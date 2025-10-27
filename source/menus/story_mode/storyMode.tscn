@@ -1,0 +1,186 @@
+[gd_scene load_steps=7 format=3 uid="uid://f37p03ir2jr5"]
+
+[ext_resource type="Script" uid="uid://0q0b2um80msy" path="res://source/menus/story_mode/storyMode.gd" id="1_bpcgf"]
+[ext_resource type="SpriteFrames" uid="uid://dcuob18cf8qsn" path="res://assets/images/story mode/menu_assets.res" id="2_w5ivh"]
+[ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_1ftmq"]
+[ext_resource type="Texture2D" uid="uid://dyx812j1nrcuc" path="res://assets/images/story mode/lockerIcon.png" id="5_j1oqd"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_w5ivh"]
+font = ExtResource("3_1ftmq")
+font_size = 41
+
+[sub_resource type="LabelSettings" id="LabelSettings_kbmc3"]
+font = ExtResource("3_1ftmq")
+font_size = 930
+shadow_size = 90
+shadow_color = Color(0, 0, 0, 1)
+
+[node name="StoryMode" type="Node2D"]
+script = ExtResource("1_bpcgf")
+
+[node name="bgs" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="bg" type="ColorRect" parent="bgs"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.075
+anchor_right = 3.125
+anchor_bottom = 1.6
+offset_left = -3.0
+offset_right = 1155.0
+offset_bottom = 656.0
+color = Color(0, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="WeekSprite" type="Node2D" parent="bgs"]
+position = Vector2(596, 469)
+
+[node name="yellowRect" type="ColorRect" parent="bgs"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = -0.2
+anchor_right = 3.15
+anchor_bottom = 0.75
+offset_left = -2.0
+offset_top = 64.0
+offset_right = 1154.0
+offset_bottom = 391.0
+color = Color(1, 0.839551, 0.365285, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="blackRect" type="ColorRect" parent="bgs"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(32.0001, 1.4003)
+color = Color(0, 0, 0, 1)
+
+[node name="arrows" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 120.0
+offset_right = 160.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="LeftArrow" type="AnimatedSprite2D" parent="arrows"]
+position = Vector2(763, 480)
+sprite_frames = ExtResource("2_w5ivh")
+animation = &"arrow left"
+
+[node name="RightArrow" type="AnimatedSprite2D" parent="arrows"]
+position = Vector2(1125, 480)
+sprite_frames = ExtResource("2_w5ivh")
+animation = &"arrow right"
+
+[node name="characters" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="characterPosition1" type="Node2D" parent="characters"]
+position = Vector2(614, 252)
+
+[node name="characterPosition2" type="Node2D" parent="characters"]
+position = Vector2(1043, 254)
+
+[node name="characterPosition3" type="Node2D" parent="characters"]
+position = Vector2(197, 238)
+
+[node name="texts" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 68.0
+offset_right = 108.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="songs" type="Label" parent="texts"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -4.975
+anchor_top = 11.85
+anchor_right = 184.875
+anchor_bottom = 122.975
+offset_left = 131.0
+offset_top = 20.0
+offset_right = 177.0
+offset_bottom = 95.0
+scale = Vector2(0.05, 0.05)
+theme_override_colors/font_color = Color(0.913725, 0.415686, 0.52549, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_1ftmq")
+theme_override_font_sizes/font_size = 600
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="weekName" type="Label" parent="texts"]
+texture_filter = 1
+layout_mode = 0
+offset_left = -63.0
+offset_top = 5.0
+offset_right = 1208.0
+offset_bottom = 52.0
+text = "Week Name"
+label_settings = SubResource("LabelSettings_w5ivh")
+horizontal_alignment = 2
+
+[node name="score" type="Label" parent="texts"]
+layout_mode = 0
+offset_left = -63.0
+offset_top = 10.0
+offset_right = 169.0
+offset_bottom = 42.0
+scale = Vector2(0.05, 0.05)
+theme_override_fonts/font = ExtResource("3_1ftmq")
+theme_override_font_sizes/font_size = 780
+text = "Week Score:"
+
+[node name="tracks" type="Label" parent="."]
+offset_left = 99.0
+offset_top = 437.0
+offset_right = 2472.0
+offset_bottom = 1031.0
+scale = Vector2(0.075, 0.075)
+theme_override_colors/font_color = Color(0.913725, 0.415686, 0.52549, 1)
+theme_override_fonts/font = ExtResource("3_1ftmq")
+theme_override_font_sizes/font_size = 675
+text = "TRACKS"
+
+[node name="lock" type="Sprite2D" parent="."]
+position = Vector2(968, 478)
+texture = ExtResource("5_j1oqd")
+
+[node name="difficulties" type="Sprite2D" parent="."]
+position = Vector2(1062, 480)
+
+[node name="warning" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="warning"]
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.592)
+
+[node name="Label" type="Label" parent="warning"]
+layout_mode = 0
+offset_left = 37.0
+offset_top = 186.0
+offset_right = 35151.0
+offset_bottom = 14415.0
+scale = Vector2(0.035, 0.035)
+label_settings = SubResource("LabelSettings_kbmc3")
+horizontal_alignment = 1

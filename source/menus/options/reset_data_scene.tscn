@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://csjtlx65o4ol2"]
+
+[ext_resource type="Script" uid="uid://qkc8yrc4rkrk" path="res://source/menus/options/reset_data_scene.gd" id="1_armif"]
+[ext_resource type="Shader" uid="uid://chi6jamggry1k" path="res://source/shaders/backdrops shaders/backdrop2.gdshader" id="3_u6fpd"]
+[ext_resource type="PackedScene" uid="uid://c6v05f40spef2" path="res://source/alphabet/alphabetObject.tscn" id="4_7husa"]
+[ext_resource type="Texture2D" uid="uid://dsjjxpfhq7j7" path="res://assets/images/backdrop1.png" id="4_u6fpd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vnbf0"]
+shader = ExtResource("3_u6fpd")
+shader_parameter/tile_size = 100.0
+shader_parameter/scroll_speed = Vector2(0.5, 0.5)
+
+[node name="reset_data_scene" type="CanvasLayer"]
+script = ExtResource("1_armif")
+
+[node name="panel" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="panel"]
+layout_mode = 0
+offset_left = -182.0
+offset_top = -142.0
+offset_right = 1432.0
+offset_bottom = 905.0
+color = Color(0, 0, 0, 0.4627451)
+
+[node name="backDropBg" type="Sprite2D" parent="panel"]
+material = SubResource("ShaderMaterial_vnbf0")
+position = Vector2(632.5, 361.5)
+scale = Vector2(15.85, 9.77)
+texture = ExtResource("4_u6fpd")
+
+[node name="alphabetObject" parent="panel" instance=ExtResource("4_7husa")]
+position = Vector2(45.999996, 160)
+scale = Vector2(0.57, 0.57)
+coolText = "Are you sure you want to reset your data?"
+
+[node name="alphabetGrp" type="Node2D" parent="panel"]

@@ -1,0 +1,52 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#000000ff",
+	"HealthIcon": "pico",
+	"LoopAnim": false,
+	"Poses": [
+		{
+			"Anim": "shoot1",
+			"Name": "Pico shoot 1",
+			"Offset": [
+				338.0,
+				-190.0
+			]
+		},
+		{
+			"Anim": "shoot2",
+			"Name": "Pico shoot 2",
+			"Offset": [
+				388.0,
+				-127.0
+			]
+		},
+		{
+			"Anim": "shoot3",
+			"Name": "Pico shoot 3",
+			"Offset": [
+				-106.0,
+				-159.0
+			]
+		},
+		{
+			"Anim": "shoot4",
+			"Name": "Pico shoot 4",
+			"Offset": [
+				-120.0,
+				-181.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"cameraPos": [
+		0.0,
+		-190.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

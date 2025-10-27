@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://3abqo6ewx8py"]
+
+[ext_resource type="SpriteFrames" uid="uid://cvcxqbyl6fyq4" path="res://assets/images/mainMenu/credits.res" id="1_270g8"]
+
+[node name="credits" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_270g8")
+animation = &"credits idle"

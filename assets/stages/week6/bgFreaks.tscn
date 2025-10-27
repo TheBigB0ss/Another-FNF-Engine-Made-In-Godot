@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=3 uid="uid://bsvgftxd7osis"]
+
+[ext_resource type="Script" uid="uid://l5064s7uymtw" path="res://assets/stages/week6/bgFreaks.gd" id="1_kua8w"]
+[ext_resource type="Texture2D" uid="uid://ddh8apx6eq3k1" path="res://assets/stages/week6/bgFreaks.png" id="2_1mxel"]
+
+[sub_resource type="Animation" id="Animation_1mxel"]
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57, 0.6, 0.63, 0.66, 0.69, 0.72, 0.75, 0.78, 0.81, 0.84, 0.87),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(0, 0, 451, 96), Rect2(0, 0, 451, 96), Rect2(461, 0, 451, 96), Rect2(461, 0, 451, 96), Rect2(461, 0, 451, 96), Rect2(461, 0, 451, 96), Rect2(0, 106, 451, 96), Rect2(0, 106, 451, 96), Rect2(0, 106, 451, 96), Rect2(0, 106, 451, 96), Rect2(0, 106, 451, 96), Rect2(0, 106, 451, 96), Rect2(0, 106, 451, 96), Rect2(0, 106, 451, 96), Rect2(461, 106, 451, 96), Rect2(461, 106, 451, 96), Rect2(0, 212, 451, 96), Rect2(0, 212, 451, 96), Rect2(461, 212, 451, 96), Rect2(461, 212, 451, 96), Rect2(0, 318, 451, 96), Rect2(0, 318, 451, 96), Rect2(461, 318, 451, 96), Rect2(461, 318, 451, 96), Rect2(461, 318, 451, 96), Rect2(461, 318, 451, 96), Rect2(461, 318, 451, 96), Rect2(461, 318, 451, 96), Rect2(461, 318, 451, 96), Rect2(461, 318, 451, 96)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ikkea"]
+_data = {
+&" ": SubResource("Animation_1mxel")
+}
+
+[sub_resource type="Animation" id="Animation_d6wni"]
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57, 0.6, 0.63, 0.66, 0.69, 0.72, 0.75, 0.78, 0.81, 0.84, 0.87),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(0, 424, 450, 96), Rect2(0, 424, 450, 96), Rect2(460, 424, 450, 96), Rect2(460, 424, 450, 96), Rect2(460, 424, 450, 96), Rect2(460, 424, 450, 96), Rect2(0, 530, 450, 96), Rect2(0, 530, 450, 96), Rect2(0, 530, 450, 96), Rect2(0, 530, 450, 96), Rect2(0, 530, 450, 96), Rect2(0, 530, 450, 96), Rect2(0, 530, 450, 96), Rect2(0, 530, 450, 96), Rect2(460, 530, 450, 96), Rect2(460, 530, 450, 96), Rect2(0, 636, 450, 96), Rect2(0, 636, 450, 96), Rect2(0, 530, 450, 96), Rect2(0, 530, 450, 96), Rect2(460, 636, 450, 96), Rect2(460, 636, 450, 96), Rect2(460, 424, 450, 96), Rect2(460, 424, 450, 96), Rect2(460, 424, 450, 96), Rect2(460, 424, 450, 96), Rect2(460, 424, 450, 96), Rect2(460, 424, 450, 96), Rect2(460, 424, 450, 96), Rect2(460, 424, 450, 96)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fu5ep"]
+_data = {
+&" ": SubResource("Animation_d6wni")
+}
+
+[node name="bgFreaks" type="Node2D"]
+script = ExtResource("1_kua8w")
+
+[node name="Character_Sprite" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_1mxel")
+region_enabled = true
+region_rect = Rect2(0, 0, 451, 96)
+
+[node name="Character_Animation" type="AnimationPlayer" parent="."]
+libraries = {
+&"BG fangirls dissuaded": SubResource("AnimationLibrary_ikkea"),
+&"BG girls group": SubResource("AnimationLibrary_fu5ep")
+}
+autoplay = "BG girls group/ "

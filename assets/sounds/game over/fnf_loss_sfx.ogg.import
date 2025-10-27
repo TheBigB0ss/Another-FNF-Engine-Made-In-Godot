@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cgshffeinrnq"
+path="res://.godot/imported/fnf_loss_sfx.ogg-6bc9c2275c6b1d95fbe0620d4eb5f47b.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sounds/game over/fnf_loss_sfx.ogg"
+dest_files=["res://.godot/imported/fnf_loss_sfx.ogg-6bc9c2275c6b1d95fbe0620d4eb5f47b.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

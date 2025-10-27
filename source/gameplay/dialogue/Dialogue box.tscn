@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://lmu4akqkj75l"]
+
+[ext_resource type="Script" uid="uid://c5quqa6p7m4ms" path="res://source/gameplay/dialogue/Dialogue box.gd" id="1_11ctq"]
+[ext_resource type="SpriteFrames" uid="uid://br6i4ge53w1xc" path="res://assets/images/portraits/dialogue box/default/Ballon.res" id="2_6lud4"]
+[ext_resource type="Texture2D" uid="uid://t7y88drxugty" path="res://assets/images/portraits/dialogue box/pixel/hand_textbox.png" id="3_7pger"]
+[ext_resource type="FontFile" uid="uid://clifiya6s5xnf" path="res://assets/fonts/pixel.otf" id="3_higrh"]
+
+[node name="DialogueBox" type="CanvasLayer"]
+script = ExtResource("1_11ctq")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -599.0
+offset_top = -358.0
+offset_right = 1989.0
+offset_bottom = 1235.0
+color = Color(0.408, 0.941, 1, 0.224)
+
+[node name="boyfriend" type="Node2D" parent="."]
+visible = false
+position = Vector2(650, 409)
+
+[node name="girlfriend" type="Node2D" parent="."]
+visible = false
+position = Vector2(584, 411)
+
+[node name="opponent" type="Node2D" parent="."]
+visible = false
+position = Vector2(515, 412)
+
+[node name="Box" type="AnimatedSprite2D" parent="."]
+position = Vector2(637, 415)
+sprite_frames = ExtResource("2_6lud4")
+animation = &"BallonBottom"
+
+[node name="hand" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(1140, 656)
+scale = Vector2(5.4, 5.4)
+texture = ExtResource("3_7pger")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 148.0
+offset_top = 463.0
+offset_right = 6266.0
+offset_bottom = 1076.0
+scale = Vector2(0.05, 0.05)
+theme_override_fonts/font = ExtResource("3_higrh")
+theme_override_font_sizes/font_size = 525

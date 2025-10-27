@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bg4nc547y4275"]
+
+[ext_resource type="SpriteFrames" uid="uid://c86q8xq3ifx06" path="res://assets/images/weekCharacters/Menu_Spooky_Kids.res" id="1_54xi1"]
+
+[node name="menu_spooky kids" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_54xi1")
+animation = &"M Spooky Kids Idle"
+autoplay = "M Spooky Kids Idle"

@@ -1,0 +1,27 @@
+{
+	"songs":[
+		[
+			"cocoa",
+			"parents",
+			[0.928, 0.446, 0.915]
+		],
+		[
+			"eggnog",
+			"parents",
+			[0.928, 0.446, 0.915]
+		],
+		[
+			"winter-horrorland",
+			"monster",
+			[1, 0.989, 0]
+		]
+	],
+	"hideFromFreeplay": false,
+	"hideFromStoryMode": false,
+	"isLocked": false,
+	"weekName": "week5",
+	"lastWeek": "",
+	"weekDescription": "RED SNOW",
+	"weekDifficulties": [],
+	"weekCharacters": ["Parents", "BF", "GF"]
+}

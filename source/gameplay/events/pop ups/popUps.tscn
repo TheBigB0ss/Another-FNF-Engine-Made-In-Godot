@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5nbioqfoj7jl"]
+
+[ext_resource type="Script" uid="uid://bpnvcriy0eomb" path="res://source/gameplay/events/pop ups/popUps.gd" id="1_l15lo"]
+[ext_resource type="Texture2D" uid="uid://b3o8id5alp6wy" path="res://assets/images/pop ups/window/bar.png" id="2_viyjm"]
+[ext_resource type="Texture2D" uid="uid://bcbmtn1mo6b7p" path="res://assets/images/pop ups/window/X.png" id="3_6ph78"]
+
+[node name="PopUps" type="Node2D"]
+script = ExtResource("1_l15lo")
+
+[node name="pop up stuff" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="pop up" type="Sprite2D" parent="pop up stuff"]
+position = Vector2(584, 335.5)
+
+[node name="Bar" type="Sprite2D" parent="pop up stuff"]
+position = Vector2(584, 335.5)
+texture = ExtResource("2_viyjm")
+
+[node name="XButton" type="Sprite2D" parent="pop up stuff"]
+position = Vector2(857.25, 200.5)
+scale = Vector2(1.00943, 1)
+texture = ExtResource("3_6ph78")

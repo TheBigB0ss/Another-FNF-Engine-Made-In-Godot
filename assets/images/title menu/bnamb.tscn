@@ -1,0 +1,53 @@
+[gd_scene load_steps=5 format=3 uid="uid://n3jffc0aii0x"]
+
+[ext_resource type="Script" uid="uid://dbt5nai1ld3ts" path="res://source/characters/characters_scripts/New_Character.gd" id="1_teqgu"]
+[ext_resource type="Texture2D" uid="uid://c052nh3qwdpwq" path="res://assets/images/title menu/bnamb.png" id="2_a0eug"]
+
+[sub_resource type="Animation" id="Animation_hnqys"]
+length = 0.21
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(0, 0, 268, 392), Rect2(268, 0, 261, 316), Rect2(0, 392, 273, 300), Rect2(273, 392, 261, 316), Rect2(0, 708, 268, 393), Rect2(273, 392, 261, 316), Rect2(0, 392, 273, 300), Rect2(268, 0, 261, 316)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character_Sprite:offset")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(16, 23), Vector2(26.5, 64), Vector2(23.5, 67), Vector2(10.5, 64), Vector2(26, 14.5), Vector2(10.5, 64), Vector2(23.5, 67), Vector2(26.5, 64)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7lvqr"]
+_data = {
+&" ": SubResource("Animation_hnqys")
+}
+
+[node name="bnamb" type="Node2D"]
+script = ExtResource("1_teqgu")
+
+[node name="Character_Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_a0eug")
+offset = Vector2(10.5, 64)
+region_enabled = true
+region_rect = Rect2(273, 392, 261, 316)
+
+[node name="Character_Animation" type="AnimationPlayer" parent="."]
+libraries = {
+&"idle": SubResource("AnimationLibrary_7lvqr")
+}
+autoplay = "idle/ "
+speed_scale = 0.555

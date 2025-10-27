@@ -1,0 +1,101 @@
+[gd_scene load_steps=15 format=3 uid="uid://b0odcfo5qp5h8"]
+
+[ext_resource type="Script" uid="uid://c1dmjbgsl853d" path="res://source/stages/philly remix.gd" id="1_45nwq"]
+[ext_resource type="Texture2D" uid="uid://daxi82f4w3ajs" path="res://assets/stages/week3/remix/sky.png" id="2_o8y8o"]
+[ext_resource type="Texture2D" uid="uid://dkg1qjnhp0ngx" path="res://assets/stages/week3/remix/city_2.png" id="3_asinp"]
+[ext_resource type="Texture2D" uid="uid://71p0sqt4gab4" path="res://assets/stages/week3/remix/city_1.png" id="4_eptyo"]
+[ext_resource type="Texture2D" uid="uid://dqtn0hj2v6iah" path="res://assets/stages/week3/remix/Lights.png" id="5_lsgl8"]
+[ext_resource type="Texture2D" uid="uid://cualptufupiu" path="res://assets/stages/week3/remix/buildings_2.png" id="6_kshjk"]
+[ext_resource type="Texture2D" uid="uid://dbngsy5xcin77" path="res://assets/stages/week3/remix/buildings_1.png" id="7_gh7r3"]
+[ext_resource type="Texture2D" uid="uid://cxm68qo7tmrxq" path="res://assets/stages/week3/remix/rooftop.png" id="8_4puf3"]
+[ext_resource type="Texture2D" uid="uid://4wd1uaw15ret" path="res://assets/stages/week3/remix/foreground.png" id="9_xwjm6"]
+[ext_resource type="PackedScene" uid="uid://c3bk8nb71v1fe" path="res://source/characters/Nene.tscn" id="10_eptyo"]
+[ext_resource type="Texture2D" uid="uid://djc31ia0m7ye4" path="res://assets/stages/week1/soaked.png" id="11_asinp"]
+[ext_resource type="PackedScene" uid="uid://dx77iyyt31ep0" path="res://source/characters/Darnell.tscn" id="11_lsgl8"]
+[ext_resource type="PackedScene" uid="uid://c8mrn1hyxpo2g" path="res://assets/stages/week3/remix/bg characters/meme/DarnellAss.tscn" id="12_kshjk"]
+[ext_resource type="Script" uid="uid://xxy8xw6owehg" path="res://source/gameplay/strums/Opponent Notes.gd" id="12_lsgl8"]
+
+[node name="philly remix" type="Node2D"]
+script = ExtResource("1_45nwq")
+
+[node name="sky" type="Sprite2D" parent="."]
+position = Vector2(641, 30)
+texture = ExtResource("2_o8y8o")
+
+[node name="city1" type="Sprite2D" parent="."]
+position = Vector2(653, 315)
+texture = ExtResource("3_asinp")
+
+[node name="city2" type="Sprite2D" parent="."]
+position = Vector2(629, 622)
+texture = ExtResource("4_eptyo")
+
+[node name="lights" type="Sprite2D" parent="."]
+position = Vector2(592, 303)
+texture = ExtResource("5_lsgl8")
+
+[node name="build1" type="Sprite2D" parent="."]
+position = Vector2(431, 426)
+texture = ExtResource("6_kshjk")
+
+[node name="build2" type="Sprite2D" parent="."]
+position = Vector2(585, 66)
+texture = ExtResource("7_gh7r3")
+
+[node name="rooftop" type="Sprite2D" parent="."]
+position = Vector2(704, 766)
+texture = ExtResource("8_4puf3")
+
+[node name="foreground" type="Sprite2D" parent="."]
+z_index = 2
+position = Vector2(446, 1256)
+texture = ExtResource("9_xwjm6")
+
+[node name="characters" type="Node2D" parent="."]
+
+[node name="Nene" parent="characters" instance=ExtResource("10_eptyo")]
+z_index = 1
+position = Vector2(324, 702)
+
+[node name="Darnell" parent="characters" instance=ExtResource("11_lsgl8")]
+z_index = 1
+position = Vector2(831, 703)
+
+[node name="DarnellAss" parent="characters" instance=ExtResource("12_kshjk")]
+visible = false
+z_index = 1
+position = Vector2(868, 674)
+scale = Vector2(1.22, 1.22)
+
+[node name="strums" type="Node2D" parent="."]
+modulate = Color(1, 1, 1, 0)
+
+[node name="NeneStrum" type="Node2D" parent="strums"]
+modulate = Color(1, 1, 1, 0.678431)
+z_index = 2
+position = Vector2(308, 445)
+scale = Vector2(0.5, 0.5)
+script = ExtResource("12_lsgl8")
+
+[node name="DarnellStrum" type="Node2D" parent="strums"]
+modulate = Color(1, 1, 1, 0.678431)
+z_index = 2
+position = Vector2(776, 434)
+scale = Vector2(0.5, 0.5)
+script = ExtResource("12_lsgl8")
+
+[node name="soaked" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.113725)
+position = Vector2(1823, 709)
+scale = Vector2(0.653587, 1.24888)
+texture = ExtResource("11_asinp")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+z_index = 2
+offset_left = -1254.0
+offset_top = -697.0
+offset_right = 2429.0
+offset_bottom = 1584.0
+color = Color(0, 0, 0, 1)

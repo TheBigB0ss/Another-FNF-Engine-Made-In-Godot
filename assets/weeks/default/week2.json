@@ -1,0 +1,22 @@
+{
+	"songs":[
+		[
+			"spookeez",
+			"spooky",
+			[0.792, 0.505, 0.24]
+		],
+		[
+			"south",
+			"spooky",
+			[0.792, 0.505, 0.24]
+		]
+	],
+	"hideFromFreeplay": false,
+	"hideFromStoryMode": false,
+	"isLocked": false,
+	"weekName": "week2",
+	"lastWeek": "",
+	"weekDescription": "Spooky Month",
+	"weekDifficulties": ["easy", "normal", "hard", "remix"],
+	"weekCharacters": ["Spooky_Kids", "BF", "GF"]
+}

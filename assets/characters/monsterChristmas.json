@@ -1,0 +1,59 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#fff000",
+	"HealthIcon": "monster",
+	"LoopAnim": true,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "monster idle",
+			"Offset": [
+				-85.0,
+				-50.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "Monster Right note",
+			"Offset": [
+				-78.0,
+				-59.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "monster down",
+			"Offset": [
+				-39.0,
+				-11.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "monster up note",
+			"Offset": [
+				-92.0,
+				-82.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "Monster left note",
+			"Offset": [
+				-59.0,
+				-54.0
+			]
+		}
+	],
+	"cameraPos": [
+		120.0,
+		10.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

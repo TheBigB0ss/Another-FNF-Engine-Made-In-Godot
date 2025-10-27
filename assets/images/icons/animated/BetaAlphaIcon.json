@@ -1,0 +1,20 @@
+{
+	"IconPoses": [
+		{
+			"Anim": "idle",
+			"Name": "Neutral",
+		},
+		{
+			"Anim": "lose",
+			"Name": "Lose",
+		},
+		{
+			"Anim": "transition",
+			"Name": "Trans",
+		},
+		{
+			"Anim": "win",
+			"Name": "Win",
+		}
+	]
+}

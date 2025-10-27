@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://5atx172ddrlk"]
+
+[ext_resource type="Texture2D" uid="uid://cb87gy27earks" path="res://assets/images/portraits/characters/spiritFaceForward.png" id="1_ayd62"]
+[ext_resource type="Script" uid="uid://765kglosplae" path="res://source/characters/dialogue portraits/spirit.gd" id="2_q6tae"]
+[ext_resource type="Texture2D" uid="uid://bo1in5jsk3tal" path="res://assets/images/portraits/bow.png" id="3_4rviy"]
+
+[node name="Spirit" type="Sprite2D"]
+texture_filter = 1
+scale = Vector2(5.4, 5.4)
+texture = ExtResource("1_ayd62")
+script = ExtResource("2_q6tae")
+
+[node name="bow" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(14.2593, -10.3704)
+rotation = 0.418879
+scale = Vector2(0.496394, 0.479027)
+texture = ExtResource("3_4rviy")

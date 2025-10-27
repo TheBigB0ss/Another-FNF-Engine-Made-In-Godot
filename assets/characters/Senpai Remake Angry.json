@@ -1,0 +1,61 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#964804ff",
+	"HealthIcon": "senpai-angry-remake",
+	"LoopAnim": true,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "Senpai Angry Idle",
+			"Offset": [
+				5.0,
+				-10.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "Senpai Angry Left",
+			"Offset": [
+				5.0,
+				-10.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "Senpai Angry Down",
+			"Offset": [
+				4.0,
+				-10.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "Senpai Angry Up",
+			"Offset": [
+				5.0,
+				-10.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "Senpai Angry Right",
+			"Offset": [
+				6.0,
+				-10.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"camera follow pos": false,
+	"cameraPos": [
+		30.0,
+		-50.0
+	],
+	"isPlayer": false,
+	"scale": [
+		5.0,
+		5.0
+	]
+}

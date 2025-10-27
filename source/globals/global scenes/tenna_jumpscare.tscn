@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3 uid="uid://ds2jvq5lqnej5"]
+
+[ext_resource type="Script" uid="uid://by3yskahchait" path="res://source/globals/global scenes/tenna_jumpscare.gd" id="1_rqfya"]
+[ext_resource type="Texture2D" uid="uid://due0cijvru0g1" path="res://assets/images/tenna/tenna_jumpscare.png" id="2_ynksm"]
+
+[sub_resource type="Animation" id="Animation_xp36i"]
+length = 0.15
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(0, 0, 177, 417), Rect2(177, 0, 177, 417), Rect2(354, 0, 177, 417), Rect2(531, 0, 177, 417), Rect2(708, 0, 177, 417), Rect2(0, 417, 177, 417)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/path = NodePath("Character_Sprite:offset")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(88.5, 208.5), Vector2(88.5, 208.5), Vector2(88.5, 208.5), Vector2(88.5, 208.5), Vector2(88.5, 208.5), Vector2(88.5, 208.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gyjvf"]
+_data = {
+&" ": SubResource("Animation_xp36i")
+}
+
+[node name="tenna_jumpscare" type="CanvasLayer"]
+layer = 3
+script = ExtResource("1_rqfya")
+
+[node name="Character_Sprite" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(625, 350)
+scale = Vector2(0.02, 0.02)
+texture = ExtResource("2_ynksm")
+region_enabled = true
+region_rect = Rect2(0, 0, 177, 417)
+
+[node name="Character_Animation" type="AnimationPlayer" parent="."]
+libraries = {
+&"ten": SubResource("AnimationLibrary_gyjvf")
+}
+speed_scale = 0.35

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="BetaAlphaIcon.png">
+	<!-- Created with Adobe Animate version 24.0.2.12 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Lose0000" x="30" y="30" width="92" height="86"/>
+	<SubTexture name="Lose0001" x="30" y="30" width="92" height="86"/>
+	<SubTexture name="Lose0002" x="30" y="30" width="92" height="86"/>
+	<SubTexture name="Lose0003" x="30" y="30" width="92" height="86"/>
+	<SubTexture name="Lose0004" x="30" y="30" width="92" height="86"/>
+	<SubTexture name="Lose0005" x="142" y="30" width="90" height="86" frameX="-2" frameY="0" frameWidth="92" frameHeight="86"/>
+	<SubTexture name="Lose0006" x="142" y="30" width="90" height="86" frameX="-2" frameY="0" frameWidth="92" frameHeight="86"/>
+	<SubTexture name="Lose0007" x="142" y="30" width="90" height="86" frameX="-2" frameY="0" frameWidth="92" frameHeight="86"/>
+	<SubTexture name="Lose0008" x="142" y="30" width="90" height="86" frameX="-2" frameY="0" frameWidth="92" frameHeight="86"/>
+	<SubTexture name="Lose0009" x="142" y="30" width="90" height="86" frameX="-2" frameY="0" frameWidth="92" frameHeight="86"/>
+	<SubTexture name="Neutral0000" x="252" y="30" width="88" height="83" frameX="0" frameY="0" frameWidth="88" frameHeight="85"/>
+	<SubTexture name="Neutral0001" x="252" y="30" width="88" height="83" frameX="0" frameY="0" frameWidth="88" frameHeight="85"/>
+	<SubTexture name="Neutral0002" x="252" y="30" width="88" height="83" frameX="0" frameY="0" frameWidth="88" frameHeight="85"/>
+	<SubTexture name="Neutral0003" x="252" y="30" width="88" height="83" frameX="0" frameY="0" frameWidth="88" frameHeight="85"/>
+	<SubTexture name="Neutral0004" x="252" y="30" width="88" height="83" frameX="0" frameY="0" frameWidth="88" frameHeight="85"/>
+	<SubTexture name="Neutral0005" x="360" y="30" width="88" height="84" frameX="0" frameY="-1" frameWidth="88" frameHeight="85"/>
+	<SubTexture name="Neutral0006" x="360" y="30" width="88" height="84" frameX="0" frameY="-1" frameWidth="88" frameHeight="85"/>
+	<SubTexture name="Neutral0007" x="360" y="30" width="88" height="84" frameX="0" frameY="-1" frameWidth="88" frameHeight="85"/>
+	<SubTexture name="Neutral0008" x="360" y="30" width="88" height="84" frameX="0" frameY="-1" frameWidth="88" frameHeight="85"/>
+	<SubTexture name="Neutral0009" x="360" y="30" width="88" height="84" frameX="0" frameY="-1" frameWidth="88" frameHeight="85"/>
+	<SubTexture name="Trans0000" x="30" y="136" width="93" height="69" frameX="0" frameY="-31" frameWidth="93" frameHeight="100"/>
+	<SubTexture name="Trans0001" x="30" y="136" width="93" height="69" frameX="0" frameY="-31" frameWidth="93" frameHeight="100"/>
+	<SubTexture name="Trans0002" x="143" y="136" width="80" height="100" frameX="-7" frameY="0" frameWidth="93" frameHeight="100"/>
+	<SubTexture name="Trans0003" x="143" y="136" width="80" height="100" frameX="-7" frameY="0" frameWidth="93" frameHeight="100"/>
+	<SubTexture name="Win0000" x="243" y="136" width="88" height="84"/>
+	<SubTexture name="Win0001" x="243" y="136" width="88" height="84"/>
+	<SubTexture name="Win0002" x="243" y="136" width="88" height="84"/>
+	<SubTexture name="Win0003" x="243" y="136" width="88" height="84"/>
+	<SubTexture name="Win0004" x="243" y="136" width="88" height="84"/>
+	<SubTexture name="Win0005" x="351" y="136" width="86" height="82" frameX="-1" frameY="-1" frameWidth="88" frameHeight="84"/>
+	<SubTexture name="Win0006" x="351" y="136" width="86" height="82" frameX="-1" frameY="-1" frameWidth="88" frameHeight="84"/>
+	<SubTexture name="Win0007" x="351" y="136" width="86" height="82" frameX="-1" frameY="-1" frameWidth="88" frameHeight="84"/>
+	<SubTexture name="Win0008" x="351" y="136" width="86" height="82" frameX="-1" frameY="-1" frameWidth="88" frameHeight="84"/>
+	<SubTexture name="Win0009" x="351" y="136" width="86" height="82" frameX="-1" frameY="-1" frameWidth="88" frameHeight="84"/>
+</TextureAtlas>

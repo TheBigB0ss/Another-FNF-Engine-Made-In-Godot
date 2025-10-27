@@ -1,0 +1,100 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#8b0000ff",
+	"HealthIcon": "gf",
+	"LoopAnim": false,
+	"Poses": [
+		{
+			"Anim": "singLeft",
+			"Name": "GF left note",
+			"Offset": [
+				86.0,
+				-115.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "GF Down Note",
+			"Offset": [
+				87.0,
+				-115.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "GF Up Note",
+			"Offset": [
+				86.0,
+				-128.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "GF Right Note",
+			"Offset": [
+				86.0,
+				-116.0
+			]
+		},
+		{
+			"Anim": "special idle dance",
+			"Name": "GF Dancing Beat Hair Landing",
+			"Offset": [
+				86.0,
+				-121.0
+			]
+		},
+		{
+			"Anim": "sad",
+			"Name": "gf sad",
+			"Offset": [
+				87.0,
+				-115.0
+			]
+		},
+		{
+			"Anim": "hey",
+			"Name": "GF Cheer",
+			"Offset": [
+				86.0,
+				-126.0
+			]
+		},
+		{
+			"Anim": "danceLeft",
+			"Name": "dance_left",
+			"Offset": [
+				85.0,
+				-120.0
+			]
+		},
+		{
+			"Anim": "danceRight",
+			"Name": "dance_right",
+			"Offset": [
+				85.0,
+				-120.0
+			]
+		},
+		{
+			"Anim": "scared",
+			"Name": "GF FEAR",
+			"Offset": [
+				86.0,
+				-116.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"cameraPos": [
+		20.0,
+		-220.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

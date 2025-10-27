@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://3aw7homfuxmk"]
+
+[ext_resource type="SpriteFrames" uid="uid://dmy5gk32w3p4b" path="res://assets/images/mainMenu/storymode.res" id="1_g48ox"]
+
+[node name="story_mode" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_g48ox")
+animation = &"storymode idle"
+frame_progress = 0.255661

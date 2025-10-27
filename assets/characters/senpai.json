@@ -1,0 +1,60 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#ffab56ff",
+	"HealthIcon": "senpai",
+	"LoopAnim": false,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "Senpai Idle instance 1",
+			"Offset": [
+				10.0,
+				-21.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "SENPAI LEFT NOTE instance 1",
+			"Offset": [
+				5.0,
+				-21.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "SENPAI DOWN NOTE instance 1",
+			"Offset": [
+				8.0,
+				-21.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "SENPAI UP NOTE instance 1",
+			"Offset": [
+				10.0,
+				-27.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "SENPAI RIGHT NOTE instance 1",
+			"Offset": [
+				9.0,
+				-21.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"cameraPos": [
+		80.0,
+		-110.0
+	],
+	"isPlayer": false,
+	"scale": [
+		5.0,
+		5.0
+	]
+}

@@ -1,0 +1,77 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#f2b21dff",
+	"HealthIcon": "skidPump",
+	"LoopAnim": true,
+	"Poses": [
+		{
+			"Anim": "singLeft",
+			"Name": "left",
+			"Offset": [
+				-206.0,
+				-88.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "down",
+			"Offset": [
+				-6.0,
+				57.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "up",
+			"Offset": [
+				-91.0,
+				-112.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "right",
+			"Offset": [
+				77.0,
+				-30.0
+			]
+		},
+		{
+			"Anim": "hey",
+			"Name": "HEY",
+			"Offset": [
+				-88.0,
+				-106.0
+			]
+		},
+		{
+			"Anim": "danceLeft",
+			"Name": "idle-left",
+			"Offset": [
+				-34.0,
+				-38.0
+			]
+		},
+		{
+			"Anim": "danceRight",
+			"Name": "idle-right",
+			"Offset": [
+				-51.0,
+				-41.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"camera follow pos": false,
+	"cameraPos": [
+		-20.0,
+		-90.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

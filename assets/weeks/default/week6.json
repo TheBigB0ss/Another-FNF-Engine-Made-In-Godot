@@ -1,0 +1,27 @@
+{
+	"songs":[
+		[
+			"senpai",
+			"senpai",
+			[1.0, 0.671, 0.337]
+		],
+		[
+			"roses",
+			"senpai-angry",
+			[1.0, 0.671, 0.337]
+		],
+		[
+			"thorns",
+			"spirit",
+			[1.0, 0.0, 0.278]
+		]
+	],
+	"hideFromFreeplay": false,
+	"hideFromStoryMode": false,
+	"isLocked": false,
+	"weekName": "week6",
+	"lastWeek": "",
+	"weekDescription": "hating simulator ft. moawling",
+	"weekDifficulties": ["easy", "normal", "hard", "remix"],
+	"weekCharacters": ["Senpai", "BF", "GF"]
+}

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cpbrbkkkcaosv"]
+
+[ext_resource type="SpriteFrames" uid="uid://dg6r5vmmuf3tx" path="res://assets/images/mainMenu/options.res" id="1_slt56"]
+
+[node name="options" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_slt56")
+animation = &"options selected"

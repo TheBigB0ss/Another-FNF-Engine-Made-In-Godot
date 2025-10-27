@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="pixelsplashes.png">
+	<!-- Created using the Spritesheet and XML generator -->
+	<!-- https://uncertainprod.github.io/FNF-Spritesheet-XML-generator-Web -->
+	<SubTexture name="purple0000" x="63" y="86" width="21" height="20" frameX="-3" frameY="-3" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="purple0001" x="89" y="24" width="23" height="24" frameX="-2" frameY="-1" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="purple0002" x="0" y="0" width="31" height="29" frameX="2" frameY="2" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="purple0003" x="62" y="28" width="27" height="28" frameX="0" frameY="1" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="purple0004" x="62" y="28" width="27" height="28" frameX="0" frameY="1" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="blue0000" x="42" y="86" width="21" height="20" frameX="-3" frameY="-3" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="blue0001" x="89" y="48" width="23" height="24" frameX="-2" frameY="-1" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="blue0002" x="0" y="29" width="31" height="29" frameX="2" frameY="2" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="blue0003" x="27" y="58" width="27" height="28" frameX="0" frameY="1" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="blue0004" x="27" y="58" width="27" height="28" frameX="0" frameY="1" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="green0000" x="21" y="86" width="21" height="20" frameX="-3" frameY="-3" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="green0001" x="54" y="58" width="23" height="24" frameX="-2" frameY="-1" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="green0002" x="31" y="29" width="31" height="29" frameX="2" frameY="2" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="green0003" x="0" y="58" width="27" height="28" frameX="0" frameY="1" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="green0004" x="0" y="58" width="27" height="28" frameX="0" frameY="1" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="red0000" x="0" y="86" width="21" height="20" frameX="-3" frameY="-3" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="red0001" x="89" y="0" width="23" height="24" frameX="-2" frameY="-1" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="red0002" x="31" y="0" width="31" height="29" frameX="2" frameY="2" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="red0003" x="62" y="0" width="27" height="28" frameX="0" frameY="1" frameWidth="27" frameHeight="25"/>
+	<SubTexture name="red0004" x="62" y="0" width="27" height="28" frameX="0" frameY="1" frameWidth="27" frameHeight="25"/>
+</TextureAtlas>

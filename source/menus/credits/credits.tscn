@@ -1,0 +1,75 @@
+[gd_scene load_steps=4 format=3 uid="uid://4l0ft23i4t2i"]
+
+[ext_resource type="Script" uid="uid://bw4jvc7fhi17g" path="res://source/menus/credits/credits.gd" id="1_283cl"]
+[ext_resource type="Texture2D" uid="uid://ceq3mk0i6bngd" path="res://assets/images/menuBgs/menuDesat.png" id="2_y4b85"]
+[ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_5waks"]
+
+[node name="Credits" type="Node2D"]
+script = ExtResource("1_283cl")
+
+[node name="Bg" type="Sprite2D" parent="."]
+position = Vector2(640, 360)
+scale = Vector2(0.995335, 0.986301)
+texture = ExtResource("2_y4b85")
+
+[node name="creditsOpts" type="Node2D" parent="."]
+position = Vector2(120, 210)
+
+[node name="socialOpts" type="Node2D" parent="."]
+position = Vector2(490, 490)
+
+[node name="Bg Stuff" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="edgeUP" type="ColorRect" parent="Bg Stuff"]
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 115.0
+color = Color(0, 0, 0, 0.694118)
+metadata/_edit_use_anchors_ = true
+
+[node name="edgeDOWN" type="ColorRect" parent="Bg Stuff"]
+layout_mode = 0
+offset_top = 607.0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.694118)
+metadata/_edit_use_anchors_ = true
+
+[node name="Texts" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="name" type="Label" parent="Texts"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 609.0
+offset_right = 104.0
+offset_bottom = 645.0
+pivot_offset = Vector2(2, 37)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_5waks")
+theme_override_font_sizes/font_size = 40
+metadata/_edit_use_anchors_ = true
+
+[node name="role" type="Label" parent="Texts"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.125
+anchor_right = -0.125
+offset_left = 17.0
+offset_top = 668.0
+offset_right = 105.0
+offset_bottom = 702.0
+pivot_offset = Vector2(2, -22)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_5waks")
+theme_override_font_sizes/font_size = 38
+metadata/_edit_use_anchors_ = true

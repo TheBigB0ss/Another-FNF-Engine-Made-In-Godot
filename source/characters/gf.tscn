@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7mrj3l4ngoue"]
+
+[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_0fgr2"]
+[ext_resource type="SpriteFrames" uid="uid://b8rua4tyqbqiu" path="res://assets/images/characters/gf.res" id="1_s78p8"]
+
+[node name="Gf" type="Node2D"]
+scale = Vector2(1.02534, 1.0076)
+script = ExtResource("1_0fgr2")
+json_path = "gf"
+charBeat = 1
+
+[node name="character" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("1_s78p8")
+animation = &"dance_left"

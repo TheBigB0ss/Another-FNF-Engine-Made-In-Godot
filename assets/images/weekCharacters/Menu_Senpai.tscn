@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cgry5rw7bvylg"]
+
+[ext_resource type="SpriteFrames" uid="uid://cpt8ejof5g77u" path="res://assets/images/weekCharacters/Menu_Senpai.res" id="1_nmtyu"]
+
+[node name="menu_senpai" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_nmtyu")
+animation = &"M Senpai Idle"
+autoplay = "M Senpai Idle"

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://hd4jhe77yo6v"]
+
+[ext_resource type="Texture2D" uid="uid://xagqm62dqhwh" path="res://assets/images/portraits/characters/friend.png" id="1_god41"]
+
+[node name="cowboy" type="Sprite2D"]
+texture = ExtResource("1_god41")

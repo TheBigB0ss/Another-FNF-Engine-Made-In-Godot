@@ -1,0 +1,35 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#8B0000",
+	"HealthIcon": "gf",
+	"LoopAnim": false,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "GF Dancing at Gunpoint",
+			"Offset": [
+				85.0,
+				-120.0
+			]
+		},
+		{
+			"Anim": "sad",
+			"Name": "GF Crying at Gunpoint",
+			"Offset": [
+				85.0,
+				-112.0
+			]
+		}
+	],
+	"cameraPos": [
+		0.0,
+		-190.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

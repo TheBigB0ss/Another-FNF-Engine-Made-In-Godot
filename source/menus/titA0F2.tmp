@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://c8r0p2xhqh1do"]
+
+[ext_resource type="Texture2D" uid="uid://cyqeujj18tw44" path="res://assets/images/blackBG.png" id="1_56x6x"]
+[ext_resource type="Script" path="res://source/menus/titleMenu.gd" id="1_sekjh"]
+[ext_resource type="Texture2D" uid="uid://blp2bjfyfwe0y" path="res://assets/images/whiteFlash.png" id="2_ioi1y"]
+[ext_resource type="Texture2D" uid="uid://ccj3ms8w2db3p" path="res://assets/images/newgrounds_logo.png" id="4_6ckqb"]
+
+[node name="TitleMenu" type="Node2D"]
+script = ExtResource("1_sekjh")
+
+[node name="freakyMenu" type="AudioStreamPlayer2D" parent="."]
+
+[node name="textGrp" type="Node2D" parent="."]
+
+[node name="Bg" type="Sprite2D" parent="."]
+position = Vector2(581.5, 326.5)
+scale = Vector2(0.997667, 0.99589)
+texture = ExtResource("1_56x6x")
+
+[node name="flash" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(553, 334)
+scale = Vector2(1.22395, 1.19041)
+texture = ExtResource("2_ioi1y")
+
+[node name="logo" type="Sprite2D" parent="."]
+position = Vector2(561, 462)
+texture = ExtResource("4_6ckqb")

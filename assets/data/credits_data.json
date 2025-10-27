@@ -1,0 +1,266 @@
+{
+	"dev_info":[
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Big Boss",
+			"role": "coder and engine creator",
+			"icon": "big_boss",
+			"social midia": {
+				"youtube": "https://www.youtube.com/channel/UCLcCR_ZaD0W1crxT5yH_FFQ",
+				"twitter": "https://x.com/TheBigBoss050",
+				"github": "https://github.com/TheBigB0ss"
+			},
+			"bg_color": "#B3B6B7"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "boboa",
+			"role": "artist",
+			"icon": "boboa",
+			"social midia": {
+				"youtube": "https://www.youtube.com/channel/UCVXmTYkO9XrKz69Lgd8uALA",
+				"bluesky": "https://bsky.app/profile/bobolinhasdebahai.bsky.social",
+				"twitter": "https://x.com/bobolinhas9",
+				"github": "https://github.com/Bboaa"
+			},
+			"bg_color": "#4E256E"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "626",
+			"role": "bg and speech bubble artist",
+			"icon": "O_626",
+			"social midia": {
+				"twitter": "https://x.com/O_626"
+			},
+			"bg_color": "#b25918"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Dnovais",
+			"role": "note splash and song cards artist",
+			"icon": "NOVAIS",
+			"social midia": {
+				"twitter": "https://x.com/Novaizes",
+				"youtube": "https://www.youtube.com/@NoviasNovinhas"
+			},
+			"bg_color": "#ff6800"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "pheSpriter",
+			"role": "bg artist",
+			"icon": "pheSpriter",
+			"social midia": {
+				"twitter": "https://x.com/PheSpriter",
+				"youtube": "https://www.youtube.com/channel/UCC9cfw9YglbzsbZZGUFHTOA"
+			},
+			"bg_color": "#635990ff"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Yubo",
+			"role": "volume bar artist and icon artist",
+			"icon": "yubo",
+			"social midia": {
+				"twitter": "https://x.com/_YuBiNhu"
+			},
+			"bg_color": "#00d3ff"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "smwaart",
+			"role": "bg artist",
+			"icon": "smwaart",
+			"social midia": {
+				"twitter": "https://x.com/smwaart",
+			},
+			"bg_color": "#122578ff"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Tales",
+			"role": "event note artist",
+			"icon": "tales",
+			"social midia": {
+				"youtube": "https://www.youtube.com/channel/UCWpQXWhMVKHtyi-xov9Z0pA",
+				"twitter": "https://x.com/Tales_4rt"
+			},
+			"bg_color": "#ffc700"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Dort",
+			"role": "composer",
+			"icon": "dort",
+			"social midia": {
+				"youtube": "https://www.youtube.com/channel/UC_wnA-BeNENV6bQ14Z1h7Wg",
+				"twitter": "https://x.com/SillyAkaDort"
+			},
+			"bg_color": "#00ff75"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Niko",
+			"role": "artist",
+			"icon": "niko",
+			"social midia": {
+				"twitter": "https://x.com/Mudoku__"
+			},
+			"bg_color": "#794799"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Mizukii",
+			"role": "new logo and bg artist",
+			"icon": "mizu",
+			"social midia": {
+				"twitter": "https://x.com/mrs_mihsimon"
+			},
+			"bg_color": "#ffffff"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Gaby",
+			"role": "pixel note splash artist",
+			"icon": "gaby",
+			"social midia": {
+				"twitter": "https://x.com/UTGabyyOfc"
+			},
+			"bg_color": "#d000ff"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Amitzy",
+			"role": "artist",
+			"icon": "amiicon",
+			"social midia": {
+				"twitter": "https://x.com/amitzy_anims"
+			},
+			"bg_color": "#ff2859"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Start",
+			"role": "composer",
+			"icon": "start",
+			"social midia": {
+				"youtube": "https://www.youtube.com/channel/UCR7TR0jTzcgFlt36aSajoUQ",
+				"twitter": "https://x.com/StartGamer221"
+			},
+			"bg_color": "#00ff40"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Yupam",
+			"role": "Pause song 1 Composer",
+			"icon": "yupam",
+			"social midia": {
+				"youtube": "https://www.youtube.com/channel/UCgrVlJBKDSc8fUWy7S_PV1A",
+				"bluesky": "https://bsky.app/profile/yupamlovestrucks.bsky.social"
+			},
+			"bg_color": "#00eeffb1"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "synthary",
+			"role": "Composer and pixel artist",
+			"icon": "sariaicon_fnf",
+			"social midia": {
+				"youtube": "https://www.youtube.com/channel/UCbh-CbgAVHBQdpeJ4UUCQNw",
+				"twitter": "https://x.com/lopessaria_"
+			},
+			"bg_color": "#ffc700"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "dog malvado",
+			"role": "bg artist",
+			"icon": "malvido",
+			"social midia": {
+				"youtube": "https://www.youtube.com/@dawgmalvido",
+				"twitter": "https://x.com/dawgpmalvido"
+			},
+			"bg_color": "#AF66CF"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Axel",
+			"role": "icon artist",
+			"icon": "Axel",
+			"social midia": {
+				"twitter": "https://x.com/Axeltor0"
+			},
+			"bg_color": "#ff39f4"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "M4ccros",
+			"role": "composer",
+			"icon": "M4ccros",
+			"social midia": {
+				"twitter": "https://x.com/CauaMattoslol"
+			},
+			"bg_color": "#b900ff"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Octavio",
+			"role": "charter",
+			"icon": "octavio",
+			"social midia": {
+				"twitter": "https://x.com/octavio12n"
+			},
+			"bg_color": "#a400ff"
+		},
+		{
+			"team": "FNF Crew",
+			"name": "Ninja Muffin",
+			"role": "Friday Night Funkin' coder",
+			"icon": "ninjaMuffin",
+			"social midia": {
+				"twitter": "https://x.com/ninja_muffin99",
+				"github": "https://github.com/ninjamuffin99"
+			},
+			"bg_color": "#742B42"
+		},
+		{
+			"team": "FNF Crew",
+			"name": "Evilsk8r",
+			"role": "Friday Night Funkin' artist",
+			"icon": "evilsk8r",
+			"social midia": {
+				"twitter": "https://x.com/evilsk8r"
+			},
+			"bg_color": "#448965"
+		},
+		{
+			"team": "FNF Crew",
+			"name": "PhantomArcade",
+			"role": "Friday Night Funkin' animator",
+			"icon": "phantomarcade",
+			"social midia": {
+				"twitter": "https://x.com/PhantomArcade3K"
+			},
+			"bg_color": "#EABD3F"
+		},
+		{
+			"team": "FNF Crew",
+			"name": "kawaisprite",
+			"role": "Friday Night Funkin' composer",
+			"icon": "kawaisprite",
+			"social midia": {
+				"twitter": "https://x.com/kawaisprite"
+			},
+			"bg_color": "#4291C0"
+		},
+		{
+			"team": "Support",
+			"name": "friendly voice",
+			"role": "thxs for all support <3",
+			"icon": "helper voice",
+			"social midia": {},
+			"bg_color": "#000000"
+		},
+	]
+}

@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://sl6ltwesx4kd"
+path="res://.godot/imported/gaster sound.ogg-d02b7b1c0a56c906292e16e8924aa15a.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sounds/gaster sound.ogg"
+dest_files=["res://.godot/imported/gaster sound.ogg-d02b7b1c0a56c906292e16e8924aa15a.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

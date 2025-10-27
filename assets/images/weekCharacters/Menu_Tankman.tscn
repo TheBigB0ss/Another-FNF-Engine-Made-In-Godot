@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bmyplcps8m5c"]
+
+[ext_resource type="SpriteFrames" uid="uid://3y8y0f3wqwev" path="res://assets/images/weekCharacters/Menu_Tankman.res" id="1_1kk57"]
+
+[node name="menu_tankman" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_1kk57")
+animation = &"M Tankman Idle"
+autoplay = "M Tankman Idle"

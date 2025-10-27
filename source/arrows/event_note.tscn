@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://bli56ofhflxv2"]
+
+[ext_resource type="Script" uid="uid://bctnnictthknq" path="res://source/arrows/event_note.gd" id="1_rd1ko"]
+[ext_resource type="SpriteFrames" uid="uid://dqoj7rrupx4tj" path="res://assets/images/arrows/default/NOTE_assets.res" id="2_7isfr"]
+[ext_resource type="Texture2D" uid="uid://dwm12hy44l6qw" path="res://assets/images/arrows/event_note.png" id="2_bmxyx"]
+[ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_bmxyx"]
+
+[node name="EventNote" type="Node2D"]
+script = ExtResource("1_rd1ko")
+
+[node name="Note" type="AnimatedSprite2D" parent="."]
+visible = false
+sprite_frames = ExtResource("2_7isfr")
+animation = &"blue"
+
+[node name="noteLine" type="Line2D" parent="."]
+visible = false
+show_behind_parent = true
+width = 50.0
+
+[node name="noteEnd" type="Sprite2D" parent="noteLine"]
+visible = false
+
+[node name="noteEvent" type="Sprite2D" parent="."]
+texture = ExtResource("2_bmxyx")
+flip_h = true
+
+[node name="event texts" type="Label" parent="."]
+visible = false
+offset_left = 128.0
+offset_top = -61.0
+offset_right = 21222.0
+offset_bottom = 5216.0
+scale = Vector2(0.02, 0.02)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_bmxyx")
+theme_override_font_sizes/font_size = 3000
+text = "val 1:
+val 2:"

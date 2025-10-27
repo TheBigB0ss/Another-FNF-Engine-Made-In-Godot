@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgb4ykqp65dhb"]
+
+[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_cgiag"]
+[ext_resource type="SpriteFrames" uid="uid://swwgpmjxkdly" path="res://assets/images/characters/bfPixel.res" id="2_cwq0u"]
+
+[node name="PixelBoyfriend" type="Node2D"]
+script = ExtResource("1_cgiag")
+have_death_animation = true
+death_scene = "characters/Bf Pixel dead"
+json_path = "bf-pixel"
+
+[node name="character" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = ExtResource("2_cwq0u")
+animation = &"BF DOWN MISS instance 1"

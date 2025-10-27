@@ -1,0 +1,27 @@
+{
+	"songs":[
+		[
+			"pico",
+			"pico",
+			[0.669, 0.921, 0.23]
+		],
+		[
+			"philly-nice",
+			"pico",
+			[0.669, 0.921, 0.23]
+		],
+		[
+			"blammed",
+			"pico",
+			[0.669, 0.921, 0.23]
+		]
+	],
+	"hideFromFreeplay": false,
+	"hideFromStoryMode": false,
+	"isLocked": false,
+	"weekName": "week3",
+	"lastWeek": "",
+	"weekDescription": "PICO",
+	"weekDifficulties": ["easy", "normal", "hard", "remix"],
+	"weekCharacters": ["Pico", "BF", "GF"]
+}

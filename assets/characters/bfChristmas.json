@@ -1,0 +1,100 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#00cfffff",
+	"HealthIcon": "bf",
+	"LoopAnim": false,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "BF idle dance",
+			"Offset": [
+				0.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "BF NOTE LEFT",
+			"Offset": [
+				-20.0,
+				2.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "BF NOTE DOWN",
+			"Offset": [
+				-9.0,
+				24.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "BF NOTE UP",
+			"Offset": [
+				20.0,
+				-14.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "BF NOTE RIGHT",
+			"Offset": [
+				42.0,
+				2.0
+			]
+		},
+		{
+			"Anim": "singLeft MISS",
+			"Name": "BF NOTE LEFT MISS",
+			"Offset": [
+				-4.0,
+				-9.0
+			]
+		},
+		{
+			"Anim": "singDown MISS",
+			"Name": "BF NOTE DOWN MISS",
+			"Offset": [
+				0.0,
+				9.0
+			]
+		},
+		{
+			"Anim": "singUp MISS",
+			"Name": "BF NOTE UP MISS",
+			"Offset": [
+				10.0,
+				-14.0
+			]
+		},
+		{
+			"Anim": "singRight MISS",
+			"Name": "BF NOTE RIGHT MISS",
+			"Offset": [
+				40.0,
+				-11.0
+			]
+		},
+		{
+			"Anim": "hey",
+			"Name": "BF HEY!!",
+			"Offset": [
+				0.0,
+				0.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"cameraPos": [
+		-260.0,
+		-20.0
+	],
+	"isPlayer": true,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

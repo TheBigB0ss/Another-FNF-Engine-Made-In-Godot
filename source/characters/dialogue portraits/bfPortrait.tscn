@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://demhhy01snc75"]
+
+[ext_resource type="SpriteFrames" uid="uid://wvkk4fehg86e" path="res://assets/images/portraits/characters/bfPortrait.res" id="1_43fvh"]
+
+[node name="bfPortrait" type="AnimatedSprite2D"]
+texture_filter = 1
+scale = Vector2(5.4, 5.4)
+sprite_frames = ExtResource("1_43fvh")
+animation = &"Boyfriend portrait enter instance 1"
+autoplay = "Boyfriend portrait enter instance 1"

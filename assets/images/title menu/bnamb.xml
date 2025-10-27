@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="bnamb.png">
+<SubTexture name="idle0000" x="0" y="0" width="268" height="392" frameX="-3" frameY="-10" frameWidth="242" frameHeight="366" />
+<SubTexture name="idle0001" x="268" y="0" width="261" height="316" frameX="-17" frameY="-89" frameWidth="242" frameHeight="366" />
+<SubTexture name="idle0002" x="0" y="392" width="273" height="300" frameX="-8" frameY="-100" frameWidth="242" frameHeight="366" />
+<SubTexture name="idle0003" x="273" y="392" width="261" height="316" frameX="-1" frameY="-89" frameWidth="242" frameHeight="366" />
+<SubTexture name="idle0004" x="0" y="708" width="268" height="393" frameX="-13" frameY="-1" frameWidth="242" frameHeight="366" />
+<SubTexture name="idle0005" x="273" y="392" width="261" height="316" frameX="-1" frameY="-89" frameWidth="242" frameHeight="366" />
+<SubTexture name="idle0006" x="0" y="392" width="273" height="300" frameX="-8" frameY="-100" frameWidth="242" frameHeight="366" />
+<SubTexture name="idle0007" x="268" y="0" width="261" height="316" frameX="-17" frameY="-89" frameWidth="242" frameHeight="366" />
+</TextureAtlas>

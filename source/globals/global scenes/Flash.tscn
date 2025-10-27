@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dtq31vi5heedw"]
+
+[ext_resource type="Script" uid="uid://cymbv2cj5e8sb" path="res://source/globals/global scenes/Flash.gd" id="1_2bwt5"]
+
+[node name="Flash" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_2bwt5")

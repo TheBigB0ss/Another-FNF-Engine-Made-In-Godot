@@ -1,0 +1,91 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#ed72e9",
+	"HealthIcon": "parents",
+	"LoopAnim": false,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "Parent Christmas Idle",
+			"Offset": [
+				-114.0,
+				-87.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "Parent Left Note Dad",
+			"Offset": [
+				-130.0,
+				-98.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "Parent Down Note Dad",
+			"Offset": [
+				-102.0,
+				-76.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "Parent Up Note Dad",
+			"Offset": [
+				-105.0,
+				-98.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "Parent Right Note Dad",
+			"Offset": [
+				-76.0,
+				-80.0
+			]
+		},
+		{
+			"Anim": "singLeft-alt",
+			"Name": "Parent Left Note Mom",
+			"Offset": [
+				-131.0,
+				-99.0
+			]
+		},
+		{
+			"Anim": "singDown-alt",
+			"Name": "Parent Down Note Mom",
+			"Offset": [
+				-103.0,
+				-76.0
+			]
+		},
+		{
+			"Anim": "singUp-alt",
+			"Name": "Parent Up Note Mom",
+			"Offset": [
+				-104.0,
+				-102.0
+			]
+		},
+		{
+			"Anim": "singRight-alt",
+			"Name": "Parent Right Note Mom",
+			"Offset": [
+				-76.0,
+				-80.0
+			]
+		}
+	],
+	"cameraPos": [
+		-10.0,
+		-180.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

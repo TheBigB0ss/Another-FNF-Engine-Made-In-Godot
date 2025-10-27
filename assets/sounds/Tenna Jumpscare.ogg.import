@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dmv7y1yofmm1r"
+path="res://.godot/imported/Tenna Jumpscare.ogg-9a753ea61d0883a2bdbe4f97e868eb8a.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sounds/Tenna Jumpscare.ogg"
+dest_files=["res://.godot/imported/Tenna Jumpscare.ogg-9a753ea61d0883a2bdbe4f97e868eb8a.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

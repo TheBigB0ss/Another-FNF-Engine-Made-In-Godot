@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://be6cr5idy6t52"]
+
+[ext_resource type="SpriteFrames" uid="uid://dq3as1a21ocob" path="res://assets/images/mainMenu/freeplay.res" id="1_pujhi"]
+
+[node name="freeplay" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_pujhi")
+animation = &"freeplay idle"

@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="Nene.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="nene down pose0000" x="0" y="0" width="421" height="442"/>
+	<SubTexture name="nene down pose0001" x="0" y="0" width="421" height="442"/>
+	<SubTexture name="nene down pose0002" x="421" y="0" width="421" height="442"/>
+	<SubTexture name="nene down pose0003" x="421" y="0" width="421" height="442"/>
+	<SubTexture name="nene down pose0004" x="842" y="0" width="421" height="442"/>
+	<SubTexture name="nene down pose0005" x="842" y="0" width="421" height="442"/>
+	<SubTexture name="nene down pose0006" x="1263" y="0" width="421" height="442"/>
+	<SubTexture name="nene down pose0007" x="1263" y="0" width="421" height="442"/>
+	<SubTexture name="nene down pose0008" x="1263" y="0" width="421" height="442"/>
+	<SubTexture name="nene down pose0009" x="1263" y="0" width="421" height="442"/>
+	<SubTexture name="nene down pose0010" x="1263" y="0" width="421" height="442"/>
+	<SubTexture name="nene down pose0011" x="1263" y="0" width="421" height="442"/>
+	<SubTexture name="nene down pose0012" x="1263" y="0" width="421" height="442"/>
+	<SubTexture name="nene down pose0013" x="1263" y="0" width="421" height="442"/>
+	<SubTexture name="nene left pose0000" x="1684" y="0" width="353" height="472"/>
+	<SubTexture name="nene left pose0001" x="1684" y="0" width="353" height="472"/>
+	<SubTexture name="nene left pose0002" x="2037" y="0" width="353" height="472"/>
+	<SubTexture name="nene left pose0003" x="2037" y="0" width="353" height="472"/>
+	<SubTexture name="nene left pose0004" x="2037" y="0" width="353" height="472"/>
+	<SubTexture name="nene left pose0005" x="2390" y="0" width="353" height="472"/>
+	<SubTexture name="nene left pose0006" x="2390" y="0" width="353" height="472"/>
+	<SubTexture name="nene left pose0007" x="2390" y="0" width="353" height="472"/>
+	<SubTexture name="nene left pose0008" x="2390" y="0" width="353" height="472"/>
+	<SubTexture name="nene left pose0009" x="2390" y="0" width="353" height="472"/>
+	<SubTexture name="nene left pose0010" x="2390" y="0" width="353" height="472"/>
+	<SubTexture name="nene left pose0011" x="2390" y="0" width="353" height="472"/>
+	<SubTexture name="nene left pose0012" x="2390" y="0" width="353" height="472"/>
+	<SubTexture name="nene left pose0013" x="2390" y="0" width="353" height="472"/>
+	<SubTexture name="nene pose right0000" x="2743" y="0" width="415" height="472"/>
+	<SubTexture name="nene pose right0001" x="2743" y="0" width="415" height="472"/>
+	<SubTexture name="nene pose right0002" x="3158" y="0" width="415" height="472"/>
+	<SubTexture name="nene pose right0003" x="3158" y="0" width="415" height="472"/>
+	<SubTexture name="nene pose right0004" x="3573" y="0" width="415" height="472"/>
+	<SubTexture name="nene pose right0005" x="3573" y="0" width="415" height="472"/>
+	<SubTexture name="nene pose right0006" x="0" y="472" width="415" height="472"/>
+	<SubTexture name="nene pose right0007" x="0" y="472" width="415" height="472"/>
+	<SubTexture name="nene pose right0008" x="0" y="472" width="415" height="472"/>
+	<SubTexture name="nene pose right0009" x="0" y="472" width="415" height="472"/>
+	<SubTexture name="nene pose right0010" x="0" y="472" width="415" height="472"/>
+	<SubTexture name="nene pose right0011" x="0" y="472" width="415" height="472"/>
+	<SubTexture name="nene pose right0012" x="0" y="472" width="415" height="472"/>
+	<SubTexture name="nene pose right0013" x="0" y="472" width="415" height="472"/>
+	<SubTexture name="nene up pose0000" x="415" y="472" width="313" height="576"/>
+	<SubTexture name="nene up pose0001" x="415" y="472" width="313" height="576"/>
+	<SubTexture name="nene up pose0002" x="728" y="472" width="313" height="576"/>
+	<SubTexture name="nene up pose0003" x="728" y="472" width="313" height="576"/>
+	<SubTexture name="nene up pose0004" x="1041" y="472" width="313" height="576"/>
+	<SubTexture name="nene up pose0005" x="1041" y="472" width="313" height="576"/>
+	<SubTexture name="nene up pose0006" x="1354" y="472" width="313" height="576"/>
+	<SubTexture name="nene up pose0007" x="1354" y="472" width="313" height="576"/>
+	<SubTexture name="nene up pose0008" x="1354" y="472" width="313" height="576"/>
+	<SubTexture name="nene up pose0009" x="1354" y="472" width="313" height="576"/>
+	<SubTexture name="nene up pose0010" x="1354" y="472" width="313" height="576"/>
+	<SubTexture name="nene up pose0011" x="1354" y="472" width="313" height="576"/>
+	<SubTexture name="nene up pose0012" x="1354" y="472" width="313" height="576"/>
+	<SubTexture name="nene up pose0013" x="1354" y="472" width="313" height="576"/>
+	<SubTexture name="neneIDLE0000" x="1667" y="472" width="386" height="476"/>
+	<SubTexture name="neneIDLE0001" x="2053" y="472" width="386" height="476"/>
+	<SubTexture name="neneIDLE0002" x="2053" y="472" width="386" height="476"/>
+	<SubTexture name="neneIDLE0003" x="2439" y="472" width="386" height="476"/>
+	<SubTexture name="neneIDLE0004" x="2439" y="472" width="386" height="476"/>
+	<SubTexture name="neneIDLE0005" x="2439" y="472" width="386" height="476"/>
+	<SubTexture name="neneIDLE0006" x="2825" y="472" width="386" height="476"/>
+	<SubTexture name="neneIDLE0007" x="2825" y="472" width="386" height="476"/>
+	<SubTexture name="neneIDLE0008" x="2825" y="472" width="386" height="476"/>
+	<SubTexture name="neneIDLE0009" x="3211" y="472" width="386" height="476"/>
+	<SubTexture name="neneIDLE0010" x="3211" y="472" width="386" height="476"/>
+	<SubTexture name="neneIDLE0011" x="3211" y="472" width="386" height="476"/>
+	<SubTexture name="neneIDLE0012" x="3597" y="472" width="386" height="476"/>
+	<SubTexture name="neneIDLE0013" x="3597" y="472" width="386" height="476"/>
+	<SubTexture name="neneMISSPOSE0000" x="0" y="1048" width="380" height="475"/>
+	<SubTexture name="neneMISSPOSE0001" x="0" y="1048" width="380" height="475"/>
+	<SubTexture name="neneMISSPOSE0002" x="380" y="1048" width="380" height="475"/>
+	<SubTexture name="neneMISSPOSE0003" x="380" y="1048" width="380" height="475"/>
+	<SubTexture name="neneMISSPOSE0004" x="380" y="1048" width="380" height="475"/>
+	<SubTexture name="neneMISSPOSE0005" x="760" y="1048" width="380" height="475"/>
+	<SubTexture name="neneMISSPOSE0006" x="760" y="1048" width="380" height="475"/>
+	<SubTexture name="neneMISSPOSE0007" x="760" y="1048" width="380" height="475"/>
+	<SubTexture name="neneMISSPOSE0008" x="1140" y="1048" width="380" height="475"/>
+	<SubTexture name="neneMISSPOSE0009" x="1140" y="1048" width="380" height="475"/>
+	<SubTexture name="neneMISSPOSE0010" x="1520" y="1048" width="380" height="475"/>
+	<SubTexture name="neneMISSPOSE0011" x="1520" y="1048" width="380" height="475"/>
+	<SubTexture name="neneMISSPOSE0012" x="1900" y="1048" width="380" height="475"/>
+	<SubTexture name="neneMISSPOSE0013" x="1900" y="1048" width="380" height="475"/>
+</TextureAtlas>

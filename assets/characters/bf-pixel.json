@@ -1,0 +1,92 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#00e8ffff",
+	"HealthIcon": "bf-pixel",
+	"LoopAnim": false,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "BF IDLE instance 1",
+			"Offset": [
+				0.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "BF LEFT NOTE instance 1",
+			"Offset": [
+				0.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "BF DOWN NOTE instance 1",
+			"Offset": [
+				0.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "BF UP NOTE instance 1",
+			"Offset": [
+				0.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "BF RIGHT NOTE instance 1",
+			"Offset": [
+				0.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "singLeft MISS",
+			"Name": "BF LEFT MISS instance 1",
+			"Offset": [
+				0.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "singDown MISS",
+			"Name": "BF DOWN MISS instance 1",
+			"Offset": [
+				0.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "singUp MISS",
+			"Name": "BF UP MISS instance 1",
+			"Offset": [
+				0.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "singRight MISS",
+			"Name": "BF RIGHT MISS instance 1",
+			"Offset": [
+				0.0,
+				0.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"cameraPos": [
+		-260.0,
+		-40.0
+	],
+	"isPlayer": true,
+	"scale": [
+		6.0,
+		6.0
+	]
+}

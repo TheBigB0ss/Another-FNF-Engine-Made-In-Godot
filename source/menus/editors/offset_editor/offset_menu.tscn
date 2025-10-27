@@ -1,0 +1,421 @@
+[gd_scene load_steps=8 format=3 uid="uid://d2do8tvklsreq"]
+
+[ext_resource type="Script" uid="uid://cokaevuerhcpk" path="res://source/menus/editors/offset_editor/offset_menu.gd" id="1_vft5f"]
+[ext_resource type="PackedScene" uid="uid://ci7s7lxw8p2bl" path="res://source/stages/stage.tscn" id="2_l24p0"]
+[ext_resource type="Texture2D" uid="uid://dl8ob6uqlxroc" path="res://assets/images/hud/rating/default/sick.png" id="3_n322e"]
+[ext_resource type="Texture2D" uid="uid://cj6lp01iqfivo" path="res://assets/images/hud/rating/default/combo.png" id="3_v3n4i"]
+[ext_resource type="Texture2D" uid="uid://duy7maeuccjue" path="res://assets/images/cross.png" id="4_i0ff4"]
+[ext_resource type="Script" uid="uid://cbjydqignbyih" path="res://source/menus/editors/offset_editor/offsetNums.gd" id="4_qyjxo"]
+[ext_resource type="PackedScene" uid="uid://c6v05f40spef2" path="res://source/alphabet/alphabetObject.tscn" id="6_n4pec"]
+
+[node name="OffsetMenu" type="Node2D"]
+script = ExtResource("1_vft5f")
+
+[node name="Stage" parent="." instance=ExtResource("2_l24p0")]
+
+[node name="character" type="Node2D" parent="."]
+position = Vector2(475, 348)
+
+[node name="offset_layer" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="black_box" type="PanelContainer" parent="offset_layer"]
+offset_left = 813.0
+offset_top = 15.0
+offset_right = 1203.0
+offset_bottom = 479.0
+metadata/_edit_use_anchors_ = true
+
+[node name="characters" type="OptionButton" parent="offset_layer"]
+offset_left = 816.0
+offset_top = 46.0
+offset_right = 964.0
+offset_bottom = 66.0
+
+[node name="characters_text" type="Label" parent="offset_layer"]
+offset_left = 816.0
+offset_top = 24.0
+offset_right = 893.0
+offset_bottom = 47.0
+text = "Character:"
+
+[node name="flipX" type="CheckBox" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 815.0
+offset_top = 87.0
+offset_right = 890.0
+offset_bottom = 118.0
+text = "flip X?"
+
+[node name="flipY" type="CheckBox" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 904.0
+offset_top = 87.0
+offset_right = 979.0
+offset_bottom = 118.0
+text = "flip Y?"
+
+[node name="loopAnim" type="CheckBox" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 994.0
+offset_top = 87.0
+offset_right = 1107.0
+offset_bottom = 118.0
+text = "loop anim?"
+
+[node name="is_player" type="CheckBox" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 815.0
+offset_top = 195.0
+offset_right = 929.0
+offset_bottom = 226.0
+text = "is a player?"
+
+[node name="animated_icon" type="CheckBox" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 943.0
+offset_top = 198.0
+offset_right = 967.0
+offset_bottom = 222.0
+text = "animated icon?
+"
+
+[node name="icon_text" type="LineEdit" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 819.0
+offset_top = 146.0
+offset_right = 979.0
+offset_bottom = 177.0
+
+[node name="color_text" type="ColorPickerButton" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 1005.0
+offset_top = 146.0
+offset_right = 1165.0
+offset_bottom = 177.0
+color = Color(1, 1, 1, 1)
+
+[node name="icon_label" type="Label" parent="offset_layer"]
+offset_left = 819.0
+offset_top = 125.0
+offset_right = 896.0
+offset_bottom = 148.0
+text = "icon:"
+
+[node name="color_label" type="Label" parent="offset_layer"]
+offset_left = 1005.0
+offset_top = 125.0
+offset_right = 1133.0
+offset_bottom = 148.0
+text = "health bar color:"
+
+[node name="current_anim" type="Label" parent="offset_layer"]
+offset_left = 814.0
+offset_top = 456.0
+offset_right = 981.0
+offset_bottom = 479.0
+text = "animation: idle dance"
+
+[node name="save_json" type="Button" parent="offset_layer"]
+offset_left = 936.0
+offset_top = 412.0
+offset_right = 1060.0
+offset_bottom = 446.0
+text = "save json"
+
+[node name="x_scale" type="SpinBox" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 879.0
+offset_top = 275.0
+offset_right = 965.563
+offset_bottom = 306.0
+value = 1.0
+
+[node name="x_scale_label" type="Label" parent="offset_layer"]
+offset_left = 819.0
+offset_top = 280.0
+offset_right = 947.0
+offset_bottom = 303.0
+text = "X scale:"
+
+[node name="y_scale" type="SpinBox" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 1039.0
+offset_top = 275.0
+offset_right = 1125.56
+offset_bottom = 306.0
+value = 1.0
+
+[node name="y_scale_label" type="Label" parent="offset_layer"]
+offset_left = 979.0
+offset_top = 281.0
+offset_right = 1107.0
+offset_bottom = 304.0
+text = "Y scale:"
+
+[node name="camera_X" type="SpinBox" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 893.0
+offset_top = 316.0
+offset_right = 979.563
+offset_bottom = 347.0
+min_value = -9000.0
+max_value = 9000.0
+step = 10.0
+
+[node name="camera_Y" type="SpinBox" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 1072.0
+offset_top = 316.0
+offset_right = 1158.56
+offset_bottom = 347.0
+min_value = -9000.0
+max_value = 9000.0
+step = 10.0
+
+[node name="camera_X_label" type="Label" parent="offset_layer"]
+offset_left = 815.0
+offset_top = 319.0
+offset_right = 943.0
+offset_bottom = 342.0
+text = "camera X:"
+
+[node name="camera_Y_label" type="Label" parent="offset_layer"]
+offset_left = 994.0
+offset_top = 322.0
+offset_right = 1122.0
+offset_bottom = 345.0
+text = "camera Y:"
+
+[node name="cam_follow_poses" type="CheckBox" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 815.0
+offset_top = 235.0
+offset_right = 984.0
+offset_bottom = 266.0
+text = "cam follow poses?"
+
+[node name="anim_time" type="SpinBox" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 1022.0
+offset_top = 48.0
+offset_right = 1122.0
+offset_bottom = 79.0
+min_value = 1.0
+value = 5.0
+
+[node name="anim_time_text" type="Label" parent="offset_layer"]
+offset_left = 1022.0
+offset_top = 28.0
+offset_right = 1150.0
+offset_bottom = 51.0
+text = "anim time:"
+
+[node name="x_offset" type="SpinBox" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 879.0
+offset_top = 357.0
+offset_right = 965.563
+offset_bottom = 388.0
+min_value = -10000.0
+max_value = 10000.0
+
+[node name="x_offset_text" type="Label" parent="offset_layer"]
+offset_left = 816.0
+offset_top = 360.0
+offset_right = 944.0
+offset_bottom = 383.0
+text = "x offset:"
+
+[node name="y_offset" type="SpinBox" parent="offset_layer"]
+unique_name_in_owner = true
+offset_left = 1041.0
+offset_top = 357.0
+offset_right = 1127.56
+offset_bottom = 388.0
+min_value = -9000.0
+max_value = 9000.0
+
+[node name="y_offset_text" type="Label" parent="offset_layer"]
+offset_left = 976.0
+offset_top = 360.0
+offset_right = 1104.0
+offset_bottom = 383.0
+text = "y offset:"
+
+[node name="infos" type="RichTextLabel" parent="offset_layer"]
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 443.0
+offset_bottom = 192.0
+bbcode_enabled = true
+text = "Hello, welcome to the offset menu!
+Here is some information on how to use the menu :)
+[wave]
+E/Q: Change the current animation
+Space: Play the current animation
+Use your keyboard keys to change the animation offset.
+W/A/S/D: to move camera
+Mouse Scroll: change camera zoom"
+
+[node name="rating_layer" type="CanvasLayer" parent="."]
+layer = 3
+visible = false
+
+[node name="combo" type="Sprite2D" parent="rating_layer"]
+scale = Vector2(0.489796, 0.478261)
+texture = ExtResource("3_v3n4i")
+
+[node name="rating" type="Sprite2D" parent="rating_layer"]
+scale = Vector2(0.566998, 0.585526)
+texture = ExtResource("3_n322e")
+
+[node name="nums" type="Sprite2D" parent="rating_layer"]
+scale = Vector2(0.478723, 0.483193)
+script = ExtResource("4_qyjxo")
+
+[node name="black_box" type="PanelContainer" parent="rating_layer"]
+offset_left = 813.0
+offset_top = 15.0
+offset_right = 1203.0
+offset_bottom = 208.0
+
+[node name="rating_x" type="SpinBox" parent="rating_layer"]
+unique_name_in_owner = true
+offset_left = 900.0
+offset_top = 43.0
+offset_right = 986.563
+offset_bottom = 74.0
+min_value = -9000.0
+max_value = 9000.0
+step = 10.0
+
+[node name="rating_y" type="SpinBox" parent="rating_layer"]
+unique_name_in_owner = true
+offset_left = 1081.0
+offset_top = 46.0
+offset_right = 1167.56
+offset_bottom = 77.0
+min_value = -9000.0
+max_value = 9000.0
+step = 10.0
+
+[node name="rating_x_text" type="Label" parent="rating_layer"]
+offset_left = 832.0
+offset_top = 45.0
+offset_right = 896.0
+offset_bottom = 68.0
+text = "rating x:"
+
+[node name="rating_y_text" type="Label" parent="rating_layer"]
+offset_left = 1011.0
+offset_top = 48.0
+offset_right = 1075.0
+offset_bottom = 71.0
+text = "rating y:"
+
+[node name="combo_x" type="SpinBox" parent="rating_layer"]
+unique_name_in_owner = true
+offset_left = 904.0
+offset_top = 93.0
+offset_right = 990.563
+offset_bottom = 124.0
+min_value = -9000.0
+max_value = 9000.0
+step = 10.0
+
+[node name="combo_y" type="SpinBox" parent="rating_layer"]
+unique_name_in_owner = true
+offset_left = 1084.0
+offset_top = 96.0
+offset_right = 1170.56
+offset_bottom = 127.0
+min_value = -9000.0
+max_value = 9000.0
+step = 10.0
+
+[node name="combo_x_text" type="Label" parent="rating_layer"]
+offset_left = 832.0
+offset_top = 95.0
+offset_right = 903.0
+offset_bottom = 118.0
+text = "combo x:"
+
+[node name="combo_y_text" type="Label" parent="rating_layer"]
+offset_left = 1011.0
+offset_top = 98.0
+offset_right = 1081.0
+offset_bottom = 121.0
+text = "combo y:"
+
+[node name="nums_x" type="SpinBox" parent="rating_layer"]
+unique_name_in_owner = true
+offset_left = 900.0
+offset_top = 143.0
+offset_right = 986.563
+offset_bottom = 174.0
+min_value = -9000.0
+max_value = 9000.0
+step = 10.0
+
+[node name="nums_y" type="SpinBox" parent="rating_layer"]
+unique_name_in_owner = true
+offset_left = 1081.0
+offset_top = 146.0
+offset_right = 1167.56
+offset_bottom = 177.0
+min_value = -9000.0
+max_value = 9000.0
+step = 10.0
+
+[node name="nums_x_text" type="Label" parent="rating_layer"]
+offset_left = 832.0
+offset_top = 145.0
+offset_right = 896.0
+offset_bottom = 168.0
+text = "nums x:"
+
+[node name="nums_y_text" type="Label" parent="rating_layer"]
+offset_left = 1011.0
+offset_top = 148.0
+offset_right = 1075.0
+offset_bottom = 171.0
+text = "nums y:"
+
+[node name="text_layer" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="bg" type="ColorRect" parent="text_layer"]
+offset_left = 232.0
+offset_top = 669.0
+offset_right = 983.0
+offset_bottom = 709.0
+color = Color(0, 0, 0, 0.551)
+
+[node name="change_text" parent="text_layer" instance=ExtResource("6_n4pec")]
+position = Vector2(323, 688)
+scale = Vector2(0.46, 0.46)
+coolText = "press TAB to switch mode"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(641, 360)
+zoom = Vector2(0.585, 0.585)
+
+[node name="FileDialog" type="FileDialog" parent="."]
+
+[node name="cross" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("4_i0ff4")
+
+[connection signal="pressed" from="offset_layer/flipX" to="." method="_on_flip_x_pressed"]
+[connection signal="pressed" from="offset_layer/flipY" to="." method="_on_flip_y_pressed"]
+[connection signal="pressed" from="offset_layer/loopAnim" to="." method="_on_flip_x_pressed"]
+[connection signal="pressed" from="offset_layer/save_json" to="." method="save_file"]
+[connection signal="value_changed" from="offset_layer/x_scale" to="." method="_on_x_scale_value_changed"]
+[connection signal="value_changed" from="offset_layer/y_scale" to="." method="_on_y_scale_value_changed"]
+[connection signal="value_changed" from="offset_layer/camera_X" to="." method="_on_camera_x_value_changed"]
+[connection signal="value_changed" from="offset_layer/camera_Y" to="." method="_on_camera_y_value_changed"]
+[connection signal="value_changed" from="offset_layer/x_offset" to="." method="_on_x_offset_value_changed"]
+[connection signal="value_changed" from="offset_layer/y_offset" to="." method="_on_y_offset_value_changed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

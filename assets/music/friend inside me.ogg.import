@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cwv4ltqybpxgg"
+path="res://.godot/imported/friend inside me.ogg-5b46704d1be1586a55d4b60cd068ef89.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/friend inside me.ogg"
+dest_files=["res://.godot/imported/friend inside me.ogg-5b46704d1be1586a55d4b60cd068ef89.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

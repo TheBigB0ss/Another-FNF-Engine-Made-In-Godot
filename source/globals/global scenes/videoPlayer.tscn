@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://ynelehvuwvh4"]
+
+[ext_resource type="Script" uid="uid://1myrqugewu6g" path="res://source/globals/global scenes/videoPlayer.gd" id="1_46nk8"]
+
+[node name="VideoPlayer" type="CanvasLayer"]
+layer = 6
+script = ExtResource("1_46nk8")
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="."]
+scale = Vector2(2, 2)
+
+[node name="alphabetGrp" type="Node2D" parent="."]
+visible = false
+position = Vector2(54, 631)
+scale = Vector2(0.7, 0.7)
+
+[connection signal="finished" from="VideoStreamPlayer" to="." method="_on_video_stream_player_finished"]

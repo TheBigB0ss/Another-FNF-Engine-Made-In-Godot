@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://dmbsiv7yarngd"]
+
+[ext_resource type="Texture2D" uid="uid://qy5rd08gwi4m" path="res://assets/images/arrows/pixel/hurt note/hurtNote_assets.png" id="1_5ma1p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5c0hr"]
+atlas = ExtResource("1_5ma1p")
+region = Rect2(17, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8djm0"]
+atlas = ExtResource("1_5ma1p")
+region = Rect2(34, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ogjp"]
+atlas = ExtResource("1_5ma1p")
+region = Rect2(0, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2xvlj"]
+atlas = ExtResource("1_5ma1p")
+region = Rect2(51, 0, 17, 17)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5c0hr")
+}],
+"loop": true,
+"name": &"blue",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8djm0")
+}],
+"loop": true,
+"name": &"green",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ogjp")
+}],
+"loop": true,
+"name": &"purple",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2xvlj")
+}],
+"loop": true,
+"name": &"red",
+"speed": 5.0
+}]

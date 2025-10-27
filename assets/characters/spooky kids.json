@@ -1,0 +1,76 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#f2b21dff",
+	"HealthIcon": "spooky",
+	"LoopAnim": false,
+	"Poses": [
+		{
+			"Anim": "singLeft",
+			"Name": "note sing left",
+			"Offset": [
+				-115.0,
+				-19.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "spooky DOWN note",
+			"Offset": [
+				22.0,
+				39.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "spooky UP NOTE",
+			"Offset": [
+				-58.0,
+				-39.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "spooky sing right",
+			"Offset": [
+				82.0,
+				-26.0
+			]
+		},
+		{
+			"Anim": "hey",
+			"Name": "spooky kids YEAH!!",
+			"Offset": [
+				-49.0,
+				-19.0
+			]
+		},
+		{
+			"Anim": "danceLeft",
+			"Name": "dance_left",
+			"Offset": [
+				-67.0,
+				-33.0
+			]
+		},
+		{
+			"Anim": "danceRight",
+			"Name": "dance_right",
+			"Offset": [
+				-70.0,
+				-34.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"cameraPos": [
+		10.0,
+		20.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

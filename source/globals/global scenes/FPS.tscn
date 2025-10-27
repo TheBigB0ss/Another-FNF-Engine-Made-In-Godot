@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://bhcuymjm6sl5s"]
+
+[ext_resource type="Script" uid="uid://dg5urfl326apf" path="res://source/globals/global scenes/FPS.gd" id="1_kswgd"]
+[ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="2_hdtmm"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_7m8fr"]
+font_size = 380
+shadow_size = 75
+shadow_color = Color(0, 0, 0, 1)
+
+[node name="Fps" type="CanvasLayer"]
+process_mode = 3
+layer = 7
+script = ExtResource("1_kswgd")
+
+[node name="fpsText" type="Label" parent="."]
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 894.0
+offset_bottom = 335.0
+scale = Vector2(0.05, 0.05)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_hdtmm")
+theme_override_font_sizes/font_size = 410
+text = "FPS:"
+label_settings = SubResource("LabelSettings_7m8fr")

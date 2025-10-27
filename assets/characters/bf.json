@@ -1,0 +1,141 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#00cfffff",
+	"HealthIcon": "bf",
+	"LoopAnim": false,
+	"camera follow pos": false,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "BF idle dance",
+			"Offset": [
+				0.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "BF NOTE LEFT",
+			"Offset": [
+				-23.0,
+				4.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "BF NOTE DOWN",
+			"Offset": [
+				-6.0,
+				26.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "BF NOTE UP",
+			"Offset": [
+				33.0,
+				-16.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "BF NOTE RIGHT",
+			"Offset": [
+				50.0,
+				2.0
+			]
+		},
+		{
+			"Anim": "singLeft MISS",
+			"Name": "BF NOTE LEFT MISS",
+			"Offset": [
+				-10.0,
+				-10.0
+			]
+		},
+		{
+			"Anim": "singDown MISS",
+			"Name": "BF NOTE DOWN MISS",
+			"Offset": [
+				10.0,
+				12.0
+			]
+		},
+		{
+			"Anim": "singUp MISS",
+			"Name": "BF NOTE UP MISS",
+			"Offset": [
+				16.0,
+				-13.0
+			]
+		},
+		{
+			"Anim": "singRight MISS",
+			"Name": "BF NOTE RIGHT MISS",
+			"Offset": [
+				42.0,
+				-10.0
+			]
+		},
+		{
+			"Anim": "hey",
+			"Name": "BF HEY!!",
+			"Offset": [
+				5.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "hit",
+			"Name": "BF hit",
+			"Offset": [
+				0.0,
+				-7.0
+			]
+		},
+		{
+			"Anim": "pre attack",
+			"Name": "bf pre attack",
+			"Offset": [
+				20.0,
+				20.0
+			]
+		},
+		{
+			"Anim": "attack",
+			"Name": "boyfriend attack",
+			"Offset": [
+				-150.0,
+				-134.0
+			]
+		},
+		{
+			"Anim": "idle shaking",
+			"Name": "BF idle shaking",
+			"Offset": [
+				0.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "dodge",
+			"Name": "boyfriend dodge",
+			"Offset": [
+				-15.0,
+				5.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"cameraPos": [
+		-300.0,
+		-10.0
+	],
+	"isPlayer": true,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

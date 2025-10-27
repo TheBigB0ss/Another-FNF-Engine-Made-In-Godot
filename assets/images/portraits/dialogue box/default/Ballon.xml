@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="Ballon.png">
+	<!-- Created with Adobe Animate version 24.0.2.12 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="BallonBottom0000" x="30" y="30" width="1244" height="265"/>
+	<SubTexture name="BallonBottom0001" x="30" y="30" width="1244" height="265"/>
+	<SubTexture name="BallonBottom0002" x="30" y="30" width="1244" height="265"/>
+	<SubTexture name="BallonBottom0003" x="30" y="30" width="1244" height="265"/>
+	<SubTexture name="BallonBottom0004" x="1304" y="30" width="1244" height="265"/>
+	<SubTexture name="BallonBottom0005" x="1304" y="30" width="1244" height="265"/>
+	<SubTexture name="BallonBottom0006" x="1304" y="30" width="1244" height="265"/>
+	<SubTexture name="BallonBottom0007" x="1304" y="30" width="1244" height="265"/>
+	<SubTexture name="BallonBottom0008" x="2578" y="30" width="1244" height="265"/>
+	<SubTexture name="BallonBottom0009" x="2578" y="30" width="1244" height="265"/>
+	<SubTexture name="BallonBottom0010" x="2578" y="30" width="1244" height="265"/>
+	<SubTexture name="BallonBottom0011" x="2578" y="30" width="1244" height="265"/>
+	<SubTexture name="BallonLeft0000" x="30" y="325" width="1244" height="259"/>
+	<SubTexture name="BallonLeft0001" x="30" y="325" width="1244" height="259"/>
+	<SubTexture name="BallonLeft0002" x="30" y="325" width="1244" height="259"/>
+	<SubTexture name="BallonLeft0003" x="30" y="325" width="1244" height="259"/>
+	<SubTexture name="BallonLeft0004" x="1304" y="325" width="1244" height="259"/>
+	<SubTexture name="BallonLeft0005" x="1304" y="325" width="1244" height="259"/>
+	<SubTexture name="BallonLeft0006" x="1304" y="325" width="1244" height="259"/>
+	<SubTexture name="BallonLeft0007" x="1304" y="325" width="1244" height="259"/>
+	<SubTexture name="BallonLeft0008" x="2578" y="325" width="1244" height="259"/>
+	<SubTexture name="BallonLeft0009" x="2578" y="325" width="1244" height="259"/>
+	<SubTexture name="BallonLeft0010" x="2578" y="325" width="1244" height="259"/>
+	<SubTexture name="BallonLeft0011" x="2578" y="325" width="1244" height="259"/>
+	<SubTexture name="BallonRight0000" x="30" y="614" width="1244" height="259"/>
+	<SubTexture name="BallonRight0001" x="30" y="614" width="1244" height="259"/>
+	<SubTexture name="BallonRight0002" x="30" y="614" width="1244" height="259"/>
+	<SubTexture name="BallonRight0003" x="30" y="614" width="1244" height="259"/>
+	<SubTexture name="BallonRight0004" x="1304" y="614" width="1244" height="259"/>
+	<SubTexture name="BallonRight0005" x="1304" y="614" width="1244" height="259"/>
+	<SubTexture name="BallonRight0006" x="1304" y="614" width="1244" height="259"/>
+	<SubTexture name="BallonRight0007" x="1304" y="614" width="1244" height="259"/>
+	<SubTexture name="BallonRight0008" x="2578" y="614" width="1244" height="259"/>
+	<SubTexture name="BallonRight0009" x="2578" y="614" width="1244" height="259"/>
+	<SubTexture name="BallonRight0010" x="2578" y="614" width="1244" height="259"/>
+	<SubTexture name="BallonRight0011" x="2578" y="614" width="1244" height="259"/>
+</TextureAtlas>

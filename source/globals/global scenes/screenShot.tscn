@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cs20qpqgv8g5j"]
+
+[ext_resource type="Script" uid="uid://dchf3j5cj1pgp" path="res://source/globals/global scenes/screenShot.gd" id="1_mumaw"]
+
+[node name="screenShot" type="CanvasLayer"]
+layer = 7
+script = ExtResource("1_mumaw")

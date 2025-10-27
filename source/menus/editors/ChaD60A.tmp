@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3 uid="uid://crycv6kwt54te"]
+
+[ext_resource type="Script" path="res://source/menus/editors/CharacterEditor.gd" id="1_an1d2"]
+[ext_resource type="Texture2D" uid="uid://bohcucuki3lv3" path="res://assets/stages/week1/stageback.png" id="2_fifvh"]
+[ext_resource type="Texture2D" uid="uid://8cw2kxjo75u2" path="res://assets/stages/week1/stagefront.png" id="3_g826i"]
+[ext_resource type="Texture2D" uid="uid://bckrgj65ctd12" path="res://assets/images/hud/healthBar.png" id="4_iluq0"]
+
+[node name="CharacterEditor" type="Node2D"]
+script = ExtResource("1_an1d2")
+
+[node name="Bg" type="CanvasLayer" parent="."]
+
+[node name="bg" type="Sprite2D" parent="Bg"]
+position = Vector2(565.973, 246.668)
+scale = Vector2(0.5125, 0.563571)
+texture = ExtResource("2_fifvh")
+offset = Vector2(60.5406, -112.085)
+
+[node name="ground" type="Sprite2D" parent="Bg"]
+position = Vector2(597, 645)
+scale = Vector2(0.5125, 0.47031)
+texture = ExtResource("3_g826i")
+
+[node name="Hud" type="CanvasLayer" parent="."]
+
+[node name="saveCharacter" type="Button" parent="Hud"]
+offset_left = 745.0
+offset_top = 45.0
+offset_right = 867.0
+offset_bottom = 83.0
+text = "save"
+
+[node name="loadCharacter" type="Button" parent="Hud"]
+offset_left = 899.0
+offset_top = 45.0
+offset_right = 1032.0
+offset_bottom = 83.0
+text = "load"
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Hud"]
+offset_left = 308.0
+offset_top = 604.0
+offset_right = 909.0
+offset_bottom = 623.0
+texture_under = ExtResource("4_iluq0")
+
+[node name="icon" type="Sprite2D" parent="Hud"]
+position = Vector2(308, 689)
+
+[node name="OptionButton" type="OptionButton" parent="Hud"]
+offset_left = 820.0
+offset_top = 100.0
+offset_right = 865.0
+offset_bottom = 120.0
+scale = Vector2(2.72488, 1.88338)
+item_count = 1
+popup/item_0/text = ""
+popup/item_0/id = 0

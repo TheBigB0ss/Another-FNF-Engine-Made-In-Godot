@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://cn7cq3ole4vvf"]
+
+[ext_resource type="Script" uid="uid://cb7frcgryc42g" path="res://source/globals/global scenes/achievement_popUp.gd" id="1_gf811"]
+
+[node name="AchievementPopUp" type="CanvasLayer"]
+layer = 5
+script = ExtResource("1_gf811")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

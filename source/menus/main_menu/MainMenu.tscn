@@ -1,0 +1,72 @@
+[gd_scene load_steps=7 format=3 uid="uid://cbrladdlgcuht"]
+
+[ext_resource type="Script" uid="uid://canx2idd1hh8j" path="res://source/menus/main_menu/MainMenu.gd" id="1_lohmg"]
+[ext_resource type="Texture2D" uid="uid://dgw2srf1yhn7c" path="res://assets/images/menuBgs/menuBG.png" id="2_mby5t"]
+[ext_resource type="Texture2D" uid="uid://depqgg301j5px" path="res://assets/images/menuBgs/menuBGMagenta.png" id="3_je5i7"]
+[ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="4_je5i7"]
+[ext_resource type="PackedScene" uid="uid://c6v05f40spef2" path="res://source/alphabet/alphabetObject.tscn" id="5_5klk5"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_5klk5"]
+font = ExtResource("4_je5i7")
+font_size = 940
+shadow_size = 141
+shadow_color = Color(0, 0, 0, 1)
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_lohmg")
+
+[node name="bg" type="Sprite2D" parent="."]
+position = Vector2(640, 360)
+scale = Vector2(0.995335, 0.986301)
+texture = ExtResource("2_mby5t")
+
+[node name="magentaBg" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0)
+position = Vector2(640, 360)
+scale = Vector2(0.995334, 0.986301)
+texture = ExtResource("3_je5i7")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+offset_right = 1280.0
+offset_bottom = 722.0
+
+[node name="options" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 647.0
+offset_top = 151.0
+offset_right = 766.0
+offset_bottom = 258.0
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="bg" type="ColorRect" parent="Control"]
+layout_mode = 0
+offset_top = 682.0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.551)
+
+[node name="achievemens_text" type="Label" parent="Control"]
+visible = false
+texture_filter = 1
+layout_mode = 0
+offset_top = 682.0
+offset_right = 36571.0
+offset_bottom = 1759.0
+scale = Vector2(0.035, 0.035)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "Press F5 to see the achievements menu"
+label_settings = SubResource("LabelSettings_5klk5")
+horizontal_alignment = 1
+
+[node name="alphabetObject" parent="Control" instance=ExtResource("5_5klk5")]
+position = Vector2(232, 702)
+scale = Vector2(0.4, 0.4)
+coolText = "Press F5 to see the achievements menu"

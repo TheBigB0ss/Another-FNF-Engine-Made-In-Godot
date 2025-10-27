@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b254xq2an81nx"
+path="res://.godot/imported/pause V1.ogg-5e885955d25dd72ba293d7537649e4f2.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/pause V1.ogg"
+dest_files=["res://.godot/imported/pause V1.ogg-5e885955d25dd72ba293d7537649e4f2.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

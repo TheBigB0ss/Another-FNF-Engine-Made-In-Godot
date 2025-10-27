@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://cbxsgl6u7rffu"]
+
+[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_fj77n"]
+[ext_resource type="SpriteFrames" uid="uid://bvi62jhadm0tf" path="res://assets/images/characters/spooky_kids_assets.res" id="2_kw52j"]
+
+[node name="spooky kids" type="Node2D"]
+script = ExtResource("1_fj77n")
+json_path = "spooky kids"
+
+[node name="character" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("2_kw52j")
+animation = &"dance_right"

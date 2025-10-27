@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bh1lckq5ahmks"]
+
+[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_24dkt"]
+[ext_resource type="SpriteFrames" uid="uid://cmb6bsgj8dkkq" path="res://assets/images/characters/senpai_mad.res" id="2_nb523"]
+
+[node name="senpai_mad" type="Node2D"]
+script = ExtResource("1_24dkt")
+json_path = "senpai mad"
+
+[node name="character" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = ExtResource("2_nb523")
+animation = &"Angry Senpai UP NOTE instance 1"
+frame = 13
+frame_progress = 1.0

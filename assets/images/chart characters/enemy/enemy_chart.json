@@ -1,0 +1,44 @@
+{
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "idle",
+			"Offset": [
+				5.0,
+				-10.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "left",
+			"Offset": [
+				-45.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "down",
+			"Offset": [
+				-16.0,
+				30.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "up",
+			"Offset": [
+				46.0,
+				-31.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "right",
+			"Offset": [
+				56.0,
+				0.0
+			]
+		}
+	]
+}

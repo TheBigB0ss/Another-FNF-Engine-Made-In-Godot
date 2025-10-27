@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://vcui5e3p5o33"]
+
+[ext_resource type="Texture2D" uid="uid://dreyw8yboe7q3" path="res://assets/images/portraits/characters/evilLeafy.png" id="1_mdx3u"]
+
+[node name="EvilLeafy" type="Sprite2D"]
+scale = Vector2(0.165, 0.165)
+texture = ExtResource("1_mdx3u")

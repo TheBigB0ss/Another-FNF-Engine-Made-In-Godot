@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://4t6m62qin0jn"
+path="res://.godot/imported/jeffGameover-4.ogg-afa584cf920665f6f552fa3614ad78d9.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sounds/game over/tankman gameover voice lines/jeffGameover-4.ogg"
+dest_files=["res://.godot/imported/jeffGameover-4.ogg-afa584cf920665f6f552fa3614ad78d9.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,173 @@
+[gd_scene load_steps=15 format=3 uid="uid://d2scvk46riv62"]
+
+[ext_resource type="Script" uid="uid://cvaieursieveb" path="res://source/globals/global scenes/volume.gd" id="1_ocn1k"]
+[ext_resource type="Texture2D" uid="uid://cgj01cnhq30qg" path="res://assets/images/volume/volume.png" id="2_xxhmw"]
+[ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="4_cfb3u"]
+[ext_resource type="Texture2D" uid="uid://dpqunyxhaphhl" path="res://assets/images/volume/pieces/piece1.png" id="5_f4wls"]
+[ext_resource type="Texture2D" uid="uid://bnxxgklvuec2q" path="res://assets/images/volume/pieces/piece2.png" id="6_r7uoi"]
+[ext_resource type="Texture2D" uid="uid://b6xxwsmdavggm" path="res://assets/images/volume/pieces/piece3.png" id="7_kl1ie"]
+[ext_resource type="Texture2D" uid="uid://bhi541sdei23y" path="res://assets/images/volume/pieces/piece4.png" id="8_ol1bm"]
+[ext_resource type="Texture2D" uid="uid://bn1gg48f5xkyu" path="res://assets/images/volume/pieces/piece5.png" id="9_kjxw1"]
+[ext_resource type="Texture2D" uid="uid://d3acyb10jfy1l" path="res://assets/images/volume/pieces/piece6.png" id="10_2drxq"]
+[ext_resource type="Texture2D" uid="uid://cgxckw0evy3rb" path="res://assets/images/volume/pieces/piece7.png" id="11_7rapw"]
+[ext_resource type="Texture2D" uid="uid://cyc6mqw0xf0l" path="res://assets/images/volume/pieces/piece8.png" id="12_o4au3"]
+[ext_resource type="Texture2D" uid="uid://dcpvg86mkcthl" path="res://assets/images/volume/pieces/piece9.png" id="13_bb3wb"]
+[ext_resource type="Texture2D" uid="uid://b28fg6fjlliv6" path="res://assets/images/volume/pieces/piece10.png" id="14_r8xn1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_hr6tt"]
+font = ExtResource("4_cfb3u")
+font_size = 700
+shadow_size = 80
+shadow_color = Color(0, 0, 0, 1)
+
+[node name="Volume" type="CanvasLayer"]
+process_mode = 3
+layer = 8
+script = ExtResource("1_ocn1k")
+
+[node name="Control" type="Control" parent="."]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="volume_button" type="Sprite2D" parent="Control"]
+texture_filter = 1
+position = Vector2(612.75, -59.4)
+scale = Vector2(1.062, 1.056)
+texture = ExtResource("2_xxhmw")
+
+[node name="volume_text" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 556.0
+offset_top = -178.0
+offset_right = 3427.0
+offset_bottom = 438.0
+scale = Vector2(0.05, 0.05)
+text = "VOLUME:"
+label_settings = SubResource("LabelSettings_hr6tt")
+
+[node name="volume_bar" type="Control" parent="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 605.0
+offset_top = -96.4
+offset_right = 645.0
+offset_bottom = -56.4
+
+[node name="piece1" type="TextureProgressBar" parent="Control/volume_bar"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+min_value = 0.1
+max_value = 0.2
+step = 0.1
+value = 0.1
+texture_under = ExtResource("5_f4wls")
+texture_progress = ExtResource("5_f4wls")
+
+[node name="piece2" type="TextureProgressBar" parent="Control/volume_bar"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+min_value = 0.2
+max_value = 0.3
+step = 0.1
+value = 0.2
+texture_under = ExtResource("6_r7uoi")
+texture_progress = ExtResource("6_r7uoi")
+
+[node name="piece3" type="TextureProgressBar" parent="Control/volume_bar"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+min_value = 0.3
+max_value = 0.4
+step = 0.1
+value = 0.3
+texture_under = ExtResource("7_kl1ie")
+texture_progress = ExtResource("7_kl1ie")
+
+[node name="piece4" type="TextureProgressBar" parent="Control/volume_bar"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+min_value = 0.4
+max_value = 0.5
+step = 0.1
+value = 0.4
+texture_under = ExtResource("8_ol1bm")
+texture_progress = ExtResource("8_ol1bm")
+
+[node name="piece5" type="TextureProgressBar" parent="Control/volume_bar"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+min_value = 0.5
+max_value = 0.6
+step = 0.1
+value = 0.5
+texture_under = ExtResource("9_kjxw1")
+texture_progress = ExtResource("9_kjxw1")
+
+[node name="piece6" type="TextureProgressBar" parent="Control/volume_bar"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+min_value = 0.6
+max_value = 0.7
+step = 0.1
+value = 0.6
+texture_under = ExtResource("10_2drxq")
+texture_progress = ExtResource("10_2drxq")
+
+[node name="piece7" type="TextureProgressBar" parent="Control/volume_bar"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+min_value = 0.7
+max_value = 0.8
+step = 0.1
+value = 0.7
+texture_under = ExtResource("11_7rapw")
+texture_progress = ExtResource("11_7rapw")
+
+[node name="piece8" type="TextureProgressBar" parent="Control/volume_bar"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+min_value = 0.8
+max_value = 0.9
+step = 0.1
+value = 0.8
+texture_under = ExtResource("12_o4au3")
+texture_progress = ExtResource("12_o4au3")
+
+[node name="piece9" type="TextureProgressBar" parent="Control/volume_bar"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+min_value = 0.9
+max_value = 1.0
+value = 0.9
+texture_under = ExtResource("13_bb3wb")
+texture_progress = ExtResource("13_bb3wb")
+
+[node name="piece10" type="TextureProgressBar" parent="Control/volume_bar"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+value = 1.0
+texture_under = ExtResource("14_r8xn1")
+texture_progress = ExtResource("14_r8xn1")

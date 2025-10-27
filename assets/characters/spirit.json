@@ -1,0 +1,59 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#ff0047",
+	"HealthIcon": "spirit",
+	"LoopAnim": true,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "idle spirit",
+			"Offset": [
+				5.0,
+				-30.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "left",
+			"Offset": [
+				-30.0,
+				-30.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "spirit down",
+			"Offset": [
+				0.0,
+				20.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "up",
+			"Offset": [
+				0.0,
+				-50.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "right",
+			"Offset": [
+				40.0,
+				-30.0
+			]
+		}
+	],
+	"cameraPos": [
+		170.0,
+		-90.0
+	],
+	"isPlayer": false,
+	"scale": [
+		5.0,
+		5.0
+	]
+}

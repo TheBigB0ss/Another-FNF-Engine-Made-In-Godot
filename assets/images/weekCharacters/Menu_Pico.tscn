@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3n0fts4j8aar"]
+
+[ext_resource type="SpriteFrames" uid="uid://cojweicr7bkqx" path="res://assets/images/weekCharacters/Menu_Pico.res" id="1_luugq"]
+
+[node name="menu_pico" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_luugq")
+animation = &"M Pico Idle"
+autoplay = "M Pico Idle"

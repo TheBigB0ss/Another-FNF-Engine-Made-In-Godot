@@ -1,0 +1,28 @@
+{
+	"create .res": false,
+	"is pixel sprite": true,
+	"speed": 16,
+	"loop": true,
+	"anims":[
+		{"name": "trees_0000", "indices": [0, 0, 512, 512]},
+		{"name": "trees_0001", "indices": [513, 0, 512, 512]},
+		{"name": "trees_0002", "indices": [1539, 1026, 512, 512]},
+		{"name": "trees_0003", "indices": [2052, 513, 512, 512]},
+		{"name": "trees_0004", "indices": [2565, 0, 512, 512]},
+		{"name": "trees_0005", "indices": [3078, 0, 512, 512]},
+		{"name": "trees_0006", "indices": [2565, 513, 512, 512]},
+		{"name": "trees_0007", "indices": [2052, 1026, 512, 512]},
+		{"name": "trees_0008", "indices": [2565, 1026, 512, 512]},
+		{"name": "trees_0009", "indices": [3078, 513, 512, 512]},
+		{"name": "trees_0010", "indices": [1026, 0, 512, 512]},
+		{"name": "trees_0011", "indices": [0, 513, 512, 512]},
+		{"name": "trees_0012", "indices": [513, 513, 512, 512]},
+		{"name": "trees_0013", "indices": [0, 1026, 512, 512]},
+		{"name": "trees_0014", "indices": [513, 1026, 512, 512]},
+		{"name": "trees_0015", "indices": [1026, 513, 512, 512]},
+		{"name": "trees_0016", "indices": [1026, 1026, 512, 512]},
+		{"name": "trees_0017", "indices": [1539, 0, 512, 512]},
+		{"name": "trees_0018", "indices": [1539, 513, 512, 512]},
+		{"name": "trees_0019", "indices": [2052, 0, 512, 512]}
+	]
+}

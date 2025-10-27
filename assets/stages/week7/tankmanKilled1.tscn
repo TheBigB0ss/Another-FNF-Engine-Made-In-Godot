@@ -1,0 +1,120 @@
+[gd_scene load_steps=9 format=3 uid="uid://btpnfornuvbfk"]
+
+[ext_resource type="Script" uid="uid://b52xmt2trb7ts" path="res://assets/stages/week7/tankmanKilled1.gd" id="1_r6w6c"]
+[ext_resource type="Texture2D" uid="uid://dnbs64mglbalm" path="res://assets/stages/week7/tankmanKilled1.png" id="1_vwch5"]
+
+[sub_resource type="Animation" id="Animation_k5g1a"]
+length = 0.57
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(0, 2148, 750, 512), Rect2(2708, 2101, 807, 615), Rect2(1808, 2139, 814, 601), Rect2(3227, 624, 840, 605), Rect2(1808, 1556, 896, 579), Rect2(3141, 0, 914, 620), Rect2(2708, 1556, 935, 541), Rect2(3647, 1233, 426, 608), Rect2(3519, 2101, 534, 466), Rect2(3519, 2571, 521, 466), Rect2(3519, 2571, 521, 466), Rect2(2626, 2720, 459, 490), Rect2(0, 0, 1, 1), Rect2(2626, 2720, 459, 490), Rect2(0, 0, 1, 1), Rect2(2626, 2720, 459, 490), Rect2(0, 0, 1, 1), Rect2(2626, 2720, 459, 490), Rect2(0, 0, 1, 1), Rect2(0, 0, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character_Sprite:offset")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-147, 12), Vector2(-14, -4), Vector2(-17, 3), Vector2(50, 4), Vector2(22, 17), Vector2(65, -1), Vector2(54, 38), Vector2(-89, 7), Vector2(-143, 78), Vector2(-137, 78), Vector2(-137, 78), Vector2(-106, 66), Vector2(-473, -46), Vector2(-106, 66), Vector2(-473, -46), Vector2(-106, 66), Vector2(-473, -46), Vector2(-106, 66), Vector2(-473, -46), Vector2(-473, -46)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wqhw0"]
+_data = {
+&" ": SubResource("Animation_k5g1a")
+}
+
+[sub_resource type="Animation" id="Animation_x1xef"]
+length = 0.54
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(0, 2664, 597, 429), Rect2(0, 1518, 885, 626), Rect2(889, 1556, 915, 592), Rect2(1109, 832, 1055, 720), Rect2(2168, 832, 1055, 720), Rect2(2130, 0, 1007, 828), Rect2(1117, 0, 1009, 828), Rect2(0, 768, 1105, 746), Rect2(0, 0, 1113, 764), Rect2(754, 2152, 768, 491), Rect2(754, 2152, 768, 491), Rect2(754, 2647, 781, 461), Rect2(0, 0, 1, 1), Rect2(754, 2647, 781, 461), Rect2(0, 0, 1, 1), Rect2(754, 2647, 781, 461), Rect2(0, 0, 1, 1), Rect2(754, 2647, 781, 461), Rect2(0, 0, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character_Sprite:offset")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-69, 12), Vector2(47, -53), Vector2(32, -36), Vector2(65, 12), Vector2(65, 12), Vector2(94, 0), Vector2(93, 0), Vector2(50, 3), Vector2(54, 12), Vector2(-213, 10), Vector2(-213, 10), Vector2(-220, 25), Vector2(-487, -87), Vector2(-220, 25), Vector2(-487, -87), Vector2(-220, 25), Vector2(-487, -87), Vector2(-220, 25), Vector2(-487, -87)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bo20w"]
+_data = {
+&" ": SubResource("Animation_x1xef")
+}
+
+[sub_resource type="Animation" id="Animation_3cnpd"]
+length = 0.39
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(2045, 2744, 503, 412), Rect2(2045, 2744, 503, 412), Rect2(2045, 2744, 503, 412), Rect2(1539, 2744, 502, 417), Rect2(1539, 2744, 502, 417), Rect2(3089, 3041, 434, 426), Rect2(3089, 3041, 434, 426), Rect2(0, 3097, 358, 428), Rect2(0, 3097, 358, 428), Rect2(0, 3097, 358, 428), Rect2(3527, 3041, 366, 426), Rect2(3527, 3041, 366, 426), Rect2(1526, 2152, 262, 415), Rect2(1526, 2152, 262, 415)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character_Sprite:offset")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-1, -23), Vector2(-1, -23), Vector2(-1, -23), Vector2(2, -20), Vector2(2, -20), Vector2(-27, 24), Vector2(-27, 24), Vector2(43, -25), Vector2(43, -25), Vector2(43, -25), Vector2(36, -19), Vector2(36, -19), Vector2(23, 31), Vector2(23, 31)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xwbfs"]
+_data = {
+&" ": SubResource("Animation_3cnpd")
+}
+
+[node name="tankmanKilled1" type="Node2D"]
+script = ExtResource("1_r6w6c")
+
+[node name="Character_Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_vwch5")
+offset = Vector2(-1, -23)
+region_enabled = true
+region_rect = Rect2(2045, 2744, 503, 412)
+
+[node name="Character_Animation" type="AnimationPlayer" parent="."]
+libraries = {
+&"John Shot 1": SubResource("AnimationLibrary_wqhw0"),
+&"John Shot 2": SubResource("AnimationLibrary_bo20w"),
+&"tankman running": SubResource("AnimationLibrary_xwbfs")
+}
+autoplay = "tankman running/ "
+
+[connection signal="animation_finished" from="Character_Animation" to="." method="_on_character_animation_animation_finished"]

@@ -1,0 +1,27 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "",
+	"HealthIcon": "",
+	"LoopAnim": false,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "GF IDLE",
+			"Offset": [
+				21.0,
+				-18.0
+			]
+		}
+	],
+	"cameraPos": [
+		0.0,
+		-190.0
+	],
+	"isPlayer": false,
+	"scale": [
+		6.0,
+		6.0
+	]
+}

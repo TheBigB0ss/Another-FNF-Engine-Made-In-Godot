@@ -1,0 +1,61 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#abeb3bff",
+	"HealthIcon": "pico-remake",
+	"LoopAnim": true,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "Pico Idle Dance",
+			"Offset": [
+				-30.0,
+				0.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "Pico NOTE LEFT",
+			"Offset": [
+				-101.0,
+				-3.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "Pico Down Note",
+			"Offset": [
+				48.0,
+				50.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "pico Up note",
+			"Offset": [
+				-15.0,
+				-10.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "Pico Note Right",
+			"Offset": [
+				13.0,
+				-2.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"camera follow pos": false,
+	"cameraPos": [
+		50.0,
+		30.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

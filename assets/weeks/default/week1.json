@@ -1,0 +1,27 @@
+{
+	"songs":[
+		[
+			"bopeebo",
+			"dad",
+			[0.679, 0.205, 0.867]
+		],
+		[
+			"fresh",
+			"dad",
+			[0.679, 0.205, 0.867]
+		],
+		[
+			"dad-battle",
+			"dad",
+			[0.679, 0.205, 0.867]
+		]
+	],
+	"hideFromFreeplay": false,
+	"hideFromStoryMode": false,
+	"isLocked": false,
+	"weekName": "week1",
+	"lastWeek": "",
+	"weekDescription": "Daddy Dearest",
+	"weekDifficulties": ["easy", "normal", "hard", "remix"],
+	"weekCharacters": ["Dad", "BF", "GF"]
+}

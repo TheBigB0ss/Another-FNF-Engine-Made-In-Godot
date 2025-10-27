@@ -1,0 +1,43 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "",
+	"HealthIcon": "",
+	"LoopAnim": false,
+	"Poses": [
+		{
+			"Anim": "dead",
+			"Name": "BF Dies with GF",
+			"Offset": [
+				0.0,
+				22.0
+			]
+		},
+		{
+			"Anim": "dead loop",
+			"Name": "BF Dead with GF Loop",
+			"Offset": [
+				0.0,
+				28.0
+			]
+		},
+		{
+			"Anim": "dead confirm",
+			"Name": "RETRY confirm holding gf",
+			"Offset": [
+				7.0,
+				12.0
+			]
+		}
+	],
+	"cameraPos": [
+		0.0,
+		0.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

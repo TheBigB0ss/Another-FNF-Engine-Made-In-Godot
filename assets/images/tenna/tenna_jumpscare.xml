@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="tenna_jumpscare.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="tenna_0" x="0" y="0" width="177" height="417"/>
+	<SubTexture name="tenna_1" x="177" y="0" width="177" height="417"/>
+	<SubTexture name="tenna_2" x="354" y="0" width="177" height="417"/>
+	<SubTexture name="tenna_3" x="531" y="0" width="177" height="417"/>
+	<SubTexture name="tenna_4" x="708" y="0" width="177" height="417"/>
+	<SubTexture name="tenna_5" x="0" y="417" width="177" height="417"/>
+</TextureAtlas>

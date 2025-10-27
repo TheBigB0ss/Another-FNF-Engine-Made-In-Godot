@@ -1,0 +1,80 @@
+[gd_scene load_steps=7 format=3 uid="uid://dovf83bjbhnsn"]
+
+[ext_resource type="Script" uid="uid://cv1mng412n6jo" path="res://source/menus/options/options_menu.gd" id="1_g3fsc"]
+[ext_resource type="Texture2D" uid="uid://depqgg301j5px" path="res://assets/images/menuBgs/menuBGMagenta.png" id="2_gnd2s"]
+[ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_12ubm"]
+[ext_resource type="PackedScene" uid="uid://c6v05f40spef2" path="res://source/alphabet/alphabetObject.tscn" id="4_5hxum"]
+[ext_resource type="PackedScene" uid="uid://csjtlx65o4ol2" path="res://source/menus/options/reset_data_scene.tscn" id="4_ynts2"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1y2sa"]
+font = ExtResource("3_12ubm")
+font_size = 485
+shadow_size = 40
+shadow_color = Color(0, 0, 0, 1)
+
+[node name="Options_menu" type="Node2D"]
+script = ExtResource("1_g3fsc")
+
+[node name="Bg" type="Sprite2D" parent="."]
+position = Vector2(640, 360)
+scale = Vector2(0.995334, 0.986301)
+texture = ExtResource("2_gnd2s")
+
+[node name="options" type="Node2D" parent="."]
+position = Vector2(420, 479)
+
+[node name="settings" type="Node2D" parent="."]
+
+[node name="new_options" type="Node2D" parent="settings"]
+position = Vector2(-25, 479)
+
+[node name="option_suffix" type="Node2D" parent="settings"]
+
+[node name="ColorRect" type="ColorRect" parent="settings"]
+visible = false
+offset_left = -10.0
+offset_top = 638.0
+offset_right = 30.0
+offset_bottom = 676.0
+scale = Vector2(32.8118, 2.20228)
+color = Color(0, 0, 0, 0.517647)
+
+[node name="Label" type="Label" parent="settings"]
+texture_filter = 1
+offset_left = -1.0
+offset_top = 641.0
+offset_right = 1136.0
+offset_bottom = 1068.0
+scale = Vector2(0.081, 0.081)
+label_settings = SubResource("LabelSettings_1y2sa")
+metadata/_edit_use_anchors_ = true
+
+[node name="keys" type="Node2D" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="keys"]
+offset_left = -10.0
+offset_top = -20.0
+offset_right = 1297.0
+offset_bottom = 734.0
+color = Color(0, 0, 0, 0.470588)
+
+[node name="keyLabel" parent="keys" instance=ExtResource("4_5hxum")]
+
+[node name="reset" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="reset"]
+offset_top = 659.0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.415686)
+metadata/_edit_use_anchors_ = true
+
+[node name="reset_menu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="reset_data_scene" parent="reset_menu" instance=ExtResource("4_ynts2")]
+visible = false

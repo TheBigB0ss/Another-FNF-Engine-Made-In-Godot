@@ -1,0 +1,83 @@
+[gd_scene load_steps=7 format=3 uid="uid://ducf1v2equwu2"]
+
+[ext_resource type="Script" uid="uid://fwa3u3ggsrrj" path="res://assets/stages/week7/cutscene/tankman_script.gd" id="1_4ik22"]
+[ext_resource type="Texture2D" uid="uid://dcv6app6vopjh" path="res://assets/stages/week7/cutscene/stressGF.png" id="2_7vxi6"]
+
+[sub_resource type="Animation" id="Animation_7wj4u"]
+length = 0.9
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57, 0.6, 0.63, 0.66, 0.69, 0.72, 0.75, 0.78, 0.81, 0.84, 0.87, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(2, 2, 909, 674), Rect2(913, 2, 909, 674), Rect2(1824, 2, 911, 674), Rect2(2737, 2, 911, 674), Rect2(3650, 2, 911, 675), Rect2(4563, 2, 911, 675), Rect2(5476, 2, 912, 675), Rect2(6390, 2, 912, 675), Rect2(2, 679, 912, 675), Rect2(916, 679, 912, 675), Rect2(1830, 679, 912, 674), Rect2(2744, 679, 912, 676), Rect2(3658, 679, 912, 676), Rect2(4572, 679, 912, 676), Rect2(5486, 679, 913, 676), Rect2(6401, 679, 913, 677), Rect2(2, 1358, 913, 677), Rect2(917, 1358, 913, 677), Rect2(1832, 1358, 912, 677), Rect2(2746, 1358, 914, 677), Rect2(3662, 1358, 914, 677), Rect2(4578, 1358, 915, 678), Rect2(5495, 1358, 915, 678), Rect2(6412, 1358, 915, 678), Rect2(2, 2038, 915, 679), Rect2(919, 2038, 916, 679), Rect2(1837, 2038, 916, 679), Rect2(2755, 2038, 917, 679), Rect2(3674, 2038, 917, 679), Rect2(4593, 2038, 917, 678), Rect2(5512, 2038, 917, 680)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character_Sprite:offset")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57, 0.6, 0.63, 0.66, 0.69, 0.72, 0.75, 0.78, 0.81, 0.84, 0.87, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(-1, 0), Vector2(-1, 0), Vector2(-1, 0), Vector2(-1, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(458, 340)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_m5k03"]
+_data = {
+&" ": SubResource("Animation_7wj4u")
+}
+
+[sub_resource type="Animation" id="Animation_yi5yo"]
+length = 0.69
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57, 0.6, 0.63, 0.66, 0.69),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(6431, 2038, 918, 680), Rect2(2, 2720, 917, 681), Rect2(921, 2720, 919, 681), Rect2(1842, 2720, 921, 681), Rect2(2765, 2720, 921, 681), Rect2(3688, 2720, 922, 682), Rect2(4612, 2720, 921, 682), Rect2(5535, 2720, 923, 682), Rect2(6460, 2720, 923, 683), Rect2(2, 3405, 923, 683), Rect2(927, 3405, 924, 683), Rect2(1853, 3405, 923, 683), Rect2(2778, 3405, 925, 684), Rect2(3705, 3405, 925, 684), Rect2(4632, 3405, 926, 685), Rect2(5560, 3405, 926, 687), Rect2(6488, 3405, 927, 687), Rect2(2, 4094, 927, 687), Rect2(931, 4094, 927, 688), Rect2(1860, 4094, 928, 688), Rect2(2790, 4094, 930, 689), Rect2(3722, 4094, 930, 689), Rect2(4654, 4094, 1148, 1130), Rect2(5804, 4094, 931, 1027)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character_Sprite:offset")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57, 0.6, 0.63, 0.66, 0.69),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(109, 221), Vector2(108, 220), Vector2(108, 220), Vector2(108, 220), Vector2(108, 220), Vector2(109, 221), Vector2(108, 221), Vector2(108, 221), Vector2(108, 220), Vector2(108, 220), Vector2(109, 220), Vector2(108, 220), Vector2(108, 221), Vector2(108, 221), Vector2(109, 220), Vector2(109, 220), Vector2(108, 220), Vector2(108, 220), Vector2(108, 221), Vector2(109, 221), Vector2(109, 220), Vector2(109, 220), Vector2(0, 0), Vector2(109, 52)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_n4vyb"]
+_data = {
+&" ": SubResource("Animation_yi5yo")
+}
+
+[node name="stressGF" type="Node2D"]
+script = ExtResource("1_4ik22")
+
+[node name="Character_Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_7vxi6")
+region_enabled = true
+region_rect = Rect2(4593, 2038, 917, 678)
+
+[node name="Character_Animation" type="AnimationPlayer" parent="."]
+libraries = {
+&"GF STARTS TO TURN PART 1": SubResource("AnimationLibrary_m5k03"),
+&"GF STARTS TO TURN PART 2": SubResource("AnimationLibrary_n4vyb")
+}
+speed_scale = 0.82

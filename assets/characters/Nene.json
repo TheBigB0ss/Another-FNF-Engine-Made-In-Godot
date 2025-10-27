@@ -1,0 +1,69 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#fa7ca9",
+	"HealthIcon": "nene",
+	"LoopAnim": true,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "neneIDLE",
+			"Offset": [
+				18.0,
+				-10.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "nene left pose",
+			"Offset": [
+				-11.0,
+				-9.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "nene down pose",
+			"Offset": [
+				13.0,
+				9.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "nene up pose",
+			"Offset": [
+				12.0,
+				-63.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "nene pose right",
+			"Offset": [
+				31.0,
+				-8.0
+			]
+		},
+		{
+			"Anim": "singLaugh",
+			"Name": "neneMISSPOSE",
+			"Offset": [
+				20.0,
+				-10.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"camera follow pos": true,
+	"cameraPos": [
+		150.0,
+		20.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

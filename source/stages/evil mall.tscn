@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://dbwlmaqu7hrqf"]
+
+[ext_resource type="Script" uid="uid://cvw4sp32d42t8" path="res://source/stages/evil mall.gd" id="1_dh70a"]
+[ext_resource type="Texture2D" uid="uid://clq8kqtrwv4w5" path="res://assets/stages/week5/evilMall/evilBG.png" id="2_kl1mq"]
+[ext_resource type="Texture2D" uid="uid://r6eplyukyogi" path="res://assets/stages/week5/evilMall/evilSnow.png" id="3_axp51"]
+[ext_resource type="Texture2D" uid="uid://ccdfil5ffl0qj" path="res://assets/stages/week5/evilMall/evilTree.png" id="4_63vpy"]
+[ext_resource type="Texture2D" uid="uid://djc31ia0m7ye4" path="res://assets/stages/week1/soaked.png" id="4_sfo1i"]
+
+[node name="EvilMall" type="Node2D"]
+script = ExtResource("1_dh70a")
+
+[node name="soaked" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.113725)
+position = Vector2(264, 540)
+texture = ExtResource("4_sfo1i")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+scroll_offset = Vector2(0.7, 0.5)
+scroll_base_scale = Vector2(1.2, 1.2)
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="evilMallBG" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+position = Vector2(593, 170)
+texture = ExtResource("2_kl1mq")
+
+[node name="evilTree" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+position = Vector2(576, 197)
+texture = ExtResource("4_63vpy")
+
+[node name="snow" type="Sprite2D" parent="."]
+position = Vector2(582, 879)
+scale = Vector2(1, 1.77099)
+texture = ExtResource("3_axp51")
+
+[node name="intro_cam_pos" type="Node2D" parent="."]
+position = Vector2(580, -350)
