@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="pixelsplashes2.png">
+<SubTexture name="pixelsplashes2 purple0000" x="92" y="46" width="8" height="8" frameX="-13" frameY="-12" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 purple0001" x="70" y="46" width="11" height="12" frameX="-12" frameY="-10" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 purple0002" x="60" y="58" width="19" height="15" frameX="-8" frameY="-8" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 purple0003" x="70" y="0" width="30" height="23" frameX="-2" frameY="-3" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 purple0004" x="0" y="0" width="35" height="29" frameX="0" frameY="0" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 blue0000" x="60" y="73" width="8" height="8" frameX="-13" frameY="-12" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 blue0001" x="81" y="46" width="11" height="12" frameX="-12" frameY="-10" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 blue0002" x="79" y="58" width="19" height="15" frameX="-8" frameY="-8" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 blue0003" x="70" y="23" width="30" height="23" frameX="-2" frameY="-3" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 blue0004" x="35" y="0" width="35" height="29" frameX="0" frameY="0" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 green0000" x="68" y="73" width="8" height="8" frameX="-13" frameY="-12" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 green0001" x="38" y="81" width="11" height="12" frameX="-12" frameY="-10" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 green0002" x="0" y="81" width="19" height="15" frameX="-8" frameY="-8" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 green0003" x="0" y="58" width="30" height="23" frameX="-2" frameY="-3" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 green0004" x="0" y="29" width="35" height="29" frameX="0" frameY="0" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 red0000" x="76" y="73" width="8" height="8" frameX="-13" frameY="-12" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 red0001" x="49" y="81" width="11" height="12" frameX="-12" frameY="-10" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 red0002" x="19" y="81" width="19" height="15" frameX="-8" frameY="-8" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 red0003" x="30" y="58" width="30" height="23" frameX="-2" frameY="-3" frameWidth="35" frameHeight="29" />
+<SubTexture name="pixelsplashes2 red0004" x="35" y="29" width="35" height="29" frameX="0" frameY="0" frameWidth="35" frameHeight="29" />
+</TextureAtlas>

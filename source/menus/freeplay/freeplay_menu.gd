@@ -29,7 +29,7 @@ var coolOffset = 140;
 var dont_have_chart = false;
 
 func loadJson(week):
-	var jsonFile = FileAccess.open("res://assets/weeks/%s/%s.json"%[Global.week_path, week],FileAccess.READ);
+	var jsonFile = FileAccess.open("res://assets/data/weeks data/%s/%s.json"%[SongData.week_folder_path, week],FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
 	weekJson = jsonData.get_data();
@@ -38,7 +38,7 @@ func loadJson(week):
 	
 func get_week_files():
 	var file = [];
-	var coolFolder = DirAccess.open("res://assets/weeks/%s"%[Global.week_path]);
+	var coolFolder = DirAccess.open("res://assets/data/weeks data/%s"%[SongData.week_folder_path]);
 	if coolFolder:
 		coolFolder.list_dir_begin();
 		var nameShit = coolFolder.get_next();
@@ -49,6 +49,10 @@ func get_week_files():
 	return file;
 	
 func _ready() -> void:
+	Conductor.reset();
+	Conductor.getSongTime = 0.0;
+	Conductor.connect("new_beat", beat_hit);
+	
 	Discord.update_discord_info("freeplay menu", "Is in menus");
 	
 	weeks = get_week_files();
@@ -57,34 +61,22 @@ func _ready() -> void:
 		
 		for j in weekJson["songs"]:
 			if !weekJson["hideFromFreeplay"]:
-				week_difficulties.append(weekJson["weekDifficulties"]);
-				cool_weeks.append(weekJson["weekName"]);
-				
-				var new_word = j[0];
+				var new_song = j[0];
 				var new_icon = j[1];
+				var new_color = j[2];
+				var new_weekName = weekJson["weekName"];
+				var new_weekDifficult = weekJson["weekDifficulties"];
 				
-				if new_word.contains("-"):
-					new_word = new_word.replace("-", " ");
-					
-				songs.append(j[0]);
-				icons.append(j[1]);
-				bg_colors.append(j[2]);
-				
-				var alphabet = Alphabet.new();
-				alphabet._creat_word(new_word);
-				alphabet.position.y += offSetShit;
-				song_stuff.add_child(alphabet);
-				
-				var icon = freeplayIcon.new();
-				icon.alphabet = alphabet;
-				icon.new_x = 100;
-				icon.load_icon(new_icon);
-				icons_stuff.add_child(icon);
-				
-				offSetShit += coolOffset;
+				add_song(new_song, new_icon, new_color, new_weekName, new_weekDifficult);
 				
 	for i in HighScore.unlockSongs:
-		add_song(i, HighScore.unlockSongs[i]["icon"], HighScore.unlockSongs[i]["color"], HighScore.unlockSongs[i]["diffs"]);
+		var new_song = i;
+		var new_icon = HighScore.unlockSongs[i]["icon"];
+		var new_color = HighScore.unlockSongs[i]["color"];
+		var new_weekName = HighScore.unlockSongs[i]["week name"];
+		var new_weekDifficult = HighScore.unlockSongs[i]["diffs"];
+		
+		add_song(new_song, new_icon, new_color, new_weekName, new_weekDifficult);
 		
 	song_stuff.position.y = float(350-coolOffset*Global.cur_thing);
 	icons_stuff.position.y = float(350-coolOffset*Global.cur_thing);
@@ -93,15 +85,11 @@ func _ready() -> void:
 	change_song(Global.cur_thing);
 	changeDiff(1);
 	
-func add_song(new_song, new_icon, new_color, diff):
-	var new_offset = 140;
-	var new_offset_shit = 0;
-	
+func add_song(new_song, new_icon, new_color, new_week, diff):
 	songs.append(new_song);
 	icons.append(new_icon);
 	bg_colors.append(new_color);
-	
-	cool_weeks.append(new_song);
+	cool_weeks.append(new_week);
 	week_difficulties.append(diff);
 	
 	if new_song.contains("-"):
@@ -121,6 +109,8 @@ func add_song(new_song, new_icon, new_color, diff):
 	offSetShit += coolOffset;
 	
 func _process(delta):
+	Conductor.getSongTime += delta*1000;
+	
 	song_stuff.position.y = lerp(float(song_stuff.position.y), float(350-coolOffset*cur_song), 0.18);
 	icons_stuff.position.y = lerp(float(icons_stuff.position.y), float(350-coolOffset*cur_song), 0.18);
 	$bg.modulate = lerp($bg.modulate, Color(bg_colors[cur_song][0], bg_colors[cur_song][1], bg_colors[cur_song][2]), 0.075);
@@ -137,13 +127,18 @@ func _process(delta):
 	rank = HighScore.get_rank(song, diff);
 	percent = HighScore.get_percent(song, diff);
 	
-	$scoreText.text = "SCORE: %s - %s"%[int(cur_score), str(float(percent), "%")];
+	$scoreText.text = "SCORE: %s"%[int(cur_score)];
+	$percentText.text = "PERCENT: %s"%[str(float(percent), "%")];
 	$fcText.text = "RANK: %s"%[rank];
 	$fcText.modulate = Color(1.0, 0.892, 0.0, 1.0) if rank == "SFC" else Color.WHITE;
 	
 	if GlobalOptions.low_quality:
 		return;
 		
+	for i in songs.size():
+		for letterID in song_stuff.get_child(i).get_child_count():
+			song_stuff.get_child(i).get_children()[letterID].scale = lerp(song_stuff.get_child(i).get_children()[letterID].scale, Vector2(1.0, 1.0), 0.10);
+			
 	for i in songs.size():
 		for letters in song_stuff.get_child(i).get_children():
 			if songs[i] == "thorns":
@@ -183,18 +178,25 @@ func _input(ev):
 				var inst_shit = songs[cur_song].to_lower() if diffs[cur_diff] != "remix" else str(songs[cur_song].to_lower(),"-remix");
 				MusicManager._play_song(inst_shit + "/Inst", true, true);
 				
-			#if ev.keycode in [KEY_R] && ev.echo:
-			#	HighScore.clear_score();
-				
+func beat_hit(beat):
+	for i in songs.size():
+		for letterID in song_stuff.get_child(i).get_child_count():
+			if songs[i] == "test":
+				if beat % 2 == 0 && letterID % 2 == 0:
+					song_stuff.get_child(i).get_children()[letterID].scale = Vector2(1.5,1.5)
+					
+				elif beat % 2 != 0 && letterID % 2 != 0:
+					song_stuff.get_child(i).get_children()[letterID].scale = Vector2(1.5,1.5)
+					
 func go_to_song(song, diff_path):
-	SongData.loadJson(song, "" if diff_path == "normal" else diff_path);
+	SongData.loadJson(song, diff_path);
 	
 	if !SongData.chart_dont_exist:
-		SoundStuff.playAudio("confirmMenu", false);
-		Global.songsShit = song;
-		Global.diffsShit = diff_path;
-		Global.isStoryMode = false;
-		Global.cur_week = cool_weeks[cur_song];
+		Sound.playAudio("confirmMenu", false);
+		SongData.week_songs = song;
+		SongData.week_diffs = diff_path;
+		SongData.isStoryMode = false;
+		SongData.weekName = cool_weeks[cur_song];
 		MusicManager._stop_music();
 		
 		if !cur_song > cool_weeks.size()-1:
@@ -204,23 +206,22 @@ func go_to_song(song, diff_path):
 			
 		await get_tree().create_timer(0.6).timeout;
 		Global.changeScene("gameplay/PlayState", true, false);
-		
 	else:
 		$warning.visible = true;
 		
 		var difficultyPath = "";
 		if diff_path == "" or diff_path == "normal":
-			difficultyPath = "res://assets/data/%s/%s.json"%[song, song];
+			difficultyPath = "res://assets/data/songs/%s/%s.json"%[song, song];
 		else:
-			difficultyPath = "res://assets/data/%s/%s-%s.json"%[song, song, diff_path];
+			difficultyPath = "res://assets/data/songs/%s/%s-%s.json"%[song, song, diff_path];
 			
 		$warning/Label.text = "Missing Chart:\n%s"%[difficultyPath];
-		SoundStuff.playAudio("cancelMenu", false);
+		Sound.playAudio("cancelMenu", false);
 		
 func change_song(change):
 	cur_song += change;
 	
-	SoundStuff.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu", false);
 	cur_song = wrapi(cur_song, 0, len(songs));
 	Global.cur_thing = cur_song;
 	update_song();

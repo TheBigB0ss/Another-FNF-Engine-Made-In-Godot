@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://bjwu376pqbhgn"]
+[gd_scene format=3 uid="uid://bjwu376pqbhgn"]
 
-[ext_resource type="Script" uid="uid://bmbu7b2mlgl0n" path="res://source/menus/achievements_menu/achievements_menu.gd" id="1_hhbmt"]
+[ext_resource type="Script" uid="uid://b5ire87v6dnbf" path="res://source/menus/achievements_menu/achievements_menu.gd" id="1_hhbmt"]
 [ext_resource type="Texture2D" uid="uid://ceq3mk0i6bngd" path="res://assets/images/menuBgs/menuDesat.png" id="2_vw640"]
 [ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_vw640"]
 
@@ -10,38 +10,38 @@ font_size = 940
 shadow_size = 141
 shadow_color = Color(0, 0, 0, 1)
 
-[node name="achievements_menu" type="Node2D"]
+[node name="achievements_menu" type="Node2D" unique_id=1646452780]
 script = ExtResource("1_hhbmt")
 
-[node name="bg" type="Sprite2D" parent="."]
+[node name="bg" type="Sprite2D" parent="." unique_id=93602176]
 position = Vector2(640, 360)
 scale = Vector2(0.995334, 0.986301)
 texture = ExtResource("2_vw640")
 
-[node name="colorBg" type="ColorRect" parent="."]
+[node name="colorBg" type="ColorRect" parent="." unique_id=205890972]
 offset_left = 209.0
 offset_right = 1081.0
 offset_bottom = 719.0
 color = Color(0, 0, 0, 0.447059)
 
-[node name="achievements" type="Node2D" parent="."]
+[node name="achievements" type="Node2D" parent="." unique_id=45470877]
 position = Vector2(70, 276)
 
-[node name="description_stuff" type="Control" parent="."]
+[node name="description_stuff" type="Control" parent="." unique_id=684902569]
 layout_mode = 3
 anchors_preset = 0
 offset_top = 165.0
 offset_right = 40.0
 offset_bottom = 205.0
 
-[node name="description_box" type="ColorRect" parent="description_stuff"]
+[node name="description_box" type="ColorRect" parent="description_stuff" unique_id=1274878612]
 layout_mode = 0
 offset_top = 584.0
 offset_right = 1280.0
 offset_bottom = 720.0
 color = Color(0, 0, 0, 0.551)
 
-[node name="description_text" type="Label" parent="description_stuff"]
+[node name="description_text" type="Label" parent="description_stuff" unique_id=1321694724]
 texture_filter = 1
 layout_mode = 0
 offset_left = 3.0
@@ -52,7 +52,7 @@ scale = Vector2(0.05, 0.05)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 label_settings = SubResource("LabelSettings_op38l")
 
-[node name="esc_text" type="Label" parent="."]
+[node name="esc_text" type="Label" parent="." unique_id=1245958649]
 texture_filter = 1
 offset_left = 390.0
 offset_top = -55.0

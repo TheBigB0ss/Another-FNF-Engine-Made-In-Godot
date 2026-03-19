@@ -13,6 +13,7 @@ extends Node2D
 @onready var bf = $Boyfriend;
 @onready var dad = $'Dad';
 @onready var gf = $Gf;
+@onready var mom = $Mom;
 
 var stages = null;
 var cur_stage = null;
@@ -23,6 +24,7 @@ var replaced = "";
 var opponent_pos = [];
 var bf_pos = [];
 var gf_pos = [];
+var mom_pos = [];
 
 var anim_list = [];
 
@@ -40,7 +42,7 @@ func _ready() -> void:
 		
 	satge_button.connect("item_selected", change_bg);
 	
-	change_bg(0)
+	change_bg(0);
 	
 func change_anim(char):
 	is_updating = true;
@@ -54,21 +56,24 @@ func change_bg(char):
 		stage.remove_child(i);
 		i.queue_free();
 		
-	var new_stage = load("res://source/stages/%s.tscn"%[stage_list[satge_button.selected]]).instantiate();
+	var new_stage = load("res://source/stages/%s/%s.tscn"%[stage_list[satge_button.selected], stage_list[satge_button.selected]]).instantiate();
 	cur_stage = new_stage;
 	stage.add_child(new_stage);
 	
 	opponent_pos = get_stage_json(stage_list[satge_button.selected])["opponent"];
 	bf_pos = get_stage_json(stage_list[satge_button.selected])["bf"];
 	gf_pos = get_stage_json(stage_list[satge_button.selected])["gf"];
+	mom_pos = get_stage_json(stage_list[satge_button.selected])["new opponent"];
 	
 	bf.position = Vector2(bf_pos[0], bf_pos[1]);
 	dad.position = Vector2(opponent_pos[0], opponent_pos[1]);
 	gf.position = Vector2(gf_pos[0], gf_pos[1]);
+	mom.position = Vector2(mom_pos[0], mom_pos[1]);
 	
 	bf.z_index = get_stage_json(stage_list[satge_button.selected])["bf Z_Index"];
 	gf.z_index = get_stage_json(stage_list[satge_button.selected])["gf Z_Index"];
 	dad.z_index = get_stage_json(stage_list[satge_button.selected])["opponent Z_Index"];
+	mom.z_index = get_stage_json(stage_list[satge_button.selected])["new opponent Z_Index"];
 	
 	for j in element_anim.get_item_count():
 		element_anim.remove_item(j);
@@ -86,8 +91,14 @@ func change_bg(char):
 	%gf_y.value = gf_pos[1];
 	%gf_zIndex.value = get_stage_json(stage_list[satge_button.selected])["gf Z_Index"];
 	
+	%mom_x.value = mom_pos[0];
+	%mom_y.value = mom_pos[1];
+	%mom_zIndex.value = get_stage_json(stage_list[satge_button.selected])["new opponent Z_Index"];
+	
 	%stage_zoom.value = get_stage_json(stage_list[satge_button.selected])["stage zoom"];
 	%stage_beat_zoom.value = get_stage_json(stage_list[satge_button.selected])["stage beat zoom"];
+	
+	%"two opponents".button_pressed = get_stage_json(stage_list[satge_button.selected])["two opponents"];
 	
 var updated_camX = 0;
 var updated_camY = 0;
@@ -121,13 +132,19 @@ func update_canera_offset(x, y):
 var current_obj = null;
 var is_updating = false;
 func _process(delta: float) -> void:
+	mom.visible = %"two opponents".button_pressed;
+	for i in [%mom_x, %mom_y, %mom_zIndex]:
+		i.editable = %"two opponents".button_pressed;
+		
 	bf.position = Vector2(%bf_x.value, %bf_y.value);
 	dad.position = Vector2(%opponent_x.value, %opponent_y.value);
 	gf.position = Vector2(%gf_x.value, %gf_y.value);
+	mom.position = Vector2(%mom_x.value, %mom_y.value);
 	
 	bf.z_index = %bf_zIndex.value;
 	gf.z_index = %gf_zIndex.value;
 	dad.z_index = %opponent_zIndex.value;
+	mom.z_index = %mom_zIndex.value;
 	
 	if !$FileDialog.visible:
 		if Input.is_action_just_released("mouse_wheel_down") or Input.is_action_pressed("input_S"):
@@ -188,7 +205,7 @@ func _process(delta: float) -> void:
 					if is_updating:
 						%obj_color.color = current_obj.modulate;
 						
-					print(current_obj)
+					print(current_obj);
 					
 	#if can_grab:
 	#	update_canera_offset(get_global_mouse_position().x/2, get_global_mouse_position().y/2)
@@ -202,18 +219,16 @@ func mouse_inside_container():
 	
 func addStageToList():
 	var charList = [];
-	var char = getFolderShit("assets/stages/data/");
-	for i in char:
+	for i in getFolderShit("assets/data/stages data/"):
 		if i.ends_with(".json"):
 			charList.append(i);
 			
 	return charList;
 	
-func get_stage_json(stage):
+func get_stage_json(newStage):
 	var info = {}
-	var replaced = stage;
 	
-	var jsonFile = FileAccess.open("res://assets/stages/data/%s.json"%[replaced],FileAccess.READ);
+	var jsonFile = FileAccess.open("res://assets/data/stages data/%s.json"%[newStage],FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
 	info = jsonData.get_data()
@@ -224,6 +239,9 @@ func get_stage_json(stage):
 	set_stage_null_var(info, "bf Z_Index", 0);
 	set_stage_null_var(info, "stage zoom", 0.8);
 	set_stage_null_var(info, "stage beat zoom", 0.83);
+	set_stage_null_var(info, "new opponent", [0, 0]);
+	set_stage_null_var(info, "new opponent Z_Index", 0);
+	set_stage_null_var(info, "two opponents", false);
 	
 	return info;
 	
@@ -290,11 +308,14 @@ func save_json(path):
 		"opponent": [%opponent_x.value, %opponent_y.value],
 		"gf": [%gf_x.value, %gf_y.value],
 		"bf": [%bf_x.value, %bf_y.value],
+		"new opponent": [%mom_x.value, %mom_y.value],
 		"gf Z_Index": %gf_zIndex.value,
 		"bf Z_Index": %bf_zIndex.value,
 		"opponent Z_Index": %opponent_zIndex.value,
+		"new opponent Z_Index": %mom_zIndex.value,
 		"stage zoom": %stage_zoom.value,
-		"stage beat zoom": %stage_beat_zoom.value
+		"stage beat zoom": %stage_beat_zoom.value,
+		"two opponents": %"two opponents".button_pressed
 	}, "\t"));
 	new_jsonFile.close();
 	print('save: ', path);
@@ -329,7 +350,7 @@ func _on_obj_z_index_value_changed(value: float) -> void:
 	is_updating = true;
 	
 func _on_create_stage_pressed() -> void:
-	var new_jsonFile = FileAccess.open("res://assets/stages/data/%s.json"%[%stage_name.text], FileAccess.WRITE);
+	var new_jsonFile = FileAccess.open("res://assets/data/stages data/%s.json"%[%stage_name.text], FileAccess.WRITE);
 	new_jsonFile.store_string(JSON.stringify({
 		"opponent": [0, 0],
 		"gf": [0, 0],
@@ -350,7 +371,7 @@ func _on_create_stage_pressed() -> void:
 	stage_list.append(%stage_name.text);
 	satge_button.add_item(%stage_name.text)
 	
-	ResourceSaver.save(packed_scene, "res://source/stages/%s"%[%stage_name.text] + ".tscn", ResourceSaver.FLAG_COMPRESS);
+	ResourceSaver.save(packed_scene, "res://source/stages/%s/%s.tscn"%[%stage_name.text, %stage_name.text], ResourceSaver.FLAG_COMPRESS);
 	
 func _on_load_stage_pressed() -> void:
 	for i in satge_button.get_item_count():
@@ -362,7 +383,7 @@ func _on_save_stage_pressed() -> void:
 	var packed_scene = PackedScene.new();
 	packed_scene.pack(cur_stage);
 	
-	ResourceSaver.save(packed_scene, "res://source/stages/%s.tscn"%[stage_list[satge_button.selected]], ResourceSaver.FLAG_COMPRESS);
+	ResourceSaver.save(packed_scene, "res://source/stages/%s/%s.tscn"%[stage_list[satge_button.selected], stage_list[satge_button.selected]], ResourceSaver.FLAG_COMPRESS);
 	
 func _on_obj_color_picker_created() -> void:
 	is_updating = true;

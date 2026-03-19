@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://c7hg6iptjhdx5"]
+
+[ext_resource type="Script" uid="uid://bj1clr4af1fa" path="res://source/stages/spooky_mansion/spooky_mansion.gd" id="1_o8rk7"]
+[ext_resource type="SpriteFrames" uid="uid://d31wl2catd58v" path="res://assets/stages/week2/halloween_bg.res" id="2_dipxo"]
+
+[node name="SpookyMansion" type="Node2D"]
+script = ExtResource("1_o8rk7")
+
+[node name="spooky Bg" type="AnimatedSprite2D" parent="."]
+position = Vector2(629, 574.625)
+scale = Vector2(1.24976, 1.36442)
+sprite_frames = ExtResource("2_dipxo")
+animation = &"halloweem bg"
+
+[connection signal="animation_finished" from="spooky Bg" to="." method="_on_spooky_bg_animation_finished"]

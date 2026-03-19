@@ -1,14 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://c45yxh6482cpj"]
+[gd_scene format=3 uid="uid://c45yxh6482cpj"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_d5ynp"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_d5ynp"]
 [ext_resource type="SpriteFrames" uid="uid://d1l32g6s3fxfp" path="res://assets/images/characters/bfAndGF.res" id="2_d5ynp"]
 
-[node name="bfAndGf" type="Node2D"]
+[node name="bfAndGf" type="Node2D" unique_id=82369366]
 script = ExtResource("1_d5ynp")
+json_path = "res://assets/data/characters/bfAndGf.json"
+healthBar_Color = Color(0, 0.9098039, 1, 1)
+is_player = true
+animTimes = {
+"catches": [2, 5],
+"hey": [2, 5],
+"idle dance": [2, 5],
+"singDown": [2, 5],
+"singDown MISS": [2, 5],
+"singLeft": [2, 5],
+"singLeft MISS": [2, 5],
+"singRight": [2, 5],
+"singRight MISS": [2, 5],
+"singUp": [2, 5],
+"singUp MISS": [2, 5]
+}
+anim_type = 3
 have_death_animation = true
-death_scene = "characters/bfAndGfDead"
-json_path = "bfAndGf"
+death_scene = "res://source/characters/bfAndGfDead.tscn"
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=831174918]
 sprite_frames = ExtResource("2_d5ynp")
-animation = &"BF NOTE RIGHT MISS"
+animation = &"BF idle dance w gf"
+frame = 13
+frame_progress = 1.0

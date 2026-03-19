@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://b0odcfo5qp5h8"]
+
+[ext_resource type="Script" uid="uid://dcujpfotnjmno" path="res://source/stages/philly_remix/philly_remix.gd" id="1_45nwq"]
+[ext_resource type="Texture2D" uid="uid://daxi82f4w3ajs" path="res://assets/stages/week3/remix/sky.png" id="2_o8y8o"]
+[ext_resource type="Texture2D" uid="uid://dkg1qjnhp0ngx" path="res://assets/stages/week3/remix/city_2.png" id="3_asinp"]
+[ext_resource type="Texture2D" uid="uid://71p0sqt4gab4" path="res://assets/stages/week3/remix/city_1.png" id="4_eptyo"]
+[ext_resource type="Texture2D" uid="uid://dqtn0hj2v6iah" path="res://assets/stages/week3/remix/Lights.png" id="5_lsgl8"]
+[ext_resource type="Texture2D" uid="uid://cualptufupiu" path="res://assets/stages/week3/remix/buildings_2.png" id="6_kshjk"]
+[ext_resource type="Texture2D" uid="uid://dbngsy5xcin77" path="res://assets/stages/week3/remix/buildings_1.png" id="7_gh7r3"]
+[ext_resource type="Texture2D" uid="uid://cxm68qo7tmrxq" path="res://assets/stages/week3/remix/rooftop.png" id="8_4puf3"]
+[ext_resource type="Texture2D" uid="uid://4wd1uaw15ret" path="res://assets/stages/week3/remix/foreground.png" id="9_xwjm6"]
+[ext_resource type="PackedScene" uid="uid://c3bk8nb71v1fe" path="res://source/characters/Nene.tscn" id="10_eptyo"]
+[ext_resource type="PackedScene" uid="uid://dx77iyyt31ep0" path="res://source/characters/Darnell.tscn" id="11_lsgl8"]
+[ext_resource type="Script" uid="uid://cbvyc7ar58pke" path="res://source/gameplay/strums/strum.gd" id="13_46xqv"]
+
+[node name="philly remix" type="Node2D" unique_id=1409014100]
+script = ExtResource("1_45nwq")
+
+[node name="sky" type="Sprite2D" parent="." unique_id=1635086438]
+position = Vector2(641, 30)
+texture = ExtResource("2_o8y8o")
+
+[node name="city1" type="Sprite2D" parent="." unique_id=1821150510]
+position = Vector2(653, 315)
+texture = ExtResource("3_asinp")
+
+[node name="city2" type="Sprite2D" parent="." unique_id=715352589]
+position = Vector2(629, 622)
+texture = ExtResource("4_eptyo")
+
+[node name="lights" type="Sprite2D" parent="." unique_id=1634116609]
+position = Vector2(592, 303)
+texture = ExtResource("5_lsgl8")
+
+[node name="build1" type="Sprite2D" parent="." unique_id=1678022006]
+position = Vector2(431, 426)
+texture = ExtResource("6_kshjk")
+
+[node name="build2" type="Sprite2D" parent="." unique_id=1140899238]
+position = Vector2(585, 66)
+texture = ExtResource("7_gh7r3")
+
+[node name="rooftop" type="Sprite2D" parent="." unique_id=798007461]
+position = Vector2(760, 766)
+texture = ExtResource("8_4puf3")
+
+[node name="foreground" type="Sprite2D" parent="." unique_id=1807695746]
+z_index = 2
+position = Vector2(496, 1256)
+texture = ExtResource("9_xwjm6")
+
+[node name="characters" type="Node2D" parent="." unique_id=1798038925]
+
+[node name="Nene" parent="characters" unique_id=1025747770 instance=ExtResource("10_eptyo")]
+z_index = 1
+position = Vector2(325, 702)
+
+[node name="Darnell" parent="characters" unique_id=2039568579 instance=ExtResource("11_lsgl8")]
+z_index = 1
+position = Vector2(830, 703)
+
+[node name="strums" type="Node2D" parent="." unique_id=1221599510]
+visible = false
+modulate = Color(1, 1, 1, 0.7882353)
+z_index = 4
+
+[node name="NeneStrum" type="Node2D" parent="strums" unique_id=2006917768 node_paths=PackedStringArray("strum_char")]
+position = Vector2(269, 525)
+script = ExtResource("13_46xqv")
+noteOffset = 82
+strumScale = Vector2(0.5, 0.5)
+chart_path = "res://assets/data/songs/philly-nice/NeneSpeaker.json"
+strum_char = NodePath("../../characters/Nene")
+metadata/_custom_type_script = "uid://cbvyc7ar58pke"
+
+[node name="DarnellStrum" type="Node2D" parent="strums" unique_id=1587543813 node_paths=PackedStringArray("strum_char")]
+position = Vector2(773, 502)
+script = ExtResource("13_46xqv")
+noteOffset = 82
+strumScale = Vector2(0.5, 0.5)
+chart_path = "res://assets/data/songs/philly-nice/DarnellSpeaker.json"
+strum_char = NodePath("../../characters/Darnell")
+metadata/_custom_type_script = "uid://cbvyc7ar58pke"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1992163618]
+visible = false
+z_index = 2
+offset_left = -1254.0
+offset_top = -697.0
+offset_right = 2429.0
+offset_bottom = 1584.0
+color = Color(0, 0, 0, 1)

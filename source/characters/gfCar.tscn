@@ -1,13 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://bhu1bv5v1d5qw"]
+[gd_scene format=3 uid="uid://bhu1bv5v1d5qw"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_bt7qf"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_bt7qf"]
 [ext_resource type="SpriteFrames" uid="uid://dy37bi24kkbwp" path="res://assets/images/characters/gfCar.res" id="2_qxngp"]
 
-[node name="gfCar" type="Node2D"]
+[node name="gfCar" type="Node2D" unique_id=1796356272]
 script = ExtResource("1_bt7qf")
-json_path = "gfCar"
+json_path = "res://assets/data/characters/gfCar.json"
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=860098042]
 sprite_frames = ExtResource("2_qxngp")
 animation = &"GF Dancing Beat Hair blowing CAR"
 frame = 29

@@ -2,7 +2,7 @@ extends AnimatedSprite2D
 
 func cool_splash(data, noteData, dir, strumX, strumY):
 	self.position = Vector2(strumX, strumY);
-	play("%s%s"%[dir, data]);
+	play("pixelsplashes%s %s"%[data, dir]);
 	
 func _on_animation_finished() -> void:
 	self.queue_free();

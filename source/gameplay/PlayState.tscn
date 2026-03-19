@@ -1,14 +1,13 @@
-[gd_scene load_steps=21 format=3 uid="uid://cag5wwhghp7na"]
+[gd_scene format=3 uid="uid://cag5wwhghp7na"]
 
-[ext_resource type="Script" uid="uid://127f5ov8edik" path="res://source/gameplay/PlayState.gd" id="1_nlkw3"]
+[ext_resource type="Script" uid="uid://cdlvrlqjngiph" path="res://source/gameplay/PlayState.gd" id="1_nlkw3"]
+[ext_resource type="Script" uid="uid://bylq1p6vnb3qd" path="res://source/gameplay/events/EventLoader.gd" id="2_4fsh2"]
 [ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="2_ygq3c"]
-[ext_resource type="Script" uid="uid://bikd50x8djuug" path="res://source/gameplay/ratings/combo.gd" id="3_vbhv8"]
-[ext_resource type="Script" uid="uid://d2tkta7bdpita" path="res://source/gameplay/ratings/rating.gd" id="4_ujn4o"]
-[ext_resource type="Script" uid="uid://d27oueisleymo" path="res://source/gameplay/strums/Second Opponent Notes.gd" id="5_4fsh2"]
-[ext_resource type="Script" uid="uid://buue5pe1yp75m" path="res://source/gameplay/strums/Player Notes.gd" id="5_hjbjt"]
-[ext_resource type="Script" uid="uid://bweo5k4adeurg" path="res://source/gameplay/ratings/nums.gd" id="5_rvgcf"]
-[ext_resource type="Script" uid="uid://xxy8xw6owehg" path="res://source/gameplay/strums/Opponent Notes.gd" id="6_o40cs"]
-[ext_resource type="Texture2D" uid="uid://c05ymgh1hremv" path="res://assets/images/icons/icon-dad.png" id="8_s3ehv"]
+[ext_resource type="Script" uid="uid://ov1a7ymw3c5l" path="res://source/gameplay/ratings/combo.gd" id="3_vbhv8"]
+[ext_resource type="Script" uid="uid://c1w1j8th2unar" path="res://source/gameplay/ratings/rating.gd" id="4_ujn4o"]
+[ext_resource type="Script" uid="uid://dl7m3sfamfd6h" path="res://source/gameplay/strums/PlayerStrum.gd" id="5_hjbjt"]
+[ext_resource type="Script" uid="uid://dihavia4gx2aq" path="res://source/gameplay/ratings/nums.gd" id="5_rvgcf"]
+[ext_resource type="Script" uid="uid://lyuq1eefi8od" path="res://source/gameplay/strums/OpponentStrum.gd" id="6_o40cs"]
 [ext_resource type="PackedScene" uid="uid://c2lkjdn511dpc" path="res://source/gameplay/pause/pause_layer.tscn" id="13_7gusd"]
 [ext_resource type="PackedScene" uid="uid://lmu4akqkj75l" path="res://source/gameplay/dialogue/Dialogue box.tscn" id="14_2bco5"]
 
@@ -20,12 +19,6 @@ load_path = "res://.godot/imported/healthBar.png-3bca16c4189998705b48c3052804afa
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_pxn5x"]
 load_path = "res://.godot/imported/timeBar.png-e22e0b4a8031b78496400e527f997ffd.ctex"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_s3ehv"]
-load_path = "res://.godot/imported/icon-bf.png-3128b48a8f7c0daea8fc43f459309a89.ctex"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0054s"]
-load_path = "res://.godot/imported/icon-dad.png-6d121b4574e85a0421e63a9d47818a29.ctex"
 
 [sub_resource type="LabelSettings" id="LabelSettings_08ga8"]
 font = ExtResource("2_ygq3c")
@@ -51,38 +44,38 @@ font = ExtResource("2_ygq3c")
 font_size = 41
 shadow_color = Color(0, 0, 0, 1)
 
-[node name="PlayState" type="Node2D"]
+[node name="PlayState" type="Node2D" unique_id=530081182]
 script = ExtResource("1_nlkw3")
 
-[node name="stage" type="Node2D" parent="."]
+[node name="stage" type="Node2D" parent="." unique_id=1093992963]
 
-[node name="rating" type="Control" parent="."]
+[node name="rating" type="Control" parent="." unique_id=526681523]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 metadata/_edit_use_anchors_ = true
 
-[node name="Rating_Layer" type="CanvasLayer" parent="rating"]
+[node name="Rating_Layer" type="CanvasLayer" parent="rating" unique_id=997633769]
 layer = 2
 
-[node name="combo" type="Sprite2D" parent="rating/Rating_Layer"]
+[node name="combo" type="Sprite2D" parent="rating/Rating_Layer" unique_id=1812961663]
 modulate = Color(1, 1, 1, 0)
 scale = Vector2(0.489796, 0.478261)
 texture = SubResource("CompressedTexture2D_2bi1b")
 script = ExtResource("3_vbhv8")
 
-[node name="rating" type="Sprite2D" parent="rating/Rating_Layer"]
+[node name="rating" type="Sprite2D" parent="rating/Rating_Layer" unique_id=2123491209]
 modulate = Color(1, 1, 1, 0)
 scale = Vector2(0.566998, 0.585526)
 script = ExtResource("4_ujn4o")
 
-[node name="nums" type="Sprite2D" parent="rating/Rating_Layer"]
+[node name="nums" type="Sprite2D" parent="rating/Rating_Layer" unique_id=364671175]
 modulate = Color(1, 1, 1, 0)
 scale = Vector2(0.478723, 0.483193)
 script = ExtResource("5_rvgcf")
 
-[node name="strums" type="Control" parent="."]
+[node name="strums" type="Control" parent="." unique_id=1616783029]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 170.0
@@ -91,42 +84,34 @@ offset_right = 170.0
 offset_bottom = 60.0
 metadata/_edit_use_anchors_ = true
 
-[node name="Strum_Layer" type="CanvasLayer" parent="strums"]
+[node name="Strum_Layer" type="CanvasLayer" parent="strums" unique_id=2037664863]
 layer = 2
 
-[node name="Second Opponent Note" type="Node2D" parent="strums/Strum_Layer"]
+[node name="Second Opponent Note" type="Node2D" parent="strums/Strum_Layer" unique_id=576651245]
 visible = false
-script = ExtResource("5_4fsh2")
+script = ExtResource("6_o40cs")
+is_secondary_strum = true
+noteOffset = 50
+strumScale = Vector2(0.5, 0.5)
 
-[node name="Player Notes" type="Node2D" parent="strums/Strum_Layer"]
+[node name="Player Notes" type="Node2D" parent="strums/Strum_Layer" unique_id=1701820447]
 position = Vector2(840, 95)
 script = ExtResource("5_hjbjt")
 
-[node name="Opponent Notes" type="Node2D" parent="strums/Strum_Layer"]
+[node name="Opponent Notes" type="Node2D" parent="strums/Strum_Layer" unique_id=1741890682]
 position = Vector2(110, 95)
 script = ExtResource("6_o40cs")
 
-[node name="Splashes" type="Node2D" parent="strums/Strum_Layer"]
+[node name="Splashes" type="Node2D" parent="strums/Strum_Layer" unique_id=965221595]
 
-[node name="notes" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Note_Layer" type="CanvasLayer" parent="notes"]
-layer = 2
-
-[node name="Note_Grp" type="Node2D" parent="notes/Note_Layer"]
-
-[node name="hud" type="Control" parent="."]
+[node name="hud" type="Control" parent="." unique_id=1619441642]
 layout_mode = 3
 anchors_preset = 0
 
-[node name="Hud_Layer" type="CanvasLayer" parent="hud"]
+[node name="Hud_Layer" type="CanvasLayer" parent="hud" unique_id=1266649310]
 layer = 2
 
-[node name="healthBar" type="TextureProgressBar" parent="hud/Hud_Layer"]
+[node name="healthBar" type="TextureProgressBar" parent="hud/Hud_Layer" unique_id=1262312385]
 offset_left = 358.0
 offset_top = 640.0
 offset_right = 959.0
@@ -137,7 +122,7 @@ fill_mode = 1
 texture_under = SubResource("CompressedTexture2D_4fsh2")
 texture_progress = SubResource("CompressedTexture2D_4fsh2")
 
-[node name="timeBar" type="TextureProgressBar" parent="hud/Hud_Layer"]
+[node name="timeBar" type="TextureProgressBar" parent="hud/Hud_Layer" unique_id=1821427129]
 offset_left = 430.0
 offset_top = 15.0
 offset_right = 830.0
@@ -146,36 +131,12 @@ max_value = 0.0
 step = 0.01
 texture_under = SubResource("CompressedTexture2D_pxn5x")
 texture_progress = SubResource("CompressedTexture2D_pxn5x")
-tint_under = Color(0, 0, 0, 1)
+tint_under = Color(0.12662369, 0.12662369, 0.12662369, 1)
 
-[node name="icons" type="Node2D" parent="hud/Hud_Layer"]
+[node name="icons" type="Node2D" parent="hud/Hud_Layer" unique_id=1671112722]
 position = Vector2(2, -4)
 
-[node name="iconPlayer" type="Sprite2D" parent="hud/Hud_Layer/icons"]
-position = Vector2(710, 645)
-texture = SubResource("CompressedTexture2D_s3ehv")
-flip_h = true
-hframes = 3
-
-[node name="iconDad" type="Sprite2D" parent="hud/Hud_Layer/icons"]
-position = Vector2(610, 645)
-texture = ExtResource("8_s3ehv")
-
-[node name="iconNewDad" type="Sprite2D" parent="hud/Hud_Layer/icons"]
-visible = false
-position = Vector2(550, 586)
-texture = SubResource("CompressedTexture2D_0054s")
-hframes = 2
-
-[node name="animated icons" type="Node2D" parent="hud/Hud_Layer"]
-
-[node name="iconPlayer" type="Node2D" parent="hud/Hud_Layer/animated icons"]
-position = Vector2(710, 645)
-
-[node name="iconDad" type="Node2D" parent="hud/Hud_Layer/animated icons"]
-position = Vector2(610, 645)
-
-[node name="timeLabel" type="Label" parent="hud/Hud_Layer"]
+[node name="timeLabel" type="Label" parent="hud/Hud_Layer" unique_id=1238761713]
 offset_left = 520.935
 offset_top = 7.0
 offset_right = 5020.94
@@ -183,15 +144,17 @@ offset_bottom = 614.0
 scale = Vector2(0.0489982, 0.0487552)
 label_settings = SubResource("LabelSettings_08ga8")
 
-[node name="scoreLabel" type="Label" parent="hud/Hud_Layer"]
-offset_left = 420.0
+[node name="scoreLabel" type="Label" parent="hud/Hud_Layer" unique_id=1862258188]
+offset_left = 291.0
 offset_top = 670.0
-offset_right = 421.0
+offset_right = 16862.0
 offset_bottom = 1114.0
 scale = Vector2(0.045, 0.045)
+text = "Score: ??? / Misses: ??? / Rating: ??? (0.0) / Rank: ???"
 label_settings = SubResource("LabelSettings_ghwrx")
+horizontal_alignment = 1
 
-[node name="botplayLabel" type="Label" parent="hud/Hud_Layer"]
+[node name="botplayLabel" type="Label" parent="hud/Hud_Layer" unique_id=1540411430]
 offset_left = 550.0
 offset_top = 170.0
 offset_right = 3749.0
@@ -200,17 +163,14 @@ scale = Vector2(0.05, 0.05)
 text = "BOTPLAY"
 label_settings = SubResource("LabelSettings_3ypwt")
 
-[node name="LyricGrp" type="Node2D" parent="hud/Hud_Layer"]
+[node name="LyricGrp" type="Node2D" parent="hud/Hud_Layer" unique_id=431414764]
 position = Vector2(440, 466)
 
-[node name="countdown" type="Sprite2D" parent="hud/Hud_Layer"]
+[node name="countdown" type="Sprite2D" parent="hud/Hud_Layer" unique_id=57895017]
 modulate = Color(1, 1, 1, 0)
 position = Vector2(644, 332)
 
-[node name="song card" type="Sprite2D" parent="hud/Hud_Layer"]
-position = Vector2(-945, 360)
-
-[node name="ratingLabel" type="Label" parent="hud/Hud_Layer"]
+[node name="ratingLabel" type="Label" parent="hud/Hud_Layer" unique_id=124688561]
 texture_filter = 1
 offset_left = 8.0
 offset_top = 279.0
@@ -224,32 +184,36 @@ Bads:
 Shits:"
 label_settings = SubResource("LabelSettings_pxn5x")
 
-[node name="dialogue" type="Control" parent="."]
+[node name="dialogue" type="Control" parent="." unique_id=456868802]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="DialogueBox" parent="dialogue" instance=ExtResource("14_2bco5")]
+[node name="DialogueBox" parent="dialogue" unique_id=536220967 instance=ExtResource("14_2bco5")]
 layer = 2
 visible = false
 
-[node name="pause" type="Control" parent="."]
+[node name="pause" type="Control" parent="." unique_id=678990798]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Pause_Layer" parent="pause" instance=ExtResource("13_7gusd")]
+[node name="Pause_Layer" parent="pause" unique_id=1801196698 instance=ExtResource("13_7gusd")]
 layer = 3
 visible = false
 
-[node name="voices" type="AudioStreamPlayer" parent="."]
+[node name="voices" type="AudioStreamPlayer" parent="." unique_id=162161933]
 
-[node name="inst" type="AudioStreamPlayer" parent="."]
+[node name="inst" type="AudioStreamPlayer" parent="." unique_id=1651001125]
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1841492602]
 position = Vector2(620, 350)
 zoom = Vector2(0.8, 0.8)
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
+
+[node name="EventLoader" type="Node" parent="." unique_id=459085608]
+script = ExtResource("2_4fsh2")
+metadata/_custom_type_script = "uid://bylq1p6vnb3qd"

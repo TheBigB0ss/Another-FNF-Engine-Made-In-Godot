@@ -1,0 +1,61 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#75369eff",
+	"HealthIcon": "dad-remake",
+	"LoopAnim": true,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "idle",
+			"Offset": [
+				-75.0,
+				-110.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "singLEFT",
+			"Offset": [
+				-81.0,
+				-109.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "singDOWN",
+			"Offset": [
+				-41.0,
+				-101.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "singUP",
+			"Offset": [
+				-73.0,
+				-124.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "singRIGHT",
+			"Offset": [
+				-50.0,
+				-122.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"camera follow pos": false,
+	"cameraPos": [
+		140.0,
+		-100.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

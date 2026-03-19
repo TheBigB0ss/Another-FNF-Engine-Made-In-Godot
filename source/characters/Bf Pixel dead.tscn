@@ -1,19 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://hphgss72ykcs"]
+[gd_scene format=3 uid="uid://hphgss72ykcs"]
 
-[ext_resource type="Script" uid="uid://bjomsg0ihnqon" path="res://source/characters/characters_scripts/bf_dead.gd" id="1_68dmj"]
+[ext_resource type="Script" uid="uid://dw0lkkcaqx4nr" path="res://source/characters/characters_scripts/bf_dead.gd" id="1_68dmj"]
 [ext_resource type="SpriteFrames" uid="uid://drx0nspfj7lmv" path="res://assets/images/characters/bfPixelsDEAD.res" id="2_muwmr"]
 
-[node name="Bf Pixel Dead" type="Node2D"]
+[node name="Bf Pixel Dead" type="Node2D" unique_id=150652609]
 script = ExtResource("1_68dmj")
-json_path = "Bf Pixel dead"
+json_path = "res://assets/data/characters/Bf Pixel dead.json"
 
-[node name="ColorRect" type="ColorRect" parent="."]
-visible = false
-offset_right = 1280.0
-offset_bottom = 720.0
-color = Color(0, 0, 0, 1)
-
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=1417612479]
 texture_filter = 1
 scale = Vector2(6.125, 6.125)
 sprite_frames = ExtResource("2_muwmr")

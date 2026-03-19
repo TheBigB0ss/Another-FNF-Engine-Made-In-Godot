@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dbwlmaqu7hrqf"]
+
+[ext_resource type="Script" uid="uid://div01b26p8bo7" path="res://source/stages/evil_mall/evil_mall.gd" id="1_dh70a"]
+[ext_resource type="Texture2D" uid="uid://clq8kqtrwv4w5" path="res://assets/stages/week5/evilMall/evilBG.png" id="2_kl1mq"]
+[ext_resource type="Texture2D" uid="uid://r6eplyukyogi" path="res://assets/stages/week5/evilMall/evilSnow.png" id="3_axp51"]
+[ext_resource type="Texture2D" uid="uid://ccdfil5ffl0qj" path="res://assets/stages/week5/evilMall/evilTree.png" id="4_63vpy"]
+
+[node name="EvilMall" type="Node2D" unique_id=2039550917]
+script = ExtResource("1_dh70a")
+
+[node name="evilMallBG" type="Sprite2D" parent="." unique_id=1410685280]
+position = Vector2(593, 170)
+texture = ExtResource("2_kl1mq")
+
+[node name="evilTree" type="Sprite2D" parent="." unique_id=555174405]
+position = Vector2(576, 197)
+texture = ExtResource("4_63vpy")
+
+[node name="snow" type="Sprite2D" parent="." unique_id=299862478]
+position = Vector2(582, 879)
+scale = Vector2(1, 1.77099)
+texture = ExtResource("3_axp51")
+
+[node name="tree_pos" type="Marker2D" parent="." unique_id=238933742]
+unique_name_in_owner = true
+position = Vector2(580, -169)

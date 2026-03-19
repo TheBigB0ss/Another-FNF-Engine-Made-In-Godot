@@ -1,7 +1,7 @@
 extends Node
 
 var achievements = {};
-#var devMode = true;
+var devMode = false;
 
 signal end_achievement;
 
@@ -9,14 +9,14 @@ func _ready():
 	#reset_achievements();
 	load_achievements();
 	
-	if !achievements.has("version") or achievements["version"] < 7:
+	if !achievements.has("version") or achievements["version"] != 1:
 		reset_achievements();
 		
-	#if devMode:
-		#for i in achievements.keys():
-			#if i != "version":
-				#achievements[i]["value"] = true;
-				#achievements[i]["secret achievement"] = false;
+	if devMode:
+		for i in achievements.keys():
+			if i != "version":
+				achievements[i]["value"] = true;
+				achievements[i]["secret achievement"] = false;
 				
 	for i in achievements.keys():
 		if i != "version":
@@ -26,8 +26,8 @@ func _ready():
 func unlock_achievement(achievement):
 	if typeof(achievements[achievement]["value"]) == TYPE_BOOL:
 		if achievements[achievement]["value"] == false:
-			unlock_int_achievement(achievement, "rap god", 7, 0);
-			unlock_int_achievement(achievement, "almost there", 16, 9);
+			unlock_int_achievement(achievement, "almost there", 7, 0);
+			unlock_int_achievement(achievement, "rap god", 16, 9);
 			unlock_int_achievement(achievement, "funkin master", 23, 0);
 			
 			achievements[achievement]["value"] = true;
@@ -35,13 +35,14 @@ func unlock_achievement(achievement):
 			save_achievements();
 			
 func unlock_int_achievement(achievement, new_achievement, max_val, min_val):
-	if !achievements[achievement]["achievement index"] < min_val && achievements[achievement]["achievement index"] <= max_val && !achievements[new_achievement]["value"][0] > achievements[new_achievement]["value"][1]:
+	if achievements[achievement]["achievement index"] >= min_val && achievements[achievement]["achievement index"] <= max_val && achievements[new_achievement]["value"][0] < achievements[new_achievement]["value"][1]:
 		achievements[new_achievement]["value"][0] += 1;
 		
-		if achievements[new_achievement]["value"][0] == achievements[new_achievement]["value"][1] && achievements[new_achievement]["value"][2] == false:
-			AchievementPopUp.set_achievement(new_achievement, true if Global.is_playing else false);
+		if achievements[new_achievement]["value"][0] == achievements[new_achievement]["value"][1] && !achievements[new_achievement]["value"][2]:
+			AchievementPopUp.set_achievement(new_achievement, true if SongData.isPlaying else false);
 			achievements[new_achievement]["secret achievement"] = false;
 			achievements[new_achievement]["value"][2] = true;
+			print(achievements[new_achievement]["value"][2])
 			
 func get_achievement(achievement_name):
 	for i in achievements.keys():
@@ -77,7 +78,7 @@ func save_achievements():
 	
 func reset_achievements():
 	achievements = {
-		"version": 7,
+		"version": 1,
 		"you can do it":{
 			"description": "beat tutorial",
 			"value": false,

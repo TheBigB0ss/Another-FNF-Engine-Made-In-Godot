@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://c6v05f40spef2"]
-
-[ext_resource type="Script" uid="uid://cflqoqe6a5eaw" path="res://source/alphabet/alphabetObject.gd" id="1_r46ja"]
-
-[node name="alphabetObject" type="Node2D"]
-script = ExtResource("1_r46ja")

@@ -1,12 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://cbxmksm17k2jp"]
+[gd_scene format=3 uid="uid://cbxmksm17k2jp"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_bmpsl"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_bmpsl"]
 [ext_resource type="SpriteFrames" uid="uid://lhjcx78u55cu" path="res://assets/images/characters/DADDY_DEAREST.res" id="2_op1dn"]
 
-[node name="Dad" type="Node2D"]
+[node name="Dad" type="Node2D" unique_id=338328575]
 script = ExtResource("1_bmpsl")
-json_path = "dad"
+json_path = "res://assets/data/characters/dad.json"
+healthBar_Color = Color(0.45882353, 0.21176471, 0.61960787, 1)
+animTimes = {
+"idle dance": [2, 5],
+"singDown": [2, 5],
+"singLeft": [2, 5],
+"singRight": [2, 5],
+"singUp": [2, 5]
+}
+anim_type = 3
+have_death_animation = false
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=1463488487]
 sprite_frames = ExtResource("2_op1dn")
-animation = &"Dad Sing Note UP"
+animation = &"Dad idle dance"
+frame = 12
+frame_progress = 1.0
+offset = Vector2(-75, -110)

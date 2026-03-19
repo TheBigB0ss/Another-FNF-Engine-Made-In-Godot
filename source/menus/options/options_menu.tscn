@@ -1,9 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dovf83bjbhnsn"]
+[gd_scene format=3 uid="uid://dovf83bjbhnsn"]
 
-[ext_resource type="Script" uid="uid://cv1mng412n6jo" path="res://source/menus/options/options_menu.gd" id="1_g3fsc"]
+[ext_resource type="Script" uid="uid://1ti2qhdtf1mm" path="res://source/menus/options/options_menu.gd" id="1_g3fsc"]
 [ext_resource type="Texture2D" uid="uid://depqgg301j5px" path="res://assets/images/menuBgs/menuBGMagenta.png" id="2_gnd2s"]
 [ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_12ubm"]
-[ext_resource type="PackedScene" uid="uid://c6v05f40spef2" path="res://source/alphabet/alphabetObject.tscn" id="4_5hxum"]
+[ext_resource type="Script" uid="uid://essfoa0h4nwy" path="res://source/alphabet/alphabetObject.gd" id="4_5hxum"]
 [ext_resource type="PackedScene" uid="uid://csjtlx65o4ol2" path="res://source/menus/options/reset_data_scene.tscn" id="4_ynts2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_1y2sa"]
@@ -12,25 +12,25 @@ font_size = 485
 shadow_size = 40
 shadow_color = Color(0, 0, 0, 1)
 
-[node name="Options_menu" type="Node2D"]
+[node name="Options_menu" type="Node2D" unique_id=320468640]
 script = ExtResource("1_g3fsc")
 
-[node name="Bg" type="Sprite2D" parent="."]
+[node name="Bg" type="Sprite2D" parent="." unique_id=357058538]
 position = Vector2(640, 360)
 scale = Vector2(0.995334, 0.986301)
 texture = ExtResource("2_gnd2s")
 
-[node name="options" type="Node2D" parent="."]
+[node name="options" type="Node2D" parent="." unique_id=189224050]
 position = Vector2(420, 479)
 
-[node name="settings" type="Node2D" parent="."]
+[node name="settings" type="Node2D" parent="." unique_id=225446614]
 
-[node name="new_options" type="Node2D" parent="settings"]
+[node name="new_options" type="Node2D" parent="settings" unique_id=933948405]
 position = Vector2(-25, 479)
 
-[node name="option_suffix" type="Node2D" parent="settings"]
+[node name="option_suffix" type="Node2D" parent="settings" unique_id=2143670227]
 
-[node name="ColorRect" type="ColorRect" parent="settings"]
+[node name="ColorRect" type="ColorRect" parent="settings" unique_id=1235964037]
 visible = false
 offset_left = -10.0
 offset_top = 638.0
@@ -39,7 +39,7 @@ offset_bottom = 676.0
 scale = Vector2(32.8118, 2.20228)
 color = Color(0, 0, 0, 0.517647)
 
-[node name="Label" type="Label" parent="settings"]
+[node name="Label" type="Label" parent="settings" unique_id=1657021667]
 texture_filter = 1
 offset_left = -1.0
 offset_top = 641.0
@@ -49,32 +49,38 @@ scale = Vector2(0.081, 0.081)
 label_settings = SubResource("LabelSettings_1y2sa")
 metadata/_edit_use_anchors_ = true
 
-[node name="keys" type="Node2D" parent="."]
+[node name="keys" type="Node2D" parent="." unique_id=1791194663]
 visible = false
 
-[node name="ColorRect" type="ColorRect" parent="keys"]
+[node name="ColorRect" type="ColorRect" parent="keys" unique_id=2133996401]
 offset_left = -10.0
 offset_top = -20.0
 offset_right = 1297.0
 offset_bottom = 734.0
 color = Color(0, 0, 0, 0.470588)
 
-[node name="keyLabel" parent="keys" instance=ExtResource("4_5hxum")]
+[node name="reset" type="Node2D" parent="." unique_id=155725832]
 
-[node name="reset" type="Node2D" parent="."]
-
-[node name="ColorRect" type="ColorRect" parent="reset"]
+[node name="ColorRect" type="ColorRect" parent="reset" unique_id=1423191949]
 offset_top = 659.0
 offset_right = 1280.0
 offset_bottom = 720.0
 color = Color(0, 0, 0, 0.415686)
 metadata/_edit_use_anchors_ = true
 
-[node name="reset_menu" type="Control" parent="."]
+[node name="AlphabetObject" type="AnimatedSprite2D" parent="reset" unique_id=1353327913]
+position = Vector2(659.00006, 689.00006)
+scale = Vector2(0.65, 0.65)
+script = ExtResource("4_5hxum")
+text = "Hold R to return to default settings"
+centred = true
+metadata/_custom_type_script = "uid://essfoa0h4nwy"
+
+[node name="reset_menu" type="Control" parent="." unique_id=1216545783]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="reset_data_scene" parent="reset_menu" instance=ExtResource("4_ynts2")]
+[node name="reset_data_scene" parent="reset_menu" unique_id=256411788 instance=ExtResource("4_ynts2")]
 visible = false

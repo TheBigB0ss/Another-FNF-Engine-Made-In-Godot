@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://baufg6phhjs3o"]
+
+[ext_resource type="Script" uid="uid://cs8nfs42vlbhr" path="res://source/stages/school_evil_remix/school_evil_remix.gd" id="1_tn4iw"]
+[ext_resource type="Shader" uid="uid://dho05u5a40fe" path="res://source/shaders/vhs.gdshader" id="2_wl1w2"]
+[ext_resource type="Shader" uid="uid://v8cdn1pqygg3" path="res://source/shaders/wiggle.gdshader" id="3_7nglg"]
+[ext_resource type="Texture2D" uid="uid://coktt3eg27x4t" path="res://assets/stages/week6/evil/remix/glitch bg.png" id="4_smncg"]
+[ext_resource type="Texture2D" uid="uid://5paqj6fkvwdg" path="res://assets/stages/week6/evil/remix/evil school.png" id="5_d7sgs"]
+[ext_resource type="Texture2D" uid="uid://dgd30uvtbwbfi" path="res://assets/stages/week6/evil/remix/evil ground.png" id="6_xvd3t"]
+[ext_resource type="Texture2D" uid="uid://dh150obthtpdc" path="res://assets/stages/week6/evil/remix/evil tree.png" id="7_p02p3"]
+[ext_resource type="Texture2D" uid="uid://doa4cmq6bdysc" path="res://assets/stages/week6/evil/remix/broken wall.png" id="8_vyr7t"]
+[ext_resource type="Shader" uid="uid://bcj1i4t5ur56h" path="res://source/shaders/glitch.gdshader" id="9_smncg"]
+[ext_resource type="Texture2D" uid="uid://dfqs2dwk486lr" path="res://assets/stages/week6/evil/remix/evil_girl1.png" id="10_d7sgs"]
+[ext_resource type="Texture2D" uid="uid://bolxcqayewwu8" path="res://assets/stages/week6/evil/remix/evil_girl2.png" id="11_xvd3t"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5e1lj"]
+shader = ExtResource("2_wl1w2")
+shader_parameter/wiggle = 0.05
+shader_parameter/wiggle_speed = 22.0
+shader_parameter/smear = 1.285
+shader_parameter/blur_samples = 15
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xv4uc"]
+shader = ExtResource("3_7nglg")
+shader_parameter/effect_type = 4
+shader_parameter/u_speed = 1.385
+shader_parameter/u_frequency = 3.925
+shader_parameter/u_amplitude = -0.045
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_smncg"]
+shader = ExtResource("9_smncg")
+shader_parameter/shake_power = 1.195
+shader_parameter/shake_rate = 0.430000020425
+shader_parameter/shake_speed = 5.0
+shader_parameter/shake_block_size = 30.5
+shader_parameter/shake_color_rate = 0.01
+shader_parameter/use_screen_texture = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p02p3"]
+shader = ExtResource("9_smncg")
+shader_parameter/shake_power = -0.615
+shader_parameter/shake_rate = 0.406000019285
+shader_parameter/shake_speed = 11.75
+shader_parameter/shake_block_size = 21.09
+shader_parameter/shake_color_rate = 0.5050000239875
+shader_parameter/use_screen_texture = false
+
+[node name="school evil remake" type="Node2D" unique_id=1483757777]
+script = ExtResource("1_tn4iw")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=253802749]
+layer = 4
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=2133433349]
+material = SubResource("ShaderMaterial_5e1lj")
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="sky" type="Sprite2D" parent="." unique_id=1137534955]
+texture_filter = 1
+material = SubResource("ShaderMaterial_xv4uc")
+position = Vector2(614.75, 357.25)
+scale = Vector2(10, 10)
+texture = ExtResource("4_smncg")
+
+[node name="Glitch" type="ColorRect" parent="." unique_id=342210751]
+material = SubResource("ShaderMaterial_smncg")
+offset_left = -1008.0
+offset_top = -489.0
+offset_right = 2287.0
+offset_bottom = 1231.0
+color = Color(0, 0, 0, 1)
+
+[node name="school" type="Sprite2D" parent="." unique_id=1524829840]
+texture_filter = 1
+position = Vector2(615, 355)
+scale = Vector2(8.3, 8.3)
+texture = ExtResource("5_d7sgs")
+
+[node name="ground" type="Sprite2D" parent="." unique_id=1890593703]
+texture_filter = 1
+position = Vector2(1331, 645.00006)
+scale = Vector2(8.3, 8.3)
+texture = ExtResource("6_xvd3t")
+
+[node name="tree" type="Sprite2D" parent="." unique_id=471653785]
+z_index = 2
+texture_filter = 1
+position = Vector2(-105, 80)
+scale = Vector2(8.3, 8.3)
+texture = ExtResource("7_p02p3")
+
+[node name="wall" type="Sprite2D" parent="." unique_id=1954467609]
+z_index = 2
+texture_filter = 1
+position = Vector2(1457, -25)
+scale = Vector2(8.3, 8.3)
+texture = ExtResource("8_vyr7t")
+
+[node name="girl1" type="Sprite2D" parent="." unique_id=1761704289]
+visible = false
+texture_filter = 1
+material = SubResource("ShaderMaterial_p02p3")
+scale = Vector2(4.4, 4.4)
+texture = ExtResource("10_d7sgs")
+
+[node name="girl2" type="Sprite2D" parent="." unique_id=618317725]
+visible = false
+texture_filter = 1
+material = SubResource("ShaderMaterial_p02p3")
+scale = Vector2(4.4, 4.4)
+texture = ExtResource("11_xvd3t")

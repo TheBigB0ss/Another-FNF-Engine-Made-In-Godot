@@ -1,12 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://dodv15s6w7fjg"]
+[gd_scene format=3 uid="uid://dodv15s6w7fjg"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_q3iyv"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_q3iyv"]
 [ext_resource type="SpriteFrames" uid="uid://d1lgyf680a2j" path="res://assets/images/characters/monsterChristmas.res" id="2_uuj8m"]
 
-[node name="monsterChristmas" type="Node2D"]
+[node name="monsterChristmas" type="Node2D" unique_id=593322059]
 script = ExtResource("1_q3iyv")
-json_path = "monsterChristmas"
+json_path = "res://assets/data/characters/monsterChristmas.json"
+healthBar_Color = Color(1, 0.9411765, 0, 1)
+animTimes = {
+"idle dance": [2, 5],
+"singDown": [2, 5],
+"singLeft": [2, 5],
+"singRight": [2, 5],
+"singUp": [2, 5]
+}
+anim_type = 3
+have_death_animation = false
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=15430078]
 sprite_frames = ExtResource("2_uuj8m")
-animation = &"Monster Right note"
+animation = &"monster idle"
+frame = 14
+frame_progress = 1.0
+offset = Vector2(-85, -50)

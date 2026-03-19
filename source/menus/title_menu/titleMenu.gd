@@ -20,22 +20,19 @@ var random_text_arr = [];
 
 var datetime = Time.get_datetime_dict_from_system();
 
-var salesMan1997 = false;
-
 func _ready():
+	Conductor.reset();
+	Conductor.getSongTime = 0.0;
+	Conductor.connect("new_beat", beat_hit);
+	
 	Discord.update_discord_info("title menu", "Is in menus");
 	
 	if !Global.finished_intro:
-		Conductor.getSongTime = 0.0;
-		Global.connect("new_beat", beat_hit);
-		
 		hide_guys();
 		MusicManager._play_music("freakyMenu", true, true);
 	else:
 		show_guys();
 		Flash.flashAppears(1.3);
-		
-		Global.connect("new_beat", beat_hit);
 		
 	enterText.play("Press Enter to Begin");
 	
@@ -47,21 +44,13 @@ func _ready():
 		
 	random_text_arr = [getTxt()];
 	
-	salesMan1997 = (int(randf_range(0, 1997)) <= 97);
-	if salesMan1997:
-		newGroundsLogo.texture = preload("res://assets/images/title menu/pipis.png");
-		
-	sales_man_bg.visible = salesMan1997;
-	
 func _process(delta):
-	new_logo.scale = lerp(new_logo.scale, Vector2(0.35, 0.35), 0.060);
+	new_logo.scale = lerp(new_logo.scale, Vector2(0.3, 0.3), 0.060);
 	Conductor.getSongTime += delta*1000;
 	
 func show_guys():
-	bambi.visible = (int(randf_range(0, 5000)) <= 5);
-	if !bambi.visible:
-		gf.visible = !salesMan1997;
-		
+	bambi.visible = (int(randf_range(0, 5000)) <= 5) && (datetime.month == 12 && datetime.day == 25);
+	gf.visible = !bambi.visible;
 	new_logo.show();
 	enterText.show();
 	
@@ -78,7 +67,7 @@ func _input(ev):
 		if ev is InputEventKey && ev.pressed && (ev.keycode in [KEY_ENTER] || ev.keycode in [KEY_KP_ENTER]):
 			no_spam = true;
 			enterText.play("ENTER PRESSED");
-			SoundStuff.playAudio('confirmMenu', false);
+			Sound.playAudio('confirmMenu', false);
 			Global.finished_intro = true;
 			
 			await get_tree().create_timer(1.5).timeout
@@ -95,24 +84,22 @@ func skipIntro():
 	hasSkippedIntro = true;
 	
 func getTxt():
-	var txtData = [];
+	var readTxt = FileAccess.open("res://assets/IntroTexts.txt", FileAccess.READ);
+	var txtData = readTxt.get_as_text().split("\n");
 	var txtTexts = [];
-	var readTxt = FileAccess.open("res://assets/data/IntroTexts.txt", FileAccess.READ);
-	txtData = readTxt.get_as_text().split("\n");
 	
 	for i in txtData:
+		if i.strip_edges() == "":
+			continue;
+			
 		var coolest_split = i.split("--");
 		txtTexts.append(coolest_split);
 		
-	for i in txtTexts.size()-1:
-		if (txtTexts[i][0] == "" && txtTexts[i][1] == ""):
-			txtTexts.remove_at(i);
-			
-	var text = txtTexts.pick_random();
-	if text[0] != "" && text[1] != "":
-		return text;
+	if !txtTexts:
+		return ["no", "text"];
 		
-	return ["no", "text"];
+	var text = txtTexts.pick_random();
+	return text;
 	
 func create_text(text):
 	var intro_texts = [];
@@ -133,39 +120,39 @@ func hideText():
 			
 func beat_hit(beat):
 	gfDanceLeft = !gfDanceLeft;
-	new_logo.scale = Vector2(0.39, 0.39);
+	new_logo.scale = Vector2(0.35, 0.35);
 	gf.play("dance_right" if gfDanceLeft else "dance_left");
 	logo.play("logo bumpin");
 	
 	if !hasSkippedIntro && !Global.finished_intro:
 		match beat:
 			1:
-				create_text("big boss presents" if !salesMan1997 else "salesman1997 [presents]");
+				create_text("big boss presents");
 			4:
 				hideText();
 			5:
-				create_text("not association" if !salesMan1997 else "any [association]");
+				create_text("not association");
 				create_text("with");
 			7:
-				create_text("newgrounds" if !salesMan1997 else "[pipis]");
+				create_text("newgrounds");
 				newGroundsLogo.show();
 			8:
 				hideText();
 				newGroundsLogo.hide();
 			9:
-				create_text(random_text_arr[0][0] if !salesMan1997 else "i have a special [deal]");
+				create_text(random_text_arr[0][0]);
 			10:
-				create_text(random_text_arr[0][1] if !salesMan1997 else "just for you [%s]"%[Global.getUserName()]);
+				create_text(random_text_arr[0][1]);
 			11:
 				hideText();
 				newGroundsLogo.hide();
 				$ameigos_bg.hide();
 			12:
-				create_text("another" if !salesMan1997 else "some one...");
+				create_text("another");
 			13:
-				create_text("fnf engine" if !salesMan1997 else "please...........");
+				create_text("fnf engine");
 			14:
-				create_text("made in godot" if !salesMan1997 else "........help");
+				create_text("made in godot");
 			16:
 				hideText();
 				skipIntro();

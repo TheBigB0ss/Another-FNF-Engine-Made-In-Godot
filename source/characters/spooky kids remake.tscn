@@ -1,6 +1,6 @@
-[gd_scene load_steps=93 format=3 uid="uid://c6d80bn15olsd"]
+[gd_scene format=3 uid="uid://c6d80bn15olsd"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_bbgov"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_bbgov"]
 [ext_resource type="Texture2D" uid="uid://dr8koqdvt1iex" path="res://assets/images/characters/remixes/SkidPump_Assets.png" id="2_8hu2y"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d26cs"]
@@ -747,10 +747,26 @@ animations = [{
 "speed": 18.0
 }]
 
-[node name="spooky kids remake" type="Node2D"]
+[node name="spooky kids remake" type="Node2D" unique_id=1390256852]
 script = ExtResource("1_bbgov")
-json_path = "spooky kids remake"
+json_path = "res://assets/data/characters/spooky kids remake.json"
+healthBar_Color = Color(0.9490196, 0.69803923, 0.11372549, 1)
+anims_timer = {
+"danceLeft": [2, 5, false],
+"danceRight": [2, 5, false],
+"hey": [2, 10, true],
+"singDown": [2, 5, false],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false]
+}
+anim_type = 2
+have_death_animation = false
+frame_count = 2.4
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=1871576473]
 sprite_frames = SubResource("SpriteFrames_vxy8o")
-animation = &"HEY"
+animation = &"idle-right"
+frame = 7
+frame_progress = 1.0
+offset = Vector2(-51, -41)

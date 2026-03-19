@@ -1,15 +1,28 @@
-[gd_scene load_steps=3 format=3 uid="uid://clmqwo5a7tqgl"]
+[gd_scene format=3 uid="uid://clmqwo5a7tqgl"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_c3l03"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_c3l03"]
 [ext_resource type="SpriteFrames" uid="uid://brios6f54dg6f" path="res://assets/images/characters/spirit.res" id="2_bkcf6"]
 
-[node name="spirit" type="Node2D"]
+[node name="spirit" type="Node2D" unique_id=1527958019]
 script = ExtResource("1_c3l03")
-json_path = "spirit"
+json_path = "res://assets/data/characters/spirit.json"
+healthBar_Color = Color(1, 0, 0.2784314, 1)
+animTimes = {
+"idle dance": [2, 5],
+"singDown": [2, 5],
+"singLeft": [2, 5],
+"singRight": [2, 5],
+"singUp": [2, 5]
+}
+anim_type = 2
+have_death_animation = false
+frame_count = 2.4
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=1859462146]
 texture_filter = 1
+scale = Vector2(5, 5)
 sprite_frames = ExtResource("2_bkcf6")
-animation = &"up"
+animation = &"idle spirit"
 frame = 19
 frame_progress = 1.0
+offset = Vector2(5, -30)

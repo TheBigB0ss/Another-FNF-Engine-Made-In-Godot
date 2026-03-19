@@ -71,7 +71,7 @@ func _input(event):
 func changeDev(shit):
 	creditSelected += shit;
 	creditSelected = wrapi(creditSelected, 0, len(creditsJson["dev_info"]));
-	SoundStuff.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu", false);
 	
 	change_social_midia(0);
 	updateDev();
@@ -79,7 +79,7 @@ func changeDev(shit):
 func change_social_midia(shit):
 	socialSelected += shit;
 	socialSelected = wrapi(socialSelected, 0, len(creditsJson["dev_info"][creditSelected]["social midia"].keys()));
-	SoundStuff.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu", false);
 	
 	update_midia();
 	

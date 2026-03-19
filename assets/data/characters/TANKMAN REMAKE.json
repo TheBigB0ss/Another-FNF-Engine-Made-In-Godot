@@ -1,0 +1,96 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#ffffffff",
+	"HealthIcon": "tankman remake",
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Anim Time": 5,
+			"Name": "TANKMAN_IDLE",
+			"Offset": [
+				35.0,
+				-41.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singLeft",
+			"Anim Time": 5,
+			"Name": "TANKMAN_LEFT",
+			"Offset": [
+				-51.0,
+				-37.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singDown",
+			"Anim Time": 5,
+			"Name": "TANKMAN_DOWN",
+			"Offset": [
+				49.0,
+				26.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singUp",
+			"Anim Time": 5,
+			"Name": "TANKMAN_UP",
+			"Offset": [
+				33.0,
+				-43.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singRight",
+			"Anim Time": 5,
+			"Name": "TANKMAN_RIGHT",
+			"Offset": [
+				117.0,
+				-41.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "hey",
+			"Anim Time": 25,
+			"Name": "TANKMAN_UGH",
+			"Offset": [
+				11.0,
+				-38.0
+			],
+			"anim beat": 2,
+			"special anim": true
+		},
+		{
+			"Anim": "steve anim",
+			"Anim Time": 25,
+			"Name": "TANKMAN_CALLING",
+			"Offset": [
+				2.0,
+				-41.0
+			],
+			"anim beat": 2,
+			"special anim": true
+		}
+	],
+	"camera follow pos": false,
+	"cameraPos": [
+		290.0,
+		-90.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

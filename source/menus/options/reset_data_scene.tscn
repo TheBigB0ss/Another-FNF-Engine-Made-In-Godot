@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://csjtlx65o4ol2"]
 
-[ext_resource type="Script" uid="uid://qkc8yrc4rkrk" path="res://source/menus/options/reset_data_scene.gd" id="1_armif"]
+[ext_resource type="Script" uid="uid://bg8q3p8tilx74" path="res://source/menus/options/reset_data_scene.gd" id="1_armif"]
 [ext_resource type="Shader" uid="uid://chi6jamggry1k" path="res://source/shaders/backdrops shaders/backdrop2.gdshader" id="3_u6fpd"]
-[ext_resource type="PackedScene" uid="uid://c6v05f40spef2" path="res://source/alphabet/alphabetObject.tscn" id="4_7husa"]
+[ext_resource type="Script" uid="uid://essfoa0h4nwy" path="res://source/alphabet/alphabetObject.gd" id="4_7husa"]
 [ext_resource type="Texture2D" uid="uid://dsjjxpfhq7j7" path="res://assets/images/backdrop1.png" id="4_u6fpd"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vnbf0"]
@@ -33,9 +33,12 @@ position = Vector2(632.5, 361.5)
 scale = Vector2(15.85, 9.77)
 texture = ExtResource("4_u6fpd")
 
-[node name="alphabetObject" parent="panel" instance=ExtResource("4_7husa")]
-position = Vector2(45.999996, 160)
-scale = Vector2(0.57, 0.57)
-coolText = "Are you sure you want to reset your data?"
+[node name="AlphabetObject" type="AnimatedSprite2D" parent="panel"]
+position = Vector2(659, 166)
+scale = Vector2(0.59, 0.59)
+script = ExtResource("4_7husa")
+text = "Are you sure you want to reset your data?"
+centred = true
+metadata/_custom_type_script = "uid://essfoa0h4nwy"
 
 [node name="alphabetGrp" type="Node2D" parent="panel"]

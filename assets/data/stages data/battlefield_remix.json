@@ -1,0 +1,25 @@
+{
+	"bf": [
+		941.0,
+		746.0
+	],
+	"bf Z_Index": 0.0,
+	"gf": [
+		507.0,
+		683.0
+	],
+	"gf Z_Index": 0.0,
+	"new opponent": [
+		-1337.0,
+		620.0
+	],
+	"new opponent Z_Index": 0.0,
+	"opponent": [
+		236.0,
+		653.0
+	],
+	"opponent Z_Index": 0.0,
+	"stage beat zoom": 0.64,
+	"stage zoom": 0.61,
+	"two opponents": true
+}

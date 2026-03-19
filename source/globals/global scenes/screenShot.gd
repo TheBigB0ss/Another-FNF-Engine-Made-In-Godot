@@ -37,7 +37,7 @@ func you_can_take_a_photo():
 	
 func screen_shot():
 	can_take_a_shot = false;
-	SoundStuff.playAudio("screenshot", false);
+	Sound.add_new_sound("screenshot", PROCESS_MODE_ALWAYS, false);
 	Flash.flashAppears(0.3);
 	
 	var datetime = Time.get_datetime_string_from_system(false, true).replace(":", "-");

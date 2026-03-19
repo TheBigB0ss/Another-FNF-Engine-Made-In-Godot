@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://dhohdf1urwugf"]
+
+[ext_resource type="Script" uid="uid://bud56cfhivkw2" path="res://source/stages/school_remix/school_remix.gd" id="1_n0p6p"]
+[ext_resource type="Texture2D" uid="uid://byvpv2h188xq6" path="res://assets/stages/week6/remix/bg_sky.png" id="1_q2iu0"]
+[ext_resource type="Shader" uid="uid://dho05u5a40fe" path="res://source/shaders/vhs.gdshader" id="2_6qc3i"]
+[ext_resource type="Texture2D" uid="uid://ctp4pasvqmjv0" path="res://assets/stages/week6/remix/bg_school.png" id="2_506oe"]
+[ext_resource type="Texture2D" uid="uid://dhlotip1mmve1" path="res://assets/stages/week6/remix/bg_ground.png" id="3_dp0gx"]
+[ext_resource type="Texture2D" uid="uid://bdyakpg2o3hln" path="res://assets/stages/week6/remix/bg_grass.png" id="4_n0p6p"]
+[ext_resource type="Texture2D" uid="uid://daeyf3c4werug" path="res://assets/stages/week6/remix/bg_trunks.png" id="7_q04ht"]
+[ext_resource type="Texture2D" uid="uid://dftoqocwdgcwm" path="res://assets/stages/week6/remix/bg_trees.png" id="8_t1itc"]
+[ext_resource type="Texture2D" uid="uid://cs2rx1lixrygq" path="res://assets/stages/week6/remix/bg_wall.png" id="9_tvoso"]
+[ext_resource type="PackedScene" uid="uid://bsvgftxd7osis" path="res://assets/stages/week6/bgFreaks.tscn" id="10_n0p6p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w1wfj"]
+shader = ExtResource("2_6qc3i")
+shader_parameter/wiggle = 0.05
+shader_parameter/wiggle_speed = 22.0
+shader_parameter/smear = 1.285
+shader_parameter/blur_samples = 15
+
+[node name="school remake" type="Node2D"]
+script = ExtResource("1_n0p6p")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 4
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_w1wfj")
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="sky" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(839.99994, 111)
+scale = Vector2(8.3, 8.3)
+texture = ExtResource("1_q2iu0")
+
+[node name="school" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(806.0001, 225.00012)
+scale = Vector2(8.3, 8.3)
+texture = ExtResource("2_506oe")
+
+[node name="ground" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(832, 596)
+scale = Vector2(8.3, 8.3)
+texture = ExtResource("3_dp0gx")
+
+[node name="grass" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(839.99994, 552)
+scale = Vector2(8.3, 8.3)
+texture = ExtResource("4_n0p6p")
+
+[node name="trunks" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(846.0001, 306.00003)
+scale = Vector2(8.3, 8.3)
+texture = ExtResource("7_q04ht")
+
+[node name="trees" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(839.99994, -45.999992)
+scale = Vector2(8.3, 8.3)
+texture = ExtResource("8_t1itc")
+
+[node name="walls" type="Sprite2D" parent="."]
+z_index = 2
+texture_filter = 1
+position = Vector2(839.99994, 782.99994)
+scale = Vector2(8.3, 8.3)
+texture = ExtResource("9_tvoso")
+
+[node name="bgFreaks" parent="." instance=ExtResource("10_n0p6p")]
+position = Vector2(851.00006, 446)
+scale = Vector2(5.6, 5.6)

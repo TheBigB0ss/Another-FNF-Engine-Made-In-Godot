@@ -1,6 +1,6 @@
-[gd_scene load_steps=299 format=3 uid="uid://digttpaahgjiq"]
+[gd_scene format=3 uid="uid://digttpaahgjiq"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_gtqxi"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_gtqxi"]
 [ext_resource type="Texture2D" uid="uid://btf0lq7hlr7pn" path="res://assets/images/characters/bfChristmas.png" id="2_mgmyb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jbmrq"]
@@ -2416,12 +2416,29 @@ animations = [{
 "speed": 22.0
 }]
 
-[node name="bfChristmas" type="Node2D"]
+[node name="bfChristmas" type="Node2D" unique_id=1352102818]
 script = ExtResource("1_gtqxi")
+json_path = "res://assets/data/characters/bfChristmas.json"
+healthBar_Color = Color(0, 0.8117647, 1, 1)
+is_player = true
+animTimes = {
+"hey": [2, 5],
+"idle dance": [2, 5],
+"singDown": [2, 5],
+"singDown MISS": [2, 5],
+"singLeft": [2, 5],
+"singLeft MISS": [2, 5],
+"singRight": [2, 5],
+"singRight MISS": [2, 5],
+"singUp": [2, 5],
+"singUp MISS": [2, 5]
+}
+anim_type = 3
 have_death_animation = true
-death_scene = "characters/Bf dead"
-json_path = "bfChristmas"
+death_scene = "res://source/characters/Bf dead.tscn"
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=1256054110]
 sprite_frames = SubResource("SpriteFrames_3hyrf")
-animation = &"BF NOTE UP MISS"
+animation = &"BF idle dance"
+frame = 13
+frame_progress = 1.0

@@ -38,7 +38,7 @@ func _input(ev):
 			
 			Global.can_use_menus = false;
 			AchievementPopUp.set_achievement('what time is it', false);
-			SoundStuff.add_new_sound("Tenna Jumpscare", Node.PROCESS_MODE_ALWAYS);
+			Sound.add_new_sound("Tenna Jumpscare", Node.PROCESS_MODE_ALWAYS);
 			MusicManager._stop_music();
 			
 func _process(delta):

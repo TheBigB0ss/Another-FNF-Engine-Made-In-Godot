@@ -1,6 +1,6 @@
 class_name Achievements_icon extends Node2D
 
-var shit = "";
+var fake_name = "";
 var cool_name = "";
 var cool_value = false;
 var cool_description = "";
@@ -58,4 +58,4 @@ func _ready() -> void:
 	for i in len(cool_name):
 		coolest_point += "?";
 		
-	shit = coolest_point;
+	fake_name = coolest_point;

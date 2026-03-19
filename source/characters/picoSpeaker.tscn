@@ -1,12 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://dxlrpnjdvghel"]
+[gd_scene format=3 uid="uid://dxlrpnjdvghel"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_eycg5"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_eycg5"]
 [ext_resource type="SpriteFrames" uid="uid://du4cfrv5bojh0" path="res://assets/images/characters/picoSpeaker.res" id="2_eycg5"]
 
-[node name="picoSpeaker" type="Node2D"]
+[node name="picoSpeaker" type="Node2D" unique_id=631180512]
 script = ExtResource("1_eycg5")
-json_path = "picoSpeaker"
+json_path = "res://assets/data/characters/picoSpeaker.json"
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=685090914]
 sprite_frames = ExtResource("2_eycg5")
 animation = &"Pico shoot 1"

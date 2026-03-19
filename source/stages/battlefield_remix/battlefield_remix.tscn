@@ -1,0 +1,152 @@
+[gd_scene format=3 uid="uid://o15ndtyyl572"]
+
+[ext_resource type="Script" uid="uid://qjclh5dqpe82" path="res://source/stages/battlefield_remix/battlefield_remix.gd" id="1_rxw5l"]
+[ext_resource type="Texture2D" uid="uid://cikx851dag8cr" path="res://assets/stages/week7/remix/sky.png" id="2_f7sni"]
+[ext_resource type="Shader" uid="uid://vf1al1wynl8i" path="res://source/shaders/backdrops shaders/backdrop1.gdshader" id="3_le3xy"]
+[ext_resource type="Texture2D" uid="uid://b6y0q4yjxnufi" path="res://assets/stages/week7/remix/clouds.png" id="4_gam10"]
+[ext_resource type="Texture2D" uid="uid://cq6li3thiodch" path="res://assets/stages/week7/remix/mountains.png" id="5_uhad5"]
+[ext_resource type="Texture2D" uid="uid://bgdvv8tgqyx6q" path="res://assets/stages/week7/remix/city2.png" id="6_uql5g"]
+[ext_resource type="Texture2D" uid="uid://sxrw3bjnfxqe" path="res://assets/stages/week7/remix/city1.png" id="7_7371l"]
+[ext_resource type="SpriteFrames" uid="uid://dlu5e26acxpub" path="res://assets/stages/week7/remix/watcher.res" id="8_iac7k"]
+[ext_resource type="SpriteFrames" uid="uid://b0bkfhlkqivl4" path="res://assets/stages/week7/remix/tanks.res" id="9_clmbp"]
+[ext_resource type="SpriteFrames" uid="uid://cx2uehc1u7oy2" path="res://assets/stages/week7/remix/smokes.res" id="10_f5usi"]
+[ext_resource type="Texture2D" uid="uid://c63dplqxi24pq" path="res://assets/stages/week7/remix/barbed_wire1.png" id="11_22ult"]
+[ext_resource type="Texture2D" uid="uid://cl7tm1q5qcbi7" path="res://assets/stages/week7/remix/barbed_wire2.png" id="12_vdw1x"]
+[ext_resource type="Texture2D" uid="uid://0g4n0fuw68uc" path="res://assets/stages/week7/remix/Ground.png" id="13_a112n"]
+[ext_resource type="Texture2D" uid="uid://brl1s1q8nvxdc" path="res://assets/stages/week7/remix/box1.png" id="14_7b4go"]
+[ext_resource type="Texture2D" uid="uid://btl2v7ucwnbio" path="res://assets/stages/week7/remix/box2.png" id="15_bokef"]
+[ext_resource type="SpriteFrames" uid="uid://blfjisqcokofe" path="res://assets/stages/week7/remix/soldiers.res" id="16_f7sni"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ddiij"]
+shader = ExtResource("3_le3xy")
+shader_parameter/scroll_speed = Vector2(20, 0)
+shader_parameter/time = 0.0
+
+[node name="battlefield remix" type="Node2D" unique_id=1768193739]
+script = ExtResource("1_rxw5l")
+
+[node name="skyBg" type="Sprite2D" parent="." unique_id=385625109]
+position = Vector2(655.99994, 197)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("2_f7sni")
+
+[node name="cloud" type="Sprite2D" parent="." unique_id=1804288049]
+material = SubResource("ShaderMaterial_ddiij")
+position = Vector2(657, -87)
+texture = ExtResource("4_gam10")
+
+[node name="mountainsBg" type="Sprite2D" parent="." unique_id=395946508]
+position = Vector2(666.99994, 626)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("5_uhad5")
+
+[node name="ruinsBg2" type="Sprite2D" parent="." unique_id=152837071]
+position = Vector2(659, 769)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("6_uql5g")
+
+[node name="paratroopers" type="Node2D" parent="." unique_id=112569043]
+position = Vector2(631, -604)
+
+[node name="ruinsBg1" type="Sprite2D" parent="." unique_id=1430611245]
+position = Vector2(659, 773)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("7_7371l")
+
+[node name="towerBg" type="AnimatedSprite2D" parent="." unique_id=1772554644]
+position = Vector2(-51.999992, 472.99997)
+scale = Vector2(1.1, 1.1)
+sprite_frames = ExtResource("8_iac7k")
+animation = &"watchtower gradient color"
+autoplay = "watchtower gradient color"
+frame_progress = 0.10414388
+
+[node name="tank1" type="AnimatedSprite2D" parent="." unique_id=1161198633]
+position = Vector2(945.5, 510)
+sprite_frames = ExtResource("9_clmbp")
+animation = &"BG TANK"
+autoplay = "BG TANK"
+frame_progress = 0.94226164
+
+[node name="tank2" type="AnimatedSprite2D" parent="." unique_id=902969388]
+position = Vector2(262, 527)
+sprite_frames = ExtResource("9_clmbp")
+animation = &"BG TANK2"
+autoplay = "BG TANK2"
+frame_progress = 0.34449548
+
+[node name="smoke1" type="AnimatedSprite2D" parent="." unique_id=96209919]
+position = Vector2(-144, 332)
+sprite_frames = ExtResource("10_f5usi")
+animation = &"left smoke"
+autoplay = "left smoke"
+frame_progress = 0.9484275
+
+[node name="smoke2" type="AnimatedSprite2D" parent="." unique_id=49425805]
+position = Vector2(1469, 326)
+sprite_frames = ExtResource("10_f5usi")
+animation = &"right smoke"
+autoplay = "right smoke"
+frame_progress = 0.18652895
+
+[node name="fance1" type="Sprite2D" parent="." unique_id=362879984]
+position = Vector2(1545, 628)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("11_22ult")
+
+[node name="fance2" type="Sprite2D" parent="." unique_id=2134391089]
+position = Vector2(-257, 645)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("12_vdw1x")
+
+[node name="groundBg" type="Sprite2D" parent="." unique_id=1704608836]
+position = Vector2(659, 1191)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("13_a112n")
+
+[node name="box1" type="Sprite2D" parent="." unique_id=2102943729]
+z_index = 2
+position = Vector2(-122, 1119)
+texture = ExtResource("14_7b4go")
+
+[node name="box2" type="Sprite2D" parent="." unique_id=1583447742]
+z_index = 2
+position = Vector2(1465, 1125)
+texture = ExtResource("15_bokef")
+
+[node name="soldiers" type="Node2D" parent="." unique_id=1027762158]
+z_index = 2
+scale = Vector2(0.825, 0.825)
+
+[node name="tankman1" type="AnimatedSprite2D" parent="soldiers" unique_id=813669907]
+position = Vector2(-531.13635, 1213.3636)
+sprite_frames = ExtResource("16_f7sni")
+animation = &"FG_Tankmen1"
+
+[node name="tankman2" type="AnimatedSprite2D" parent="soldiers" unique_id=1021792393]
+position = Vector2(2318.7878, 1333.3334)
+sprite_frames = ExtResource("16_f7sni")
+animation = &"FG_Tankmen2"
+
+[node name="tankman3" type="AnimatedSprite2D" parent="soldiers" unique_id=1444434793]
+position = Vector2(1225.4546, 1490.909)
+sprite_frames = ExtResource("16_f7sni")
+animation = &"FG_Tankmen3"
+frame = 13
+frame_progress = 1.0
+
+[node name="tankman4" type="AnimatedSprite2D" parent="soldiers" unique_id=371730007]
+position = Vector2(648.48486, 1602.4243)
+sprite_frames = ExtResource("16_f7sni")
+animation = &"FG_Tankmen4"
+
+[node name="tankman5" type="AnimatedSprite2D" parent="soldiers" unique_id=1937163175]
+position = Vector2(34.924255, 1426.697)
+sprite_frames = ExtResource("16_f7sni")
+animation = &"FG_Tankmen5"
+
+[node name="tankman6" type="AnimatedSprite2D" parent="soldiers" unique_id=1357206230]
+position = Vector2(1807.2728, 1284.8485)
+sprite_frames = ExtResource("16_f7sni")
+animation = &"FG_Tankmen6"
+flip_h = true

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="tanks.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="BG TANK0000" x="0" y="0" width="333" height="296"/>
+	<SubTexture name="BG TANK0001" x="333" y="0" width="333" height="296"/>
+	<SubTexture name="BG TANK0002" x="666" y="0" width="333" height="296"/>
+	<SubTexture name="BG TANK20000" x="0" y="296" width="333" height="291"/>
+	<SubTexture name="BG TANK20001" x="333" y="296" width="333" height="291"/>
+	<SubTexture name="BG TANK20002" x="666" y="296" width="333" height="291"/>
+</TextureAtlas>

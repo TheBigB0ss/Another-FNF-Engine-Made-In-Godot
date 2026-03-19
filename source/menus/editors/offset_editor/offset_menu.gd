@@ -1,8 +1,8 @@
 extends Node2D
 
 @onready var characterGrp = $"character";
-@onready var characters_options = $"offset_layer/characters";
-@onready var cur_anim_text = $'offset_layer/current_anim';
+@onready var characters_options = $"offset_layer/TabContainer/main settings/characters";
+@onready var cur_anim_text = $"offset_layer/TabContainer/anim settings/current_anim";
 @onready var pos_cross = $cross;
 @onready var camera = $Camera2D;
 
@@ -21,15 +21,18 @@ var offset_count = 0;
 
 func _ready():
 	Discord.update_discord_info("offset menu", "Is in menus");
-	Global.is_on_death_screen = false;
+	SongData.isOnDeathScreen = false;
 	MusicManager._play_music(GlobalOptions.updated_pause_music, false, true);
 	
 	for i in addCharToList():
 		if i.contains(".json"):
 			replaced = i.replace(".json", "");
 			
+		if replaced == "none":
+			continue;
+			
 		character_list.append(replaced);
-		characters_options.add_item(i.replace(".json", ""));
+		characters_options.add_item(replaced);
 		
 	characters_options.connect("item_selected",change_character);
 	
@@ -38,23 +41,21 @@ func _ready():
 	numsSpr.position = Vector2(GlobalOptions.ratings_positions["nums"][0], GlobalOptions.ratings_positions["nums"][1]);
 	
 	change_character(0);
-	change_anim(0);
 	play_anim();
 	
 var adjusting_rating = false;
-func get_char_json(char, cur_offset = 0):
+func get_char_json(character, cur_offset, option):
 	var offset = {};
-	var replaced = char;
 	
-	if char.contains(".tscn"):
-		replaced = char.replace(".tscn", "");
+	if character.contains(".tscn"):
+		character = character.replace(".tscn", "");
 		
-	var jsonFile = FileAccess.open("res://assets/characters/%s.json"%[replaced],FileAccess.READ);
+	var jsonFile = FileAccess.open("res://assets/data/characters/%s.json"%[character],FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
 	offset = jsonData.get_data();
 	jsonFile.close();
-	return offset["Poses"][cur_offset]["Offset"];
+	return offset["Poses"][cur_offset][option];
 	
 func change_character(char):
 	for i in characterGrp.get_children():
@@ -80,7 +81,6 @@ func change_character(char):
 		%flipX.button_pressed = i.charData["FlipX"];
 		%flipY.button_pressed = i.charData["FlipY"];
 		%is_player.button_pressed = i.charData["isPlayer"];
-		%loopAnim.button_pressed = i.loopAnim;
 		%anim_time.value = i.anim_time;
 		%cam_follow_poses.button_pressed = i.cam_follow_pos;
 		
@@ -88,7 +88,6 @@ func change_character(char):
 		update_scale_value(i.charData["scale"][0], i.charData["scale"][1]);
 		flip_char(i.charData["FlipX"], i.charData["FlipY"]);
 		
-	change_anim(0);
 	set_rating_pos();
 	
 func update_offset_value(x = 0, y = 0):
@@ -98,16 +97,16 @@ func update_offset_value(x = 0, y = 0):
 			i.character.offset = Vector2(x, y);
 			
 		if i.character is Sprite2D:
-			i.position = i.base_position + Vector2(x, y);
+			i.character.position = i.base_position + Vector2(x, y);
+			print(i.character.position)
 			
 func update_cross(x, y):
-	var char = characterGrp.get_child(0);
-	var midpoint = char.global_position;
+	var midpoint = characterGrp.get_child(0).global_position;
+	$cross_position.position = Vector2(midpoint.x + x, midpoint.y + y);
+	pos_cross.position = $cross_position.position - pos_cross.texture.get_size() * 0.5 * pos_cross.scale;
 	
-	var new_x = midpoint.x + 150 + x;
-	var new_y = midpoint.y - 100 + y;
-	
-	pos_cross.position = Vector2(new_x, new_y) - pos_cross.texture.get_size() * 0.5 * pos_cross.scale;
+	%camera_X.value = x;
+	%camera_Y.value = y;
 	
 func update_scale_value(x = 1, y = 1):
 	for i in characterGrp.get_children():
@@ -122,14 +121,14 @@ func flip_char(flipX, flipY):
 func play_anim():
 	for i in characterGrp.get_children():
 		if i.character is Sprite2D:
-			i.character_anim.play(str(i.posesList[cur_pose], "/ "));
+			i.character_anim.play(i.posesList[cur_pose]);
 			
 		elif i.character is AnimatedSprite2D:
 			i.character.play(i.posesList[cur_pose]);
 			
 var cursor = "";
-func update_cursor(cursor):
-	var path = "res://assets/images/cursors/cursor-%s.png"%[cursor];
+func update_cursor(new_cursor):
+	var path = "res://assets/images/cursors/cursor-%s.png"%[new_cursor];
 	Input.set_custom_mouse_cursor(load(path), Input.CURSOR_ARROW, Vector2.ZERO);
 	
 func set_rating_pos():
@@ -252,6 +251,10 @@ enum RatingState {
 };
 
 var can_grab = true;
+
+var animTimes = [];
+var animBeats = [];
+var specialAnims = [];
 func _process(delta: float) -> void:
 	if adjusting_rating:
 		var mouse = get_viewport().get_mouse_position();
@@ -291,35 +294,47 @@ func _process(delta: float) -> void:
 		GlobalOptions.get_setting("combo_pos", [%combo_x.value, %combo_y.value]);
 		GlobalOptions.get_setting("nums_pos", [%nums_x.value, %nums_y.value]);
 		
-	elif can_grab && !adjusting_rating:
-		var mouse = characterGrp.to_local(get_global_mouse_position());
-		var mouse_shit = get_viewport().gui_get_hovered_control() is TabBar or get_viewport().gui_get_hovered_control() is SpinBox or get_viewport().gui_get_hovered_control() is CheckBox or get_viewport().gui_get_hovered_control() is Button or get_viewport().gui_get_hovered_control() is OptionButton;
-		
-		if Input.is_action_pressed("mouse_click"):
-			for i in characterGrp.get_children():
-				if !$FileDialog.visible && !mouse_shit:
-					if mouse_inside_character(i.character):
-						holding_char = true;
-				else:
-					holding_char = false;
-		else:
-			holding_char = false;
-			
-		if holding_char:
-			offset_array[cur_pose][0] = mouse.x/char_scale.x;
-			offset_array[cur_pose][1] = mouse.y/char_scale.y;
+	#elif can_grab && !adjusting_rating:
+		#var mouse = characterGrp.to_local(get_global_mouse_position());
+		#var mouse_shit = get_viewport().gui_get_hovered_control() is TabBar or get_viewport().gui_get_hovered_control() is SpinBox or get_viewport().gui_get_hovered_control() is CheckBox or get_viewport().gui_get_hovered_control() is Button or get_viewport().gui_get_hovered_control() is OptionButton;
+		#var character = null;
+		#
+		#for i in characterGrp.get_children():
+			#character = i.character;
+			#
+		#if Input.is_action_pressed("mouse_click") && mouse_inside_character(character):
+			#holding_char = !$FileDialog.visible;
+		#else:
+			#holding_char = false;
+			#
+		#if holding_char:
+			#offset_array[cur_pose][0] = mouse.x/char_scale.x;
+			#offset_array[cur_pose][1] = mouse.y/char_scale.y;
 			
 	if !$FileDialog.visible:
+		if Input.is_action_pressed("ui_shift") && Input.is_action_pressed("mouse_click"):
+			update_cross(get_global_mouse_position().x - characterGrp.get_child(0).global_position.x, get_global_mouse_position().y - characterGrp.get_child(0).global_position.y);
+			
 		if Input.is_action_just_released("mouse_wheel_down"):
 			if camera.zoom.x < 0.50:
 				return;
 				
-			camera.zoom.x -= 0.2/6;
-			camera.zoom.y -= 0.2/6;
+			var lastPos = get_global_mouse_position();
+			
+			camera.zoom.x -= 0.2/4;
+			camera.zoom.y -= 0.2/4;
+			
+			var curPos = get_global_mouse_position();
+			camera.position += lastPos - curPos;
 			
 		if Input.is_action_just_released("mouse_wheel_up"):
-			camera.zoom.x += 0.2/8;
-			camera.zoom.y += 0.2/8;
+			var lastPos = get_global_mouse_position();
+			
+			camera.zoom.x += 0.2/4;
+			camera.zoom.y += 0.2/4;
+			
+			var curPos = get_global_mouse_position();
+			camera.position += lastPos - curPos;
 			
 	if (Input.is_action_just_released("mouse_click") or !Input.is_action_just_pressed("mouse_click")) && !can_grab:
 		can_grab = true;
@@ -330,12 +345,18 @@ func _process(delta: float) -> void:
 	
 	for i in characterGrp.get_children():
 		if !offset_count > i.animList.size()-1:
-			offset_array.append(get_char_json(character_list[characters_options.selected], offset_count))
+			offset_array.append(get_char_json(character_list[characters_options.selected], offset_count, "Offset"));
+			animTimes.append(5);
+			animBeats.append(2);
+			specialAnims.append(false);
 			
 			characterData.append({
 				"Name": i.posesList[offset_count],
 				"Anim": i.animList[offset_count],
-				"Offset": [0, 0]
+				"Offset": [0, 0],
+				"anim beat": 2,
+				"Anim Time": 5,
+				"special anim": false
 			});
 			
 			characterData[offset_count]["Offset"] = [
@@ -343,12 +364,20 @@ func _process(delta: float) -> void:
 				offset_array[offset_count][1]
 			];
 			
+			characterData[offset_count]["anim beat"] = int(animBeats[offset_count]);
+			characterData[offset_count]["Anim Time"] = int(animTimes[offset_count]);
+			characterData[offset_count]["special anim"] = specialAnims[offset_count];
+			
 			offset_count += 1;
 			
 		characterData[cur_pose]["Offset"] = [
 			offset_array[cur_pose][0],
 			offset_array[cur_pose][1]
 		];
+		
+		characterData[cur_pose]["anim beat"] = int(animBeats[cur_pose]);
+		characterData[cur_pose]["Anim Time"] = int(animTimes[cur_pose]);
+		characterData[cur_pose]["special anim"] = specialAnims[cur_pose];
 		
 		characterJson = {
 			"Poses": characterData,
@@ -360,18 +389,18 @@ func _process(delta: float) -> void:
 			"AnimatedIcon": %animated_icon.button_pressed,
 			"scale": [%x_scale.value, %y_scale.value],
 			"cameraPos": [%camera_X.value, %camera_Y.value],
-			"LoopAnim": %loopAnim.button_pressed,
-			"anim time": %anim_time.value,
 			"camera follow pos": %cam_follow_poses.button_pressed
 		};
 		
 	%x_offset.value = offset_array[cur_pose][0];
 	%y_offset.value = offset_array[cur_pose][1];
+	%beat_time.value = animBeats[cur_pose];
+	%anim_time.value = animTimes[cur_pose];
+	%is_special.button_pressed = specialAnims[cur_pose];
 	
 func addCharToList():
 	var charList = [];
-	var char = getFolderShit("assets/characters/");
-	for i in char:
+	for i in getFolderShit("assets/data/characters/"):
 		if i.ends_with(".json") && !i == "none":
 			charList.append(i);
 			
@@ -427,12 +456,34 @@ func _on_camera_y_value_changed(value: float) -> void:
 	
 func _on_y_offset_value_changed(value: float) -> void:
 	can_grab = false;
-	if offset_array != []:
-		offset_array[cur_pose][1] = value;
-		update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
+	if offset_array.is_empty():
+		return;
 		
+	offset_array[cur_pose][1] = value;
+	update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
+	
 func _on_x_offset_value_changed(value: float) -> void:
 	can_grab = false;
-	if offset_array != []:
-		offset_array[cur_pose][0] = value;
-		update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
+	if offset_array.is_empty():
+		return;
+		
+	offset_array[cur_pose][0] = value;
+	update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
+	
+func _on_anim_time_value_changed(value: float) -> void:
+	if animTimes.is_empty():
+		return;
+		
+	animTimes[cur_pose] = value;
+	
+func _on_beat_time_value_changed(value: float) -> void:
+	if animBeats.is_empty():
+		return;
+		
+	animBeats[cur_pose] = value;
+	
+func _on_is_special_toggled(toggled_on: bool) -> void:
+	if specialAnims.is_empty():
+		return;
+		
+	specialAnims[cur_pose] = toggled_on;

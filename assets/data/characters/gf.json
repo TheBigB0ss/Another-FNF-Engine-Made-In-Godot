@@ -1,0 +1,129 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#8b0000ff",
+	"HealthIcon": "gf",
+	"Poses": [
+		{
+			"Anim": "singLeft",
+			"Anim Time": 5.0,
+			"Name": "GF left note",
+			"Offset": [
+				86.0,
+				-115.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "singDown",
+			"Anim Time": 5.0,
+			"Name": "GF Down Note",
+			"Offset": [
+				87.0,
+				-115.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "singUp",
+			"Anim Time": 5.0,
+			"Name": "GF Up Note",
+			"Offset": [
+				86.0,
+				-128.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "singRight",
+			"Anim Time": 5.0,
+			"Name": "GF Right Note",
+			"Offset": [
+				86.0,
+				-116.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "special idle dance",
+			"Anim Time": 5.0,
+			"Name": "GF Dancing Beat Hair Landing",
+			"Offset": [
+				86.0,
+				-121.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "sad",
+			"Anim Time": 5.0,
+			"Name": "gf sad",
+			"Offset": [
+				87.0,
+				-115.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "hey",
+			"Anim Time": 5.0,
+			"Name": "GF Cheer",
+			"Offset": [
+				86.0,
+				-126.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "danceLeft",
+			"Anim Time": 5.0,
+			"Name": "dance_left",
+			"Offset": [
+				85.0,
+				-120.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "danceRight",
+			"Anim Time": 5.0,
+			"Name": "dance_right",
+			"Offset": [
+				85.0,
+				-120.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "scared",
+			"Anim Time": 5.0,
+			"Name": "GF FEAR",
+			"Offset": [
+				86.0,
+				-116.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		}
+	],
+	"camera follow pos": false,
+	"cameraPos": [
+		130.0,
+		-150.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

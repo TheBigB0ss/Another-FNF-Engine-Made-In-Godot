@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="paratroopers.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="BG_FallingBox0000" x="0" y="0" width="168" height="200"/>
+	<SubTexture name="BG_FallingBox0001" x="0" y="0" width="168" height="200"/>
+	<SubTexture name="BG_FallingBox0002" x="0" y="0" width="168" height="200"/>
+	<SubTexture name="BG_FallingBox0003" x="0" y="0" width="168" height="200"/>
+	<SubTexture name="BG_FallingBox0004" x="168" y="0" width="168" height="200"/>
+	<SubTexture name="BG_FallingBox0005" x="168" y="0" width="168" height="200"/>
+	<SubTexture name="BG_FallingBox0006" x="168" y="0" width="168" height="200"/>
+	<SubTexture name="BG_FallingBox0007" x="168" y="0" width="168" height="200"/>
+	<SubTexture name="BG_FallingBox0008" x="336" y="0" width="168" height="200"/>
+	<SubTexture name="BG_FallingBox0009" x="336" y="0" width="168" height="200"/>
+	<SubTexture name="BG_FallingBox0010" x="336" y="0" width="168" height="200"/>
+	<SubTexture name="BG_FallingBox0011" x="336" y="0" width="168" height="200"/>
+	<SubTexture name="BG_FallingFreddy0000" x="504" y="0" width="147" height="259"/>
+	<SubTexture name="BG_FallingFreddy0001" x="504" y="0" width="147" height="259"/>
+	<SubTexture name="BG_FallingFreddy0002" x="504" y="0" width="147" height="259"/>
+	<SubTexture name="BG_FallingFreddy0003" x="651" y="0" width="147" height="259"/>
+	<SubTexture name="BG_FallingFreddy0004" x="651" y="0" width="147" height="259"/>
+	<SubTexture name="BG_FallingFreddy0005" x="651" y="0" width="147" height="259"/>
+	<SubTexture name="BG_FallingFreddy0006" x="798" y="0" width="147" height="259"/>
+	<SubTexture name="BG_FallingFreddy0007" x="798" y="0" width="147" height="259"/>
+	<SubTexture name="BG_FallingFreddy0008" x="798" y="0" width="147" height="259"/>
+	<SubTexture name="BG_FallingFreddy0009" x="0" y="259" width="147" height="259"/>
+	<SubTexture name="BG_FallingFreddy0010" x="0" y="259" width="147" height="259"/>
+	<SubTexture name="BG_FallingFreddy0011" x="0" y="259" width="147" height="259"/>
+	<SubTexture name="BG_FallingTankmen10000" x="147" y="259" width="168" height="236"/>
+	<SubTexture name="BG_FallingTankmen10001" x="147" y="259" width="168" height="236"/>
+	<SubTexture name="BG_FallingTankmen10002" x="147" y="259" width="168" height="236"/>
+	<SubTexture name="BG_FallingTankmen10003" x="147" y="259" width="168" height="236"/>
+	<SubTexture name="BG_FallingTankmen10004" x="315" y="259" width="168" height="236"/>
+	<SubTexture name="BG_FallingTankmen10005" x="315" y="259" width="168" height="236"/>
+	<SubTexture name="BG_FallingTankmen10006" x="315" y="259" width="168" height="236"/>
+	<SubTexture name="BG_FallingTankmen10007" x="315" y="259" width="168" height="236"/>
+	<SubTexture name="BG_FallingTankmen10008" x="483" y="259" width="168" height="236"/>
+	<SubTexture name="BG_FallingTankmen10009" x="483" y="259" width="168" height="236"/>
+	<SubTexture name="BG_FallingTankmen10010" x="483" y="259" width="168" height="236"/>
+	<SubTexture name="BG_FallingTankmen10011" x="483" y="259" width="168" height="236"/>
+	<SubTexture name="BG_FallingTankmen20000" x="651" y="259" width="168" height="247"/>
+	<SubTexture name="BG_FallingTankmen20001" x="651" y="259" width="168" height="247"/>
+	<SubTexture name="BG_FallingTankmen20002" x="651" y="259" width="168" height="247"/>
+	<SubTexture name="BG_FallingTankmen20003" x="651" y="259" width="168" height="247"/>
+	<SubTexture name="BG_FallingTankmen20004" x="819" y="259" width="168" height="247"/>
+	<SubTexture name="BG_FallingTankmen20005" x="819" y="259" width="168" height="247"/>
+	<SubTexture name="BG_FallingTankmen20006" x="819" y="259" width="168" height="247"/>
+	<SubTexture name="BG_FallingTankmen20007" x="819" y="259" width="168" height="247"/>
+	<SubTexture name="BG_FallingTankmen20008" x="0" y="518" width="168" height="247"/>
+	<SubTexture name="BG_FallingTankmen20009" x="0" y="518" width="168" height="247"/>
+	<SubTexture name="BG_FallingTankmen20010" x="0" y="518" width="168" height="247"/>
+	<SubTexture name="BG_FallingTankmen20011" x="0" y="518" width="168" height="247"/>
+</TextureAtlas>

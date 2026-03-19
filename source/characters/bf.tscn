@@ -1,14 +1,36 @@
-[gd_scene load_steps=3 format=3 uid="uid://nuno0fp5tpiu"]
+[gd_scene format=3 uid="uid://nuno0fp5tpiu"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_crp0m"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_crp0m"]
 [ext_resource type="SpriteFrames" uid="uid://dwhnjmnku87du" path="res://assets/images/characters/BOYFRIEND.res" id="1_vhb3j"]
 
-[node name="Boyfriend" type="Node2D"]
+[node name="Boyfriend" type="Node2D" unique_id=1571258161]
 script = ExtResource("1_crp0m")
+json_path = "res://assets/data/characters/bf.json"
+healthBar_Color = Color(0, 0.8117647, 1, 1)
+is_player = true
+animTimes = {
+"attack": [2, 5],
+"dodge": [2, 5],
+"hey": [2, 5],
+"hit": [2, 5],
+"idle dance": [2, 5],
+"idle shaking": [2, 5],
+"pre attack": [2, 5],
+"singDown": [2, 5],
+"singDown MISS": [2, 5],
+"singLeft": [2, 5],
+"singLeft MISS": [2, 5],
+"singRight": [2, 5],
+"singRight MISS": [2, 5],
+"singUp": [2, 5],
+"singUp MISS": [2, 5]
+}
+anim_type = 3
 have_death_animation = true
-death_scene = "characters/Bf dead"
-json_path = "bf"
+death_scene = "uid://de51xg7o8kadi"
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=352195109]
 sprite_frames = ExtResource("1_vhb3j")
-animation = &"BF NOTE UP"
+animation = &"BF idle dance"
+frame = 13
+frame_progress = 1.0

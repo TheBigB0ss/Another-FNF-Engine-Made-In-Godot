@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cuyn8jxkfq8u7"]
+
+[ext_resource type="Script" uid="uid://codo7t38p7oxk" path="res://source/stages/school_evil_remix/GhostAnim.gd" id="1_7stlj"]
+
+[node name="GhostAnim" type="Sprite2D" unique_id=787831028]
+script = ExtResource("1_7stlj")

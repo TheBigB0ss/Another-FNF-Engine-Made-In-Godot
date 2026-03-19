@@ -35,18 +35,18 @@ func _input(ev):
 			if (ev.keycode in [Global.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo:
 				match opt[cur_opt]:
 					"yes":
-						SoundStuff.playAudio("confirmMenu", false);
+						Sound.playAudio("confirmMenu", false);
 						HighScore.clear_data();
 						self.visible = false;
 						
 					"no":
-						SoundStuff.playAudio("cancelMenu", false);
+						Sound.playAudio("cancelMenu", false);
 						self.visible = false;
 						
 func change_opt(change):
 	cur_opt += change;
 	cur_opt = clamp(cur_opt, 0, len(opt)-1);
-	SoundStuff.add_new_sound("scrollMenu", PROCESS_MODE_INHERIT);
+	Sound.add_new_sound("scrollMenu", PROCESS_MODE_INHERIT);
 	
 	for i in opt.size():
 		alphabetGroup.get_child(i).modulate.a = 1 if i == cur_opt else 0.5;

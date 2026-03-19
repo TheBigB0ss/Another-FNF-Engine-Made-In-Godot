@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="speaker.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="ANIM_SPEAKER_Idle0000" x="0" y="0" width="705" height="336"/>
+	<SubTexture name="ANIM_SPEAKER_Idle0001" x="0" y="0" width="705" height="336"/>
+	<SubTexture name="ANIM_SPEAKER_Idle0002" x="705" y="0" width="705" height="336"/>
+	<SubTexture name="ANIM_SPEAKER_Idle0003" x="0" y="336" width="705" height="336"/>
+	<SubTexture name="ANIM_SPEAKER_Idle0004" x="0" y="336" width="705" height="336"/>
+	<SubTexture name="ANIM_SPEAKER_Idle0005" x="705" y="336" width="705" height="336"/>
+	<SubTexture name="ANIM_SPEAKER_Idle0006" x="705" y="336" width="705" height="336"/>
+	<SubTexture name="ANIM_SPEAKER_Idle0007" x="705" y="336" width="705" height="336"/>
+	<SubTexture name="ANIM_SPEAKER_Idle0008" x="705" y="336" width="705" height="336"/>
+	<SubTexture name="ANIM_SPEAKER_Idle0009" x="705" y="336" width="705" height="336"/>
+	<SubTexture name="ANIM_SPEAKER_Idle0010" x="705" y="336" width="705" height="336"/>
+	<SubTexture name="ANIM_SPEAKER_Idle0011" x="705" y="336" width="705" height="336"/>
+	<SubTexture name="ANIM_SPEAKER_Idle0012" x="705" y="336" width="705" height="336"/>
+	<SubTexture name="ANIM_SPEAKER_Idle0013" x="705" y="336" width="705" height="336"/>
+</TextureAtlas>

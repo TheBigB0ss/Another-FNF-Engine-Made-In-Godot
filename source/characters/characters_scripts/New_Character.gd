@@ -1,132 +1,221 @@
+@tool
 extends CharacterData
 
-@export var have_death_animation = false;
-@export var death_scene = "";
-@export var json_path = "";
-@onready var character = $'Character_Sprite';
-@onready var character_anim = $'Character_Animation';
+enum CHARACTER_STATES{
+	IDLE = 1, 
+	SINGING = 2, 
+	HOLDING = 3, 
+	SPECIAL = 4
+};
+
+enum CHARACTER_ANIM_TYPE{
+	FREEZE = 1, 
+	REPEAT = 2, 
+	NONE = 3
+};
+
+@onready var character = $"Character_Sprite";
+@onready var character_anim = $"Character_Animation";
+
 var curCharacter = "";
 
-var healthBar_Color = Color();
-var curIcon = '';
+var curIcon = "";
 var animatedIcon = false;
-var loopAnim = false;
-var is_player = false;
 var cam_follow_pos = false;
 var curAnim = "";
+var special_anim = false;
 
 var anim_offset = [];
 var camera_pos = [];
 
 var idleTimer = 0;
+var characterState = CHARACTER_STATES.IDLE;
+var base_position = Vector2.ZERO;
+
+var have_death_animation = false:
+	set(val):
+		have_death_animation = val;
+		notify_property_list_changed();
+var death_scene = "";
+
+var anim_type: CHARACTER_ANIM_TYPE = CHARACTER_ANIM_TYPE.FREEZE:
+	set(val):
+		anim_type = val;
+		notify_property_list_changed();
+var frame_count = 0.06;
+
+@export_group("character settings", "")
+
+@export_file_path("*.json") var json_path = "";
+
+@export var healthBar_Color = Color();
+@export var is_player = false;
+
+@export var anims_timer = {};
+
 var anim_time = 5;
 var anim_beat = 2;
 
-var char_speed = 0.0;
-
-var base_position = Vector2.ZERO;
-
 func _ready():
-	charPath = json_path;
-	curCharacter = charPath;
+	notify_property_list_changed();
+	curCharacter = json_path.get_file();
+	curCharacter = curCharacter.replace(".json", "");
 	
-	char_speed = character_anim.speed_scale;
+	init_json(json_path);
 	
-	var jsonFile = FileAccess.open("res://assets/characters/%s.json"%[charPath],FileAccess.READ);
-	var jsonData = JSON.new();
-	jsonData.parse(jsonFile.get_as_text());
-	charData = jsonData.get_data();
-	jsonFile.close();
-	
-	set_data_vars("camera follow pos", false);
-	set_data_vars("AnimatedIcon", false);
-	set_data_vars("LoopAnim", false);
-	set_data_vars("cameraPos", [1, 1]);
-	set_data_vars("scale", [1, 1]);
-	set_data_vars("anim time", 5);
+	healthBar_Color = Color(charData.get("HealthBarColor", healthBar_Color));
 	
 	character.scale = Vector2(charData["scale"][0], charData["scale"][1]);
 	character.flip_h = charData["FlipX"];
 	character.flip_v = charData["FlipY"];
 	
-	camera_pos = [charData["cameraPos"][0], charData["cameraPos"][1]];
-	anim_time = charData["anim time"];
-	is_player = charData["isPlayer"];
-	curIcon = charData["HealthIcon"];
-	animatedIcon = charData["AnimatedIcon"];
-	healthBar_Color = Color(charData["HealthBarColor"]);
-	loopAnim = charData["LoopAnim"];
-	cam_follow_pos = charData["camera follow pos"];
+	is_player = charData.get("isPlayer", is_player);
+	healthBar_Color = Color(charData.get("HealthBarColor", healthBar_Color));
+	cam_follow_pos = charData.get("camera follow pos", cam_follow_pos);
+	curIcon = charData.get("HealthIcon", "face");
+	camera_pos = charData.get("cameraPos", [0, 0]);
+	curIcon = charData.get("HealthIcon", "no_icon");
 	
 	for i in charData["Poses"].size():
 		animList.append(charData["Poses"][i]["Anim"]);
 		posesList.append(charData["Poses"][i]["Name"]);
 		
-	base_position = self.position;
+	anims_timer = {}
+	for i in animList.size():
+		anims_timer[animList[i]] = [
+			int(charData["Poses"][i].get("anim beat", 2)), 
+			int(charData["Poses"][i].get("Anim Time", 5)), 
+			charData["Poses"][i].get("special anim", false)
+		];
+		
+	base_position = character.position;
 	
 	dance();
 	
-func set_data_vars(null_var, null_value):
-	if !charData.has(null_var):
-		charData[null_var] = null_value;
-		
 func _process(delta):
-	if curAnim.begins_with("sing") or curAnim.contains("sing"):
+	if Engine.is_editor_hint():
+		return;
+		
+	if (curAnim.begins_with("sing") or curAnim.contains("sing") or special_anim) && characterState != CHARACTER_STATES.HOLDING:
+		characterState = CHARACTER_STATES.IDLE;
 		idleTimer += delta;
 		
-	if Global.is_not_in_cutscene && !Global.is_on_video:
+	if SongData.is_not_in_cutscene && !Global.is_on_video:
 		if idleTimer >= Conductor.stepCrochet * anim_time * 0.001:
-			if curAnim.contains("sing"):
+			if curAnim.contains("sing") or special_anim && characterState != CHARACTER_STATES.HOLDING:
 				dance();
 				idleTimer = 0;
 				
 var can_dance = false;
 var have_anims = false;
 func dance():
-	self.modulate = Color.WHITE;
 	have_anims = animList.has("danceRight") && animList.has("danceLeft");
 	if have_anims:
 		can_dance = !can_dance;
 		_playAnim("danceRight" if can_dance else "danceLeft");
 		
 	if animList.has("idle dance"):
-		character_anim.speed_scale = char_speed;
 		_playAnim("idle dance");
 		
 	if curCharacter == "picoSpeaker":
-		_playAnim("shoot%s"%[int(randf_range(1, 4))]);
+		_playAnim("shoot%s" % [int(randf_range(1, 4))]);
 		
-func _playAnim(anim="", inLoop=false):
+var current_anim_name = "";
+func _playAnim(anim = "", note: Note = null):
+	var longNote = note.isSustain if is_instance_valid(note) else false;
 	for i in animList.size():
-		if animList[i] == anim:
-			if !charData["Poses"][i].has("anim beat"):
-				anim_beat = 2;
-			else:
-				anim_beat = charData["Poses"][i]["anim beat"];
-				
-			var pose_offset = Vector2(
-				charData["Poses"][i]["Offset"][0],
-				charData["Poses"][i]["Offset"][1]
-			);
+		if animList[i] != anim:
+			continue;
 			
-			self.position = base_position + pose_offset;
+		var prevState = characterState;
+		var pose_offset = Vector2(charData["Poses"][i]["Offset"][0], charData["Poses"][i]["Offset"][1]);
+		
+		anim_beat = anims_timer[anim][0];
+		anim_time = anims_timer[anim][1];
+		special_anim = anims_timer[anim][2];
+		
+		character.position = base_position + pose_offset;
+		
+		if animList[i].contains("sing"):
+			characterState = (CHARACTER_STATES.IDLE if note.sustainLenght <= 0 or note.MissedlongNote else CHARACTER_STATES.HOLDING) if longNote else CHARACTER_STATES.SINGING;
+		elif special_anim:
+			characterState = CHARACTER_STATES.SPECIAL;
+		elif curAnim == "idle dance":
+			characterState = CHARACTER_STATES.IDLE;
 			
-			if !loopAnim:
-				character_anim.seek(0.0);
-				
-			character_anim.play(str(posesList[i], "/ "));
+		if characterState != CHARACTER_STATES.IDLE:
+			match characterState:
+				CHARACTER_STATES.HOLDING:
+					if prevState != CHARACTER_STATES.HOLDING or (current_anim_name != posesList[i] && curAnim != "idle dance" && curAnim != "hit"):
+						character_anim.seek(0.0);
+					if prevState != CHARACTER_STATES.HOLDING:
+						character_anim.seek(0.0);
+						
+				CHARACTER_STATES.SINGING:
+					character_anim.seek(0.0);
+					
+		if animList[i].begins_with("sing") or charData["Poses"][i].has("Anim Time"):
+			idleTimer = 0;
 			
-			if animList[i].begins_with("sing"):
-				idleTimer = 0;
-				
-	if !loopAnim:
-		loop_anim(inLoop);
+		loop_anim();
+		
+		if current_anim_name == posesList[i] && animList[i].begins_with("sing") && characterState != CHARACTER_STATES.SINGING:
+			return;
+			
+		current_anim_name = posesList[i];
+		character_anim.play(posesList[i]);
 		
 	curAnim = anim;
 	
-func loop_anim(inLoop):
-	if character_anim.current_animation_position > 0.06:
-		character_anim.seek(0.0);
+func loop_anim():
+	if characterState != CHARACTER_STATES.HOLDING:
+		return ;
 		
-	if !inLoop:
-		character_anim.seek(0.0);
+	match anim_type:
+		1:
+			character_anim.seek(0.0);
+		2:
+			if character_anim.current_animation_position > frame_count:
+				character_anim.seek(0.0);
+				
+func _get_property_list():
+	var properties: Array[Dictionary] = []
+	
+	properties.append({
+		"name": "anim_type", 
+		"type": TYPE_INT, 
+		"hint": PROPERTY_HINT_ENUM, 
+		"hint_string": "FREEZE,REPEAT,NONE", 
+		"usage": PROPERTY_USAGE_DEFAULT
+	});
+	
+	properties.append({
+		"name": "have_death_animation", 
+		"type": TYPE_BOOL, 
+		"usage": PROPERTY_USAGE_DEFAULT
+	});
+	
+	if anim_type == CHARACTER_ANIM_TYPE.REPEAT:
+		properties.append({
+			"name": "frame_count", 
+			"type": TYPE_FLOAT, 
+			"usage": PROPERTY_USAGE_DEFAULT
+		});
+		
+	if have_death_animation:
+		properties.append({
+			"name": "death_scene", 
+			"type": TYPE_STRING, 
+			"hint": PROPERTY_HINT_FILE, 
+			"hint_string": "*.tscn", 
+			"usage": PROPERTY_USAGE_DEFAULT
+		});
+		
+	return properties;
+	
+func beat_hit(beat) -> void :
+	beat_dance(beat);
+	
+func beat_dance(beat):
+	if (beat % int(anim_beat) == 0) && !curAnim.begins_with("sing") && !special_anim:
+		dance();

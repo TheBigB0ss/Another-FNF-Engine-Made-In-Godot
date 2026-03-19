@@ -1,12 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://dyvskfmddf8l"]
+[gd_scene format=3 uid="uid://dyvskfmddf8l"]
 
-[ext_resource type="Script" uid="uid://bjomsg0ihnqon" path="res://source/characters/characters_scripts/bf_dead.gd" id="1_hfy5q"]
+[ext_resource type="Script" uid="uid://dw0lkkcaqx4nr" path="res://source/characters/characters_scripts/bf_dead.gd" id="1_hfy5q"]
 [ext_resource type="SpriteFrames" uid="uid://cfydwkt36d7wc" path="res://assets/images/characters/bfHoldingGF-DEAD.res" id="2_hfy5q"]
 
-[node name="bfAndGfDead" type="Node2D"]
+[node name="bfAndGfDead" type="Node2D" unique_id=488280172]
 script = ExtResource("1_hfy5q")
-json_path = "bfAndGfDead"
+json_path = "res://assets/data/characters/bfAndGfDead.json"
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=1785031136]
 sprite_frames = ExtResource("2_hfy5q")
 animation = &"BF Dead with GF Loop"

@@ -26,14 +26,14 @@ var characters_spr_array = [];
 func _ready():
 	curSong = SongData.song;
 	
-	if FileAccess.file_exists("res://assets/data/%s/%sDialogue.txt"%[curSong, curSong]):
+	if FileAccess.file_exists("res://assets/data/songs/%s/%sDialogue.txt"%[curSong, curSong]):
 		for i in getTxt().size():
 			if getTxt()[i][0] != "":
 				characters_array.append(getTxt()[i][0]);
 				characters_spr_array.append(getTxt()[i][1]);
 				dialogue_array.append(getTxt()[i][2]);
 				
-	elif FileAccess.file_exists("res://assets/data/%s/%sDialogue.json"%[curSong, curSong]):
+	elif FileAccess.file_exists("res://assets/data/songs/%s/%sDialogue.json"%[curSong, curSong]):
 		for i in get_json_text()["structure"].size():
 			characters_array.append(get_json_text()["structure"][i]["role"]);
 			characters_spr_array.append(get_json_text()["structure"][i]["character"]);
@@ -99,13 +99,13 @@ var is_joke_dialogue = false;
 func getTxt():
 	var txtData = [];
 	var txtTexts = [];
-	var path_file = "res://assets/data/%s/%sDialogue.txt"%[curSong, curSong];
+	var path_file = "res://assets/data/songs/%s/%sDialogue.txt"%[curSong, curSong];
 	
 	match curSong:
 		"senpai", "roses", "thorns":
 			if is_joke() <= 6:
 				is_joke_dialogue = true;
-				path_file =  "res://assets/data/%s/%sDialogue-joke.txt"%[curSong, curSong];
+				path_file =  "res://assets/data/songs/%s/%sDialogue-joke.txt"%[curSong, curSong];
 			else:
 				is_joke_dialogue = false;
 				
@@ -121,7 +121,7 @@ func getTxt():
 func get_json_text():
 	var dialogue_data = {};
 	
-	var path_file = "res://assets/data/%s/%sDialogue.json"%[curSong, curSong];
+	var path_file = "res://assets/data/songs/%s/%sDialogue.json"%[curSong, curSong];
 	var jsonFile = FileAccess.open(path_file, FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
@@ -135,22 +135,22 @@ func is_joke():
 	
 func _process(delta):
 	dialogue_timer += 1*delta;
-	if dialogue_timer >= 0.05 && !Global.is_not_in_cutscene && !Global.is_on_video:
+	if dialogue_timer >= 0.05 && !SongData.is_not_in_cutscene && !Global.is_on_video:
 		if box_text.visible_characters <= len(box_text.text):
 			box_text.visible_characters += 1;
 			dialogue_timer = 0;
 			if characters_spr_array[cur_dialogue] != "evilLeafy":
-				SoundStuff.playAudio("pixelText", false);
+				Sound.playAudio("pixelText", false);
 				
 		if is_pixel_box:
 			cool_hand.visible = (box_text.visible_characters >= len(box_text.text));
 			
-	if Input.is_action_just_pressed("ui_accept") && !Global.is_not_in_cutscene && box_text.visible_characters-1 < len(box_text.text):
+	if Input.is_action_just_pressed("ui_accept") && !SongData.is_not_in_cutscene && box_text.visible_characters-1 < len(box_text.text):
 		box_text.visible_characters = len(box_text.text);
 		
-	if Input.is_action_just_pressed("ui_accept") && !Global.is_not_in_cutscene && box_text.visible_characters-1 == len(box_text.text):
+	if Input.is_action_just_pressed("ui_accept") && !SongData.is_not_in_cutscene && box_text.visible_characters-1 == len(box_text.text):
 		cur_dialogue += 1;
-		SoundStuff.playAudio("clickText", false);
+		Sound.playAudio("clickText", false);
 		if !cur_dialogue > dialogue_array.size()-1:
 			update_text(dialogue_array[cur_dialogue], characters_array[cur_dialogue], characters_spr_array[cur_dialogue]);
 		else:
@@ -198,7 +198,7 @@ func update_text(text, char, char_spr):
 			opponentGrp.position = Vector2(285, 280);
 			bfGrp.position = Vector2(1015, 280);
 			gfGrp.position = Vector2(585, 280);
-			SoundStuff.playAudio("evilLeafy", false);
+			Sound.playAudio("evilLeafy", false);
 			
 	if is_pixel_box:
 		match curSong:
@@ -249,7 +249,7 @@ func update_text(text, char, char_spr):
 	
 func start_song():
 	MusicManager._stop_music();
-	Global.is_not_in_cutscene = true;
+	SongData.is_not_in_cutscene = true;
 	Global.emit_signal("end_dialogue");
 	get_tree().paused = false;
 	self.hide();

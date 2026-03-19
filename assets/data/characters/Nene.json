@@ -1,0 +1,85 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#fa7ca9ff",
+	"HealthIcon": "nene",
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Anim Time": 5,
+			"Name": "neneIDLE",
+			"Offset": [
+				18.0,
+				-10.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singLeft",
+			"Anim Time": 5,
+			"Name": "nene left pose",
+			"Offset": [
+				-11.0,
+				-9.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singDown",
+			"Anim Time": 5,
+			"Name": "nene down pose",
+			"Offset": [
+				13.0,
+				9.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singUp",
+			"Anim Time": 5,
+			"Name": "nene up pose",
+			"Offset": [
+				12.0,
+				-63.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singRight",
+			"Anim Time": 5,
+			"Name": "nene pose right",
+			"Offset": [
+				31.0,
+				-8.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singLaugh",
+			"Anim Time": 15,
+			"Name": "neneMISSPOSE",
+			"Offset": [
+				20.0,
+				-10.0
+			],
+			"anim beat": 4,
+			"special anim": true
+		}
+	],
+	"camera follow pos": true,
+	"cameraPos": [
+		-30.0,
+		-50.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

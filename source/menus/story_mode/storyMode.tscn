@@ -1,6 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://f37p03ir2jr5"]
+[gd_scene format=3 uid="uid://f37p03ir2jr5"]
 
-[ext_resource type="Script" uid="uid://0q0b2um80msy" path="res://source/menus/story_mode/storyMode.gd" id="1_bpcgf"]
+[ext_resource type="Script" uid="uid://mdw80o30svwt" path="res://source/menus/story_mode/storyMode.gd" id="1_bpcgf"]
 [ext_resource type="SpriteFrames" uid="uid://dcuob18cf8qsn" path="res://assets/images/story mode/menu_assets.res" id="2_w5ivh"]
 [ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_1ftmq"]
 [ext_resource type="Texture2D" uid="uid://dyx812j1nrcuc" path="res://assets/images/story mode/lockerIcon.png" id="5_j1oqd"]
@@ -15,17 +15,17 @@ font_size = 930
 shadow_size = 90
 shadow_color = Color(0, 0, 0, 1)
 
-[node name="StoryMode" type="Node2D"]
+[node name="StoryMode" type="Node2D" unique_id=1691695955]
 script = ExtResource("1_bpcgf")
 
-[node name="bgs" type="Control" parent="."]
+[node name="bgs" type="Control" parent="." unique_id=127364315]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 metadata/_edit_use_anchors_ = true
 
-[node name="bg" type="ColorRect" parent="bgs"]
+[node name="bg" type="ColorRect" parent="bgs" unique_id=761004057]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.075
@@ -37,10 +37,10 @@ offset_bottom = 656.0
 color = Color(0, 0, 0, 1)
 metadata/_edit_use_anchors_ = true
 
-[node name="WeekSprite" type="Node2D" parent="bgs"]
+[node name="WeekSprite" type="Node2D" parent="bgs" unique_id=1133688583]
 position = Vector2(596, 469)
 
-[node name="yellowRect" type="ColorRect" parent="bgs"]
+[node name="yellowRect" type="ColorRect" parent="bgs" unique_id=1056103430]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.05
@@ -54,14 +54,14 @@ offset_bottom = 391.0
 color = Color(1, 0.839551, 0.365285, 1)
 metadata/_edit_use_anchors_ = true
 
-[node name="blackRect" type="ColorRect" parent="bgs"]
+[node name="blackRect" type="ColorRect" parent="bgs" unique_id=1061928092]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 scale = Vector2(32.0001, 1.4003)
 color = Color(0, 0, 0, 1)
 
-[node name="arrows" type="Control" parent="."]
+[node name="arrows" type="Control" parent="." unique_id=1188628758]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 120.0
@@ -69,33 +69,33 @@ offset_right = 160.0
 offset_bottom = 40.0
 metadata/_edit_use_anchors_ = true
 
-[node name="LeftArrow" type="AnimatedSprite2D" parent="arrows"]
+[node name="LeftArrow" type="AnimatedSprite2D" parent="arrows" unique_id=1690710672]
 position = Vector2(763, 480)
 sprite_frames = ExtResource("2_w5ivh")
 animation = &"arrow left"
 
-[node name="RightArrow" type="AnimatedSprite2D" parent="arrows"]
+[node name="RightArrow" type="AnimatedSprite2D" parent="arrows" unique_id=1748450108]
 position = Vector2(1125, 480)
 sprite_frames = ExtResource("2_w5ivh")
 animation = &"arrow right"
 
-[node name="characters" type="Control" parent="."]
+[node name="characters" type="Control" parent="." unique_id=1465923696]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 metadata/_edit_use_anchors_ = true
 
-[node name="characterPosition1" type="Node2D" parent="characters"]
+[node name="characterPosition1" type="Node2D" parent="characters" unique_id=1862330798]
 position = Vector2(614, 252)
 
-[node name="characterPosition2" type="Node2D" parent="characters"]
+[node name="characterPosition2" type="Node2D" parent="characters" unique_id=1091512894]
 position = Vector2(1043, 254)
 
-[node name="characterPosition3" type="Node2D" parent="characters"]
+[node name="characterPosition3" type="Node2D" parent="characters" unique_id=1731676493]
 position = Vector2(197, 238)
 
-[node name="texts" type="Control" parent="."]
+[node name="texts" type="Control" parent="." unique_id=1193044445]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 68.0
@@ -103,7 +103,7 @@ offset_right = 108.0
 offset_bottom = 40.0
 metadata/_edit_use_anchors_ = true
 
-[node name="songs" type="Label" parent="texts"]
+[node name="songs" type="Label" parent="texts" unique_id=501954670]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = -4.975
@@ -122,7 +122,7 @@ theme_override_font_sizes/font_size = 600
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="weekName" type="Label" parent="texts"]
+[node name="weekName" type="Label" parent="texts" unique_id=1034071767]
 texture_filter = 1
 layout_mode = 0
 offset_left = -63.0
@@ -133,7 +133,7 @@ text = "Week Name"
 label_settings = SubResource("LabelSettings_w5ivh")
 horizontal_alignment = 2
 
-[node name="score" type="Label" parent="texts"]
+[node name="score" type="Label" parent="texts" unique_id=65135910]
 layout_mode = 0
 offset_left = -63.0
 offset_top = 10.0
@@ -144,7 +144,7 @@ theme_override_fonts/font = ExtResource("3_1ftmq")
 theme_override_font_sizes/font_size = 780
 text = "Week Score:"
 
-[node name="tracks" type="Label" parent="."]
+[node name="tracks" type="Label" parent="." unique_id=1634620777]
 offset_left = 99.0
 offset_top = 437.0
 offset_right = 2472.0
@@ -155,27 +155,27 @@ theme_override_fonts/font = ExtResource("3_1ftmq")
 theme_override_font_sizes/font_size = 675
 text = "TRACKS"
 
-[node name="lock" type="Sprite2D" parent="."]
+[node name="lock" type="Sprite2D" parent="." unique_id=203753424]
 position = Vector2(968, 478)
 texture = ExtResource("5_j1oqd")
 
-[node name="difficulties" type="Sprite2D" parent="."]
+[node name="difficulties" type="Sprite2D" parent="." unique_id=1840889123]
 position = Vector2(1062, 480)
 
-[node name="warning" type="Control" parent="."]
+[node name="warning" type="Control" parent="." unique_id=1202968880]
 visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="ColorRect" type="ColorRect" parent="warning"]
+[node name="ColorRect" type="ColorRect" parent="warning" unique_id=708354908]
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
 color = Color(0, 0, 0, 0.592)
 
-[node name="Label" type="Label" parent="warning"]
+[node name="Label" type="Label" parent="warning" unique_id=1750907901]
 layout_mode = 0
 offset_left = 37.0
 offset_top = 186.0

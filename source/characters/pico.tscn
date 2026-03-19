@@ -1,13 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://bpsgpll2prusa"]
+[gd_scene format=3 uid="uid://bpsgpll2prusa"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_p5a5n"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_p5a5n"]
 [ext_resource type="SpriteFrames" uid="uid://decluv7riek6p" path="res://assets/images/characters/Pico.res" id="2_kam8n"]
 
-[node name="pico" type="Node2D"]
+[node name="pico" type="Node2D" unique_id=2145836923]
 script = ExtResource("1_p5a5n")
-json_path = "pico"
+json_path = "res://assets/data/characters/pico.json"
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=1478675731]
 sprite_frames = ExtResource("2_kam8n")
 animation = &"pico Up note miss"
 frame = 24

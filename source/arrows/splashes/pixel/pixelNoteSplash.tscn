@@ -1,13 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://bm8wn5qfnyxfp"]
+[gd_scene format=3 uid="uid://bm8wn5qfnyxfp"]
 
-[ext_resource type="SpriteFrames" uid="uid://syn75psrxgii" path="res://assets/images/arrows/splashes/pixel/pixelsplashes.res" id="1_xt2es"]
-[ext_resource type="Script" uid="uid://co5hhkvniblh5" path="res://source/arrows/splashes/pixel/pixelNoteSplash.gd" id="2_d008n"]
+[ext_resource type="SpriteFrames" uid="uid://c6ee8m1cjyx5t" path="res://assets/images/arrows/splashes/pixel/pixelsplashes.res" id="1_xt2es"]
+[ext_resource type="Script" uid="uid://b6psfuqsbo1aq" path="res://source/arrows/splashes/pixel/pixelNoteSplash.gd" id="2_d008n"]
 
-[node name="pixelNoteSplash" type="AnimatedSprite2D"]
+[node name="pixelNoteSplash" type="AnimatedSprite2D" unique_id=1156717095]
 texture_filter = 1
-scale = Vector2(8.5, 8.5)
+scale = Vector2(5, 5)
 sprite_frames = ExtResource("1_xt2es")
-animation = &"blue1"
+animation = &"pixelsplashes2 red"
 script = ExtResource("2_d008n")
 
 [connection signal="animation_finished" from="." to="." method="_on_animation_finished"]

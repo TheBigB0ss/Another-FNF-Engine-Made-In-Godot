@@ -68,7 +68,7 @@ func _input(ev):
 			if (ev.keycode in [Global.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !noSpam:
 				noSpam = true;
 				choiced = true;
-				SoundStuff.playAudio("confirmMenu", false);
+				Sound.playAudio("confirmMenu", false);
 				
 				await get_tree().create_timer(0.9).timeout;
 				match options[curOption]:
@@ -89,7 +89,7 @@ func _input(ev):
 var can_show_magenta = true;
 var magenta_time = 0.095;
 func _process(delta):
-	coolOptions.position.y = lerp(float(coolOptions.position.y), float((720/2.0)-(coolOffset*curOption)), 0.040);
+	coolOptions.position.y = lerp(coolOptions.position.y, (720/2.0)-(coolOffset*curOption), 0.040);
 	if choiced:
 		$magentaBg.show();
 		magenta_time -= delta;
@@ -110,4 +110,4 @@ func changeItem(change):
 	for j in options.size():
 		coolOptions.get_child(j).play(options[curOption] + " selected" if j == curOption else options[j] + " idle");
 		
-	SoundStuff.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu", false);

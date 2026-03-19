@@ -14,7 +14,7 @@ var weekJson = {
 
 func get_week_files():
 	var file = [];
-	var coolFolder = DirAccess.open("res://assets/weeks/%s"%[Global.week_path]);
+	var coolFolder = DirAccess.open("res://assets/data/weeks data/%s"%[SongData.week_folder_path]);
 	if coolFolder:
 		coolFolder.list_dir_begin();
 		var nameShit = coolFolder.get_next();

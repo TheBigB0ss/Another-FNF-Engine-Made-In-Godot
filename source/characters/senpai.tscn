@@ -1,13 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://bdo6u2t45v5n1"]
+[gd_scene format=3 uid="uid://bdo6u2t45v5n1"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_wlguy"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_wlguy"]
 [ext_resource type="SpriteFrames" uid="uid://b51ar5brfddjn" path="res://assets/images/characters/senpai.res" id="2_hxrdp"]
 
-[node name="senpai" type="Node2D"]
+[node name="senpai" type="Node2D" unique_id=665015851]
 script = ExtResource("1_wlguy")
-json_path = "senpai"
+json_path = "res://assets/data/characters/senpai.json"
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=596804410]
 texture_filter = 1
 sprite_frames = ExtResource("2_hxrdp")
 animation = &"Senpai Idle instance 1"

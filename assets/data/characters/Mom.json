@@ -1,0 +1,74 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#c6337bff",
+	"HealthIcon": "mom",
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Anim Time": 5,
+			"Name": "Mom Idle",
+			"Offset": [
+				-55.0,
+				-90.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singRight",
+			"Anim Time": 5,
+			"Name": "Mom Pose Left",
+			"Offset": [
+				-102.0,
+				-58.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singDown",
+			"Anim Time": 5,
+			"Name": "MOM DOWN POSE",
+			"Offset": [
+				-52.0,
+				-22.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singUp",
+			"Anim Time": 5,
+			"Name": "Mom Up Pose",
+			"Offset": [
+				-62.0,
+				-140.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singLeft",
+			"Anim Time": 5,
+			"Name": "Mom Left Pose",
+			"Offset": [
+				-224.0,
+				-69.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		}
+	],
+	"camera follow pos": false,
+	"cameraPos": [
+		80.0,
+		-190.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

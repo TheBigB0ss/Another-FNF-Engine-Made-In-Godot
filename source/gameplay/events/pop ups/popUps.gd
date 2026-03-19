@@ -19,23 +19,22 @@ func _ready():
 	all_stuff.pivot_offset = Vector2(585, 335);
 	all_stuff.position = Vector2(randf_range(160, 420), randf_range(140, 240));
 	
-	pop_up.texture = load("res://assets/images/pop ups/pop up%s.png"%[random_popUp()]);
+	pop_up.texture = load("res://assets/images/pop ups/pop up%s.png"%[int(randf_range(1, 5))]);
 	
 func _process(delta):
 	if all_stuff != null && !deleted:
+		if !Input.is_action_just_pressed("mouse_click"):
+			return;
+			
 		if mouse_inside_the_X():
-			if Input.is_action_just_pressed("mouse_click"):
-				delete_pop_up();
-				
+			delete_pop_up();
+			
 func mouse_inside_the_X():
 	var mouse = get_global_mouse_position();
 	if get_global_mouse_position().x >= x_button.global_position.x-30 && get_global_mouse_position().x < x_button.global_position.x+30 && get_global_mouse_position().y >= x_button.global_position.y-30 && get_global_mouse_position().y < x_button.global_position.y+30:
 		return true;
 		
 	return false;
-	
-func random_popUp():
-	return int(randf_range(1, 5));
 	
 func delete_pop_up():
 	deleted = true;

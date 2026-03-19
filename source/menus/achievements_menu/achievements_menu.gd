@@ -74,7 +74,7 @@ func _input(ev):
 func change_achievement(change):
 	cur_Achievement += change;
 	
-	SoundStuff.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu", false);
 	
 	var cur_col = cur_Achievement - (floor(cur_Achievement / achievements_row) * achievements_row);
 	if cur_Achievement >= len(achievements_list):
@@ -87,8 +87,7 @@ func change_achievement(change):
 	
 	update_achievement();
 	
-var achievement_fakeName = "";
-var achievement_realName = "";
+var achievement_name = "";
 var achievement_value = false;
 
 var seeingAchievementStatus = false;
@@ -134,11 +133,10 @@ func update_achievement():
 	
 	achievementName._creat_word('');
 	
-	achievement_fakeName = achievementsGrp.get_child(cur_Achievement).shit;
-	achievement_realName = achievementsGrp.get_child(cur_Achievement).cool_name;
 	achievement_value = achievementsGrp.get_child(cur_Achievement).cool_value;
+	achievement_name = achievementsGrp.get_child(cur_Achievement).cool_name if achievement_value else achievementsGrp.get_child(cur_Achievement).fake_name;
 	
 	for j in achievements_list.size():
 		achievementsGrp.get_child(j).modulate.a = 1 if j == cur_Achievement else 0.50;
-		achievementName._creat_word(achievement_realName if achievement_value else achievement_fakeName)
+		achievementName._creat_word(achievement_name);
 		

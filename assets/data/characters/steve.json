@@ -1,0 +1,85 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#ffffffff",
+	"HealthIcon": "steve",
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Anim Time": 5,
+			"Name": "STEVE_IDLE",
+			"Offset": [
+				-5.0,
+				-21.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singLeft",
+			"Anim Time": 5,
+			"Name": "STEVE_LEFT",
+			"Offset": [
+				-6.0,
+				-16.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singDown",
+			"Anim Time": 5,
+			"Name": "STEVE_DOWN",
+			"Offset": [
+				17.0,
+				20.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singUp",
+			"Anim Time": 5,
+			"Name": "STEVE_UP",
+			"Offset": [
+				-49.0,
+				-25.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singRight",
+			"Anim Time": 5,
+			"Name": "STEVE_RIGHT",
+			"Offset": [
+				11.0,
+				-17.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "running",
+			"Anim Time": 50,
+			"Name": "STEVE_CORRENDO",
+			"Offset": [
+				-8.0,
+				-11.0
+			],
+			"anim beat": 2,
+			"special anim": true
+		}
+	],
+	"camera follow pos": false,
+	"cameraPos": [
+		150.0,
+		-90.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

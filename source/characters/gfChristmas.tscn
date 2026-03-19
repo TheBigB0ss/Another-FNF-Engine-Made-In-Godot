@@ -1,6 +1,6 @@
-[gd_scene load_steps=226 format=3 uid="uid://yp61yfrk7o5y"]
+[gd_scene format=3 uid="uid://yp61yfrk7o5y"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_4hhqo"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_4hhqo"]
 [ext_resource type="Texture2D" uid="uid://3eo5g4wla8no" path="res://assets/images/characters/gfChristmas.png" id="2_ackki"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3fqfa"]
@@ -1688,10 +1688,10 @@ animations = [{
 "speed": 22.0
 }]
 
-[node name="gfChristmas" type="Node2D"]
+[node name="gfChristmas" type="Node2D" unique_id=2068361702]
 script = ExtResource("1_4hhqo")
-json_path = "gfChristmas"
+json_path = "res://assets/data/characters/gfChristmas.json"
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=1409321514]
 sprite_frames = SubResource("SpriteFrames_kxvvq")
 animation = &"GF Dancing Beat"

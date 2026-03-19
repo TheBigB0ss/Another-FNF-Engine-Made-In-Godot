@@ -111,13 +111,15 @@
 		},
 		{
 			"team": "Another FNF Engine made in Godot",
-			"name": "Mizukii",
-			"role": "new logo and bg artist",
-			"icon": "mizu",
+			"name": "DiogoTV",
+			"role": "new logo artist",
+			"icon": "diogotv",
 			"social midia": {
-				"twitter": "https://x.com/mrs_mihsimon"
+				"twitter": "https://x.com/DiogoTVV",
+				"youtube": "https://www.youtube.com/channel/UCbEuCNMMnFqdq4Oo9A8C6IA",
+				"github": "https://github.com/DiogoTVV",
 			},
-			"bg_color": "#ffffff"
+			"bg_color": "#c385ff"
 		},
 		{
 			"team": "Another FNF Engine made in Godot",
@@ -163,17 +165,6 @@
 		},
 		{
 			"team": "Another FNF Engine made in Godot",
-			"name": "synthary",
-			"role": "Composer and pixel artist",
-			"icon": "sariaicon_fnf",
-			"social midia": {
-				"youtube": "https://www.youtube.com/channel/UCbh-CbgAVHBQdpeJ4UUCQNw",
-				"twitter": "https://x.com/lopessaria_"
-			},
-			"bg_color": "#ffc700"
-		},
-		{
-			"team": "Another FNF Engine made in Godot",
 			"name": "dog malvado",
 			"role": "bg artist",
 			"icon": "malvido",
@@ -212,6 +203,26 @@
 				"twitter": "https://x.com/octavio12n"
 			},
 			"bg_color": "#a400ff"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Jacc",
+			"role": "artist",
+			"icon": "Jacc",
+			"social midia": {
+				"twitter": "https://x.com/JackGD9"
+			},
+			"bg_color": "#b900ff"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
+			"name": "Purple Dog",
+			"role": "pixel artist",
+			"icon": "Purple_dog",
+			"social midia": {
+				"twitter": "https://x.com/Cachororoxo"
+			},
+			"bg_color": "#640bff"
 		},
 		{
 			"team": "FNF Crew",

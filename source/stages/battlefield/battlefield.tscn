@@ -1,0 +1,164 @@
+[gd_scene format=3 uid="uid://cpuo10srwsmg5"]
+
+[ext_resource type="Script" uid="uid://bmfebo57fhorl" path="res://source/stages/battlefield/battlefield.gd" id="1_mocah"]
+[ext_resource type="SpriteFrames" uid="uid://mg85iodu2ncy" path="res://assets/stages/week7/tankWatchtower.res" id="2_f3vam"]
+[ext_resource type="Shader" uid="uid://vf1al1wynl8i" path="res://source/shaders/backdrops shaders/backdrop1.gdshader" id="2_laywd"]
+[ext_resource type="SpriteFrames" uid="uid://frsqdf8mrjx4" path="res://assets/stages/week7/tankRolling.res" id="3_x5dww"]
+[ext_resource type="SpriteFrames" uid="uid://84f3hfjhrja8" path="res://assets/stages/week7/smokeRight.res" id="4_yp5t5"]
+[ext_resource type="SpriteFrames" uid="uid://djynje25un601" path="res://assets/stages/week7/smokeLeft.res" id="5_r28s8"]
+[ext_resource type="SpriteFrames" uid="uid://62w04maikhne" path="res://assets/stages/week7/tank0.res" id="6_8s6mx"]
+[ext_resource type="Script" uid="uid://ef5aa02ickfp" path="res://addons/gdanimate/animate_symbol.gd" id="7_cka7g"]
+[ext_resource type="SpriteFrames" uid="uid://cl30yconcugj2" path="res://assets/stages/week7/tank1.res" id="7_mocah"]
+[ext_resource type="SpriteFrames" uid="uid://bcb0tfdgvr3tt" path="res://assets/stages/week7/tank2.res" id="8_4s4sm"]
+[ext_resource type="PackedScene" uid="uid://nuno0fp5tpiu" path="res://source/characters/bf.tscn" id="9_cikvs"]
+[ext_resource type="SpriteFrames" uid="uid://bhu1rnpwgc4tl" path="res://assets/stages/week7/tank3.res" id="9_ffwmn"]
+[ext_resource type="SpriteFrames" uid="uid://7mfr8x37adt8" path="res://assets/stages/week7/tank5.res" id="10_k6itx"]
+[ext_resource type="SpriteFrames" uid="uid://c8guxly7ohjyd" path="res://assets/stages/week7/tank4.res" id="11_vt8xh"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hti86"]
+load_path = "res://.godot/imported/tankSky.png-3ab5c011537869c2573728407b425f7b.ctex"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cikvs"]
+shader = ExtResource("2_laywd")
+shader_parameter/scroll_speed = Vector2(30, 0)
+shader_parameter/time = 2.2950001090125
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_quriv"]
+load_path = "res://.godot/imported/tankClouds.png-45a55457c480f8a6f63e45e8f3232423.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ou58p"]
+load_path = "res://.godot/imported/tankMountains.png-9e3c8594033bd070212959492ef48a0b.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_y8cbi"]
+load_path = "res://.godot/imported/tankBuildings.png-807c1de4800802e9ee7982f034784d43.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_gqqg0"]
+load_path = "res://.godot/imported/tankRuins.png-8f7d323a00b2ad1a8b1415f536f8b8e0.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_evlji"]
+load_path = "res://.godot/imported/tankGround.png-3bc7a70da6dd6171dbb0af75cab659a1.ctex"
+
+[node name="TankmanBattlefield" type="Node2D" unique_id=364790979]
+script = ExtResource("1_mocah")
+
+[node name="skyBg" type="Sprite2D" parent="." unique_id=450206260]
+position = Vector2(620, 296)
+scale = Vector2(1.4, 1.4)
+texture = SubResource("CompressedTexture2D_hti86")
+
+[node name="cloudsBg" type="Sprite2D" parent="." unique_id=784470764]
+material = SubResource("ShaderMaterial_cikvs")
+position = Vector2(655.5, 201.5)
+scale = Vector2(1.4, 1.4)
+texture = SubResource("CompressedTexture2D_quriv")
+
+[node name="mountainsBg" type="Sprite2D" parent="." unique_id=398296806]
+position = Vector2(656.5, 644.5)
+scale = Vector2(1.7037, 1.4)
+texture = SubResource("CompressedTexture2D_ou58p")
+
+[node name="buildingsBg" type="Sprite2D" parent="." unique_id=1676842310]
+position = Vector2(736, 558)
+scale = Vector2(1.4, 1.4)
+texture = SubResource("CompressedTexture2D_y8cbi")
+
+[node name="ruinsBg" type="Sprite2D" parent="." unique_id=2147117531]
+position = Vector2(723, 545)
+scale = Vector2(1.4, 1.4)
+texture = SubResource("CompressedTexture2D_gqqg0")
+
+[node name="towerBg" type="AnimatedSprite2D" parent="." unique_id=101523306]
+position = Vector2(158, 502)
+sprite_frames = ExtResource("2_f3vam")
+animation = &"watchtower gradient color instance 1"
+autoplay = "watchtower gradient color instance 1"
+
+[node name="rollingTankBg" type="AnimatedSprite2D" parent="." unique_id=338799731]
+position = Vector2(-442, 636)
+scale = Vector2(1.4, 1.4)
+sprite_frames = ExtResource("3_x5dww")
+animation = &"BG tank w lighting instance 1"
+autoplay = "BG tank w lighting instance 1"
+
+[node name="smokeRight" type="AnimatedSprite2D" parent="." unique_id=1459092698]
+position = Vector2(1571, 339)
+scale = Vector2(1.4, 1.4)
+sprite_frames = ExtResource("4_yp5t5")
+animation = &"SmokeRight instance 1"
+autoplay = "SmokeRight instance 1"
+
+[node name="smokeLeft" type="AnimatedSprite2D" parent="." unique_id=1674834139]
+position = Vector2(-131, 482)
+scale = Vector2(1.4, 1.4)
+sprite_frames = ExtResource("5_r28s8")
+animation = &"SmokeBlurLeft instance 1"
+autoplay = "SmokeBlurLeft instance 1"
+
+[node name="groundBg" type="Sprite2D" parent="." unique_id=1865201310]
+position = Vector2(675, 560)
+scale = Vector2(1.3, 1.3)
+texture = SubResource("CompressedTexture2D_evlji")
+
+[node name="cutscenes" type="Node2D" parent="." unique_id=1598349765]
+
+[node name="pico anim" type="Node2D" parent="cutscenes" unique_id=548756320]
+visible = false
+position = Vector2(712, 555)
+script = ExtResource("7_cka7g")
+atlas = "res://assets/stages/week7/cutscene/pico"
+loop_mode = "Play Once"
+metadata/_custom_type_script = "uid://ef5aa02ickfp"
+
+[node name="BoyfriendCutscene" parent="cutscenes" unique_id=1952747793 instance=ExtResource("9_cikvs")]
+visible = false
+position = Vector2(1199, 801)
+
+[node name="tankmanCutscene" type="Node2D" parent="." unique_id=1332700260]
+
+[node name="tankBg0" type="AnimatedSprite2D" parent="." unique_id=1506699683]
+z_index = 3
+position = Vector2(-316.2, 949)
+scale = Vector2(1.4, 1.4)
+sprite_frames = ExtResource("6_8s6mx")
+animation = &"fg tankhead far right instance 1"
+autoplay = "fg tankhead far right instance 1"
+
+[node name="tankBg2" type="AnimatedSprite2D" parent="." unique_id=1261776410]
+z_index = 2
+position = Vector2(486.8, 1055)
+scale = Vector2(1.4, 1.4)
+sprite_frames = ExtResource("8_4s4sm")
+animation = &"foreground man 3 instance 1"
+autoplay = "foreground man 3 instance 1"
+
+[node name="tankBg1" type="AnimatedSprite2D" parent="." unique_id=966707352]
+z_index = 2
+position = Vector2(76.6, 1195)
+scale = Vector2(1.4, 1.4)
+sprite_frames = ExtResource("7_mocah")
+animation = &"fg tankhead 5 instance 1"
+autoplay = "fg tankhead 5 instance 1"
+
+[node name="tankBg3" type="AnimatedSprite2D" parent="." unique_id=1747016343]
+z_index = 2
+position = Vector2(1016.6, 1179)
+scale = Vector2(1.4, 1.4)
+sprite_frames = ExtResource("9_ffwmn")
+animation = &"fg tankhead 4 instance 1"
+autoplay = "fg tankhead 4 instance 1"
+
+[node name="tankBg5" type="AnimatedSprite2D" parent="." unique_id=894798300]
+z_index = 2
+position = Vector2(1815.8, 914)
+scale = Vector2(1.4, 1.4)
+sprite_frames = ExtResource("10_k6itx")
+animation = &"fg tankhead far right instance 1"
+autoplay = "fg tankhead far right instance 1"
+
+[node name="tankBg4" type="AnimatedSprite2D" parent="." unique_id=615237934]
+z_index = 2
+position = Vector2(1653, 1130)
+scale = Vector2(1.4, 1.4)
+sprite_frames = ExtResource("11_vt8xh")
+animation = &"fg tankman bobbin 3 instance 1"
+autoplay = "fg tankman bobbin 3 instance 1"

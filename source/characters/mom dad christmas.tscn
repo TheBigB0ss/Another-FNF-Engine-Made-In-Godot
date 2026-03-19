@@ -1,6 +1,6 @@
-[gd_scene load_steps=138 format=3 uid="uid://csg0fknwup8yt"]
+[gd_scene format=3 uid="uid://csg0fknwup8yt"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_mr8m0"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_mr8m0"]
 [ext_resource type="Texture2D" uid="uid://cem3hb1ig18av" path="res://assets/images/characters/mom_dad_christmas_assets.png" id="2_45whf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_optlh"]
@@ -1113,10 +1113,11 @@ animations = [{
 "speed": 22.0
 }]
 
-[node name="mom dad christmas" type="Node2D"]
+[node name="mom dad christmas" type="Node2D" unique_id=720612566]
 script = ExtResource("1_mr8m0")
-json_path = "mom dad christmas"
+anim_type = 3
+json_path = "res://assets/data/characters/mom dad christmas.json"
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=90482259]
 sprite_frames = SubResource("SpriteFrames_siiq5")
 animation = &"Parent Right Note Mom"

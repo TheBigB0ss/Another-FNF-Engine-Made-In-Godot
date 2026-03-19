@@ -1,0 +1,167 @@
+[gd_scene load_steps=19 format=3 uid="uid://duf3orbo6or1h"]
+
+[ext_resource type="Script" uid="uid://c8odm56mhmkiq" path="res://source/characters/speaker/speaker.gd" id="1_j1md7"]
+[ext_resource type="SpriteFrames" uid="uid://dmnh3g511mlg2" path="res://assets/images/speaker/vizualizer.res" id="2_bi3bi"]
+[ext_resource type="Texture2D" uid="uid://c3gx5m4hvve7t" path="res://assets/images/speaker/speaker.png" id="2_q3erv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bi3bi"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(0, 0, 705, 336)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyfra"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(0, 0, 705, 336)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cxqwc"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(705, 0, 705, 336)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n75em"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(0, 336, 705, 336)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6hxjn"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(0, 336, 705, 336)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2vbix"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(705, 336, 705, 336)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lfm1r"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(705, 336, 705, 336)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tkgnw"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(705, 336, 705, 336)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_twerf"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(705, 336, 705, 336)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xcq7h"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(705, 336, 705, 336)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lc1vj"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(705, 336, 705, 336)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xux8k"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(705, 336, 705, 336)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v2nna"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(705, 336, 705, 336)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bwe25"]
+atlas = ExtResource("2_q3erv")
+region = Rect2(705, 336, 705, 336)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_t7tp7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bi3bi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kyfra")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cxqwc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n75em")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6hxjn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2vbix")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lfm1r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tkgnw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_twerf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xcq7h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lc1vj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xux8k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v2nna")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bwe25")
+}],
+"loop": false,
+"name": &"ANIM_SPEAKER_Idle",
+"speed": 18.0
+}]
+
+[node name="speaker" type="Node2D"]
+script = ExtResource("1_j1md7")
+amount = 0.285
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -180.0
+offset_top = -140.0
+offset_right = 191.0
+offset_bottom = 135.0
+color = Color(0.09411765, 0.08235294, 0.1254902, 1)
+
+[node name="vizu" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="Vizu1" type="AnimatedSprite2D" parent="vizu"]
+position = Vector2(-141, -11)
+sprite_frames = ExtResource("2_bi3bi")
+animation = &"VIZ1"
+metadata/_edit_lock_ = true
+
+[node name="Vizu2" type="AnimatedSprite2D" parent="vizu"]
+position = Vector2(-94, -11)
+sprite_frames = ExtResource("2_bi3bi")
+animation = &"VIZ2"
+metadata/_edit_lock_ = true
+
+[node name="Vizu3" type="AnimatedSprite2D" parent="vizu"]
+position = Vector2(-39, -9)
+sprite_frames = ExtResource("2_bi3bi")
+animation = &"VIZ3"
+metadata/_edit_lock_ = true
+
+[node name="Vizu4" type="AnimatedSprite2D" parent="vizu"]
+position = Vector2(26, -9)
+sprite_frames = ExtResource("2_bi3bi")
+animation = &"VIZ4"
+metadata/_edit_lock_ = true
+
+[node name="Vizu5" type="AnimatedSprite2D" parent="vizu"]
+position = Vector2(83, -12)
+sprite_frames = ExtResource("2_bi3bi")
+animation = &"VIZ5"
+metadata/_edit_lock_ = true
+
+[node name="Vizu6" type="AnimatedSprite2D" parent="vizu"]
+position = Vector2(137, -11)
+sprite_frames = ExtResource("2_bi3bi")
+animation = &"VIZ6"
+metadata/_edit_lock_ = true
+
+[node name="speaker" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_t7tp7")
+animation = &"ANIM_SPEAKER_Idle"
+frame = 13
+frame_progress = 1.0

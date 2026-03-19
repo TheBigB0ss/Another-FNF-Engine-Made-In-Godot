@@ -1,0 +1,64 @@
+{
+	"achievements_map":{
+		"tutorial": ["you can do it", "a new begin"],
+		"week1": ["a new rapper", "a new rockstar"],
+		"week2": ["trick or treat", "spooky scary skeletons"],
+		"week3": ["since 99's", "go pico go"],
+		"week4": ["what is a milf", "highway troubles"],
+		"week5": ["a christmas special", "rip and tear"],
+		"week6": ["so retro", "your gf is in another castle"],
+		"week7": ["what we got here", "war never change"]
+	},
+	"rank_map":{
+		"SFC": 5, 
+		"GFC": 4, 
+		"FC": 3, 
+		"SDCB": 2, 
+		"Clear": 1, 
+		"???": 0
+	},
+	"rating_data":{
+		"Shit": {
+			"Ms": [175, 110],
+			"Score": 20,
+			"Percent": 0.10,
+			"Rating": "shits",
+			"RatingID": 3
+		},
+		"Bad": {
+			"Ms": [110, 60],
+			"Score": 80,
+			"Percent": 0.40,
+			"Rating": "bads",
+			"RatingID": 2
+		},
+		"Good": {
+			"Ms": [60, 30],
+			"Score": 140,
+			"Percent": 0.80,
+			"Rating": "goods",
+			"RatingID": 1
+		},
+		"Sick": {
+			"Ms": [30, -140],
+			"Score": 210,
+			"Percent": 1,
+			"Rating": "sicks",
+			"RatingID": 0
+		}
+	},
+	"percentData":{
+		"REALLY_BAD": ["Awful", 0.1],
+		"VERY_BAD": ["Shit", 0.3],
+		"JUST_BAD": ["Bad", 0.4],
+		"MEH": ["Meh", 0.5],
+		"IS_OKAY": ["Nice", 0.7],
+		"IS_GOOD": ["Good", 0.8],
+		"GREAT": ["Great!", 0.9],
+		"VERY_GOOD": ["Sick!!", 1]
+	},
+	"countdownset":{
+		"default": ["prepare", "ready", "set", "go"],
+		"pixel": ["prepare", "ready", "set", "date"]
+	}
+}

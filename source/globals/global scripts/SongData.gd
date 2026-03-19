@@ -23,6 +23,8 @@ var stage = "":
 		return stage;
 		
 	set(val):
+		if val.contains(" "):
+			val = val.replace(" ", "_");
 		stage = val.to_lower();
 		
 var songBpm = 100.0;
@@ -51,15 +53,41 @@ var gfZindex = 0;
 var stageZoom = Vector2.ZERO;
 var stageZoomBeat = Vector2.ZERO;
 
+var death_count = 0;
+var isStoryMode = false;
+var restartSong = false;
+var is_not_in_cutscene = true;
 var haveTwoOpponents = false;
 var isPixelStage = false;
 var needVoice = true;
 
+var isOnPauseMode = false;
+var isOnChartMode = false;
+var isPlaying = false;
+var isOnDeathScreen = false;
+
 var songNotes = [];
 var songEvents = [];
 
-func loadStageJson(stage):
-	var jsonFile = FileAccess.open("res://assets/stages/data/%s.json"%[stage], FileAccess.READ);
+var week_songs = []:
+	set(val):
+		week_songs = [val] if val is String else val;
+	get:
+		return week_songs;
+		
+var week_diffs = []:
+	set(val):
+		week_diffs = "" if val == "normal" else val;
+	get:
+		return week_diffs;
+		
+var weeks_data = {};
+
+var week_folder_path = "default";
+var weekName = "";
+
+func loadStageJson(new_stage):
+	var jsonFile = FileAccess.open("res://assets/data/stages data/%s.json"%[new_stage], FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
 	stageData = jsonData.get_data();
@@ -70,6 +98,9 @@ func loadStageJson(stage):
 	set_stage_null_var("bf Z_Index", 0);
 	set_stage_null_var("stage zoom", 0.8);
 	set_stage_null_var("stage beat zoom", 0.83);
+	set_stage_null_var("new opponent", [0, 0]);
+	set_stage_null_var("new opponent Z_Index", 0);
+	set_stage_null_var("two opponents", false);
 	
 	stageZoomBeat = Vector2(stageData["stage beat zoom"], stageData["stage beat zoom"]);
 	stageZoom = Vector2(stageData["stage zoom"], stageData["stage zoom"]);
@@ -80,8 +111,8 @@ func loadStageJson(stage):
 	player2StagePosition = Vector2(SongData.stageData["opponent"][0], SongData.stageData["opponent"][1]);
 	player2Zindex = stageData["opponent Z_Index"];
 	
-	player3StagePosition = Vector2(SongData.stageData["opponent"][0], SongData.stageData["opponent"][1]);
-	player3Zindex = stageData["opponent Z_Index"];
+	player3StagePosition = Vector2(SongData.stageData["new opponent"][0], SongData.stageData["new opponent"][1]);
+	player3Zindex = stageData["new opponent Z_Index"];
 	
 	gfStagePosition = Vector2(SongData.stageData["gf"][0], SongData.stageData["gf"][1]);
 	gfZindex = stageData["gf Z_Index"];
@@ -112,8 +143,8 @@ func loadJson(new_song, difficulty = "", new_chart = null):
 		"sectionNotes": []
 	};
 	
-	difficultyPath = ("res://assets/data/%s/%s.json"%[new_song, new_song]) if difficulty == "" or difficulty == "normal" else ("res://assets/data/%s/%s-%s.json"%[new_song, new_song, difficulty]);
-	eventsPath = "res://assets/data/%s/events.json"%[new_song];
+	difficultyPath = ("res://assets/data/songs/%s/%s.json"%[new_song, new_song]) if difficulty == "" or difficulty == "normal" else ("res://assets/data/songs/%s/%s-%s.json"%[new_song, new_song, difficulty]);
+	eventsPath = "res://assets/data/songs/%s/events.json"%[new_song];
 	
 	var jsonFile = FileAccess.open(difficultyPath, FileAccess.READ);
 	var jsonData = JSON.new();
@@ -135,11 +166,12 @@ func loadJson(new_song, difficulty = "", new_chart = null):
 			set_section_null_var(i, sections_null_vars[i]);
 			
 		for i in chartData["song"]["notes"].size():
-			for j in chartData["song"]["notes"][i]["sectionNotes"].size():
-				if chartData["song"]["notes"][i]["sectionNotes"][j].size() < 4:
-					chartData["song"]["notes"][i]["sectionNotes"][j].append("");
+			for j in chartData["song"]["notes"][i]["sectionNotes"]:
+				while len(j) < 4:
+					j.append("");
 					
 		songNotes = chartData["song"]["notes"];
+		
 		if !chartData["song"]["events"].is_empty():
 			songEvents = chartData["song"]["events"];
 			

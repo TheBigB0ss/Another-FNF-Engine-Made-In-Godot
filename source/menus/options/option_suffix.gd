@@ -58,7 +58,7 @@ func _ready() -> void:
 				checkBoxGrp.add_child(check_sprite);
 				update_bool_spr(new_options[i].opt_type);
 				
-	Global.updated_options = new_options;
+	GlobalOptions.updated_options = new_options;
 	
 func update_bool_spr(new_value):
 	if !new_value:

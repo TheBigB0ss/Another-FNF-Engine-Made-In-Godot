@@ -1,116 +1,66 @@
 extends CharacterData
 
-@export var json_path = "";
+@export_group("death screen settings", "")
+@export_file_path("*.json") var json_path = "";
+
 @onready var character = $'Character_Sprite';
 @onready var character_anim = $'Character_Animation';
 
-var healthBar_Color = Color();
-var curIcon = '';
-var animatedIcon = false;
-var loopAnim = false;
-var is_player = false;
-var cam_follow_pos = false;
 var curAnim = "";
+var curIcon = "";
 
-var anim_offset = [];
 var camera_pos = [];
+var anim_offset = [];
 
 var idleTimer = 0;
-var anim_time = 5;
-var anim_beat = 2;
+var confirmTimer = 0;
+
+var anim_time = 0;
+var cam_follow_pos = false;
+
+var base_position = Vector2.ZERO;
 
 func _ready():
-	charPath = json_path;
+	charPath = json_path.get_file();
+	charPath = charPath.replace(".json", "");
 	
-	var jsonFile = FileAccess.open("res://assets/characters/%s.json"%[charPath],FileAccess.READ);
-	var jsonData = JSON.new();
-	jsonData.parse(jsonFile.get_as_text());
-	charData = jsonData.get_data()
-	jsonFile.close();
-	
-	set_data_vars("camera follow pos", false);
-	set_data_vars("AnimatedIcon", false);
-	set_data_vars("LoopAnim", false);
-	set_data_vars("cameraPos", [1, 1]);
-	set_data_vars("scale", [1, 1]);
-	set_data_vars("anim time", 5);
+	init_json(json_path);
 	
 	character.scale = Vector2(charData["scale"][0], charData["scale"][1]);
 	character.flip_h = charData["FlipX"];
 	character.flip_v = charData["FlipY"];
-	
-	camera_pos = [charData["cameraPos"][0], charData["cameraPos"][1]]
-	anim_time = charData["anim time"];
-	is_player = charData["isPlayer"];
-	curIcon = charData["HealthIcon"];
-	animatedIcon = charData["AnimatedIcon"];
-	healthBar_Color = Color(charData["HealthBarColor"]);
-	loopAnim = charData["LoopAnim"];
-	cam_follow_pos = charData["camera follow pos"];
+	curIcon = charData.get("HealthIcon", "no_icon");
 	
 	for i in charData["Poses"].size():
 		animList.append(charData["Poses"][i]["Anim"]);
 		posesList.append(charData["Poses"][i]["Name"]);
 		
-	_playAnim("dead")
+	base_position = character.position;
 	
-	if Global.is_on_death_screen:
-		SoundStuff.playAudio("game over/fnf_loss_sfx", false);
-		
-		if json_path == "Bf Pixel dead":
-			SoundStuff.playAudio("game over/fnf_loss_sfx", true);
-			
-func set_data_vars(null_var, null_value):
-	if !charData.has(null_var):
-		charData[null_var] = null_value;
-		
+	_playAnim("dead");
+	
 func _process(delta):
-	if curAnim.begins_with("dead") && curAnim != "dead loop" && Global.is_on_death_screen:
+	if curAnim.begins_with("dead") && SongData.isOnDeathScreen:
 		idleTimer += delta;
 		
-	if idleTimer >= 2 && curAnim != "dead confirm" && Global.is_on_death_screen:
+	if idleTimer >= 2 && curAnim != "dead confirm" && SongData.isOnDeathScreen:
 		bf_loop_anim();
 		idleTimer = 0;
 		
-	if curAnim == "dead confirm" && idleTimer >= 2.5 && idleTimer < 2.6 && Global.is_on_death_screen:
-		print("go back")
-		idleTimer = 0;
-		SongData.loadJson(Global.songsShit[0] if Global.isStoryMode else Global.songsShit, Global.diffsShit);
-		Global.changeScene("gameplay/PlayState", true, false);
+	if idleTimer == 0 && curAnim == "dead confirm":
+		confirmTimer += delta;
 		
 func _playAnim(anim):
 	for i in animList.size():
 		if animList[i] == anim:
-			#character.offset.x = charData["Poses"][i]["Offset"][0];
-			#character.offset.y = charData["Poses"][i]["Offset"][1];
-			character_anim.play(str(posesList[i], "/ "));
+			var pose_offset = Vector2(charData["Poses"][i]["Offset"][0], charData["Poses"][i]["Offset"][1]);
+			
+			character.position = base_position + pose_offset;
+			character_anim.play(posesList[i]);
 			character_anim.seek(0.0);
 			
 	curAnim = anim;
 	
 func bf_loop_anim():
-	if Global.is_on_death_screen:
-		MusicManager._play_music("game over/gameOver", false, true);
-		
-		if json_path == "Bf Pixel dead":
-			MusicManager._play_music("game over/gameOver-pixel", false, true);
-			
+	if SongData.isOnDeathScreen:
 		_playAnim("dead loop");
-		
-var confirm = false;
-func _input(ev):
-	if ev is InputEventKey && Global.is_on_death_screen:
-		if ev.pressed && !ev.echo && !confirm:
-			if ev.keycode in [KEY_ENTER] && curAnim != "dead" && idleTimer == 0:
-				MusicManager._play_music("game over/gameOverEnd", false, false);
-				if json_path == "Bf Pixel dead":
-					MusicManager._play_music("game over/gameOverEnd-pixel", false, true);
-					
-				_playAnim("dead confirm");
-				confirm = true;
-				
-			if ev.keycode in [KEY_ESCAPE]:
-				Global.death_count = 0;
-				MusicManager._play_music("freakyMenu", true, true);
-				Global.changeScene("menus/main_menu/MainMenu");
-				confirm = true

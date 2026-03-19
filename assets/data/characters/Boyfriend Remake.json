@@ -1,0 +1,101 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#1cbadfff",
+	"HealthIcon": "BfRemake",
+	"LoopAnim": true,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "ANIM_Idle",
+			"Offset": [
+				16.0,
+				29.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "ANIM_LeftPose",
+			"Offset": [
+				-2.0,
+				13.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "ANIM_DownPose",
+			"Offset": [
+				7.0,
+				9.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "ANIM_UpPose",
+			"Offset": [
+				-7.0,
+				-27.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "ANIM_RightPose",
+			"Offset": [
+				77.0,
+				30.0
+			]
+		},
+		{
+			"Anim": "singLeft MISS",
+			"Name": "ANIM_LeftPoseMISS",
+			"Offset": [
+				15.0,
+				4.0
+			]
+		},
+		{
+			"Anim": "singDown MISS",
+			"Name": "ANIM_DownPoseMISS",
+			"Offset": [
+				19.0,
+				6.0
+			]
+		},
+		{
+			"Anim": "singUp MISS",
+			"Name": "ANIM_UpPoseMISS",
+			"Offset": [
+				-3.0,
+				-39.0
+			]
+		},
+		{
+			"Anim": "singRight MISS",
+			"Name": "ANIM_RightPoseMISS",
+			"Offset": [
+				89.0,
+				16.0
+			]
+		},
+		{
+			"Anim": "hey",
+			"Name": "ANIM_HeyPose",
+			"Offset": [
+				55.0,
+				10.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"camera follow pos": false,
+	"cameraPos": [
+		-110.0,
+		-60.0
+	],
+	"isPlayer": true,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

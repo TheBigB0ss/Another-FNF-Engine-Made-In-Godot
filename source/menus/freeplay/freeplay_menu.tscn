@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://brktim07ow51i"]
+[gd_scene format=3 uid="uid://brktim07ow51i"]
 
-[ext_resource type="Script" uid="uid://b4700etwhywe0" path="res://source/menus/freeplay/freeplay_menu.gd" id="1_vy5cd"]
+[ext_resource type="Script" uid="uid://qimi8bkga723" path="res://source/menus/freeplay/freeplay_menu.gd" id="1_vy5cd"]
 [ext_resource type="Texture2D" uid="uid://ceq3mk0i6bngd" path="res://assets/images/menuBgs/menuDesat.png" id="2_br0bf"]
 [ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_in7ae"]
 
@@ -15,28 +15,28 @@ font_size = 930
 shadow_size = 90
 shadow_color = Color(0, 0, 0, 1)
 
-[node name="FreeplayMenu" type="Node2D"]
+[node name="FreeplayMenu" type="Node2D" unique_id=114305816]
 script = ExtResource("1_vy5cd")
 
-[node name="bg" type="Sprite2D" parent="."]
+[node name="bg" type="Sprite2D" parent="." unique_id=2098578728]
 position = Vector2(640, 360)
 scale = Vector2(0.995334, 0.986301)
 texture = ExtResource("2_br0bf")
 
-[node name="songs" type="Node2D" parent="."]
+[node name="songs" type="Node2D" parent="." unique_id=1575774956]
 position = Vector2(75, 349)
 
-[node name="icons" type="Node2D" parent="."]
+[node name="icons" type="Node2D" parent="." unique_id=1695617062]
 position = Vector2(0, 349)
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=734661211]
 offset_left = 878.0
 offset_right = 918.0
-offset_bottom = 35.719555
+offset_bottom = 46.20247
 scale = Vector2(10.0542, 2.57562)
 color = Color(0.21, 0.21, 0.21, 0.454902)
 
-[node name="scoreText" type="Label" parent="."]
+[node name="scoreText" type="Label" parent="." unique_id=1186018375]
 offset_left = 881.0
 offset_top = 1.0
 offset_right = 1025.0
@@ -45,38 +45,48 @@ scale = Vector2(0.6, 0.646)
 text = "score:"
 label_settings = SubResource("LabelSettings_i3c0a")
 
-[node name="difficultyText" type="Label" parent="."]
-offset_left = 991.0
-offset_top = 64.0
-offset_right = 1183.0
-offset_bottom = 101.0
+[node name="difficultyText" type="Label" parent="." unique_id=291280583]
+offset_left = 886.0
+offset_top = 92.00001
+offset_right = 1456.0
+offset_bottom = 129.0
 scale = Vector2(0.6, 0.646)
-text = "< Hard >"
+text = "<  >"
 label_settings = SubResource("LabelSettings_i3c0a")
+horizontal_alignment = 1
 
-[node name="fcText" type="Label" parent="."]
+[node name="fcText" type="Label" parent="." unique_id=157073158]
 offset_left = 881.0
-offset_top = 36.0
+offset_top = 32.0
 offset_right = 1025.0
-offset_bottom = 73.0
+offset_bottom = 69.0
 scale = Vector2(0.6, 0.645)
 text = "FC:"
 label_settings = SubResource("LabelSettings_i3c0a")
 
-[node name="Control" type="Control" parent="."]
+[node name="percentText" type="Label" parent="." unique_id=763814449]
+offset_left = 881.0
+offset_top = 64.0
+offset_right = 1073.0
+offset_bottom = 101.0
+scale = Vector2(0.6, 0.645)
+text = "percent:"
+label_settings = SubResource("LabelSettings_i3c0a")
+
+[node name="Control" type="Control" parent="." unique_id=1875437788]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="ColorRect" type="ColorRect" parent="Control"]
+[node name="ColorRect" type="ColorRect" parent="Control" unique_id=45730292]
 layout_mode = 0
 offset_top = 702.0
 offset_right = 1280.0
 offset_bottom = 720.0
 color = Color(0, 0, 0, 0.403922)
 
-[node name="Label" type="Label" parent="Control"]
+[node name="Label" type="Label" parent="Control" unique_id=758440968]
 layout_mode = 0
 offset_left = 425.0
 offset_top = 700.0
@@ -89,20 +99,20 @@ theme_override_font_sizes/font_size = 660
 text = "press SPACE to play song INST"
 horizontal_alignment = 1
 
-[node name="warning" type="Control" parent="."]
+[node name="warning" type="Control" parent="." unique_id=598745301]
 visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="ColorRect" type="ColorRect" parent="warning"]
+[node name="ColorRect" type="ColorRect" parent="warning" unique_id=755106830]
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
 color = Color(0, 0, 0, 0.592)
 
-[node name="Label" type="Label" parent="warning"]
+[node name="Label" type="Label" parent="warning" unique_id=303276979]
 layout_mode = 0
 offset_left = 37.0
 offset_top = 186.0

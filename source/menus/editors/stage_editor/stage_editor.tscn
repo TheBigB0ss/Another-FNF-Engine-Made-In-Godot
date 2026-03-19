@@ -1,41 +1,43 @@
-[gd_scene load_steps=5 format=3 uid="uid://bg8s3qgkacj5g"]
+[gd_scene format=3 uid="uid://bg8s3qgkacj5g"]
 
-[ext_resource type="Script" uid="uid://d1cctfipvqros" path="res://source/menus/editors/stage_editor/stage_editor.gd" id="1_ghdrb"]
+[ext_resource type="Script" uid="uid://dueskcgvn0l00" path="res://source/menus/editors/stage_editor/stage_editor.gd" id="1_ghdrb"]
 [ext_resource type="PackedScene" uid="uid://nuno0fp5tpiu" path="res://source/characters/bf.tscn" id="2_t2p8t"]
 [ext_resource type="PackedScene" uid="uid://cbxmksm17k2jp" path="res://source/characters/dad.tscn" id="3_ghdrb"]
+[ext_resource type="PackedScene" uid="uid://dhiilas6qf53v" path="res://source/characters/Mom.tscn" id="4_ghdrb"]
 [ext_resource type="PackedScene" uid="uid://b7mrj3l4ngoue" path="res://source/characters/gf.tscn" id="4_qsyfx"]
 
-[node name="stage_editor" type="Node2D"]
+[node name="stage_editor" type="Node2D" unique_id=1664649525]
 script = ExtResource("1_ghdrb")
 
-[node name="stage" type="Node2D" parent="."]
+[node name="stage" type="Node2D" parent="." unique_id=788276658]
 
-[node name="FileDialog" type="FileDialog" parent="."]
+[node name="FileDialog" type="FileDialog" parent="." unique_id=1017702903]
 auto_translate_mode = 1
 size = Vector2i(348, 180)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2248973]
 layer = 5
 
-[node name="TabContainer" type="TabContainer" parent="CanvasLayer"]
+[node name="TabContainer" type="TabContainer" parent="CanvasLayer" unique_id=1486046921]
 offset_left = 945.0
 offset_top = 9.0
 offset_right = 1260.0
-offset_bottom = 409.0
-current_tab = 0
+offset_bottom = 506.0
+current_tab = 1
 
-[node name="stage stuff" type="TabBar" parent="CanvasLayer/TabContainer"]
+[node name="stage stuff" type="TabBar" parent="CanvasLayer/TabContainer" unique_id=1575651920]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="stages" type="OptionButton" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="stages" type="OptionButton" parent="CanvasLayer/TabContainer/stage stuff" unique_id=1997992361]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 22.0
 offset_right = 152.0
 offset_bottom = 42.0
 
-[node name="stages_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="stages_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff" unique_id=1204987790]
 layout_mode = 0
 offset_left = 5.0
 offset_top = -2.0
@@ -43,169 +45,168 @@ offset_right = 82.0
 offset_bottom = 21.0
 text = "Stages:"
 
-[node name="obj_X_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj_X_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff" unique_id=1390916696]
 layout_mode = 0
 offset_left = 7.0
-offset_top = 118.0
+offset_top = 198.0
 offset_right = 95.0
-offset_bottom = 141.0
+offset_bottom = 221.0
 text = "obj X:"
 
-[node name="obj X" type="SpinBox" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj X" type="SpinBox" parent="CanvasLayer/TabContainer/stage stuff" unique_id=95130673]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 51.0
-offset_top = 112.0
+offset_top = 192.0
 offset_right = 137.563
-offset_bottom = 143.0
+offset_bottom = 223.0
 min_value = -9000.0
 max_value = 9000.0
 step = 0.1
 value = 1.0
 
-[node name="obj_Y_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj_Y_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff" unique_id=1502327041]
 layout_mode = 0
 offset_left = 7.0
-offset_top = 154.0
+offset_top = 234.0
 offset_right = 95.0
-offset_bottom = 177.0
+offset_bottom = 257.0
 text = "obj Y:"
 
-[node name="obj Y" type="SpinBox" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj Y" type="SpinBox" parent="CanvasLayer/TabContainer/stage stuff" unique_id=1025371823]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 51.0
-offset_top = 150.0
+offset_top = 230.0
 offset_right = 137.563
-offset_bottom = 181.0
+offset_bottom = 261.0
 min_value = -9000.0
 max_value = 9000.0
 step = 0.1
 value = 1.0
 
-[node name="obj_width_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj_width_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff" unique_id=2001522036]
 layout_mode = 0
 offset_left = 7.0
-offset_top = 188.0
+offset_top = 268.0
 offset_right = 95.0
-offset_bottom = 211.0
+offset_bottom = 291.0
 text = "obj Width:"
 
-[node name="obj width" type="SpinBox" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj width" type="SpinBox" parent="CanvasLayer/TabContainer/stage stuff" unique_id=224876238]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 87.0
-offset_top = 184.0
+offset_top = 264.0
 offset_right = 173.563
-offset_bottom = 215.0
+offset_bottom = 295.0
 min_value = -9000.0
 max_value = 9000.0
 step = 0.1
 value = 1.0
 
-[node name="obj_height_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj_height_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff" unique_id=1786543689]
 layout_mode = 0
 offset_left = 7.0
-offset_top = 223.0
+offset_top = 303.0
 offset_right = 95.0
-offset_bottom = 246.0
+offset_bottom = 326.0
 text = "obj Height:"
 
-[node name="obj height" type="SpinBox" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj height" type="SpinBox" parent="CanvasLayer/TabContainer/stage stuff" unique_id=279617417]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 92.0
-offset_top = 220.0
+offset_top = 300.0
 offset_right = 178.563
-offset_bottom = 251.0
+offset_bottom = 331.0
 min_value = -100.0
 max_value = 9000.0
 step = 0.1
 value = 1.0
 
-[node name="obj_color_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj_color_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff" unique_id=190693591]
 layout_mode = 0
 offset_left = 7.0
-offset_top = 324.0
+offset_top = 142.0
 offset_right = 95.0
-offset_bottom = 347.0
+offset_bottom = 165.0
 text = "obj Tint:"
 
-[node name="obj_color" type="ColorPickerButton" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj_color" type="ColorPickerButton" parent="CanvasLayer/TabContainer/stage stuff" unique_id=494774381]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 87.0
-offset_top = 323.0
-offset_right = 214.0
-offset_bottom = 347.0
+offset_left = 76.0
+offset_top = 141.0
+offset_right = 203.0
+offset_bottom = 165.0
 color = Color(1, 1, 1, 1)
 
-[node name="obj_rotation_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj_rotation_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff" unique_id=14439561]
 layout_mode = 0
 offset_left = 7.0
-offset_top = 258.0
+offset_top = 338.0
 offset_right = 107.0
-offset_bottom = 281.0
+offset_bottom = 361.0
 text = "obj Rotation:"
 
-[node name="obj_rotation" type="SpinBox" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj_rotation" type="SpinBox" parent="CanvasLayer/TabContainer/stage stuff" unique_id=786537335]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 109.0
-offset_top = 255.0
+offset_top = 335.0
 offset_right = 195.563
-offset_bottom = 286.0
+offset_bottom = 366.0
 min_value = -100.0
 step = 0.1
 value = 1.0
 
-[node name="animations" type="OptionButton" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="animations" type="OptionButton" parent="CanvasLayer/TabContainer/stage stuff" unique_id=31291422]
 layout_mode = 0
 offset_left = 4.0
-offset_top = 77.0
+offset_top = 89.0
 offset_right = 152.0
-offset_bottom = 97.0
+offset_bottom = 109.0
 disabled = true
 
-[node name="animations_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="animations_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff" unique_id=1834921579]
 layout_mode = 0
 offset_left = 5.0
-offset_top = 53.0
+offset_top = 65.0
 offset_right = 97.0
-offset_bottom = 76.0
+offset_bottom = 88.0
 text = "animations:"
 
-[node name="obj_zIndex_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj_zIndex_text" type="Label" parent="CanvasLayer/TabContainer/stage stuff" unique_id=1438369458]
 layout_mode = 0
 offset_left = 7.0
-offset_top = 291.0
+offset_top = 371.0
 offset_right = 103.0
-offset_bottom = 314.0
+offset_bottom = 394.0
 text = "obj Z Index:"
 
-[node name="obj_zIndex" type="SpinBox" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="obj_zIndex" type="SpinBox" parent="CanvasLayer/TabContainer/stage stuff" unique_id=1163197154]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 98.0
-offset_top = 289.0
+offset_top = 369.0
 offset_right = 184.563
-offset_bottom = 320.0
+offset_bottom = 400.0
 max_value = 20.0
 
-[node name="save stage" type="Button" parent="CanvasLayer/TabContainer/stage stuff"]
+[node name="save stage" type="Button" parent="CanvasLayer/TabContainer/stage stuff" unique_id=1859693584]
 layout_mode = 0
-offset_left = 208.0
-offset_top = 22.0
-offset_right = 297.0
-offset_bottom = 53.0
+offset_left = 110.0
+offset_top = 425.0
+offset_right = 199.0
+offset_bottom = 456.0
 text = "save stage"
 
-[node name="data" type="TabBar" parent="CanvasLayer/TabContainer"]
-visible = false
+[node name="data" type="TabBar" parent="CanvasLayer/TabContainer" unique_id=851857596]
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Bf position" type="Label" parent="CanvasLayer/TabContainer/data"]
+[node name="Bf position" type="Label" parent="CanvasLayer/TabContainer/data" unique_id=1486665296]
 layout_mode = 0
 offset_left = 1.0
 offset_top = 12.0
@@ -213,7 +214,7 @@ offset_right = 89.0
 offset_bottom = 35.0
 text = "Bf position:"
 
-[node name="bf_x" type="SpinBox" parent="CanvasLayer/TabContainer/data"]
+[node name="bf_x" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=1617494268]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 92.0
@@ -224,7 +225,7 @@ min_value = -9000.0
 max_value = 9000.0
 value = 1.0
 
-[node name="bf_y" type="SpinBox" parent="CanvasLayer/TabContainer/data"]
+[node name="bf_y" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=208969529]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 180.0
@@ -235,7 +236,7 @@ min_value = -9000.0
 max_value = 9000.0
 value = 1.0
 
-[node name="Bf zIndex_text" type="Label" parent="CanvasLayer/TabContainer/data"]
+[node name="Bf zIndex_text" type="Label" parent="CanvasLayer/TabContainer/data" unique_id=2069384129]
 layout_mode = 0
 offset_left = 1.0
 offset_top = 48.0
@@ -243,7 +244,7 @@ offset_right = 89.0
 offset_bottom = 71.0
 text = "Bf Z Index:"
 
-[node name="bf_zIndex" type="SpinBox" parent="CanvasLayer/TabContainer/data"]
+[node name="bf_zIndex" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=2138552158]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 84.0
@@ -252,7 +253,7 @@ offset_right = 170.563
 offset_bottom = 75.0
 max_value = 20.0
 
-[node name="opponent position" type="Label" parent="CanvasLayer/TabContainer/data"]
+[node name="opponent position" type="Label" parent="CanvasLayer/TabContainer/data" unique_id=1596817748]
 layout_mode = 0
 offset_left = 1.0
 offset_top = 88.0
@@ -260,7 +261,7 @@ offset_right = 104.0
 offset_bottom = 111.0
 text = "Dad position:"
 
-[node name="opponent_x" type="SpinBox" parent="CanvasLayer/TabContainer/data"]
+[node name="opponent_x" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=2110746217]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 105.0
@@ -271,7 +272,7 @@ min_value = -9000.0
 max_value = 9000.0
 value = 1.0
 
-[node name="opponent_y" type="SpinBox" parent="CanvasLayer/TabContainer/data"]
+[node name="opponent_y" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=13922198]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 193.0
@@ -282,7 +283,7 @@ min_value = -9000.0
 max_value = 9000.0
 value = 1.0
 
-[node name="gf_x" type="SpinBox" parent="CanvasLayer/TabContainer/data"]
+[node name="gf_x" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=646930977]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 92.0
@@ -293,7 +294,7 @@ min_value = -9000.0
 max_value = 9000.0
 value = 1.0
 
-[node name="gf_y" type="SpinBox" parent="CanvasLayer/TabContainer/data"]
+[node name="gf_y" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=405186404]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 180.0
@@ -304,7 +305,7 @@ min_value = -9000.0
 max_value = 9000.0
 value = 1.0
 
-[node name="gf position" type="Label" parent="CanvasLayer/TabContainer/data"]
+[node name="gf position" type="Label" parent="CanvasLayer/TabContainer/data" unique_id=1305684928]
 layout_mode = 0
 offset_left = 1.0
 offset_top = 167.0
@@ -312,7 +313,7 @@ offset_right = 90.0
 offset_bottom = 190.0
 text = "Gf position:"
 
-[node name="Opponent zIndex_text" type="Label" parent="CanvasLayer/TabContainer/data"]
+[node name="Opponent zIndex_text" type="Label" parent="CanvasLayer/TabContainer/data" unique_id=482209447]
 layout_mode = 0
 offset_left = 1.0
 offset_top = 120.0
@@ -320,7 +321,7 @@ offset_right = 97.0
 offset_bottom = 143.0
 text = "Dad Z Index:"
 
-[node name="opponent_zIndex" type="SpinBox" parent="CanvasLayer/TabContainer/data"]
+[node name="opponent_zIndex" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=1424800910]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 98.0
@@ -329,7 +330,7 @@ offset_right = 184.563
 offset_bottom = 150.0
 max_value = 20.0
 
-[node name="Gf zIndex_text" type="Label" parent="CanvasLayer/TabContainer/data"]
+[node name="Gf zIndex_text" type="Label" parent="CanvasLayer/TabContainer/data" unique_id=1526603685]
 layout_mode = 0
 offset_left = 1.0
 offset_top = 199.0
@@ -337,7 +338,7 @@ offset_right = 97.0
 offset_bottom = 222.0
 text = "Gf Z Index:"
 
-[node name="gf_zIndex" type="SpinBox" parent="CanvasLayer/TabContainer/data"]
+[node name="gf_zIndex" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=1133040221]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 85.0
@@ -346,58 +347,113 @@ offset_right = 171.563
 offset_bottom = 229.0
 max_value = 20.0
 
-[node name="save_json" type="Button" parent="CanvasLayer/TabContainer/data"]
+[node name="save_json" type="Button" parent="CanvasLayer/TabContainer/data" unique_id=1164378364]
 layout_mode = 0
 offset_left = 93.0
-offset_top = 333.0
+offset_top = 426.0
 offset_right = 204.0
-offset_bottom = 364.0
+offset_bottom = 457.0
 text = "save json"
 
-[node name="stage_beat_zoom_text" type="Label" parent="CanvasLayer/TabContainer/data"]
+[node name="stage_beat_zoom_text" type="Label" parent="CanvasLayer/TabContainer/data" unique_id=1615481642]
 layout_mode = 0
 offset_left = 1.0
-offset_top = 288.0
+offset_top = 388.0
 offset_right = 133.0
-offset_bottom = 311.0
+offset_bottom = 411.0
 text = "stage beat zoom:"
 
-[node name="stage_beat_zoom" type="SpinBox" parent="CanvasLayer/TabContainer/data"]
+[node name="stage_beat_zoom" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=1675061074]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 133.0
-offset_top = 284.0
+offset_top = 384.0
 offset_right = 219.563
-offset_bottom = 315.0
+offset_bottom = 415.0
 min_value = 0.1
 step = 0.01
 value = 0.83
 
-[node name="stage_zoom_text" type="Label" parent="CanvasLayer/TabContainer/data"]
+[node name="stage_zoom_text" type="Label" parent="CanvasLayer/TabContainer/data" unique_id=561189571]
 layout_mode = 0
 offset_left = 1.0
-offset_top = 252.0
+offset_top = 352.0
 offset_right = 94.0
-offset_bottom = 275.0
+offset_bottom = 375.0
 text = "stage zoom:"
 
-[node name="stage_zoom" type="SpinBox" parent="CanvasLayer/TabContainer/data"]
+[node name="stage_zoom" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=554683687]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 97.0
-offset_top = 246.0
+offset_top = 346.0
 offset_right = 183.563
-offset_bottom = 277.0
+offset_bottom = 377.0
 min_value = 0.01
 step = 0.01
 value = 0.8
 
-[node name="add new sprite" type="TabBar" parent="CanvasLayer/TabContainer"]
+[node name="two opponents" type="CheckBox" parent="CanvasLayer/TabContainer/data" unique_id=1897387252]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 314.0
+offset_right = 145.0
+offset_bottom = 345.0
+text = "two opponents"
+
+[node name="mom_x" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=762197543]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 116.0
+offset_top = 240.0
+offset_right = 202.563
+offset_bottom = 271.0
+min_value = -9000.0
+max_value = 9000.0
+value = 1.0
+
+[node name="mom_y" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=1875632992]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 204.0
+offset_top = 240.0
+offset_right = 290.563
+offset_bottom = 271.0
+min_value = -9000.0
+max_value = 9000.0
+value = 1.0
+
+[node name="mom position" type="Label" parent="CanvasLayer/TabContainer/data" unique_id=1404835777]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 244.0
+offset_right = 90.0
+offset_bottom = 267.0
+text = "Mom position:"
+
+[node name="mom zIndex_text" type="Label" parent="CanvasLayer/TabContainer/data" unique_id=797212513]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 276.0
+offset_right = 97.0
+offset_bottom = 299.0
+text = "Mom Z Index:"
+
+[node name="mom_zIndex" type="SpinBox" parent="CanvasLayer/TabContainer/data" unique_id=1064632119]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 109.0
+offset_top = 275.0
+offset_right = 195.563
+offset_bottom = 306.0
+max_value = 20.0
+
+[node name="add new sprite" type="TabBar" parent="CanvasLayer/TabContainer" unique_id=494377702]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="sprite_name_text" type="Label" parent="CanvasLayer/TabContainer/add new sprite"]
+[node name="sprite_name_text" type="Label" parent="CanvasLayer/TabContainer/add new sprite" unique_id=934339635]
 layout_mode = 0
 offset_left = 5.0
 offset_top = 20.0
@@ -405,7 +461,7 @@ offset_right = 94.0
 offset_bottom = 43.0
 text = "new sprite:"
 
-[node name="sprite_name" type="LineEdit" parent="CanvasLayer/TabContainer/add new sprite"]
+[node name="sprite_name" type="LineEdit" parent="CanvasLayer/TabContainer/add new sprite" unique_id=242526248]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 3.0
@@ -414,7 +470,7 @@ offset_right = 177.0
 offset_bottom = 74.0
 placeholder_text = "images/new_sprite"
 
-[node name="sprite_layer_text" type="Label" parent="CanvasLayer/TabContainer/add new sprite"]
+[node name="sprite_layer_text" type="Label" parent="CanvasLayer/TabContainer/add new sprite" unique_id=1827853665]
 layout_mode = 0
 offset_left = 5.0
 offset_top = 114.0
@@ -422,7 +478,7 @@ offset_right = 97.0
 offset_bottom = 137.0
 text = "sprite layer:"
 
-[node name="sprite_layer" type="SpinBox" parent="CanvasLayer/TabContainer/add new sprite"]
+[node name="sprite_layer" type="SpinBox" parent="CanvasLayer/TabContainer/add new sprite" unique_id=1790579031]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 97.0
@@ -432,7 +488,7 @@ offset_bottom = 141.0
 max_value = 10.0
 value = 1.0
 
-[node name="animated_sprite" type="CheckBox" parent="CanvasLayer/TabContainer/add new sprite"]
+[node name="animated_sprite" type="CheckBox" parent="CanvasLayer/TabContainer/add new sprite" unique_id=1864288309]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 1.0
@@ -441,7 +497,7 @@ offset_right = 161.0
 offset_bottom = 200.0
 text = "animated sprite?"
 
-[node name="save_sprite" type="Button" parent="CanvasLayer/TabContainer/add new sprite"]
+[node name="save_sprite" type="Button" parent="CanvasLayer/TabContainer/add new sprite" unique_id=914823368]
 layout_mode = 0
 offset_left = 97.0
 offset_top = 318.0
@@ -449,12 +505,12 @@ offset_right = 208.0
 offset_bottom = 349.0
 text = "add sprite"
 
-[node name="new stage" type="TabBar" parent="CanvasLayer/TabContainer"]
+[node name="new stage" type="TabBar" parent="CanvasLayer/TabContainer" unique_id=1790649412]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
-[node name="stage_name_text" type="Label" parent="CanvasLayer/TabContainer/new stage"]
+[node name="stage_name_text" type="Label" parent="CanvasLayer/TabContainer/new stage" unique_id=1798876110]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 19.0
@@ -462,7 +518,7 @@ offset_right = 96.0
 offset_bottom = 42.0
 text = "stage name:"
 
-[node name="stage_name" type="LineEdit" parent="CanvasLayer/TabContainer/new stage"]
+[node name="stage_name" type="LineEdit" parent="CanvasLayer/TabContainer/new stage" unique_id=1360669673]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 3.0
@@ -471,32 +527,84 @@ offset_right = 177.0
 offset_bottom = 74.0
 placeholder_text = "new stage name"
 
-[node name="create stage" type="Button" parent="CanvasLayer/TabContainer/new stage"]
+[node name="create stage" type="Button" parent="CanvasLayer/TabContainer/new stage" unique_id=1909506527]
 layout_mode = 0
-offset_left = 3.0
-offset_top = 200.0
-offset_right = 114.0
-offset_bottom = 231.0
+offset_left = 8.0
+offset_top = 94.0
+offset_right = 119.0
+offset_bottom = 125.0
 text = "create stage"
 
-[node name="load stage" type="Button" parent="CanvasLayer/TabContainer/new stage"]
+[node name="load stage" type="Button" parent="CanvasLayer/TabContainer/new stage" unique_id=592973726]
 layout_mode = 0
-offset_left = 3.0
-offset_top = 235.0
-offset_right = 114.0
-offset_bottom = 266.0
+offset_left = 8.0
+offset_top = 129.0
+offset_right = 119.0
+offset_bottom = 160.0
 text = "load stage"
 
-[node name="Gf" parent="." instance=ExtResource("4_qsyfx")]
+[node name="Gf" parent="." unique_id=765163930 instance=ExtResource("4_qsyfx")]
 z_index = 3
+healthBar_Color = Color(0.54509807, 0, 0, 1)
+anims_timer = {
+"danceLeft": [2, 5, false],
+"danceRight": [2, 5, false],
+"hey": [2, 5, false],
+"sad": [2, 5, false],
+"scared": [2, 5, false],
+"singDown": [2, 5, false],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false],
+"special idle dance": [2, 5, false]
+}
+anim_type = 1
+have_death_animation = false
 
-[node name="Boyfriend" parent="." instance=ExtResource("2_t2p8t")]
+[node name="Boyfriend" parent="." unique_id=51967940 instance=ExtResource("2_t2p8t")]
 z_index = 3
+anims_timer = {
+"attack": [2, 5, false],
+"dodge": [2, 5, false],
+"hey": [2, 5, false],
+"hit": [2, 5, false],
+"idle dance": [2, 5, false],
+"idle shaking": [2, 5, false],
+"pre attack": [2, 5, false],
+"singDown": [2, 5, false],
+"singDown MISS": [2, 5, false],
+"singLeft": [2, 5, false],
+"singLeft MISS": [2, 5, false],
+"singRight": [2, 5, false],
+"singRight MISS": [2, 5, false],
+"singUp": [2, 5, false],
+"singUp MISS": [2, 5, false]
+}
 
-[node name="Dad" parent="." instance=ExtResource("3_ghdrb")]
+[node name="Mom" parent="." unique_id=1634401332 instance=ExtResource("4_ghdrb")]
+visible = false
+healthBar_Color = Color(0.7764706, 0.2, 0.48235294, 1)
+anims_timer = {
+"idle dance": [2, 5, false],
+"singDown": [2, 5, false],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false]
+}
+anim_type = 1
+have_death_animation = false
+
+[node name="Dad" parent="." unique_id=1280467611 instance=ExtResource("3_ghdrb")]
 z_index = 3
+anims_timer = {
+"idle dance": [2, 5, false],
+"singDown": [2, 5, false],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false]
+}
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=409841338]
 position = Vector2(576, 297)
 zoom = Vector2(0.445, 0.445)
 

@@ -1,6 +1,6 @@
-[gd_scene load_steps=66 format=3 uid="uid://dhiilas6qf53v"]
+[gd_scene format=3 uid="uid://dhiilas6qf53v"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_8dlym"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_8dlym"]
 [ext_resource type="Texture2D" uid="uid://pxnc5i6m15ru" path="res://assets/images/characters/Mom_Assets.png" id="2_wt8ml"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7l7kl"]
@@ -519,10 +519,10 @@ animations = [{
 "speed": 25.0
 }]
 
-[node name="Mom" type="Node2D"]
+[node name="Mom" type="Node2D" unique_id=1769909972]
 script = ExtResource("1_8dlym")
-json_path = "Mom"
+json_path = "res://assets/data/characters/Mom.json"
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=382212095]
 sprite_frames = SubResource("SpriteFrames_0h3ny")
 animation = &"Mom Idle"

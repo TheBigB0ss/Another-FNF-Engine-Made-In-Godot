@@ -1,12 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://dkcpapeg564nn"]
+[gd_scene format=3 uid="uid://dkcpapeg564nn"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_gu82i"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_gu82i"]
 [ext_resource type="SpriteFrames" uid="uid://c21h6eiayd4we" path="res://assets/images/characters/gfTankmen.res" id="2_gu82i"]
 
-[node name="gfTankmen" type="Node2D"]
+[node name="gfTankmen" type="Node2D" unique_id=1477705843]
 script = ExtResource("1_gu82i")
-json_path = "gfTankmen"
+json_path = "res://assets/data/characters/gfTankmen.json"
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=234882033]
 sprite_frames = ExtResource("2_gu82i")
 animation = &"GF Dancing at Gunpoint"

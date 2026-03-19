@@ -1,0 +1,85 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#621793ff",
+	"HealthIcon": "darnell",
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Anim Time": 5.0,
+			"Name": "DarnellIDLE",
+			"Offset": [
+				35.0,
+				3.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "singLeft",
+			"Anim Time": 5.0,
+			"Name": "darnell pose left",
+			"Offset": [
+				6.0,
+				9.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "singDown",
+			"Anim Time": 5.0,
+			"Name": "Darnell Pose Down",
+			"Offset": [
+				72.0,
+				26.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "singUp",
+			"Anim Time": 5.0,
+			"Name": "Darnell pose up",
+			"Offset": [
+				23.0,
+				-29.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "singRight",
+			"Anim Time": 5.0,
+			"Name": "Darnell pose right",
+			"Offset": [
+				35.0,
+				3.0
+			],
+			"anim beat": 2.0,
+			"special anim": false
+		},
+		{
+			"Anim": "singLaugh",
+			"Anim Time": 15.0,
+			"Name": "DarnellMISSPOSE",
+			"Offset": [
+				34.0,
+				2.0
+			],
+			"anim beat": 4.0,
+			"special anim": true
+		}
+	],
+	"camera follow pos": true,
+	"cameraPos": [
+		210.0,
+		-20.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

@@ -1,0 +1,265 @@
+[gd_scene format=3 uid="uid://chfwtkdhmc256"]
+
+[ext_resource type="Script" uid="uid://dqqm45nhxoo5r" path="res://source/characters/characters_scripts/New_Character.gd" id="1_3vvub"]
+[ext_resource type="Texture2D" uid="uid://dcskrd3cmc1wb" path="res://assets/stages/week7/remix/steve.png" id="1_h8btb"]
+
+[sub_resource type="Animation" id="Animation_cw2pn"]
+length = 0.33
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(0, 0, 579, 589), Rect2(0, 0, 579, 589), Rect2(579, 0, 571, 596), Rect2(579, 0, 571, 596), Rect2(1150, 0, 302, 628), Rect2(1150, 0, 302, 628), Rect2(1452, 0, 513, 596), Rect2(1452, 0, 513, 596), Rect2(1965, 0, 503, 596), Rect2(1965, 0, 503, 596), Rect2(1150, 0, 302, 628), Rect2(1150, 0, 302, 628)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character_Sprite:offset")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -23.5), Vector2(0, -23.5), Vector2(-4, -10), Vector2(-4, -10), Vector2(-5.5, 11), Vector2(-5.5, 11), Vector2(-2, -27), Vector2(-2, -27), Vector2(3, -10), Vector2(3, -10), Vector2(-5.5, 11), Vector2(-5.5, 11)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character_Sprite:rotation_degrees")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_ngfdv"]
+length = 0.39
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(2468, 0, 455, 667), Rect2(2468, 0, 455, 667), Rect2(2923, 0, 454, 672), Rect2(2923, 0, 454, 672), Rect2(3377, 0, 447, 678), Rect2(3377, 0, 447, 678), Rect2(0, 678, 436, 681), Rect2(0, 678, 436, 681), Rect2(436, 678, 432, 681), Rect2(436, 678, 432, 681), Rect2(436, 678, 432, 681), Rect2(436, 678, 432, 681), Rect2(436, 678, 432, 681), Rect2(436, 678, 432, 681)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character_Sprite:offset")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(2, 7), Vector2(2, 7), Vector2(0.5, 4.5), Vector2(0.5, 4.5), Vector2(-6, 1.5), Vector2(-6, 1.5), Vector2(-4.5, 0), Vector2(-4.5, 0), Vector2(-4.5, 0), Vector2(-4.5, 0), Vector2(-4.5, 0), Vector2(-4.5, 0), Vector2(-4.5, 0), Vector2(-4.5, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character_Sprite:rotation_degrees")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_0ykmx"]
+length = 0.39
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(868, 678, 453, 684), Rect2(868, 678, 453, 684), Rect2(1321, 678, 457, 682), Rect2(1321, 678, 457, 682), Rect2(1778, 678, 433, 682), Rect2(1778, 678, 433, 682), Rect2(1778, 678, 433, 682), Rect2(1778, 678, 433, 682), Rect2(1778, 678, 433, 682), Rect2(1778, 678, 433, 682), Rect2(1778, 678, 433, 682), Rect2(1778, 678, 433, 682), Rect2(1778, 678, 433, 682), Rect2(1778, 678, 433, 682)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character_Sprite:offset")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(6, 0), Vector2(6, 0), Vector2(-4, 0), Vector2(-4, 0), Vector2(1, -1), Vector2(1, -1), Vector2(1, -1), Vector2(1, -1), Vector2(1, -1), Vector2(1, -1), Vector2(1, -1), Vector2(1, -1), Vector2(1, -1), Vector2(1, -1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character_Sprite:rotation_degrees")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_neb1a"]
+length = 0.39
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(2211, 678, 566, 582), Rect2(2211, 678, 566, 582), Rect2(2777, 678, 546, 607), Rect2(2777, 678, 546, 607), Rect2(3323, 678, 543, 612), Rect2(3323, 678, 543, 612), Rect2(3323, 678, 543, 612), Rect2(3323, 678, 543, 612), Rect2(3323, 678, 543, 612), Rect2(3323, 678, 543, 612), Rect2(3323, 678, 543, 612), Rect2(3323, 678, 543, 612), Rect2(3323, 678, 543, 612), Rect2(3323, 678, 543, 612)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character_Sprite:offset")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 12), Vector2(0, 12), Vector2(-1, 1.5), Vector2(-1, 1.5), Vector2(0.5, 0), Vector2(0.5, 0), Vector2(0.5, 0), Vector2(0.5, 0), Vector2(0.5, 0), Vector2(0.5, 0), Vector2(0.5, 0), Vector2(0.5, 0), Vector2(0.5, 0), Vector2(0.5, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character_Sprite:rotation_degrees")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_k3nfj"]
+length = 0.39
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(0, 1362, 502, 673), Rect2(0, 1362, 502, 673), Rect2(502, 1362, 527, 676), Rect2(502, 1362, 527, 676), Rect2(1029, 1362, 522, 672), Rect2(1029, 1362, 522, 672), Rect2(1029, 1362, 522, 672), Rect2(1029, 1362, 522, 672), Rect2(1029, 1362, 522, 672), Rect2(1029, 1362, 522, 672), Rect2(1029, 1362, 522, 672), Rect2(1029, 1362, 522, 672), Rect2(1029, 1362, 522, 672), Rect2(1029, 1362, 522, 672)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character_Sprite:offset")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-18.5, 1.5), Vector2(-18.5, 1.5), Vector2(6, 0), Vector2(6, 0), Vector2(6.5, 1), Vector2(6.5, 1), Vector2(6.5, 1), Vector2(6.5, 1), Vector2(6.5, 1), Vector2(6.5, 1), Vector2(6.5, 1), Vector2(6.5, 1), Vector2(6.5, 1), Vector2(6.5, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character_Sprite:rotation_degrees")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_nqm2x"]
+length = 0.39
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character_Sprite:region_rect")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(1551, 1362, 405, 697), Rect2(1551, 1362, 405, 697), Rect2(1956, 1362, 399, 687), Rect2(1956, 1362, 399, 687), Rect2(2355, 1362, 392, 684), Rect2(2355, 1362, 392, 684), Rect2(2355, 1362, 392, 684), Rect2(2355, 1362, 392, 684), Rect2(2355, 1362, 392, 684), Rect2(2355, 1362, 392, 684), Rect2(2355, 1362, 392, 684), Rect2(2355, 1362, 392, 684), Rect2(2355, 1362, 392, 684), Rect2(2355, 1362, 392, 684)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character_Sprite:offset")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-2, 0), Vector2(-2, 0), Vector2(5, 5), Vector2(5, 5), Vector2(6.5, 6.5), Vector2(6.5, 6.5), Vector2(6.5, 6.5), Vector2(6.5, 6.5), Vector2(6.5, 6.5), Vector2(6.5, 6.5), Vector2(6.5, 6.5), Vector2(6.5, 6.5), Vector2(6.5, 6.5), Vector2(6.5, 6.5)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character_Sprite:rotation_degrees")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mfpi1"]
+_data = {
+&"STEVE_CORRENDO": SubResource("Animation_cw2pn"),
+&"STEVE_IDLE": SubResource("Animation_ngfdv"),
+&"STEVE_RIGHT": SubResource("Animation_0ykmx"),
+&"STEVE_DOWN": SubResource("Animation_neb1a"),
+&"STEVE_LEFT": SubResource("Animation_k3nfj"),
+&"STEVE_UP": SubResource("Animation_nqm2x")
+}
+
+[node name="steve" type="Node2D" unique_id=1825381303]
+script = ExtResource("1_3vvub")
+json_path = "res://assets/data/characters/steve.json"
+anim_type = 1
+have_death_animation = false
+
+[node name="Character_Sprite" type="Sprite2D" parent="." unique_id=123205747]
+texture = ExtResource("1_h8btb")
+offset = Vector2(2, 7)
+region_enabled = true
+region_rect = Rect2(2468, 0, 455, 667)
+
+[node name="Character_Animation" type="AnimationPlayer" parent="." unique_id=316524023]
+libraries/ = SubResource("AnimationLibrary_mfpi1")
+speed_scale = 0.65

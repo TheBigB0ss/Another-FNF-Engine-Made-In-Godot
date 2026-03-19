@@ -1,0 +1,79 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#ffffffff",
+	"HealthIcon": "tankman",
+	"LoopAnim": true,
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "Tankman Idle Dance 1",
+			"Offset": [
+				7.0,
+				-9.0
+			]
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "Tankman Right Note 1",
+			"Offset": [
+				-42.0,
+				-1.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "Tankman DOWN note 1",
+			"Offset": [
+				15.0,
+				45.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "Tankman UP note 1",
+			"Offset": [
+				-17.0,
+				-32.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "Tankman Note Left 1",
+			"Offset": [
+				70.0,
+				6.0
+			]
+		},
+		{
+			"Anim": "hey",
+			"Name": "TANKMAN UGH 1",
+			"Offset": [
+				9.0,
+				-3.0
+			]
+		},
+		{
+			"Anim": "good anim",
+			"Name": "PRETTY GOOD tankman 1",
+			"Offset": [
+				57.0,
+				-16.0
+			],
+			"Anim Time": 45,
+			"special anim": true
+		}
+	],
+	"anim time": 5.0,
+	"camera follow pos": false,
+	"cameraPos": [
+		40.0,
+		-10.0
+	],
+	"isPlayer": true,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

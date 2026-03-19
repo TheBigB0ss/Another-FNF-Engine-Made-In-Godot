@@ -1,13 +1,13 @@
 [gd_scene load_steps=10 format=3 uid="uid://dsjwndbd6t4c1"]
 
-[ext_resource type="Script" uid="uid://cj3yafaq28n3x" path="res://source/menus/title_menu/titleMenu.gd" id="1_cn02s"]
+[ext_resource type="Script" uid="uid://s3ute6gs701m" path="res://source/menus/title_menu/titleMenu.gd" id="1_cn02s"]
 [ext_resource type="SpriteFrames" uid="uid://dv4ax3pedp816" path="res://assets/images/title menu/logoBumpin.res" id="2_pn810"]
 [ext_resource type="Texture2D" uid="uid://dty0pf1dcrq8t" path="res://assets/images/title menu/salesmanBg.png" id="2_xpfjh"]
 [ext_resource type="SpriteFrames" uid="uid://bq82f0i5if5d2" path="res://assets/images/title menu/gfDanceTitle.res" id="3_kv7id"]
 [ext_resource type="SpriteFrames" uid="uid://b3p6yxrwy0afp" path="res://assets/images/title menu/titleEnter.res" id="4_8d6bu"]
 [ext_resource type="PackedScene" uid="uid://n3jffc0aii0x" path="res://assets/images/title menu/bnamb.tscn" id="5_xp1tq"]
 [ext_resource type="Texture2D" uid="uid://ccj3ms8w2db3p" path="res://assets/images/title menu/newgrounds_logo.png" id="5_xpfjh"]
-[ext_resource type="Texture2D" uid="uid://ca7tv82ud5sx7" path="res://assets/images/title menu/logo.png" id="6_8d6bu"]
+[ext_resource type="Texture2D" uid="uid://cimgau63behy0" path="res://assets/images/title menu/logo.png" id="6_8d6bu"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_265fv"]
 load_path = "res://.godot/imported/ameigos_bg.png-a7b74f38a373719836125c6dcd1a6ce0.ctex"
@@ -56,15 +56,14 @@ scale = Vector2(0.9, 0.9)
 sprite_frames = ExtResource("3_kv7id")
 animation = &"dance_right"
 
-[node name="bnamb" parent="tiltle stuff" instance=ExtResource("5_xp1tq")]
-visible = false
-position = Vector2(967, 369)
-script = null
-
 [node name="title" type="AnimatedSprite2D" parent="tiltle stuff"]
 position = Vector2(869, 668)
 sprite_frames = ExtResource("4_8d6bu")
 animation = &"Press Enter to Begin"
+
+[node name="bnamb" parent="tiltle stuff" instance=ExtResource("5_xp1tq")]
+visible = false
+position = Vector2(960, 346)
 
 [node name="NG Logo" type="Sprite2D" parent="tiltle stuff"]
 visible = false
@@ -73,7 +72,7 @@ texture = ExtResource("5_xpfjh")
 
 [node name="new logo" type="Sprite2D" parent="tiltle stuff"]
 position = Vector2(354, 329)
-scale = Vector2(0.35, 0.35)
+scale = Vector2(0.3, 0.3)
 texture = ExtResource("6_8d6bu")
 
 [node name="alphabet_grp" type="Node2D" parent="."]

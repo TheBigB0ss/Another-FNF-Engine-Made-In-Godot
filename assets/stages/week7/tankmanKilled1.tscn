@@ -1,9 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://btpnfornuvbfk"]
+[gd_scene load_steps=7 format=3 uid="uid://dow7en1fayd34"]
 
 [ext_resource type="Script" uid="uid://b52xmt2trb7ts" path="res://assets/stages/week7/tankmanKilled1.gd" id="1_r6w6c"]
-[ext_resource type="Texture2D" uid="uid://dnbs64mglbalm" path="res://assets/stages/week7/tankmanKilled1.png" id="1_vwch5"]
+[ext_resource type="Texture2D" uid="uid://dnbs64mglbalm" path="res://assets/stages/week7/tankmanKilled1.png" id="2_wqhw0"]
 
-[sub_resource type="Animation" id="Animation_k5g1a"]
+[sub_resource type="Animation" id="Animation_x1xef"]
 length = 0.57
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -27,15 +27,22 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-147, 12), Vector2(-14, -4), Vector2(-17, 3), Vector2(50, 4), Vector2(22, 17), Vector2(65, -1), Vector2(54, 38), Vector2(-89, 7), Vector2(-143, 78), Vector2(-137, 78), Vector2(-137, 78), Vector2(-106, 66), Vector2(-473, -46), Vector2(-106, 66), Vector2(-473, -46), Vector2(-106, 66), Vector2(-473, -46), Vector2(-106, 66), Vector2(-473, -46), Vector2(-473, -46)]
+"values": [Vector2(-147, 12), Vector2(-13.5, -3.5), Vector2(-17, 3.5), Vector2(50, 4.5), Vector2(22, 17.5), Vector2(65, -1), Vector2(54.5, 38.5), Vector2(-89, 7), Vector2(-143, 78), Vector2(-136.5, 78), Vector2(-136.5, 78), Vector2(-105.5, 66), Vector2(-472.5, -45.5), Vector2(-105.5, 66), Vector2(-472.5, -45.5), Vector2(-105.5, 66), Vector2(-472.5, -45.5), Vector2(-105.5, 66), Vector2(-472.5, -45.5), Vector2(-472.5, -45.5)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character_Sprite:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_wqhw0"]
-_data = {
-&" ": SubResource("Animation_k5g1a")
-}
-
-[sub_resource type="Animation" id="Animation_x1xef"]
+[sub_resource type="Animation" id="Animation_bo20w"]
 length = 0.54
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -59,12 +66,19 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-69, 12), Vector2(47, -53), Vector2(32, -36), Vector2(65, 12), Vector2(65, 12), Vector2(94, 0), Vector2(93, 0), Vector2(50, 3), Vector2(54, 12), Vector2(-213, 10), Vector2(-213, 10), Vector2(-220, 25), Vector2(-487, -87), Vector2(-220, 25), Vector2(-487, -87), Vector2(-220, 25), Vector2(-487, -87), Vector2(-220, 25), Vector2(-487, -87)]
+"values": [Vector2(-69, 12.5), Vector2(47, -53), Vector2(32, -36), Vector2(65, 12), Vector2(65, 12), Vector2(94, 0), Vector2(93, 0), Vector2(50, 3), Vector2(54, 12), Vector2(-213.5, 10.5), Vector2(-213.5, 10.5), Vector2(-220, 25.5), Vector2(-487, -86.5), Vector2(-220, 25.5), Vector2(-487, -86.5), Vector2(-220, 25.5), Vector2(-487, -86.5), Vector2(-220, 25.5), Vector2(-487, -86.5)]
 }
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_bo20w"]
-_data = {
-&" ": SubResource("Animation_x1xef")
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character_Sprite:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
 
 [sub_resource type="Animation" id="Animation_3cnpd"]
@@ -92,29 +106,41 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-1, -23), Vector2(-1, -23), Vector2(-1, -23), Vector2(2, -20), Vector2(2, -20), Vector2(-27, 24), Vector2(-27, 24), Vector2(43, -25), Vector2(43, -25), Vector2(43, -25), Vector2(36, -19), Vector2(36, -19), Vector2(23, 31), Vector2(23, 31)]
+"values": [Vector2(-1, -23), Vector2(-1, -23), Vector2(-1, -23), Vector2(1.5, -19.5), Vector2(1.5, -19.5), Vector2(-27.5, 24), Vector2(-27.5, 24), Vector2(42.5, -25), Vector2(42.5, -25), Vector2(42.5, -25), Vector2(35.5, -19), Vector2(35.5, -19), Vector2(22.5, 31.5), Vector2(22.5, 31.5)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character_Sprite:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xwbfs"]
 _data = {
-&" ": SubResource("Animation_3cnpd")
+&"John Shot 1": SubResource("Animation_x1xef"),
+&"John Shot 2": SubResource("Animation_bo20w"),
+&"tankman running": SubResource("Animation_3cnpd")
 }
 
 [node name="tankmanKilled1" type="Node2D"]
 script = ExtResource("1_r6w6c")
 
 [node name="Character_Sprite" type="Sprite2D" parent="."]
-texture = ExtResource("1_vwch5")
-offset = Vector2(-1, -23)
+texture = ExtResource("2_wqhw0")
+offset = Vector2(-147, 12)
 region_enabled = true
-region_rect = Rect2(2045, 2744, 503, 412)
+region_rect = Rect2(0, 2148, 750, 512)
 
 [node name="Character_Animation" type="AnimationPlayer" parent="."]
 libraries = {
-&"John Shot 1": SubResource("AnimationLibrary_wqhw0"),
-&"John Shot 2": SubResource("AnimationLibrary_bo20w"),
-&"tankman running": SubResource("AnimationLibrary_xwbfs")
+&"": SubResource("AnimationLibrary_xwbfs")
 }
-autoplay = "tankman running/ "
+speed_scale = 0.65
 
 [connection signal="animation_finished" from="Character_Animation" to="." method="_on_character_animation_animation_finished"]

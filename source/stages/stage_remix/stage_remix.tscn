@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://cv0hphxv7ws61"]
+
+[ext_resource type="Script" uid="uid://biv6rl4mhjnd4" path="res://source/stages/stage_remix/stage_remix.gd" id="1_3ceyo"]
+[ext_resource type="Texture2D" uid="uid://du4ntfyfaobsn" path="res://assets/stages/week1/remix/spotlight.png" id="2_hg1w8"]
+[ext_resource type="Texture2D" uid="uid://blglm3vjhj7uo" path="res://assets/stages/week1/remix/bg_curtain.png" id="3_ha1xw"]
+[ext_resource type="Texture2D" uid="uid://duyk71ugkeqhk" path="res://assets/stages/week1/remix/bg_curtain1.png" id="4_afya8"]
+[ext_resource type="Texture2D" uid="uid://djt0v3ript1ya" path="res://assets/stages/week1/remix/wall.png" id="5_hio1j"]
+[ext_resource type="Texture2D" uid="uid://81dmlqwidhfv" path="res://assets/stages/week1/remix/stage.png" id="6_pr6q0"]
+[ext_resource type="Texture2D" uid="uid://dj6al0braeg6l" path="res://assets/stages/week1/remix/bg_lights.png" id="8_ha1xw"]
+[ext_resource type="Texture2D" uid="uid://40uuf0jflfdu" path="res://assets/stages/week1/remix/crowd.png" id="8_oyb0l"]
+
+[node name="stage remix" type="Node2D"]
+script = ExtResource("1_3ceyo")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+layer = 1
+scroll_offset = Vector2(0.82, 0.315)
+scroll_base_scale = Vector2(1.065, 1.065)
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="spotLights" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+z_index = 2
+position = Vector2(637, -6)
+texture = ExtResource("2_hg1w8")
+
+[node name="ParallaxBackground2" type="ParallaxBackground" parent="."]
+layer = 1
+scroll_offset = Vector2(1.045, 0.795)
+scroll_base_scale = Vector2(1.205, 1.205)
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground2"]
+motion_offset = Vector2(1.865, 1.395)
+
+[node name="curtain" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer2"]
+z_index = 2
+position = Vector2(577, -588)
+texture = ExtResource("3_ha1xw")
+
+[node name="curtain2" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer2"]
+z_index = 2
+position = Vector2(573, 30)
+texture = ExtResource("4_afya8")
+
+[node name="ParallaxBackground3" type="ParallaxBackground" parent="."]
+layer = 1
+scroll_offset = Vector2(0.465, 0.595)
+scroll_base_scale = Vector2(1.145, 1.145)
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground3"]
+position = Vector2(65.52002, 116)
+motion_offset = Vector2(1.315, 1.22)
+
+[node name="people" type="Sprite2D" parent="ParallaxBackground3/ParallaxLayer3"]
+z_index = 2
+position = Vector2(613, 749)
+scale = Vector2(0.905, 0.905)
+texture = ExtResource("8_oyb0l")
+
+[node name="BackBg" type="Sprite2D" parent="."]
+position = Vector2(689, 215)
+texture = ExtResource("5_hio1j")
+
+[node name="GroundBg" type="Sprite2D" parent="."]
+position = Vector2(652.52, 1087)
+scale = Vector2(1.28, 1.28)
+texture = ExtResource("6_pr6q0")
+
+[node name="LightBg" type="Sprite2D" parent="."]
+z_index = 2
+position = Vector2(699.52, 845.99994)
+rotation = 0.034906585
+scale = Vector2(1.105, 1.105)
+texture = ExtResource("8_ha1xw")

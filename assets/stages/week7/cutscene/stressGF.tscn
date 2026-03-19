@@ -1,6 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://ducf1v2equwu2"]
+[gd_scene load_steps=6 format=3 uid="uid://rfxpo18ymwkx"]
 
-[ext_resource type="Script" uid="uid://fwa3u3ggsrrj" path="res://assets/stages/week7/cutscene/tankman_script.gd" id="1_4ik22"]
+[ext_resource type="Script" uid="uid://fwa3u3ggsrrj" path="res://assets/stages/week7/cutscene/tankman_script.gd" id="1_76yob"]
 [ext_resource type="Texture2D" uid="uid://dcv6app6vopjh" path="res://assets/stages/week7/cutscene/stressGF.png" id="2_7vxi6"]
 
 [sub_resource type="Animation" id="Animation_7wj4u"]
@@ -27,15 +27,22 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57, 0.6, 0.63, 0.66, 0.69, 0.72, 0.75, 0.78, 0.81, 0.84, 0.87, 0.9),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(0, 0), Vector2(-1, 0), Vector2(-1, 0), Vector2(-1, 0), Vector2(-1, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(458, 340)]
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(-1, 0), Vector2(-1, 0), Vector2(-1, 0.5), Vector2(-1, 0.5), Vector2(-0.5, 0.5), Vector2(-0.5, 0.5), Vector2(-0.5, 0.5), Vector2(-0.5, 0.5), Vector2(-0.5, 0), Vector2(-0.5, 0), Vector2(-0.5, 0), Vector2(-0.5, 0), Vector2(0, 0), Vector2(0, 0.5), Vector2(0, 0.5), Vector2(0, 0.5), Vector2(-0.5, 0.5), Vector2(-0.5, 0.5), Vector2(-0.5, 0.5), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0.5), Vector2(-0.5, 0.5), Vector2(-0.5, 0.5), Vector2(0, 0.5), Vector2(0, 0.5), Vector2(0, 0), Vector2(458.5, 340)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character_Sprite:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57, 0.6, 0.63, 0.66, 0.69, 0.72, 0.75, 0.78, 0.81, 0.84, 0.87, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_m5k03"]
-_data = {
-&" ": SubResource("Animation_7wj4u")
-}
-
-[sub_resource type="Animation" id="Animation_yi5yo"]
+[sub_resource type="Animation" id="Animation_m5k03"]
 length = 0.69
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -59,25 +66,37 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57, 0.6, 0.63, 0.66, 0.69),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(109, 221), Vector2(108, 220), Vector2(108, 220), Vector2(108, 220), Vector2(108, 220), Vector2(109, 221), Vector2(108, 221), Vector2(108, 221), Vector2(108, 220), Vector2(108, 220), Vector2(109, 220), Vector2(108, 220), Vector2(108, 221), Vector2(108, 221), Vector2(109, 220), Vector2(109, 220), Vector2(108, 220), Vector2(108, 220), Vector2(108, 221), Vector2(109, 221), Vector2(109, 220), Vector2(109, 220), Vector2(0, 0), Vector2(109, 52)]
+"values": [Vector2(108.5, 220.5), Vector2(108, 220), Vector2(108, 220), Vector2(108, 220), Vector2(108, 220), Vector2(108.5, 220.5), Vector2(108, 220.5), Vector2(108, 220.5), Vector2(108, 220), Vector2(108, 220), Vector2(108.5, 220), Vector2(108, 220), Vector2(108, 220.5), Vector2(108, 220.5), Vector2(108.5, 220), Vector2(108.5, 220), Vector2(108, 220), Vector2(108, 220), Vector2(108, 220.5), Vector2(108.5, 220.5), Vector2(108.5, 220), Vector2(108.5, 220), Vector2(-0.5, -0.5), Vector2(109, 52)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character_Sprite:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.3, 0.33, 0.36, 0.39, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57, 0.6, 0.63, 0.66, 0.69),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_n4vyb"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yi5yo"]
 _data = {
-&" ": SubResource("Animation_yi5yo")
+&"GF STARTS TO TURN PART 1": SubResource("Animation_7wj4u"),
+&"GF STARTS TO TURN PART 2": SubResource("Animation_m5k03")
 }
 
 [node name="stressGF" type="Node2D"]
-script = ExtResource("1_4ik22")
+script = ExtResource("1_76yob")
 
 [node name="Character_Sprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_7vxi6")
 region_enabled = true
-region_rect = Rect2(4593, 2038, 917, 678)
+region_rect = Rect2(2, 2, 909, 674)
 
 [node name="Character_Animation" type="AnimationPlayer" parent="."]
 libraries = {
-&"GF STARTS TO TURN PART 1": SubResource("AnimationLibrary_m5k03"),
-&"GF STARTS TO TURN PART 2": SubResource("AnimationLibrary_n4vyb")
+&"": SubResource("AnimationLibrary_yi5yo")
 }
 speed_scale = 0.82

@@ -1,6 +1,6 @@
-[gd_scene load_steps=105 format=3 uid="uid://dx77iyyt31ep0"]
+[gd_scene format=3 uid="uid://dx77iyyt31ep0"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_f1jyy"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_f1jyy"]
 [ext_resource type="Texture2D" uid="uid://c8rsd7qm1d2ya" path="res://assets/stages/week3/remix/bg characters/Darnell.png" id="2_dkf8v"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f1jyy"]
@@ -743,10 +743,25 @@ animations = [{
 "speed": 23.0
 }]
 
-[node name="Darnell" type="Node2D"]
+[node name="Darnell" type="Node2D" unique_id=1031076507]
 script = ExtResource("1_f1jyy")
-json_path = "Darnell"
+json_path = "res://assets/data/characters/Darnell.json"
+healthBar_Color = Color(0.38431373, 0.09019608, 0.5764706, 1)
+animTimes = {
+"idle dance": [2, 5],
+"singDown": [2, 5],
+"singLaugh": [2, 5],
+"singLeft": [2, 5],
+"singRight": [2, 5],
+"singUp": [2, 5]
+}
+anim_type = 2
+have_death_animation = false
+frame_count = 2.4
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=908624715]
 sprite_frames = SubResource("SpriteFrames_h3gbs")
-animation = &"Darnell pose right"
+animation = &"DarnellIDLE"
+frame = 27
+frame_progress = 1.0
+offset = Vector2(35, 3)

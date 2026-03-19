@@ -22,9 +22,9 @@ func _ready():
 	difficulty_text.text = "";
 	death_count_text.text = "";
 	
-	Global.is_pause_mode = false;
+	SongData.isOnPauseMode = false;
 	
-	if Global.is_on_chartMode:
+	if SongData.isOnChartMode:
 		opts.insert(4, "EXIT CHART MODE");
 		
 	for i in opts:
@@ -32,19 +32,19 @@ func _ready():
 		pause_opts._creat_word(i);
 		pause_opts.position.y = offSetShit;
 		
-		if Global.is_on_chartMode:
+		if SongData.isOnChartMode:
 			pause_opts.position.y = offSetShit - 150;
 			
 		options_grp.add_child(pause_opts);
 		offSetShit += coolOffset;
 		
-	death_count_text.text += str("DEATHS: ",Global.death_count);
+	death_count_text.text += str("DEATHS: ",SongData.death_count);
 	song_text.text += "SONG: %s"%[SongData.song.to_upper()];
-	difficulty_text.text += "DIFFICULTY: %s"%[Global.diffsShit.to_upper()];
+	difficulty_text.text += "DIFFICULTY: %s"%[SongData.week_diffs.to_upper() if SongData.week_diffs != "" else "NORMAL"];
 	
 	for j in opts.size():
 		if opts[j] == "BOTPLAY":
-			options_grp.get_child(j).modulate = Color("#ffffff" if !Global.is_a_bot else "#ffeb00");
+			options_grp.get_child(j).modulate = Color("#ffffff" if !GlobalOptions.isUsingBot else "#ffeb00");
 			
 	options_grp.position.y = float(480-coolOffset*cur_option);
 	
@@ -70,11 +70,11 @@ func _input(ev):
 		if ev.pressed && !ev.echo && can_use && Global.can_use_menus:
 			if ev.keycode in [Global.get_key("ui_down")]:
 				change_opt(1);
-				SoundStuff.playAudio("scrollMenu", false);
+				Sound.playAudio("scrollMenu", false);
 				
 			if ev.keycode in [Global.get_key("ui_up")]:
 				change_opt(-1);
-				SoundStuff.playAudio("scrollMenu", false);
+				Sound.playAudio("scrollMenu", false);
 				
 func change_opt(opt):
 	cur_option += opt;
@@ -95,8 +95,8 @@ func _choice_pause_opts():
 			get_tree().current_scene.inst.stop();
 			get_tree().current_scene.voices.stop();
 			
-			Global.restartSong = true;
-			Global.is_playing = false;
+			SongData.restartSong = true;
+			SongData.isPlaying = false;
 			Global.reloadScene(true, false, 3.5);
 			
 		"OPTIONS":
@@ -107,13 +107,13 @@ func _choice_pause_opts():
 			get_tree().current_scene.voices.stop();
 			
 			Global.changeScene("/menus/options/options_menu", true, false);
-			Global.is_playing = false;
+			SongData.isPlaying = false;
 			
 		"BOTPLAY":
-			Global.is_a_bot = !Global.is_a_bot;
+			GlobalOptions.isUsingBot = !GlobalOptions.isUsingBot;
 			for j in opts.size():
 				if opts[j] == "BOTPLAY":
-					options_grp.get_child(j).modulate = Color("#ffffff" if !Global.is_a_bot else "#ffeb00");
+					options_grp.get_child(j).modulate = Color("#ffffff" if !GlobalOptions.isUsingBot else "#ffeb00");
 					
 		"EXIT TO MENU":
 			paused = false;
@@ -121,15 +121,15 @@ func _choice_pause_opts():
 			get_tree().current_scene.inst.stop();
 			get_tree().current_scene.voices.stop();
 			
-			Global.restartSong = false;
-			Global.is_playing = false;
-			Global.is_on_chartMode = false;
-			Global.death_count = 0;
+			SongData.restartSong = false;
+			SongData.isPlaying = false;
+			SongData.isOnChartMode = false;
+			SongData.death_count = 0;
 			
 			MusicManager.music.process_mode = 0;
 			MusicManager._play_music("freakyMenu", true, true);
 			
-			Global.changeScene("menus/story_mode/storyMode" if Global.isStoryMode else "menus/freeplay/freeplay_menu");
+			Global.changeScene("menus/story_mode/storyMode" if SongData.isStoryMode else "menus/freeplay/freeplay_menu");
 			
 		"EXIT CHART MODE":
 			paused = false;
@@ -137,12 +137,12 @@ func _choice_pause_opts():
 			get_tree().current_scene.inst.stop();
 			get_tree().current_scene.voices.stop();
 			
-			Global.restartSong = true;
-			Global.is_on_chartMode = false;
+			SongData.restartSong = true;
+			SongData.isOnChartMode = false;
 			
 			var default_chart = null;
-			var songDiff = "" if Global.diffsShit == "" else Global.diffsShit
-			var song = Global.songsShit[0] if Global.isStoryMode else Global.songsShit
+			var songDiff = "" if SongData.week_diffs == "" else SongData.week_diffs;
+			var song = SongData.week_songs[0];
 			
 			SongData.loadJson(song, songDiff, default_chart);
 			Global.reloadScene(true, false, 3.5);

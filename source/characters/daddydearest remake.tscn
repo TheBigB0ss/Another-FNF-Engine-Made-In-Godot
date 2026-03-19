@@ -1,6 +1,6 @@
-[gd_scene load_steps=40 format=3 uid="uid://fgj3sux284is"]
+[gd_scene format=3 uid="uid://fgj3sux284is"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_1rnra"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_1rnra"]
 [ext_resource type="Texture2D" uid="uid://dvkndl7g21lj6" path="res://assets/images/characters/remixes/daddydearest remake.png" id="2_pv83f"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ut0r1"]
@@ -317,10 +317,24 @@ animations = [{
 "speed": 21.0
 }]
 
-[node name="daddydearest remake" type="Node2D"]
+[node name="daddydearest remake" type="Node2D" unique_id=350807073]
 script = ExtResource("1_1rnra")
-json_path = "daddydearest remake"
+json_path = "res://assets/data/characters/daddydearest remake.json"
+healthBar_Color = Color(0.45882353, 0.21176471, 0.61960787, 1)
+animTimes = {
+"idle dance": [2, 5],
+"singDown": [2, 5],
+"singLeft": [2, 5],
+"singRight": [2, 5],
+"singUp": [2, 5]
+}
+anim_type = 2
+have_death_animation = false
+frame_count = 2.4
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=1655441520]
 sprite_frames = SubResource("SpriteFrames_rdfcl")
-animation = &"singLEFT"
+animation = &"idle"
+frame = 15
+frame_progress = 1.0
+offset = Vector2(-75, -110)

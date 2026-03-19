@@ -14,7 +14,7 @@ var is_dead = false;
 func _ready():
 	self.show();
 	runner_spr.flip_h = direction_right;
-	runner_anim.play("tankman running/ ");
+	runner_anim.play("tankman running");
 	death_animID = choice_shoot_anim();
 	
 var cool_down = 0;
@@ -28,7 +28,7 @@ func _process(delta):
 			position.x = (2290*0.65) - (Conductor.getSongTime - tankman_time)*1.2;
 			
 	if Conductor.getSongTime >= tankman_time+cool_down && !is_dead:
-		runner_anim.play("John Shot %s/ "%[death_animID]);
+		runner_anim.play("John Shot %s"%[death_animID]);
 		runner_spr.offset.x = 140
 		
 		is_dead = true;

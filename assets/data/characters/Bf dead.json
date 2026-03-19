@@ -1,0 +1,44 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#000000ff",
+	"HealthIcon": "",
+	"LoopAnim": false,
+	"Poses": [
+		{
+			"Anim": "dead",
+			"Name": "BF dies",
+			"Offset": [
+				0.0,
+				22.0
+			]
+		},
+		{
+			"Anim": "dead loop",
+			"Name": "BF Dead Loop",
+			"Offset": [
+				0.0,
+				23.0
+			]
+		},
+		{
+			"Anim": "dead confirm",
+			"Name": "BF Dead confirm",
+			"Offset": [
+				0.0,
+				-9.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"cameraPos": [
+		0.0,
+		0.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

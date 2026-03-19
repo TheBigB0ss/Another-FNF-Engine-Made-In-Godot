@@ -1,6 +1,6 @@
-[gd_scene load_steps=88 format=3 uid="uid://c3bk8nb71v1fe"]
+[gd_scene format=3 uid="uid://c3bk8nb71v1fe"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_msiec"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_msiec"]
 [ext_resource type="Texture2D" uid="uid://b72mkycqs3rdo" path="res://assets/stages/week3/remix/bg characters/Nene.png" id="2_qvwsu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_msiec"]
@@ -624,10 +624,25 @@ animations = [{
 "speed": 23.0
 }]
 
-[node name="Nene" type="Node2D"]
+[node name="Nene" type="Node2D" unique_id=1279673841]
 script = ExtResource("1_msiec")
-json_path = "Nene"
+json_path = "res://assets/data/characters/Nene.json"
+healthBar_Color = Color(0.98039216, 0.4862745, 0.6627451, 1)
+animTimes = {
+"idle dance": [2, 5],
+"singDown": [2, 5],
+"singLaugh": [2, 5],
+"singLeft": [2, 5],
+"singRight": [2, 5],
+"singUp": [2, 5]
+}
+anim_type = 1
+have_death_animation = false
+frame_count = 2.4
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=107023990]
 sprite_frames = SubResource("SpriteFrames_e6usm")
-animation = &"neneMISSPOSE"
+animation = &"neneIDLE"
+frame = 13
+frame_progress = 1.0
+offset = Vector2(18, -10)

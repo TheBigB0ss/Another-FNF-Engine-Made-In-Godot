@@ -1,0 +1,87 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#8b0000ff",
+	"HealthIcon": "GfRemake",
+	"LoopAnim": false,
+	"Poses": [
+		{
+			"Anim": "singLeft",
+			"Name": "ANIM_GF_Left",
+			"Offset": [
+				121.0,
+				-67.0
+			]
+		},
+		{
+			"Anim": "singDown",
+			"Name": "GF_ANIM_Down",
+			"Offset": [
+				116.0,
+				-68.0
+			]
+		},
+		{
+			"Anim": "singUp",
+			"Name": "ANIM_GF_Up",
+			"Offset": [
+				131.0,
+				-76.0
+			]
+		},
+		{
+			"Anim": "singRight",
+			"Name": "GF_ANIM_Right",
+			"Offset": [
+				126.0,
+				-66.0
+			]
+		},
+		{
+			"Anim": "sad",
+			"Name": "GF_ANIM_Crying",
+			"Offset": [
+				109.0,
+				-66.0
+			]
+		},
+		{
+			"Anim": "hey",
+			"Name": "ANIM_GF_Hey",
+			"Offset": [
+				136.0,
+				-78.0
+			],
+			"anim time": 20,
+			"special anim": true
+		},
+		{
+			"Anim": "danceLeft",
+			"Name": "ANIM_GF_IdleBOP1",
+			"Offset": [
+				105.0,
+				-70.0
+			]
+		},
+		{
+			"Anim": "danceRight",
+			"Name": "ANIM_GF_IdleBOP2",
+			"Offset": [
+				128.0,
+				-69.0
+			]
+		}
+	],
+	"anim time": 5.0,
+	"camera follow pos": false,
+	"cameraPos": [
+		140.0,
+		-190.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

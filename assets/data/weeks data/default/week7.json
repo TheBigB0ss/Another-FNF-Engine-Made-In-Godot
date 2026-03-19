@@ -1,0 +1,27 @@
+{
+	"songs":[
+		[
+			"ugh",
+			"tankman",
+			[1.0, 1.0, 1.0]
+		],
+		[
+			"guns",
+			"tankman",
+			[1.0, 1.0, 1.0]
+		],
+		[
+			"stress",
+			"tankman",
+			[1.0, 1.0, 1.0]
+		]
+	],
+	"hideFromFreeplay": false,
+	"hideFromStoryMode": false,
+	"isLocked": false,
+	"weekName": "week7",
+	"lastWeek": "",
+	"weekDescription": "Tankman",
+	"weekDifficulties": ["easy", "normal", "hard", "remix"],
+	"weekCharacters": ["Tankman", "BF", "GF"]
+}

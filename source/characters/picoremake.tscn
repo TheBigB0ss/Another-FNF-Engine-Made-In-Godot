@@ -1,14 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://mhiwp6r4tv5a"]
+[gd_scene format=3 uid="uid://mhiwp6r4tv5a"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_o32fe"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_o32fe"]
 [ext_resource type="SpriteFrames" uid="uid://b0eo4p1gwtl47" path="res://assets/images/characters/remixes/picoremake.res" id="2_o32fe"]
 
-[node name="picoremake" type="Node2D"]
+[node name="picoremake" type="Node2D" unique_id=651212076]
 script = ExtResource("1_o32fe")
-json_path = "picoremake"
+json_path = "res://assets/data/characters/picoremake.json"
+healthBar_Color = Color(0.67058825, 0.92156863, 0.23137255, 1)
+animTimes = {
+"idle dance": [2, 5],
+"singDown": [2, 5],
+"singLeft": [2, 5],
+"singRight": [2, 5],
+"singUp": [2, 5]
+}
+anim_type = 3
+have_death_animation = false
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=1331796188]
 sprite_frames = ExtResource("2_o32fe")
 animation = &"Pico Idle Dance"
 frame = 13
 frame_progress = 1.0
+offset = Vector2(-30, 0)

@@ -9,6 +9,8 @@ var transition_speed = 0.65
 
 var stickersArray = [];
 var jsonStickers = {};
+var sticker_textures = {};
+var stickerPack = "pack1";
 
 var can_show_stickers = true;
 var deleteStickers = false;
@@ -28,34 +30,43 @@ func _ready():
 	jsonFile.close();
 	
 	stickersArray = [];
-	for i in jsonStickers.keys():
-		for j in jsonStickers[i]:
+	for i in jsonStickers[stickerPack]:
+		for j in jsonStickers[stickerPack][i]:
 			stickersArray.append(j);
 			
+	for i in stickersArray:
+		var path = "res://assets/images/stickers/%s/%s.png"%[stickerPack, i];
+		sticker_textures[i] = load(path);
+		
+	#print(stickersArray)
+	
 func _process(delta: float) -> void:
 	process_mode = 2 if get_tree().paused else 0;
 	
 func spawnStickers():
-	if !deleteStickers && stickersGrp.get_child_count() <= 75:
-		if can_show_stickers:
-			SoundStuff.playAudio("stickerSounds/keyClick%s"%[randi_range(1, 8)], false);
-			
-		var random_sticker = stickersArray.pick_random();
-		
-		var sticker = Sprite2D.new();
-		sticker.texture = load("res://assets/images/stickers/%s.png" % random_sticker);
-		sticker.position = Vector2(randi_range(0, 1380), randi_range(0, 810));
-		sticker.rotation = deg_to_rad(randi_range(-20, 1050));
-		stickersGrp.add_child(sticker);
-		
-		Global.can_use_menus = stickersGrp.get_child_count() > 0;
-	else:
+	var count = stickersGrp.get_child_count();
+	
+	if deleteStickers or count > 75:
 		removeStickers();
+		return;
 		
+	if can_show_stickers:
+		Sound.add_new_sound("stickerSounds/keyClick%s"%[int(randi_range(1, 8))], false);
+		
+	var random_sticker = stickersArray.pick_random();
+	
+	var sticker = Sprite2D.new();
+	sticker.texture = sticker_textures[random_sticker];
+	sticker.position = Vector2(randi_range(0, 1380), randi_range(0, 810));
+	sticker.rotation = deg_to_rad(randi_range(-20, 20));
+	stickersGrp.add_child(sticker);
+	
+	Global.can_use_menus = stickersGrp.get_child_count() > 0;
+	
 func removeStickers():
 	if deleteStickers && stickersGrp.get_child_count() > 0:
 		if can_show_stickers:
-			SoundStuff.playAudio("stickerSounds/keyClick%s"%[randi_range(1, 8)], false);
+			Sound.add_new_sound("stickerSounds/keyClick%s"%[int(randi_range(1, 8))], false);
 			
 		var removed_child = stickersGrp.get_child(0);
 		stickersGrp.remove_child(removed_child);

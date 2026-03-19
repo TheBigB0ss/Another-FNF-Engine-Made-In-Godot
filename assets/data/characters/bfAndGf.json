@@ -1,0 +1,140 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#00e8ffff",
+	"HealthIcon": "bf",
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Anim Time": 5,
+			"Name": "BF idle dance w gf",
+			"Offset": [
+				0.0,
+				0.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singLeft",
+			"Anim Time": 5,
+			"Name": "BF NOTE LEFT",
+			"Offset": [
+				-23.0,
+				-3.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singDown",
+			"Anim Time": 5,
+			"Name": "BF NOTE DOWN",
+			"Offset": [
+				-6.0,
+				11.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singUp",
+			"Anim Time": 5,
+			"Name": "BF NOTE UP",
+			"Offset": [
+				42.0,
+				-6.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singRight",
+			"Anim Time": 5,
+			"Name": "BF NOTE RIGHT",
+			"Offset": [
+				30.0,
+				-11.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singLeft MISS",
+			"Anim Time": 5,
+			"Name": "BF NOTE LEFT MISS",
+			"Offset": [
+				-11.0,
+				-1.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singDown MISS",
+			"Anim Time": 5,
+			"Name": "BF NOTE DOWN MISS",
+			"Offset": [
+				0.0,
+				11.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singUp MISS",
+			"Anim Time": 5,
+			"Name": "BF NOTE UP MISS",
+			"Offset": [
+				46.0,
+				-1.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "singRight MISS",
+			"Anim Time": 5,
+			"Name": "BF NOTE RIGHT MISS",
+			"Offset": [
+				32.0,
+				-15.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "hey",
+			"Anim Time": 5,
+			"Name": "BF hey w gf",
+			"Offset": [
+				36.0,
+				-4.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		},
+		{
+			"Anim": "catches",
+			"Anim Time": 5,
+			"Name": "BF catches GF",
+			"Offset": [
+				38.0,
+				-4.0
+			],
+			"anim beat": 2,
+			"special anim": false
+		}
+	],
+	"camera follow pos": false,
+	"cameraPos": [
+		-200.0,
+		-30.0
+	],
+	"isPlayer": true,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

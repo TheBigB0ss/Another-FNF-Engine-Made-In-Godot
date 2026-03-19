@@ -59,11 +59,10 @@ var events = {
 	"change bg": "Value1 = new Bg name",
 	"play anim": "Value1 = character (0 = bf, 1 = dad, 2 = gf)\nValue2 = anim to play",
 	"flash": "Value1 = flash speed\nValue2 = flash color (in hexa code)",
-	"set camera position": "Value1 = new camera position\n(example: 20(x), 20(y))\nValue2 = just for one section? (true or false)",
+	#"set camera position": "Value1 = new camera position\n(example: 20(x), 20(y))\nValue2 = just for one section? (true or false)",
 	"spawn popUp": "nothing special",
 	"change song pitch": "Value 1 = new song pitch\nValue 2 = change velocity",
 	"change song speed": "Value 1 = new song speed",
-	"unfair note": "you played golden apple\nyou know what this means",
 	"set lyric": "Value 1 = Your Lyric Text (use :: if you want to split the text)\nValue 2 = steps (example: 10, 20, 30, 40...)"
 };
 
@@ -112,7 +111,7 @@ func getFolderShit(folder):
 	
 func addCharToList():
 	var charList = [];
-	var char = getFolderShit("assets/characters/");
+	var char = getFolderShit("assets/data/characters/");
 	for i in char:
 		if i.ends_with(".json"):
 			charList.append(i);
@@ -121,7 +120,7 @@ func addCharToList():
 	
 func addStagesToList():
 	var stageList = [];
-	var stage = getFolderShit("assets/stages/data/");
+	var stage = getFolderShit("assets/data/stages data/");
 	for i in stage:
 		if i.ends_with(".json"):
 			stageList.append(i);
@@ -129,11 +128,11 @@ func addStagesToList():
 	return stageList;
 	
 func _ready():
-	Global.is_on_chartMode = true;
+	SongData.isOnChartMode = true;
 	Discord.update_discord_info("chart menu", "Is in menus");
 	
-	%song_name.text = Global.songsShit;
-	songDiff = Global.diffsShit;
+	%song_name.text = SongData.week_songs[0];
+	songDiff = SongData.week_diffs;
 	%song_difficulty.text = songDiff;
 	
 	print(songDiff);
@@ -166,7 +165,6 @@ func _ready():
 		stageOptions.add_item(replaceString);
 		
 	var music_path = str(%song_name.text.to_lower(), "-"+%song_difficulty.text.to_lower() if %song_difficulty.text.to_lower() == "-remix" or %song_difficulty.text.to_lower() == "remix" else "");
-	print(music_path)
 	var music_inst = load("res://assets/songs/" +  music_path + "/Inst.ogg");
 	var music_voices = load("res://assets/songs/" +  music_path + "/Voices.ogg");
 	
@@ -208,11 +206,6 @@ func _ready():
 	for i in [player1Options, player2Options, gfOptions, player3Options]:
 		i.connect("item_selected", change_icons);
 		
-	if soakedAppears() <= 4:
-		$soaked.show();
-	else:
-		$soaked.hide();
-		
 	play_song();
 	update_chart_status();
 	
@@ -241,9 +234,6 @@ func _ready():
 func change_event_text(item):
 	event_text.text = "Event: %s\n\n%s"%[event_text_array[events_button.selected], events[event_text_array[events_button.selected]]];
 	
-func soakedAppears():
-	return randi_range(0, 1000);
-	
 func get_icons(char):
 	var icon = {}
 	var replaced = char;
@@ -251,7 +241,7 @@ func get_icons(char):
 	if char.contains(".json"):
 		replaced = char.replace(".json", "");
 		
-	var jsonFile = FileAccess.open("res://assets/characters/%s.json"%[replaced],FileAccess.READ);
+	var jsonFile = FileAccess.open("res://assets/data/characters/%s.json"%[replaced],FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
 	icon = jsonData.get_data();
@@ -363,8 +353,8 @@ func _input(ev):
 				inst.stream_paused = true;
 				voices.stream_paused = true;
 				
-				Global.songsShit = %song_name.text;
-				Global.diffsShit = %song_difficulty.text;
+				SongData.week_songs = %song_name.text;
+				SongData.week_diffs = %song_difficulty.text;
 				
 				var new_chart = new_chartData;
 				var new_diff = %song_difficulty.text;
@@ -372,7 +362,7 @@ func _input(ev):
 				
 				SongData.loadJson(new_name, new_diff, new_chart);
 				Global.changeScene("gameplay/PlayState", true, false);
-				Global.is_on_chartMode = true;
+				SongData.isOnChartMode = true;
 		else:
 			duet_notes = false;
 			free_Mouse = false;
@@ -559,10 +549,10 @@ func _process(delta):
 		song_line.position.y = get_strum_Y(Conductor.getSongTime - start_section());
 		chart_cam.position.y = song_line.position.y;
 		$bg.position.y = song_line.position.y;
-		
 	else:
 		if %song_name.has_focus() or %song_difficulty.has_focus() or %"value 1".has_focus() or %"value 2".has_focus():
 			return;
+			
 		if !$FileDialog.visible && !$FileDialogEvents.visible:
 			if Input.is_action_just_pressed("input_D"):
 				curSection += 1;
@@ -581,7 +571,7 @@ func _process(delta):
 				
 			if Input.is_action_pressed("input_W"):
 				update_song(-1);
-			
+				
 	mouse_inside = true if mouse_pos.x >= gridX+220 && mouse_pos.x <= gridX+grid_scaleX && mouse_pos.y > gridY && mouse_pos.y < gridY + grid_scaleY else false;
 	mouse_inside_ui = get_viewport().gui_get_hovered_control() is TabBar or get_viewport().gui_get_hovered_control() is SpinBox or get_viewport().gui_get_hovered_control() is CheckBox or get_viewport().gui_get_hovered_control() is Button or get_viewport().gui_get_hovered_control() is OptionButton;
 	cursor = "pointer" if mouse_inside_ui else "default";
@@ -594,31 +584,21 @@ func _process(delta):
 	var chartCurBeat = int(Conductor.curBeat) if !Conductor.curBeat < 0 else 0;
 	var chartCurStep = int(Conductor.curStep) if !Conductor.curStep < 0 else 0;
 	
-	chart_info.text = "section: %s / %s\ncurBeat: %s\ncurStep: %s\nsong position: %s"%[curSection, len(new_chartData["song"]["notes"]), chartCurBeat, chartCurStep, str(curMinute, ":", curSeconds, " / ", maxMinutes, ":", maxSeconds)];
+	chart_info.text = "section: %s\ncurBeat: %s\ncurStep: %s\nsong position: %s"%[curSection, chartCurBeat, chartCurStep, str(curMinute, ":", curSeconds, " / ", maxMinutes, ":", maxSeconds)];
 	
 	for note in notes.get_children():
 		if !note.chart_passed:
 			if song_line.position.y >= note.position.y:
 				note.modulate.a = 0.5;
 				
-				if is_playing && note.noteData <= 8 && note.sustainLenght <= 0.0:
+				if is_playing && note.noteData <= 8:
 					if note.chart_player:
 						chartBf.play_cool_anim(note.noteData);
 					else:
 						chartEnemy.play_cool_anim(note.noteData);
 						
-					note.chart_passed = true;
-					
-		for i in sustain_notes.get_children():
-			if song_line.position.y >= i.position.y + i.size.y && note.sustainLenght <= 0.0:
-				continue;
+				note.chart_passed = true;
 				
-			if song_line.position.y < i.position.y+i.size.y && song_line.position.y >= note.position.y && note.sustainLenght > 0.0:
-				if note.chart_player:
-					chartBf.play_cool_anim(note.noteData);
-				else:
-					chartEnemy.play_cool_anim(note.noteData);
-					
 		if song_line.position.y < note.position.y:
 			note.modulate.a = 1;
 			
@@ -662,9 +642,9 @@ func load_section():
 			new_chartData["song"]["notes"][curSection+1]["bpm"] = %new_bpm.value;
 			
 	iconP1.position.x = 430 if new_chartData["song"]["notes"][curSection]["mustHitSection"] else 610;
-	iconP1.flip_h = false if new_chartData["song"]["notes"][curSection]["mustHitSection"] else true;
+	iconP1.flip_h = !new_chartData["song"]["notes"][curSection]["mustHitSection"];
 	iconP2.position.x = 610 if new_chartData["song"]["notes"][curSection]["mustHitSection"] else 430;
-	iconP2.flip_h = true if new_chartData["song"]["notes"][curSection]["mustHitSection"] else false;
+	iconP2.flip_h = new_chartData["song"]["notes"][curSection]["mustHitSection"];
 	
 	if new_chartData["song"]["notes"][curSection]["gfSection"]:
 		update_icon(iconP1 if new_chartData["song"]["notes"][curSection]["mustHitSection"] else iconP2, "res://assets/images/icons/icon-gf.png");
@@ -674,8 +654,8 @@ func load_section():
 	for note_data in new_chartData["song"]["notes"][curSection]["sectionNotes"]:
 		var note_strum = note_data[0];
 		var new_note = spawn_note(get_strum_Y(note_strum - get_strum_time()), note_data[1], note_data[2], floor(get_strum_Y(note_strum - start_section())), note_data[3], new_chartData["song"]["notes"][curSection]["mustHitSection"]);
-		new_note.note_line.hide();
-		new_note.note_end.hide();
+		new_note.noteLine.hide();
+		new_note.noteEnd.hide();
 		
 		spawn_sustain(new_note);
 		
@@ -687,12 +667,12 @@ func load_section():
 		spawn_event_note(get_strum_Y(note_strum - get_strum_time()), note_data[1], floor(get_strum_Y(note_strum - start_section())));
 		
 func spawn_note(strumtime = 0.0, noteData = 0, sustain = 0, cool_y = null, note_type = "", isPlayeNote = false):
-	return creat_note("res://source/arrows/note/note.tscn", strumtime, int(noteData), sustain, cool_y, note_type, isPlayeNote);
+	return creat_note(false, strumtime, int(noteData), sustain, cool_y, note_type, isPlayeNote);
 	
 func spawn_event_note(strumtime = 0.0, noteData = 0, cool_y = null):
-	return creat_note("res://source/arrows/event_note.tscn", strumtime, int(noteData), 0, cool_y, "");
+	return creat_note(true, strumtime, int(noteData), 0, cool_y, "");
 	
-func creat_note(path, strumtime = 0.0, noteData = 0, sustain = 0, cool_y = null, note_type = "", isPlayeNote = false):
+func creat_note(event_note = false, strumtime = 0.0, noteData = 0, sustain = 0, cool_y = null, note_type = "", isPlayeNote = false):
 	var note_data = int(noteData)%4;
 	var is_a_player_note = isPlayeNote;
 	var is_second_opponent = false;
@@ -700,13 +680,13 @@ func creat_note(path, strumtime = 0.0, noteData = 0, sustain = 0, cool_y = null,
 	if noteData > 3 && noteData < 8:
 		is_a_player_note = !isPlayeNote;
 		
-	var newNote = load(path).instantiate();
+	var newNote = Note.new() if !event_note else EventNote.new();
 	newNote.strumTime = strumtime;
 	newNote.noteData = noteData;
 	newNote.sustainLenght = sustain;
+	newNote.isChartNote = true;
 	newNote.type = note_type;
 	newNote.chart_player = is_a_player_note;
-	newNote.scale = Vector2(0.25, 0.25);
 	newNote.position = Vector2(
 		floor(noteData * grid_size) + 380, 
 		grid_size + cool_y - 20 if cool_y != null else selection.position.y + 20
@@ -809,7 +789,7 @@ func delete_event_note(strumtime, noteData):
 	#	new_chartData["song"]["events"][curSection] = [];
 		
 func loadJson(song, difficulty = "", mew_chart = null):
-	var difficultyPath = ("res://assets/data/%s/%s.json"%[song, song] if difficulty == "" or difficulty == "normal" else "res://assets/data/%s/%s-%s.json"%[song, song, difficulty]);
+	var difficultyPath = ("res://assets/data/songs/%s/%s.json"%[song, song] if difficulty == "" or difficulty == "normal" else "res://assets/data/songs/%s/%s-%s.json"%[song, song, difficulty]);
 	
 	print(difficulty);
 	print(difficultyPath);
@@ -850,6 +830,9 @@ func loadJson(song, difficulty = "", mew_chart = null):
 		"sectionNotes": []
 	};
 	
+	if new_chartData["song"]["stage"].contains(" "):
+		new_chartData["song"]["stage"] = new_chartData["song"]["stage"].replace(" ", "_");
+		
 	var character_option_selected = {
 		player1Options: new_chartData["song"]["player1"],
 		player2Options: new_chartData["song"]["player2"],
@@ -995,11 +978,6 @@ func load_chart_stuff():
 	new_chartData["song"]["speed"] = %song_speed.value;
 	new_chartData["song"]["bpm"] = %Bpm.value;
 	new_chartData["song"]["two opponents"] = %new_opponent.button_pressed;
-	
-	new_chartData["song"]["notes"][curSection]["changeBPM"];
-	new_chartData["song"]["notes"][curSection]["altAnim"];
-	new_chartData["song"]["notes"][curSection]["gfSection"];
-	new_chartData["song"]["notes"][curSection]["mustHitSection"];
 	
 func update_chart_status():
 	%must_hit.button_pressed = new_chartData["song"]["notes"][curSection]["mustHitSection"];

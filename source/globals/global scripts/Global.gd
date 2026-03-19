@@ -1,49 +1,14 @@
 extends Node
 
-var songsShit = [];
-var diffsShit = [];
-
-var week_path = "default";
-var weekShit = {};
-var cur_week = "";
-
-var isStoryMode = false;
-var is_a_bot = false;
-
 var cur_thing = 0;
-
-var death_count = 0;
-var is_on_death_screen = false;
-
-var is_on_playstate = false;
 var finished_intro = false;
-
 var can_use_menus = true;
-
-var is_pause_mode = false;
-var is_on_chartMode = false;
-var is_playing = false;
-
-var is_not_in_cutscene = true;
 var is_on_video = false;
-var restartSong = false;
-
-var volume = 1;
-var updated_options = [];
-
-signal notePressed(note);
-signal longNotePressed(note);
-signal noteMissed(note);
-signal longNoteMissed(note);
-signal longNoteReleased(note);
-
-signal new_beat(beat);
-signal new_step(step);
 
 signal end_dialogue;
 signal end_cutscene;
 signal end_senpai_cutscene;
-signal eng_tankman_cutscene;
+signal end_tankman_cutscene;
 
 func _ready():
 	update_windowMode(GlobalOptions.full_screen);
@@ -68,7 +33,7 @@ func getFolderShit(folder):
 	return file;
 	
 func getTextFromTxt(path):
-	var txt = "res://assets/"+path+".txt";
+	var txt = "res://assets/%s.txt"%[path];
 	var readTxt = FileAccess.open(txt,FileAccess.READ);
 	var file = readTxt.get_as_text();
 	return file;
@@ -101,7 +66,6 @@ func changeScene(scene, useTransition = true, use_stickers = true):
 	
 	if useTransition:
 		Transition._is_in_transition(use_stickers);
-		
 		await get_tree().create_timer(1.0).timeout
 		get_tree().change_scene_to_file("res://source/%s.tscn"%[scene]);
 	else:
@@ -121,7 +85,7 @@ func reloadScene(useTrasition = true, use_stickers = false, speed = 0.65):
 		
 func global_get_week_files():
 	var file = [];
-	var coolFolder = DirAccess.open("res://assets/weeks/%s"%[week_path]);
+	var coolFolder = DirAccess.open("res://assets/data/weeks data/%s"%[SongData.week_folder_path]);
 	if coolFolder:
 		coolFolder.list_dir_begin();
 		var nameShit = coolFolder.get_next();
@@ -130,3 +94,4 @@ func global_get_week_files():
 			nameShit = coolFolder.get_next();
 			
 	return file;
+	

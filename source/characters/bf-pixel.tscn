@@ -1,15 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://bgb4ykqp65dhb"]
+[gd_scene format=3 uid="uid://bgb4ykqp65dhb"]
 
-[ext_resource type="Script" uid="uid://biq1yo3dhr8a1" path="res://source/characters/characters_scripts/Character.gd" id="1_cgiag"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_cgiag"]
 [ext_resource type="SpriteFrames" uid="uid://swwgpmjxkdly" path="res://assets/images/characters/bfPixel.res" id="2_cwq0u"]
 
-[node name="PixelBoyfriend" type="Node2D"]
+[node name="PixelBoyfriend" type="Node2D" unique_id=315959245]
 script = ExtResource("1_cgiag")
+json_path = "res://assets/data/characters/bf-pixel.json"
+healthBar_Color = Color(0, 0.9098039, 1, 1)
+is_player = true
+anims_timer = {
+"idle dance": [2, 5, false],
+"singDown": [2, 5, false],
+"singDown MISS": [2, 5, false],
+"singLeft": [2, 5, false],
+"singLeft MISS": [2, 5, false],
+"singRight": [2, 5, false],
+"singRight MISS": [2, 5, false],
+"singUp": [2, 5, false],
+"singUp MISS": [2, 5, false]
+}
+anim_type = 3
 have_death_animation = true
-death_scene = "characters/Bf Pixel dead"
-json_path = "bf-pixel"
+death_scene = "res://source/characters/Bf Pixel dead.tscn"
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=2107877671]
 texture_filter = 1
+scale = Vector2(6, 6)
 sprite_frames = ExtResource("2_cwq0u")
-animation = &"BF DOWN MISS instance 1"
+animation = &"BF IDLE instance 1"
+frame = 13
+frame_progress = 1.0

@@ -37,13 +37,13 @@ var week_chars = [];
 var curWeek = 0;
 
 var offSetShit = 0;
-var coolOffset = 115
+var coolOffset = 115;
 
 var score = 0;
 var week_score = 0;
 
 func loadJson(week):
-	var jsonFile = FileAccess.open("res://assets/weeks/%s/%s.json"%[Global.week_path, week],FileAccess.READ);
+	var jsonFile = FileAccess.open("res://assets/data/weeks data/%s/%s.json"%[SongData.week_folder_path, week],FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
 	weekJson = jsonData.get_data();
@@ -53,7 +53,7 @@ func loadJson(week):
 func _ready():
 	Discord.update_discord_info("story menu", "Is in menus")
 	
-	Global.weekShit = weekJson;
+	SongData.weeks_data = weekJson;
 	
 	week = get_week_files();
 	for i in week:
@@ -125,7 +125,7 @@ func _process(delta):
 	weeksSpr.position.y = lerp(float(weeksSpr.position.y), float(480-coolOffset*curWeek), 0.23);
 	
 	if choiced:
-		confirm_timer -= delta
+		confirm_timer -= delta;
 		if confirm_timer <= 0:
 			if can_change_color:
 				weeksSpr.get_child(curWeek).modulate = Color.CYAN;
@@ -136,7 +136,7 @@ func _process(delta):
 				
 			confirm_timer = 0.075;
 			
-	scoreText.text = "Week Score: %s"%[week_score]
+	scoreText.text = "Week Score: %s"%[week_score];
 	
 func go_to_week():
 	var is_unlocked = HighScore.unlockweek(last_weeks[curWeek], last_weeks[curWeek], new_weeks[curWeek], locked_weeks[curWeek]);
@@ -153,10 +153,10 @@ func go_to_week():
 			songsList.append(i[0]);
 			diffsList = diffs[curDiff if !curDiff > diffs.size()-1 else 0];
 			
-		Global.songsShit = songsList;
-		Global.diffsShit = diffsList;
-		Global.isStoryMode = storyMode;
-		Global.cur_week = new_weeks[curWeek];
+		SongData.week_songs = songsList;
+		SongData.week_diffs = diffsList;
+		SongData.isStoryMode = storyMode;
+		SongData.weekName = new_weeks[curWeek];
 		
 		if !curWeek > new_weeks.size()-1:
 			SongData.week = new_weeks[curWeek];
@@ -164,11 +164,11 @@ func go_to_week():
 			SongData.week = "";
 			
 		songPath = songsList[0];
-		SongData.loadJson(songPath, "" if diffsList == "normal" else diffsList);
+		SongData.loadJson(songPath, diffsList);
 		
 		if !SongData.chart_dont_exist:
 			choiced = true;
-			SoundStuff.playAudio("confirmMenu", false);
+			Sound.playAudio("confirmMenu", false);
 			
 			if week_chars[curWeek][1] == "BF":
 				menu_bf.get_child(0).play("M bf HEY");
@@ -182,14 +182,14 @@ func go_to_week():
 			
 			var difficultyPath = "";
 			if diffsList == "" or diffsList == "normal":
-				difficultyPath = "res://assets/data/%s/%s.json"%[songPath, songPath];
+				difficultyPath = "res://assets/data/songs/%s/%s.json"%[songPath, songPath];
 			else:
-				difficultyPath = "res://assets/data/%s/%s-%s.json"%[songPath, songPath, diffsList];
+				difficultyPath = "res://assets/data/song/%s/%s-%s.json"%[songPath, songPath, diffsList];
 				
 			$warning/Label.text = "Missing Chart:\n%s"%[difficultyPath];
-			SoundStuff.playAudio("cancelMenu", false);
+			Sound.playAudio("cancelMenu", false);
 	else:
-		SoundStuff.playAudio("cancelMenu", false);
+		Sound.playAudio("cancelMenu", false);
 		
 func changeDiff(shit):
 	week_score = 0;
@@ -214,7 +214,7 @@ func changeDiff(shit):
 func changeWeek(shit):
 	week_score = 0;
 	curWeek += shit;
-	SoundStuff.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu", false);
 	curWeek = wrapi(curWeek, 0, len(new_weeks));
 	Global.cur_thing = curWeek;
 	updateWeek();
@@ -225,7 +225,7 @@ func changeWeek(shit):
 func updateWeek():
 	changeMenuCharacter();
 	
-	Global.weekShit = weekJson;
+	SongData.weeks_data = weekJson;
 	
 	var is_unlocked = HighScore.unlockweek(last_weeks[curWeek], last_weeks[curWeek], new_weeks[curWeek], locked_weeks[curWeek]);
 	var is_locked = !is_unlocked;
@@ -254,11 +254,10 @@ func updateWeek():
 	
 	for i in songs_weeks[curWeek]:
 		if is_unlocked:
-			if i[0].contains("-"):
-				i[0] = i[0].replace("-", " ");
-				
 			songText.text += i[0].to_upper()+"\n";
-			
+			if songText.text.contains("-"):
+				songText.text = songText.text.replace("-", " ");
+				
 	weekTitle.text = "week locked" if !is_unlocked else week_description[curWeek];
 	
 	for i in songs_weeks[curWeek]:

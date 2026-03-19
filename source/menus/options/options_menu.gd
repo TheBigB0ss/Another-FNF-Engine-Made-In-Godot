@@ -25,160 +25,11 @@ var is_on_reset_menu = false;
 var options = {};
 
 func reloadText():
-	options = {
-		"graphics": {
-			"fps":{
-				"value": int(GlobalOptions.fps), 
-				"description": "change FPS LIMIT"
-			},
-			"vsync":{
-				"value": GlobalOptions.vsync, 
-				"description": "enable vsync"
-			},
-			"low quality":{
-				"value": GlobalOptions.low_quality, 
-				"description": "this helps... I think..."
-			},
-			"use shader":{
-				"value": GlobalOptions.use_shader, 
-				"description": "disable shaders?"
-			},
-			"full screen":{
-				"value": GlobalOptions.full_screen,
-				"description": "full screen mode"
-			}
-		},
-		"controls": {
-			"Left Key:":{
-				"value": GlobalOptions.keys["left"][1], 
-				"description": "change left key"
-			},
-			"Down Key:":{
-				"value": GlobalOptions.keys["down"][1], 
-				"description": "change down key"
-			},
-			"Up Key:":{
-				"value": GlobalOptions.keys["up"][1],
-				 "description": "change up key"
-			},
-			"Right Key:":{
-				"value": GlobalOptions.keys["right"][1], 
-				"description": "change right key"
-			},
-			"Ui Left Key:":{
-				"value": GlobalOptions.keys["ui_left"][1], 
-				"description": "change menu left key"
-			},
-			"Ui Down Key:":{
-				"value": GlobalOptions.keys["ui_down"][1],
-				"description": "change menu down key"
-			},
-			"Ui Up Key:":{
-				"value": GlobalOptions.keys["ui_up"][1],
-				"description": "change menu up key"
-			},
-			"Ui Right Key:":{
-				"value": GlobalOptions.keys["ui_right"][1], 
-				"description": "change menu right key"
-			},
-			"Ui Enter Key:":{
-				"value": GlobalOptions.keys["enter"][1], 
-				"description": "change enter key"
-			},
-			"Ui Esc Key:":{
-				"value": GlobalOptions.keys["escape"][1], 
-				"description": "change escape key"
-			},
-			"Volume Up Key:":{
-				"value": GlobalOptions.keys["equal"][1], 
-				"description": "change volume up key"
-			},
-			"Volume Down Key:":{
-				"value": GlobalOptions.keys["minus"][1], 
-				"description": "change volume down key"
-			},
-			"Chart Key:":{
-				"value": GlobalOptions.keys["7"][1], 
-				"description": "change chart key"
-			},
-			"Screenshot Key:":{
-				"value": GlobalOptions.keys["F11"][1], 
-				"description": "change screenshot key"
-			}
-		},
-		"visual": {
-			"hud mode":{
-				"value": GlobalOptions.array_opts["hud mode"]["options"], 
-				"description": "choice hud mode", 
-				"array value": [GlobalOptions.array_opts["hud mode"]["value"], "hud mode"]
-			},
-			"icon type":{
-				"value": GlobalOptions.array_opts["icon type"]["options"], 
-				"description": "choice your icon bouncy", 
-				"array value": [GlobalOptions.array_opts["icon type"]["value"], "icon type"]
-			},
-			"health bar alpha":{
-				"value": GlobalOptions.health_bar_alpha,
-				"description": "your health bar opacity"
-			},
-			"time bar alpha":{
-				"value": GlobalOptions.time_bar_alpha, 
-				"description": "your time bar opacity"
-			},
-			"show FPS":{
-				"value": GlobalOptions.show_fps, 
-				"description": "show fps count"
-			},
-			"show splashes":{
-				"value": GlobalOptions.show_splashes,
-				"description": "show note splashes"
-			},
-			"show song card":{
-				"value": GlobalOptions.show_songCard, 
-				"description": "show song name"
-			},
-			"show rating label":{
-				"value": GlobalOptions.show_ratingLabel, 
-				"description": "enable rating label"
-			},
-			"hide hud":{
-				"value": GlobalOptions.hide_hud, 
-				"description": "hide your hud"
-			},
-			"screen zoom":{
-				"value": GlobalOptions.screen_zoom, 
-				"description": "disable camera zoom"
-			}
-		},
-		"gameplay": {
-			"ghost tapping":{
-				"value": GlobalOptions.ghost_tapping,
-				"description": "disable ghost tapping?"
-			},
-			"down scroll":{
-				"value": GlobalOptions.down_scroll,
-				"description": "down scroll mode"
-			},
-			"middle scroll":{
-				"value": GlobalOptions.middle_scroll,
-				"description": "middle scroll mode"
-			},
-			"camera mode": {
-				"value": GlobalOptions.array_opts["camera mode"]["options"], 
-				"description": "section camera type", 
-				"array value": [GlobalOptions.array_opts["camera mode"]["value"], "camera mode"]
-			},
-			"pause music":{
-				"value": GlobalOptions.array_opts["pause music"]["options"],
-				"description": "choice the pause song", 
-				"array value": [GlobalOptions.array_opts["pause music"]["value"], "pause music"]
-			}
-		}
-	};
+	options = GlobalOptions.set_options();
 	
 	if !GlobalOptions.pause_options:
 		options["offset menu"] = {};
-		options["stage editor"] = {};
+		#options["stage editor"] = {};
 		options["clear data"] = {};
 		
 func _ready() -> void:
@@ -195,12 +46,6 @@ func _ready() -> void:
 		offSetShit += coolOffset;
 		options_array.append(i);
 		
-	var reset_text = Alphabet.new();
-	reset_text.position = Vector2(75, 685);
-	reset_text.scale = Vector2(0.60, 0.65);
-	reset_text._creat_word('Hold R to return to default settings');
-	$reset.add_child(reset_text);
-	
 	options_stuff.position.y = float(480-coolOffset*cur_option);
 	settings.position.y = float(480-coolOffset*new_cur_option);
 	
@@ -231,7 +76,7 @@ func _input(ev):
 							i.queue_free();
 							
 						$keys.hide();
-						Global.updated_options = [];
+						GlobalOptions.updated_options = [];
 						
 					elif is_on_key_mode:
 						is_on_key_mode = false;
@@ -245,7 +90,7 @@ func _input(ev):
 				if ev.keycode in [Global.get_key("ui_up")] && !ev.echo && !is_on_key_mode:
 					change_new_option(-1);
 					
-				if Global.updated_options != []:
+				if GlobalOptions.updated_options != []:
 					var curSetting = settings.get_child(new_cur_option);
 					match typeof(curSetting.opt_type):
 						TYPE_INT:
@@ -293,7 +138,10 @@ func _input(ev):
 										
 									var coolID = GlobalOptions.keys_list[new_cur_option];
 									var new_code = OS.get_keycode_string(ev.keycode).to_lower();
-									
+									if GlobalOptions.check_key_bind(ev.keycode, GlobalOptions.keys[coolID][2]):
+										Sound.playAudio("cancelMenu", false);
+										return;
+										
 									if InputMap.has_action("ui_%s"%[new_code]):
 										InputMap.erase_action("ui_%s"%[new_code]);
 										
@@ -339,7 +187,7 @@ func set_change_text(cur_opt, change, max, min):
 		return;
 		
 	settings.get_child(new_cur_option).opt_type += change;
-	SoundStuff.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu", false);
 	settings.get_child(cur_opt).update_text(str("<", settings.get_child(new_cur_option).opt_type, ">"), -80, false);
 	GlobalOptions.get_setting(settings.get_child(new_cur_option).opt_name, settings.get_child(new_cur_option).opt_type);
 	
@@ -410,13 +258,13 @@ func update_options():
 	
 func go_back():
 	if GlobalOptions.pause_options:
-		var songDiff = "" if Global.diffsShit == "" else Global.diffsShit;
-		var song = Global.songsShit[0] if Global.isStoryMode else Global.songsShit;
+		var songDiff = "" if SongData.week_diffs == "" else SongData.week_diffs;
+		var song = SongData.week_songs[0];
 		
 		SongData.loadJson(song, songDiff, SongData.updated_chart);
 		Global.changeScene("gameplay/PlayState", true, false);
 		GlobalOptions.pause_options = false;
-		Global.restartSong = true;
+		SongData.restartSong = true;
 	else:
 		Global.changeScene("menus/main_menu/MainMenu", true, false);
 		
@@ -427,7 +275,7 @@ func _process(delta):
 	
 func change_option(change):
 	cur_option += change;
-	SoundStuff.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu", false);
 	cur_option = wrapi(cur_option, 0, len(options));
 	
 	for j in options.size():
@@ -437,7 +285,7 @@ func change_option(change):
 			
 func change_new_option(change):
 	new_cur_option += change;
-	SoundStuff.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu", false);
 	new_cur_option = wrapi(new_cur_option, 0, len(new_options_array));
 	
 	description_text.text = options[options_array[cur_option]][new_options_array[new_cur_option]]["description"];

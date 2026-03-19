@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://g5r481tpry0f"]
+[gd_scene format=3 uid="uid://g5r481tpry0f"]
 
 [ext_resource type="Script" uid="uid://b7143b0ww7sy7" path="res://addons/xml_converter/xml_panel.gd" id="1_xug4f"]
 
@@ -12,106 +12,157 @@ offset_bottom = 471.0
 scale = Vector2(1.29335, 1.18112)
 script = ExtResource("1_xug4f")
 
-[node name="LineEdit1" type="LineEdit" parent="."]
-unique_name_in_owner = true
-layout_mode = 2
-offset_left = 3.86593
-offset_top = 55.8792
-offset_right = 176.866
-offset_bottom = 86.8792
+[node name="settings" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="LineEdit2" type="LineEdit" parent="."]
+[node name="LineEdit1" type="LineEdit" parent="settings"]
 unique_name_in_owner = true
-layout_mode = 2
-offset_left = 3.86593
-offset_top = 110.912
-offset_right = 176.866
-offset_bottom = 141.912
+layout_mode = 0
+offset_left = 5.4123015
+offset_top = 24.553043
+offset_right = 178.41237
+offset_bottom = 55.553047
 
-[node name="SpinBox" type="SpinBox" parent="."]
+[node name="LineEdit2" type="LineEdit" parent="settings"]
 unique_name_in_owner = true
-layout_mode = 2
-offset_left = 59.5353
-offset_top = 154.938
-offset_right = 142.598
-offset_bottom = 185.938
+layout_mode = 0
+offset_left = 5.412301
+offset_top = 76.19923
+offset_right = 178.41237
+offset_bottom = 107.19923
 
-[node name="CheckBox" type="CheckBox" parent="."]
+[node name="LineEdit3" type="LineEdit" parent="settings"]
 unique_name_in_owner = true
-layout_mode = 2
-offset_left = 87.37
-offset_top = 204.044
-offset_right = 111.37
-offset_bottom = 228.044
+layout_mode = 0
+offset_left = 5.4123015
+offset_top = 126.99844
+offset_right = 178.41237
+offset_bottom = 157.99844
+placeholder_text = "char1,char2, etc"
 
-[node name="CheckBox2" type="CheckBox" parent="."]
+[node name="SpinBox" type="SpinBox" parent="settings"]
 unique_name_in_owner = true
-layout_mode = 2
-offset_left = 143.039
-offset_top = 242.99
-offset_right = 167.039
-offset_bottom = 266.99
+layout_mode = 0
+offset_left = 61.08167
+offset_top = 171.02411
+offset_right = 147.64417
+offset_bottom = 202.02411
 
-[node name="CheckBox3" type="CheckBox" parent="."]
+[node name="SpinBox2" type="SpinBox" parent="settings"]
 unique_name_in_owner = true
-offset_left = 69.5867
-offset_top = 279.396
-offset_right = 93.5867
-offset_bottom = 303.396
+layout_mode = 0
+offset_left = 100.51417
+offset_top = 280.24243
+offset_right = 187.07668
+offset_bottom = 311.24243
+min_value = -1.0
+max_value = 1.0
+step = 2.0
+value = -1.0
+editable = false
 
-[node name="Button" type="Button" parent="."]
-layout_mode = 2
-offset_left = 5.4123
-offset_top = 324.268
-offset_right = 133.413
-offset_bottom = 355.268
+[node name="CheckBox" type="CheckBox" parent="settings"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 83.50408
+offset_top = 210.81685
+offset_right = 107.50408
+offset_bottom = 234.81685
+
+[node name="CheckBox2" type="CheckBox" parent="settings"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 130.66843
+offset_top = 248.91628
+offset_right = 154.66843
+offset_bottom = 272.91632
+
+[node name="CheckBox3" type="CheckBox" parent="settings"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 58.76213
+offset_top = 325.9618
+offset_right = 82.76213
+offset_bottom = 349.9618
+
+[node name="Button" type="Button" parent="settings"]
+layout_mode = 0
+offset_left = 5.4123015
+offset_top = 364.06122
+offset_right = 133.41301
+offset_bottom = 395.06122
 text = "Convert"
 
-[node name="Label" type="Label" parent="."]
+[node name="texts" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="texts"]
 layout_mode = 0
-offset_left = 3.86593
-offset_top = 28.7862
-offset_right = 43.8659
-offset_bottom = 51.7862
+offset_left = 5.4123015
+offset_top = -2.5399587
+offset_right = 45.41227
+offset_bottom = 20.460043
 text = "path"
 
-[node name="Label2" type="Label" parent="."]
+[node name="Label2" type="Label" parent="texts"]
 layout_mode = 0
-offset_left = 4.63912
-offset_top = 89.7453
-offset_right = 132.639
-offset_bottom = 112.745
+offset_left = 6.1854916
+offset_top = 55.03253
+offset_right = 134.18549
+offset_bottom = 78.03253
 text = "animation name"
 
-[node name="Label3" type="Label" parent="."]
+[node name="Label3" type="Label" parent="texts"]
 layout_mode = 0
-offset_left = 5.4123
-offset_top = 159.171
-offset_right = 56.4123
-offset_bottom = 182.171
+offset_left = 6.958673
+offset_top = 175.25711
+offset_right = 57.95867
+offset_bottom = 198.25711
 text = "speed:"
 
-[node name="Label4" type="Label" parent="."]
+[node name="Label4" type="Label" parent="texts"]
 layout_mode = 0
-offset_left = 5.4123
-offset_top = 203.197
-offset_right = 88.4123
-offset_bottom = 226.197
+offset_left = 6.958673
+offset_top = 209.12355
+offset_right = 89.95867
+offset_bottom = 232.12355
 text = "have loop?"
 
-[node name="Label5" type="Label" parent="."]
+[node name="Label5" type="Label" parent="texts"]
 layout_mode = 0
-offset_left = 5.4123
-offset_top = 242.143
-offset_right = 145.412
-offset_bottom = 265.143
+offset_left = 6.958673
+offset_top = 248.06958
+offset_right = 146.95868
+offset_bottom = 271.06958
 text = "animation player?"
 
-[node name="Label6" type="Label" parent="."]
-offset_left = 5.4123
-offset_top = 279.396
-offset_right = 145.412
-offset_bottom = 302.396
+[node name="Label6" type="Label" parent="texts"]
+layout_mode = 0
+offset_left = 6.958675
+offset_top = 325.96176
+offset_right = 63.958675
+offset_bottom = 348.96176
 text = "txt file?"
 
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[node name="Label7" type="Label" parent="texts"]
+layout_mode = 0
+offset_left = 6.958673
+offset_top = 285.32254
+offset_right = 146.95837
+offset_bottom = 308.32254
+text = "rotation fix:"
+
+[node name="Label8" type="Label" parent="texts"]
+layout_mode = 0
+offset_left = 6.185492
+offset_top = 105.83174
+offset_right = 134.18549
+offset_bottom = 128.83174
+text = "new anims"
+
+[connection signal="toggled" from="settings/CheckBox2" to="." method="_on_check_box_2_toggled"]
+[connection signal="pressed" from="settings/Button" to="." method="_on_button_pressed"]

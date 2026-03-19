@@ -8,22 +8,26 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="Another FNF engine made in Godot"
-config/version=" "
 run/main_scene="res://source/menus/title_menu/titleMenu.tscn"
-config/features=PackedStringArray("4.5", "Forward Plus")
+config/use_custom_user_dir=true
+config/custom_user_dir_name="Another FNF engine made in Godot"
+config/features=PackedStringArray("4.6", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="uid://br7hchcect3k7"
 config/icon="res://engine_icon.png"
-config/windows_native_icon="res://file_icon.ico"
 run/vsync/vsync_mode=0
 
 [autoload]
 
 Conductor="*res://source/globals/global scripts/Conductor.gd"
-SoundStuff="*res://source/globals/global scripts/SoundStuff.gd"
+Sound="*res://source/globals/global scripts/Sound.gd"
 Global="*res://source/globals/global scripts/Global.gd"
 SongData="*res://source/globals/global scripts/SongData.gd"
 GlobalOptions="*res://source/globals/global scripts/Global_Options.gd"
@@ -40,18 +44,29 @@ HighScore="*res://source/globals/global scripts/HighScore.gd"
 Achievements="*res://source/globals/global scripts/Achievements.gd"
 AchievementPopUp="*res://source/globals/global scenes/achievement_popUp.tscn"
 TennaJumpscare="*res://source/globals/global scenes/tenna_jumpscare.tscn"
+ModsLoader="res://source/globals/global scripts/ModsLoader.gd"
 
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/subwindows/embed_subwindows=false
 window/stretch/mode="canvas_items"
+window/per_pixel_transparency/allowed=true
 mouse_cursor/custom_image="uid://3oh6exxqqcts"
 mouse_cursor/custom_image_hotspot=Vector2(1.8, 1.8)
 
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/discord-rpc-gd/plugin.cfg", "res://addons/gdanimate/plugin.cfg", "res://addons/xml_converter/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://addons/": "yellow",
+"res://assets/": "green",
+"res://source/": "blue"
+}
 
 [filesystem]
 

@@ -1,0 +1,102 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://c8y4b05sa518e"]
+
+[ext_resource type="Texture2D" uid="uid://c83c40tyx65c2" path="res://assets/images/arrows/pixel/default/arrowEnds.png" id="1_jf731"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jf731"]
+atlas = ExtResource("1_jf731")
+region = Rect2(27, 0, 9, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gnjrg"]
+atlas = ExtResource("1_jf731")
+region = Rect2(18, 0, 9, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ncnm"]
+atlas = ExtResource("1_jf731")
+region = Rect2(45, 0, 9, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1o4rg"]
+atlas = ExtResource("1_jf731")
+region = Rect2(36, 0, 9, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5xtt2"]
+atlas = ExtResource("1_jf731")
+region = Rect2(9, 0, 9, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ejt27"]
+atlas = ExtResource("1_jf731")
+region = Rect2(0, 0, 9, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vaqon"]
+atlas = ExtResource("1_jf731")
+region = Rect2(63, 0, 9, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwdrl"]
+atlas = ExtResource("1_jf731")
+region = Rect2(54, 0, 9, 6)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jf731")
+}],
+"loop": true,
+"name": &"blue hold end",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gnjrg")
+}],
+"loop": true,
+"name": &"blue hold piece",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ncnm")
+}],
+"loop": true,
+"name": &"green hold end",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1o4rg")
+}],
+"loop": true,
+"name": &"green hold piece",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5xtt2")
+}],
+"loop": true,
+"name": &"purple hold end",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ejt27")
+}],
+"loop": true,
+"name": &"purple hold piece",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vaqon")
+}],
+"loop": true,
+"name": &"red hold end",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xwdrl")
+}],
+"loop": true,
+"name": &"red hold piece",
+"speed": 5.0
+}]

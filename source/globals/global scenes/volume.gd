@@ -10,41 +10,41 @@ func _ready():
 	add_child(timer);
 	timer.connect("timeout", hide_volume_button);
 	
-	if Global.volume < 0.1 or Global.volume == 0:
+	if GlobalOptions.volume < 0.1 or GlobalOptions.volume == 0:
 		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), true);
-	elif Global.volume >= 0.1:
+	elif GlobalOptions.volume >= 0.1:
 		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), false);
-		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), lerp(-20.0, 0.0, Global.volume));
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), lerp(-20.0, 0.0, GlobalOptions.volume));
 		
 func _input(ev):
 	if ev is InputEventKey:
 		if ev.pressed:
 			if ev.keycode in [Global.get_key("equal")]:
-				volume_shit(Global.volume + 0.1);
+				volume_shit(GlobalOptions.volume + 0.1);
 				
 			if ev.keycode in [Global.get_key("minus")]:
-				volume_shit(Global.volume - 0.1);
+				volume_shit(GlobalOptions.volume - 0.1);
 				
 func volume_shit(volume_value, muted = false):
 	timer.start();
 	show_volume_button();
 	
-	Global.volume = clamp(volume_value, 0.0, 1.0);
+	GlobalOptions.volume = clamp(volume_value, 0.0, 1.0);
 	
-	if Global.volume < 0.1 or Global.volume == 0:
+	if GlobalOptions.volume < 0.1 or GlobalOptions.volume == 0:
 		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), true);
 		
-	elif Global.volume >= 0.1:
+	elif GlobalOptions.volume >= 0.1:
 		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), false);
-		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), lerp(-20.0, 0.0, Global.volume));
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), lerp(-20.0, 0.0, GlobalOptions.volume));
 		
 	for i in volume_bar.get_children():
-		if i.value <= Global.volume:
+		if i.value <= GlobalOptions.volume:
 			i.modulate.a = 1;
 		else:
 			i.modulate.a = 0;
 			
-	GlobalOptions.get_setting("volume", Global.volume);
+	GlobalOptions.get_setting("volume", GlobalOptions.volume);
 	
 func show_volume_button():
 	var tween = get_tree().create_tween();
