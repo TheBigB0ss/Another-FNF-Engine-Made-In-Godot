@@ -290,15 +290,25 @@ _data = {
 [node name="TANKMAN REMAKE" type="Node2D" unique_id=650879763]
 script = ExtResource("1_vkgdn")
 json_path = "res://assets/data/characters/TANKMAN REMAKE.json"
+healthBar_Color = Color(1, 1, 1, 1)
+anims_timer = {
+"hey": [2, 25, true],
+"idle dance": [2, 5, false],
+"singDown": [2, 5, false],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false],
+"steve anim": [2, 25, true]
+}
 anim_type = 2
 have_death_animation = false
 frame_count = 0.06
 
 [node name="Character_Sprite" type="Sprite2D" parent="." unique_id=1716359127]
 texture = ExtResource("2_x61wo")
-offset = Vector2(1, 0)
+offset = Vector2(3, 7)
 region_enabled = true
-region_rect = Rect2(1563, 2039, 513, 678)
+region_rect = Rect2(1776, 1358, 433, 667)
 
 [node name="Character_Animation" type="AnimationPlayer" parent="." unique_id=1718571819]
 libraries/ = SubResource("AnimationLibrary_iy1ix")

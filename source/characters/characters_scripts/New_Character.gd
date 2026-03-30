@@ -134,8 +134,9 @@ func _playAnim(anim = "", note: Note = null):
 		anim_time = anims_timer[anim][1];
 		special_anim = anims_timer[anim][2];
 		
-		character.position = base_position + pose_offset;
-		
+		if !Engine.is_editor_hint():
+			character.position = base_position + pose_offset;
+			
 		if animList[i].contains("sing"):
 			characterState = (CHARACTER_STATES.IDLE if note.sustainLength <= 0 or note.MissedlongNote else CHARACTER_STATES.HOLDING) if longNote else CHARACTER_STATES.SINGING;
 		elif special_anim:
@@ -179,41 +180,41 @@ func loop_anim():
 				character_anim.seek(0.0);
 				
 func _get_property_list():
-	var properties: Array[Dictionary] = []
+	var properties: Array[Dictionary] = [];
 	
 	properties.append({
-		"name": "anim_type", 
-		"type": TYPE_INT, 
-		"hint": PROPERTY_HINT_ENUM, 
-		"hint_string": "FREEZE,REPEAT,NONE", 
+		"name": "anim_type",
+		"type": TYPE_INT,
+		"hint": PROPERTY_HINT_ENUM,
+		"hint_string": "FREEZE:1,REPEAT:2,NONE:3",
 		"usage": PROPERTY_USAGE_DEFAULT
 	});
 	
 	properties.append({
-		"name": "have_death_animation", 
-		"type": TYPE_BOOL, 
+		"name": "have_death_animation",
+		"type": TYPE_BOOL,
 		"usage": PROPERTY_USAGE_DEFAULT
 	});
 	
 	if anim_type == CHARACTER_ANIM_TYPE.REPEAT:
 		properties.append({
-			"name": "frame_count", 
-			"type": TYPE_FLOAT, 
+			"name": "frame_count",
+			"type": TYPE_FLOAT,
 			"usage": PROPERTY_USAGE_DEFAULT
 		});
 		
 	if have_death_animation:
 		properties.append({
-			"name": "death_scene", 
-			"type": TYPE_STRING, 
-			"hint": PROPERTY_HINT_FILE, 
-			"hint_string": "*.tscn", 
+			"name": "death_scene",
+			"type": TYPE_STRING,
+			"hint": PROPERTY_HINT_FILE,
+			"hint_string": "*.tscn",
 			"usage": PROPERTY_USAGE_DEFAULT
 		});
 		
 	return properties;
 	
-func beat_hit(beat) -> void :
+func beat_hit(beat) -> void:
 	beat_dance(beat);
 	
 func beat_dance(beat):

@@ -1314,7 +1314,7 @@ healthBar_Color = Color(0.54509807, 0, 0, 1)
 anims_timer = {
 "danceLeft": [2, 5, false],
 "danceRight": [2, 5, false],
-"hey": [2, 9, true],
+"hey": [2, 5, true],
 "sad": [2, 5, false],
 "singDown": [2, 5, false],
 "singLeft": [2, 5, false],
