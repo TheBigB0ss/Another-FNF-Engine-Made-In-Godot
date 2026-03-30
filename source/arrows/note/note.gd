@@ -33,7 +33,7 @@ var note_pressed = false;
 var strumTime = 0;
 var noteData = 0;
 var isSustain = false;
-var sustainLenght = 0.0;
+var sustainLength = 0.0;
 
 var no_anim = false;
 var is_hey_note = false;
@@ -51,7 +51,8 @@ var strumPressed = false;
 var reset_arrow_anim = 0;
 var tap = false;
 
-var chart_passed = false;
+var gotHit = false;
+var hitTail = false;
 var chart_player = false;
 var isChartNote = false;
 
@@ -66,7 +67,7 @@ func reload_note_type():
 		"Hurt Note":
 			note.sprite_frames = load("res://assets/images/arrows/hurt note/HurtNote.res" if !SongData.isPixelStage else "res://assets/images/arrows/pixel/hurt note/pixel_hurtNotes.tres");
 			is_a_bad_note = true;
-			sustainLenght = max(0,0);
+			sustainLength = max(0,0);
 			
 const notes_settings = {
 	0:{
@@ -157,11 +158,11 @@ func _ready():
 	
 	noteLine.width = 50;
 	
-	isSustain = (sustainLenght > 0.0);
+	isSustain = (sustainLength > 0.0);
 	
 	if isSustain:
 		noteLine.add_point(Vector2.ZERO);
-		noteLine.add_point(Vector2(0, sustainLenght));
+		noteLine.add_point(Vector2(0, sustainLength));
 		
 	if isStrumNote:
 		note.hide();
@@ -215,7 +216,7 @@ func _process(delta: float) -> void:
 		self.modulate.a = 0.3;
 		
 	if isSustain && is_instance_valid(noteLine):
-		noteLine.set_point_position(1, Vector2(0, sustainLenght));
+		noteLine.set_point_position(1, Vector2(0, sustainLength));
 		
 		noteLine.scale.y = Conductor.songSpeed/1.5;
 		if GlobalOptions.down_scroll:
@@ -223,21 +224,21 @@ func _process(delta: float) -> void:
 			
 		if noteEnd != null:
 			noteEnd.scale = set_note_scale(noteEnd.get_parent().scale, SongData.isPixelStage, secondOpponentNote);
-			noteEnd.position.y = sustainLenght + noteEnd.texture.get_size().y * noteEnd.scale.y / 2.0;
+			noteEnd.position.y = sustainLength + noteEnd.texture.get_size().y * noteEnd.scale.y / 2.0;
 			
 	if is_pressing:
-		sustainLenght -= (delta * 1000);
-		sustainLenght = max(sustainLenght, 0.0);
+		sustainLength -= (delta * 1000);
+		sustainLength = max(sustainLength, 0.0);
 		
 		if isSustain && noteLine != null && noteEnd != null:
-			noteEnd.scale.y = abs(min(sustainLenght*Conductor.songSpeed / noteEnd.texture.get_size().y, noteEnd.scale.y));
-			noteEnd.position.y = sustainLenght + noteEnd.texture.get_size().y * noteEnd.scale.y / 2.0;
+			noteEnd.scale.y = abs(min(sustainLength*Conductor.songSpeed / noteEnd.texture.get_size().y, noteEnd.scale.y));
+			noteEnd.position.y = sustainLength + noteEnd.texture.get_size().y * noteEnd.scale.y / 2.0;
 			
-			noteLine.set_point_position(1, Vector2(0, sustainLenght));
+			noteLine.set_point_position(1, Vector2(0, sustainLength));
 			
 			pressed();
 			
-			if sustainLenght <= 0:
+			if sustainLength <= 0:
 				missed = false;
 				noteEnd.queue_free();
 				noteLine.queue_free();
@@ -245,7 +246,7 @@ func _process(delta: float) -> void:
 	if MissedlongNote:
 		missTimer += delta;
 		
-	if missed or MissedlongNote && sustainLenght > 0.0:
+	if missed or MissedlongNote && sustainLength > 0.0:
 		if missTimer > 0.13:
 			can_press = false;
 			miss_note();
@@ -258,7 +259,7 @@ func pressed(new_character = null):
 	if !isPlayer:
 		return;
 		
-	if sustainLenght <= 0:
+	if sustainLength <= 0:
 		if !pressed_emit:
 			if is_a_bad_note:
 				miss_note();
@@ -306,7 +307,7 @@ func miss_note():
 	modulate.a = 0.3;
 	
 	main_scene.health = max(main_scene.health - 4, 0.0);
-	if isSustain && sustainLenght > 0.0:
+	if isSustain && sustainLength > 0.0:
 		MissedlongNote = true;
 		emit_signal("longNoteMissed", self);
 	else:

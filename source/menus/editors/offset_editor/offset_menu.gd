@@ -24,6 +24,13 @@ func _ready():
 	SongData.isOnDeathScreen = false;
 	MusicManager._play_music(GlobalOptions.updated_pause_music, false, true);
 	
+	if GlobalOptions.rating_mode == "hud element":
+		for i in [ratingSpr, comboSpr, numsSpr]:
+			i.reparent($rating_layer, true);
+	elif GlobalOptions.rating_mode == "game element":
+		for i in [ratingSpr, comboSpr, numsSpr]:
+			i.reparent($rating_node, true);
+	
 	for i in addCharToList():
 		if i.contains(".json"):
 			replaced = i.replace(".json", "");
@@ -134,6 +141,7 @@ func update_cursor(new_cursor):
 func set_rating_pos():
 	if adjusting_rating:
 		$rating_layer.show();
+		$rating_node.show();
 		$offset_layer.hide();
 		$character.hide();
 		$cross.hide();
@@ -148,6 +156,7 @@ func set_rating_pos():
 		%nums_y.value = GlobalOptions.ratings_positions["nums"][1];
 	else:
 		$rating_layer.hide();
+		$rating_node.hide();
 		$offset_layer.show();
 		$character.show();
 		$cross.show();

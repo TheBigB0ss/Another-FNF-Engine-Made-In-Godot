@@ -38,8 +38,12 @@ func _ready():
 		options_grp.add_child(pause_opts);
 		offSetShit += coolOffset;
 		
+	var songName = SongData.song.to_upper();
+	if songName.contains("-REMIX"):
+		songName = songName.replace("-REMIX", "");
+		
 	death_count_text.text += str("DEATHS: ",SongData.death_count);
-	song_text.text += "SONG: %s"%[SongData.song.to_upper()];
+	song_text.text += "SONG: %s"%[songName];
 	difficulty_text.text += "DIFFICULTY: %s"%[SongData.week_diffs.to_upper() if SongData.week_diffs != "" else "NORMAL"];
 	
 	for j in opts.size():

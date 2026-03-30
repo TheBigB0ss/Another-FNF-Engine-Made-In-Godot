@@ -104,10 +104,10 @@ func _process(delta):
 			note.missed = true;
 			note.miss_note();
 			
-		if Conductor.getSongTime > 320 + note.strumTime && note.sustainLenght <= 0:
+		if Conductor.getSongTime > 320 + note.strumTime && note.sustainLength <= 0:
 			notes_to_delete.append(note);
 			
-		elif Conductor.getSongTime > 320 + note.strumTime + note.sustainLenght && note.sustainLenght > 0 && !note.is_pressing:
+		elif Conductor.getSongTime > 320 + note.strumTime + note.sustainLength && note.sustainLength > 0 && !note.is_pressing:
 			notes_to_delete.append(note);
 			
 	playerNotes = playerNotes.filter(func(note): return note != null);
@@ -121,12 +121,12 @@ func _process(delta):
 		if GlobalOptions.isUsingBot:
 			if Conductor.getSongTime >= note.strumTime && note.can_press && playerNotes.size() > 0 && note.must_press && !note.is_a_bad_note:
 				delete_note(note.custom_note_dir);
-				if note.sustainLenght == 0:
+				if note.sustainLength == 0:
 					notes_to_delete.append(note);
 				else:
 					if !note.is_pressing: continue;
 					
-					if note.sustainLenght <= 0:
+					if note.sustainLength <= 0:
 						note.is_pressing = false;
 						notes_to_delete.append(note);
 					else:
@@ -139,10 +139,10 @@ func _process(delta):
 				emit_signal("canPress", int(note.noteData));
 				delete_note(note.custom_note_dir);
 				
-			if note.sustainLenght <= 0 or !note.isSustain: continue;
+			if note.sustainLength <= 0 or !note.isSustain: continue;
 			
 			if Input.is_action_pressed(key) && note.MissedlongNote && !note.missed && note.missTimer <= 0:
-				if note.sustainLenght <= 0:
+				if note.sustainLength <= 0:
 					note.is_pressing = false;
 					notes_to_delete.append(note);
 				else:
@@ -229,7 +229,7 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer)
 	note.is_altAnim = isAltAnim;
 	note.strumTime = strumTime;
 	note.noteData = data;
-	note.sustainLenght = lenght;
+	note.sustainLength = lenght;
 	note.type = type;
 	note.isGfNote = isGfNote or (type == "gf sing");
 	note.is_altAnim = isAltAnim or (type == "alt anim");
@@ -237,7 +237,7 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer)
 	note.is_hey_note = (type == "Hey!");
 	note.isPlayer = is_a_player_note;
 	note.must_press = note.isPlayer;
-	note.isSustain = note.sustainLenght > 0.0;
+	note.isSustain = note.sustainLength > 0.0;
 	
 	note.notePressed.connect(main_scene.pressedNote);
 	note.noteMissed.connect(main_scene.miss_note);

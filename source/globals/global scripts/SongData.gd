@@ -86,6 +86,9 @@ var weeks_data = {};
 var week_folder_path = "default";
 var weekName = "";
 
+var characters = {};
+var camera_data = {};
+
 func loadStageJson(new_stage):
 	var jsonFile = FileAccess.open("res://assets/data/stages data/%s.json"%[new_stage], FileAccess.READ);
 	var jsonData = JSON.new();

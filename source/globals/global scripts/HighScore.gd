@@ -15,10 +15,8 @@ var files = {
 };
 
 func _ready():
-	for i in files.keys():
-		var loaded = loadJson(i);
-		files[i].clear();
-		files[i].merge(loaded);
+	for i in files:
+		files[i].merge(loadJson(i));
 		
 	update_version();
 	

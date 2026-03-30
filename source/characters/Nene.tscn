@@ -628,17 +628,16 @@ animations = [{
 script = ExtResource("1_msiec")
 json_path = "res://assets/data/characters/Nene.json"
 healthBar_Color = Color(0.98039216, 0.4862745, 0.6627451, 1)
-animTimes = {
-"idle dance": [2, 5],
-"singDown": [2, 5],
-"singLaugh": [2, 5],
-"singLeft": [2, 5],
-"singRight": [2, 5],
-"singUp": [2, 5]
+anims_timer = {
+"idle dance": [2, 5, false],
+"singDown": [2, 5, false],
+"singLaugh": [4, 15, true],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false]
 }
-anim_type = 1
+anim_type = 3
 have_death_animation = false
-frame_count = 2.4
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=107023990]
 sprite_frames = SubResource("SpriteFrames_e6usm")

@@ -138,6 +138,13 @@ func _ready():
 	print("song list is: " + str(playlist));
 	print("song diff is: " + str(songDiff));
 	
+	if GlobalOptions.rating_mode == "hud element":
+		for i in [rating_spr, combo_spr, nums_spr]:
+			i.reparent($rating/Rating_Layer, true);
+	elif GlobalOptions.rating_mode == "game element":
+		for i in [rating_spr, combo_spr, nums_spr]:
+			i.reparent($hud, true);
+			
 	splash_normal = preload("res://source/arrows/splashes/noteSplashes.tscn");
 	splash_pixel = preload("res://source/arrows/splashes/pixel/pixelNoteSplash.tscn");
 	
@@ -233,6 +240,8 @@ func _ready():
 		for i in [iconP1, iconP2]:
 			i.position.y = 65;
 			
+		iconP3.position.y = 95;
+		
 	if GlobalOptions.middle_scroll:
 		playerStrum.position.x = 478;
 		opponentStrum.visible = false;
@@ -620,6 +629,16 @@ func cam_follow_poses(new_char):
 	sectionCamera.offset = lerp(sectionCamera.offset, camOffset, 0.07);
 	
 func playerDead():
+	SongData.characters = {
+		"bf": [bf.global_position, bf.scale, bf.rotation, bf.death_scene, bf.have_death_animation],
+		"opponent": [dad.global_position, dad.scale, dad.rotation, dad.death_scene, dad.have_death_animation],
+		"gf": [gf.global_position, gf.scale, gf.rotation, gf.death_scene, gf.have_death_animation] if gf != null else [Vector2(0,0), Vector2(0,0), 0.0, "", false]
+	};
+	SongData.camera_data = {
+		"position": sectionCamera.global_position,
+		"zoom": sectionCamera.zoom,
+		"rotation": sectionCamera.rotation
+	};
 	SongData.death_count += 1;
 	SongData.isOnDeathScreen = true;
 	can_pause = false;

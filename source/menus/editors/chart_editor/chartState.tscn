@@ -3,15 +3,8 @@
 [ext_resource type="Script" uid="uid://bsv6b7kj5cykg" path="res://source/menus/editors/chart_editor/chartState.gd" id="1_0k01q"]
 [ext_resource type="Texture2D" uid="uid://bx5opmuyd8cpm" path="res://assets/images/menuBgs/chart_BG.png" id="2_nlb02"]
 [ext_resource type="Script" uid="uid://g5ydanm2cc3t" path="res://source/menus/editors/chart_editor/grid.gd" id="3_nvrt8"]
-[ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="4_5274j"]
 [ext_resource type="PackedScene" uid="uid://bs3bmha3d0luc" path="res://assets/images/chart characters/bf/chart-bf.tscn" id="6_ewqos"]
 [ext_resource type="PackedScene" uid="uid://f0c72kmnsor3" path="res://assets/images/chart characters/enemy/enemy_chart.tscn" id="7_w8f1m"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_ko37q"]
-font = ExtResource("4_5274j")
-font_size = 350
-shadow_size = 55
-shadow_color = Color(0, 0, 0, 1)
 
 [node name="ChartState" type="Node2D" unique_id=1858587677]
 script = ExtResource("1_0k01q")
@@ -106,7 +99,7 @@ offset_top = 192.0
 offset_right = 391.0
 offset_bottom = 694.0
 tab_alignment = 1
-current_tab = 4
+current_tab = 5
 all_tabs_in_front = true
 
 [node name="chart" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=751395330]
@@ -218,36 +211,20 @@ offset_bottom = 39.0
 max_value = 50.0
 value = 16.0
 
-[node name="copy_section" type="Button" parent="chart_UI/chart_objs/TabContainer/section" unique_id=308153305]
-layout_mode = 0
-offset_left = 5.0
-offset_top = 183.0
-offset_right = 116.0
-offset_bottom = 214.0
-text = "copy section"
-
-[node name="paste_section" type="Button" parent="chart_UI/chart_objs/TabContainer/section" unique_id=978326837]
-layout_mode = 0
-offset_left = 5.0
-offset_top = 222.0
-offset_right = 116.0
-offset_bottom = 253.0
-text = "paste section"
-
 [node name="clear_section" type="Button" parent="chart_UI/chart_objs/TabContainer/section" unique_id=68355817]
 layout_mode = 0
 offset_left = 5.0
-offset_top = 262.0
+offset_top = 176.0
 offset_right = 116.0
-offset_bottom = 293.0
+offset_bottom = 207.0
 text = "clear section"
 
 [node name="add_section" type="Button" parent="chart_UI/chart_objs/TabContainer/section" unique_id=256267654]
 layout_mode = 0
 offset_left = 5.0
-offset_top = 301.0
+offset_top = 215.0
 offset_right = 116.0
-offset_bottom = 332.0
+offset_bottom = 246.0
 text = "add section"
 
 [node name="note" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=468888128]
@@ -342,6 +319,7 @@ value 1:
 value 2:"
 
 [node name="song" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=293273335]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 4
 
@@ -512,49 +490,61 @@ offset_right = 265.0
 offset_bottom = 253.0
 text = "stage:"
 
+[node name="help" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=577019770]
+layout_mode = 2
+metadata/_tab_index = 5
+
+[node name="chart_info2" type="Label" parent="chart_UI/chart_objs/TabContainer/help" unique_id=850742220]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 15.0
+offset_right = 440.0
+offset_bottom = 454.0
+scale = Vector2(0.755, 0.755)
+text = "-use A/D to change section
+
+-Hold CTRL and CLICK to position a note
+
+-Use drag select and ctrl c and v to copy and paste notes
+
+-Use Q/E to change note lenght
+
+-Press SPACE to resume the song
+
+-Use W/S or mouse wheel to navigate the grid
+
+
+
+
+chart preview:
+"
+
+[node name="preview" type="Node2D" parent="chart_UI/chart_objs/TabContainer/help" unique_id=48762639]
+
+[node name="ColorRect" type="ColorRect" parent="chart_UI/chart_objs/TabContainer/help/preview" unique_id=974319065]
+offset_left = 6.0000076
+offset_top = 327.0
+offset_right = 59.57852
+offset_bottom = 372.1964
+scale = Vector2(5.2819676, 3.0312147)
+color = Color(1, 1, 1, 0.46666667)
+
+[node name="chart-bf" parent="chart_UI/chart_objs/TabContainer/help/preview" unique_id=1845491327 instance=ExtResource("6_ewqos")]
+position = Vector2(203.00002, 418.00003)
+scale = Vector2(0.3, 0.3)
+
+[node name="enemy_chart" parent="chart_UI/chart_objs/TabContainer/help/preview" unique_id=1373808594 instance=ExtResource("7_w8f1m")]
+position = Vector2(73, 395)
+scale = Vector2(0.3, 0.3)
+
 [node name="chart_info" type="Label" parent="chart_UI/chart_objs" unique_id=1099617167]
 layout_mode = 0
 offset_left = -24.0
 offset_top = 708.0
-offset_right = 2847.0
-offset_bottom = 1949.0
-scale = Vector2(0.06128024, 0.05612893)
-text = "section:
-curBeat:
-curStep:
-song position:"
-label_settings = SubResource("LabelSettings_ko37q")
-
-[node name="chart_info2" type="Label" parent="chart_UI/chart_objs" unique_id=850742220]
-layout_mode = 0
-offset_left = -24.0
-offset_top = 812.0
-offset_right = 8792.0
-offset_bottom = 2675.0
-scale = Vector2(0.05113062, 0.05110919)
-text = "use A/D to change section
-Hold CTRL and CLICK to position a note
-Use Q/E to change note lenght
-Press SPACE to resume the song
-Use W/S or mouse wheel to navigate the grid
-"
-label_settings = SubResource("LabelSettings_ko37q")
-
-[node name="ColorRect" type="ColorRect" parent="chart_UI" unique_id=974319065]
-offset_left = 346.0
-offset_top = 516.00006
-offset_right = 385.5686
-offset_bottom = 557.56757
-scale = Vector2(5.2819676, 3.0312147)
-color = Color(1, 1, 1, 0.20392157)
-
-[node name="chart-bf" parent="chart_UI" unique_id=1845491327 instance=ExtResource("6_ewqos")]
-position = Vector2(473.00003, 606)
-scale = Vector2(0.3, 0.3)
-
-[node name="enemy_chart" parent="chart_UI" unique_id=1373808594 instance=ExtResource("7_w8f1m")]
-position = Vector2(403.00003, 584)
-scale = Vector2(0.3, 0.3)
+offset_right = 213.0
+offset_bottom = 757.0
+text = "0:00/0:00
+Section: %s - Step: %s - Beat: %s"
 
 [node name="chart_inst" type="AudioStreamPlayer" parent="." unique_id=164621937]
 
@@ -571,8 +561,6 @@ position = Vector2(640, 360)
 [connection signal="value_changed" from="chart_UI/chart_objs/TabContainer/section/new_bpm" to="." method="_on_new_bpm_value_changed"]
 [connection signal="pressed" from="chart_UI/chart_objs/TabContainer/section/bpm_change" to="." method="_on_bpm_change_pressed"]
 [connection signal="value_changed" from="chart_UI/chart_objs/TabContainer/section/section_step" to="." method="_on_section_step_value_changed"]
-[connection signal="pressed" from="chart_UI/chart_objs/TabContainer/section/copy_section" to="." method="copy_section"]
-[connection signal="pressed" from="chart_UI/chart_objs/TabContainer/section/paste_section" to="." method="paste_section"]
 [connection signal="pressed" from="chart_UI/chart_objs/TabContainer/section/clear_section" to="." method="_on_clear_section_pressed"]
 [connection signal="pressed" from="chart_UI/chart_objs/TabContainer/section/add_section" to="." method="_on_add_section_pressed"]
 [connection signal="value_changed" from="chart_UI/chart_objs/TabContainer/note/note_sustain_lenght" to="." method="_on_note_sustain_lenght_value_changed"]

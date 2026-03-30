@@ -243,6 +243,7 @@ func update_options():
 		new_option.option_new_x = 190;
 		new_option.opt_id = len(i);
 		new_option.position.y += offSetShit;
+		new_option.scale = Vector2(0.8, 0.8);
 		
 		if options[options_array[cur_option]][i].has('array value'):
 			new_option.array_val = options[options_array[cur_option]][i];

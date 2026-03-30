@@ -7,7 +7,7 @@ var curr_mem = 0;
 
 func _process(delta: float) -> void:
 	fps_text.visible = GlobalOptions.show_fps;
-	fps_text.text = "FPS: %s"%[Engine.get_frames_per_second()];
+	fps_text.text = "FPS: %s"%[int(Engine.get_frames_per_second())];
 	
 	#curr_mem = OS.get_static_memory_usage();
 	#if curr_mem != 0:

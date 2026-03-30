@@ -313,6 +313,11 @@ offset_right = 162.0
 offset_bottom = 300.0
 text = "is a special anim?"
 
+[node name="rating_node" type="Control" parent="." unique_id=1025969622]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+
 [node name="rating_layer" type="CanvasLayer" parent="." unique_id=664715140]
 layer = 3
 visible = false

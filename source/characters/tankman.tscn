@@ -8,17 +8,18 @@ script = ExtResource("1_yivwg")
 json_path = "res://assets/data/characters/tankman.json"
 healthBar_Color = Color(1, 1, 1, 1)
 is_player = true
-animTimes = {
-"good anim": [2, 45],
-"hey": [2, 5],
-"idle dance": [2, 5],
-"singDown": [2, 5],
-"singLeft": [2, 5],
-"singRight": [2, 5],
-"singUp": [2, 5]
+anims_timer = {
+"good anim": [2, 45, true],
+"hey": [2, 5, false],
+"idle dance": [2, 5, false],
+"singDown": [2, 5, false],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false]
 }
-anim_type = 1
+anim_type = 2
 have_death_animation = false
+frame_count = 2.4
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=18993768]
 sprite_frames = ExtResource("2_govxb")

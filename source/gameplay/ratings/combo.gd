@@ -3,7 +3,6 @@ extends Sprite2D
 var ratingPart = "";
 var folderPart = "";
 
-var vspeed = 0;
 var grav = 0.25;
 var fade_speed = 12.0;
 var max_fall_speed = 2;
@@ -13,7 +12,6 @@ var velocity = Vector2.ZERO
 var acceleration = Vector2.ZERO
 
 func _ready() -> void:
-	vspeed = -0.4;
 	if SongData.isPixelStage:
 		self.scale = Vector2(3.5,3.5);
 		ratingPart = "-pixel";
@@ -37,7 +35,6 @@ func pop_up_rating():
 	velocity = Vector2(-randi_range(0, 10),-randi_range(140, 175));
 	
 	position = coolComboPos;
-	vspeed = -4;
 	
 	texture = load("res://assets/images/hud/rating/%s/combo%s.png"%[folderPart, ratingPart]);
 	modulate.a = 20.0;

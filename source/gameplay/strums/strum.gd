@@ -113,14 +113,14 @@ func _process(delta):
 			note.opponent_pressed(strum_char);
 			play_strum_anim(note, 0.40);
 			self.emit_signal("pressed_note", strum_char);
-			if note.sustainLenght == 0:
+			if note.sustainLength == 0:
 				notesList.erase(note);
 			else:
 				if note.note != null:
 					note.note.queue_free();
 					
 				note.is_pressing = true;
-				if note.sustainLenght <= 0:
+				if note.sustainLength <= 0:
 					note.is_pressing = false;
 					notesList.erase(note);
 					
@@ -142,14 +142,14 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer)
 	note.is_altAnim = isAltAnim;
 	note.strumTime = strumTime;
 	note.noteData = note_data;
-	note.sustainLenght = lenght;
+	note.sustainLength = lenght;
 	note.type = type;
 	note.isGfNote = isGfNote or (type == "gf sing");
 	note.is_altAnim = isAltAnim or (type == "alt anim");
 	note.no_anim = (type == "No Animation");
 	note.is_hey_note = (type == "Hey!");
 	note.must_press = note.isPlayer;
-	note.isSustain = note.sustainLenght > 0.0;
+	note.isSustain = note.sustainLength > 0.0;
 	
 	note.scale = strumNode.get_child(note.noteData).scale;
 	note.rotation = strumNode.get_child(note.noteData).rotation;

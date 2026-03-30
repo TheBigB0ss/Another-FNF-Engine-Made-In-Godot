@@ -47,6 +47,6 @@ func _process(delta: float) -> void:
 		
 		match spectrumType:
 			1:
-				vizu.get_child(i).frame = 10 - int(floor(value * 10.0))
+				vizu.get_child(i).frame = 5 - int(floor(value * 5.0));
 			2:
-				vizu.get_child(i).frame = clamp(int(floor(value * 10.0)) + 1, 1, 10) - 1;
+				vizu.get_child(i).frame = clamp(int(floor(value * 5.0)) + 1, 0, 5) - 1;

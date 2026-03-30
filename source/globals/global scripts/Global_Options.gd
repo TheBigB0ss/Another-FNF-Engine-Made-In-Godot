@@ -65,6 +65,10 @@ var array_opts = {
 	"icon type": {
 		"options": ["default", "new bouncy", "golden apple", "disabled"],
 		"value": 0
+	},
+	"rating mode":{
+		"options": ["hud element", "game element"],
+		"value": 0
 	}
 };
 
@@ -72,6 +76,7 @@ var updated_pause_music = "pause song";
 var updated_hud = "new hud";
 var updated_cam = "normal";
 var updated_icon = "default";
+var rating_mode = "hud element";
 
 signal ghost_tapping_miss(note);
 
@@ -83,7 +88,7 @@ func _ready():
 		for j in keys.keys():
 			keys_list.append(j);
 			
-	if !settingsJson.has("version") or settingsJson["version"] != 0:
+	if !settingsJson.has("version") or settingsJson["version"] != 1:
 		reset_settings();
 		
 	apply_changes();
@@ -120,12 +125,13 @@ func rebind_keys(key_selected, new_key, key_value):
 	
 func reset_settings():
 	settingsJson = {
-		"version": 0,
+		"version": 1,
 		"pause music": "pause song",
 		"hud mode": "new hud",
 		"camera mode": "normal",
 		"icon type": "default",
 		"down scroll": false,
+		"rating mode": "hud element",
 		"middle scroll": false,
 		"no R": false,
 		"hide hud": false,
@@ -177,6 +183,10 @@ func reset_settings():
 			"icon type": {
 				"options": ["default", "disabled"],
 				"value": 0
+			},
+			"rating mode":{
+				"options": ["hud element", "game element"],
+				"value": 0
 			}
 		},
 		"volume": 1
@@ -201,6 +211,7 @@ func apply_changes():
 	updated_pause_music = settingsJson["pause music"];
 	updated_cam = settingsJson["camera mode"];
 	updated_icon = settingsJson["icon type"];
+	rating_mode = settingsJson["rating mode"];
 	
 	show_fps = settingsJson["show FPS"];
 	full_screen = settingsJson["full screen"];
@@ -325,6 +336,11 @@ func set_options():
 			}
 		},
 		"visual": {
+			"rating mode":{
+				"value": array_opts["rating mode"]["options"], 
+				"description": "choose how the ranking will behave on the game screen", 
+				"array value": [array_opts["rating mode"]["value"], "rating mode"]
+			},
 			"hud mode":{
 				"value": array_opts["hud mode"]["options"], 
 				"description": "choice hud mode", 

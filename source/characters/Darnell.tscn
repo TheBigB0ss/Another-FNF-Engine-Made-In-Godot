@@ -747,17 +747,16 @@ animations = [{
 script = ExtResource("1_f1jyy")
 json_path = "res://assets/data/characters/Darnell.json"
 healthBar_Color = Color(0.38431373, 0.09019608, 0.5764706, 1)
-animTimes = {
-"idle dance": [2, 5],
-"singDown": [2, 5],
-"singLaugh": [2, 5],
-"singLeft": [2, 5],
-"singRight": [2, 5],
-"singUp": [2, 5]
+anims_timer = {
+"idle dance": [2, 5, false],
+"singDown": [2, 5, false],
+"singLaugh": [4, 15, true],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false]
 }
-anim_type = 2
+anim_type = 3
 have_death_animation = false
-frame_count = 2.4
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=908624715]
 sprite_frames = SubResource("SpriteFrames_h3gbs")

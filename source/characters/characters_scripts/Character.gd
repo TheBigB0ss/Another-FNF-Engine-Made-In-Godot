@@ -135,7 +135,7 @@ func _playAnim(anim="", note:Note = null):
 		var prevState = characterState;
 		
 		if animList[i].contains("sing"):
-			characterState = (CHARACTER_STATES.IDLE if note.sustainLenght <= 0 or note.MissedlongNote else CHARACTER_STATES.HOLDING) if longNote else CHARACTER_STATES.SINGING;
+			characterState = (CHARACTER_STATES.IDLE if note.sustainLength <= 0 or note.MissedlongNote else CHARACTER_STATES.HOLDING) if longNote else CHARACTER_STATES.SINGING;
 		elif special_anim:
 			characterState = CHARACTER_STATES.SPECIAL;
 		elif curAnim == "idle dance":

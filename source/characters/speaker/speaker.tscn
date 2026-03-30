@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://duf3orbo6or1h"]
+[gd_scene format=3 uid="uid://duf3orbo6or1h"]
 
 [ext_resource type="Script" uid="uid://c8odm56mhmkiq" path="res://source/characters/speaker/speaker.gd" id="1_j1md7"]
 [ext_resource type="SpriteFrames" uid="uid://dmnh3g511mlg2" path="res://assets/images/speaker/vizualizer.res" id="2_bi3bi"]
@@ -110,57 +110,58 @@ animations = [{
 "speed": 18.0
 }]
 
-[node name="speaker" type="Node2D"]
+[node name="speaker" type="Node2D" unique_id=1950582606]
 script = ExtResource("1_j1md7")
-amount = 0.285
+amount = 0.235
+power = 4
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=572042398]
 offset_left = -180.0
 offset_top = -140.0
 offset_right = 191.0
 offset_bottom = 135.0
 color = Color(0.09411765, 0.08235294, 0.1254902, 1)
 
-[node name="vizu" type="Node2D" parent="."]
+[node name="vizu" type="Node2D" parent="." unique_id=213293964]
 metadata/_edit_lock_ = true
 
-[node name="Vizu1" type="AnimatedSprite2D" parent="vizu"]
+[node name="Vizu1" type="AnimatedSprite2D" parent="vizu" unique_id=1256478323]
 position = Vector2(-141, -11)
 sprite_frames = ExtResource("2_bi3bi")
 animation = &"VIZ1"
 metadata/_edit_lock_ = true
 
-[node name="Vizu2" type="AnimatedSprite2D" parent="vizu"]
+[node name="Vizu2" type="AnimatedSprite2D" parent="vizu" unique_id=2105560236]
 position = Vector2(-94, -11)
 sprite_frames = ExtResource("2_bi3bi")
 animation = &"VIZ2"
 metadata/_edit_lock_ = true
 
-[node name="Vizu3" type="AnimatedSprite2D" parent="vizu"]
+[node name="Vizu3" type="AnimatedSprite2D" parent="vizu" unique_id=1931320630]
 position = Vector2(-39, -9)
 sprite_frames = ExtResource("2_bi3bi")
 animation = &"VIZ3"
 metadata/_edit_lock_ = true
 
-[node name="Vizu4" type="AnimatedSprite2D" parent="vizu"]
+[node name="Vizu4" type="AnimatedSprite2D" parent="vizu" unique_id=1662640287]
 position = Vector2(26, -9)
 sprite_frames = ExtResource("2_bi3bi")
 animation = &"VIZ4"
 metadata/_edit_lock_ = true
 
-[node name="Vizu5" type="AnimatedSprite2D" parent="vizu"]
+[node name="Vizu5" type="AnimatedSprite2D" parent="vizu" unique_id=261120132]
 position = Vector2(83, -12)
 sprite_frames = ExtResource("2_bi3bi")
 animation = &"VIZ5"
 metadata/_edit_lock_ = true
 
-[node name="Vizu6" type="AnimatedSprite2D" parent="vizu"]
+[node name="Vizu6" type="AnimatedSprite2D" parent="vizu" unique_id=846885332]
 position = Vector2(137, -11)
 sprite_frames = ExtResource("2_bi3bi")
 animation = &"VIZ6"
 metadata/_edit_lock_ = true
 
-[node name="speaker" type="AnimatedSprite2D" parent="."]
+[node name="speaker" type="AnimatedSprite2D" parent="." unique_id=313307505]
 sprite_frames = SubResource("SpriteFrames_t7tp7")
 animation = &"ANIM_SPEAKER_Idle"
 frame = 13
