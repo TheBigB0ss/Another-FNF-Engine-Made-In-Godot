@@ -37,6 +37,7 @@ func _process(delta):
 	queue_redraw()
 	
 var nums = [];
+var scale_factor = 0.3 if SongData.isPixelStage else 1.0;
 func pop_up_rating():
 	position = coolNumsPos;
 	nums = [];
@@ -48,9 +49,12 @@ func pop_up_rating():
 		
 		var numbers = {
 			"texture": numScore[int(combo[i])],
-			"position": Vector2(i * 90 + rand_x, rand_y) if !SongData.isPixelStage else Vector2(i * 10 + rand_x, rand_y),
-			"velocity": Vector2(-randi_range(0, 50), -randi_range(130, 190)) if !SongData.isPixelStage else Vector2(-randi_range(0, 10),-randi_range(140, 175)),
-			"acceleration": Vector2(0, randf_range(420, 760)) if !SongData.isPixelStage else Vector2(0, 550)
+			"position": Vector2(i * (10 if SongData.isPixelStage else 90) + rand_x, rand_y),
+			"velocity": Vector2(
+				-randi_range(0, 50) * scale_factor,
+				-randi_range(130, 190) * scale_factor
+			),
+			"acceleration": Vector2(0, randf_range(420, 760) * scale_factor)
 		};
 		
 		nums.append(numbers);
