@@ -2,11 +2,17 @@
 
 [ext_resource type="Script" uid="uid://y1n73jvmvg2n" path="res://source/menus/editors/offset_editor/offset_menu.gd" id="1_vft5f"]
 [ext_resource type="PackedScene" uid="uid://ci7s7lxw8p2bl" path="res://source/stages/stage/stage.tscn" id="2_l24p0"]
+[ext_resource type="Texture2D" uid="uid://b23ynj36pxt2r" path="res://assets/images/hud/offset_ui/ui_pointer.png" id="3_hopd8"]
 [ext_resource type="Texture2D" uid="uid://dl8ob6uqlxroc" path="res://assets/images/hud/rating/default/sick.png" id="3_n322e"]
 [ext_resource type="Texture2D" uid="uid://cj6lp01iqfivo" path="res://assets/images/hud/rating/default/combo.png" id="3_v3n4i"]
 [ext_resource type="Texture2D" uid="uid://duy7maeuccjue" path="res://assets/images/cross.png" id="4_i0ff4"]
 [ext_resource type="Script" uid="uid://et1x2odfrswb" path="res://source/menus/editors/offset_editor/offsetNums.gd" id="4_qyjxo"]
+[ext_resource type="Texture2D" uid="uid://80xkslengvv2" path="res://assets/images/hud/offset_ui/ui_bar.png" id="4_xty76"]
+[ext_resource type="Texture2D" uid="uid://p62e8iawbjv5" path="res://assets/images/hud/offset_ui/UI_RIGHT.png" id="5_bn4vb"]
 [ext_resource type="Script" uid="uid://essfoa0h4nwy" path="res://source/alphabet/alphabetObject.gd" id="6_v3n4i"]
+[ext_resource type="Texture2D" uid="uid://c4iv46257vg3j" path="res://assets/images/hud/offset_ui/UI_LEFT.png" id="6_wtymh"]
+[ext_resource type="Texture2D" uid="uid://ckkrwrljw3sjd" path="res://assets/images/hud/offset_ui/UI_LEFT_WALL.png" id="7_o6sf4"]
+[ext_resource type="Texture2D" uid="uid://cj2xlr6n2atcu" path="res://assets/images/hud/offset_ui/UI_RIGHT_WALL.png" id="8_125xj"]
 
 [node name="OffsetMenu" type="Node2D" unique_id=720753676]
 script = ExtResource("1_vft5f")
@@ -19,30 +25,15 @@ position = Vector2(475, 348)
 [node name="offset_layer" type="CanvasLayer" parent="." unique_id=407402591]
 layer = 3
 
-[node name="infos" type="RichTextLabel" parent="offset_layer" unique_id=1116520503]
-offset_left = 5.0
-offset_top = 5.0
-offset_right = 443.0
-offset_bottom = 216.0
-bbcode_enabled = true
-text = "Hello, welcome to the offset menu!
-Here is some information on how to use the menu :)
-[wave]
-E/Q: Change the current animation
-Space: Play the current animation
-Use your keyboard keys to change the animation offset.
-W/A/S/D: to move camera
-Mouse Scroll: change camera zoom
-Shift + Mouse Press to drag camera cross"
-
 [node name="TabContainer" type="TabContainer" parent="offset_layer" unique_id=1159964180]
 offset_left = 807.0
 offset_top = 23.0
 offset_right = 1231.0
 offset_bottom = 462.0
-current_tab = 0
+current_tab = 1
 
 [node name="main settings" type="TabBar" parent="offset_layer/TabContainer" unique_id=138948233]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -187,17 +178,73 @@ max_value = 9000.0
 step = 10.0
 
 [node name="anim settings" type="TabBar" parent="offset_layer/TabContainer" unique_id=1814175706]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 1
+
+[node name="frames_ui" type="Control" parent="offset_layer/TabContainer/anim settings" unique_id=785130326]
+anchors_preset = 0
+offset_left = 7.0
+offset_right = 47.0
+offset_bottom = 40.0
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="offset_layer/TabContainer/anim settings/frames_ui" unique_id=1023720238]
+texture_filter = 1
+layout_mode = 0
+offset_left = 64.57501
+offset_top = 295.0
+offset_right = 693.575
+offset_bottom = 404.0
+scale = Vector2(0.45, 0.45)
+max_value = 1.0
+texture_under = ExtResource("4_xty76")
+texture_progress = ExtResource("4_xty76")
+tint_under = Color(0, 0, 0, 1)
+
+[node name="pointer" type="Sprite2D" parent="offset_layer/TabContainer/anim settings/frames_ui" unique_id=869257152]
+texture_filter = 1
+position = Vector2(81, 281)
+scale = Vector2(0.45, 0.45)
+texture = ExtResource("3_hopd8")
+
+[node name="last_frame" type="Sprite2D" parent="offset_layer/TabContainer/anim settings/frames_ui" unique_id=869771568]
+texture_filter = 1
+position = Vector2(46, 322)
+scale = Vector2(0.275, 0.275)
+texture = ExtResource("5_bn4vb")
+
+[node name="next_frame" type="Sprite2D" parent="offset_layer/TabContainer/anim settings/frames_ui" unique_id=2043957510]
+texture_filter = 1
+position = Vector2(364, 322)
+scale = Vector2(0.275, 0.275)
+texture = ExtResource("6_wtymh")
+
+[node name="arrow_wall_left" type="Sprite2D" parent="offset_layer/TabContainer/anim settings/frames_ui" unique_id=1640347938]
+texture_filter = 1
+position = Vector2(18, 319.99997)
+scale = Vector2(0.275, 0.275)
+texture = ExtResource("7_o6sf4")
+
+[node name="arrow_wall_right" type="Sprite2D" parent="offset_layer/TabContainer/anim settings/frames_ui" unique_id=180851452]
+texture_filter = 1
+position = Vector2(393, 320)
+scale = Vector2(0.275, 0.275)
+texture = ExtResource("8_125xj")
 
 [node name="current_anim" type="Label" parent="offset_layer/TabContainer/anim settings" unique_id=1734959117]
 layout_mode = 0
 offset_left = 1.0
-offset_top = 382.0
+offset_top = 348.0
 offset_right = 168.0
-offset_bottom = 405.0
+offset_bottom = 371.0
 text = "animation: idle dance"
+
+[node name="current_frame" type="Label" parent="offset_layer/TabContainer/anim settings" unique_id=1844462683]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 375.0
+offset_right = 168.0
+offset_bottom = 398.0
+text = "frame: 0 / 0"
 
 [node name="x_scale_label" type="Label" parent="offset_layer/TabContainer/anim settings" unique_id=2018475551]
 layout_mode = 0
@@ -236,36 +283,36 @@ value = 1.0
 [node name="anim_time_text" type="Label" parent="offset_layer/TabContainer/anim settings" unique_id=634919882]
 layout_mode = 0
 offset_left = 1.0
-offset_top = 160.0
+offset_top = 113.0
 offset_right = 129.0
-offset_bottom = 183.0
+offset_bottom = 136.0
 text = "anim time:"
 
 [node name="anim_time" type="SpinBox" parent="offset_layer/TabContainer/anim settings" unique_id=532316722]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 86.0
-offset_top = 157.0
+offset_top = 110.0
 offset_right = 186.0
-offset_bottom = 188.0
+offset_bottom = 141.0
 min_value = 1.0
 value = 5.0
 
 [node name="beat_time_text" type="Label" parent="offset_layer/TabContainer/anim settings" unique_id=1692181547]
 layout_mode = 0
 offset_left = 1.0
-offset_top = 205.0
+offset_top = 158.0
 offset_right = 129.0
-offset_bottom = 228.0
+offset_bottom = 181.0
 text = "anim beat:"
 
 [node name="beat_time" type="SpinBox" parent="offset_layer/TabContainer/anim settings" unique_id=92275838]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 86.0
-offset_top = 202.0
+offset_top = 155.0
 offset_right = 186.0
-offset_bottom = 233.0
+offset_bottom = 186.0
 min_value = 1.0
 value = 2.0
 
@@ -308,10 +355,38 @@ max_value = 9000.0
 [node name="is_special" type="CheckBox" parent="offset_layer/TabContainer/anim settings" unique_id=1941830486]
 unique_name_in_owner = true
 layout_mode = 0
-offset_top = 269.0
+offset_top = 194.0
 offset_right = 162.0
-offset_bottom = 300.0
+offset_bottom = 225.0
 text = "is a special anim?"
+
+[node name="help" type="TabBar" parent="offset_layer/TabContainer" unique_id=751837879]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="infos" type="RichTextLabel" parent="offset_layer/TabContainer/help" unique_id=1116520503]
+layout_mode = 0
+offset_left = 3.9999995
+offset_top = 7.0
+offset_right = 442.0
+offset_bottom = 412.2705
+scale = Vector2(0.9575283, 0.9795926)
+bbcode_enabled = true
+text = "Hello, welcome to the offset menu!
+Here is some information on how to use the menu :)
+
+-E/Q: Change the current animation
+
+-Space: Play the current animation
+
+-Use your keyboard keys to change the animation offset.
+
+-W/A/S/D: to move camera
+
+-Mouse Scroll: change camera zoom
+
+-Shift + Mouse Press to drag camera cross"
 
 [node name="rating_node" type="Control" parent="." unique_id=1025969622]
 visible = false

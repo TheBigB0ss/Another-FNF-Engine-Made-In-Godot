@@ -1,7 +1,5 @@
 extends Node
 
-@onready var events = $EventLoader;
-
 @onready var hud = $hud/Hud_Layer;
 @onready var timeText = $'hud/Hud_Layer/timeLabel';
 @onready var ratingText = $'hud/Hud_Layer/ratingLabel'
@@ -308,7 +306,6 @@ func _ready():
 		scoreText.position = Vector2(620, 680);
 		scoreText.scale = Vector2(0.03, 0.03);
 		
-	events.load_(self);
 	updateScoreText();
 	
 func add_character(position, z_index, path, child_id):

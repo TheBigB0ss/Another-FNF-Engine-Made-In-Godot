@@ -33,7 +33,7 @@ func pop_up_rating(rating):
 	acceleration = Vector2(0, 550);
 	velocity = Vector2(-randi_range(0, 10),-randi_range(140, 175));
 	
-	position = coolRatingPos;
+	global_position = coolRatingPos;
 	
 	texture = load("res://assets/images/hud/rating/%s/%s.png"%[folderPart, ratings[rating] + ratingPart]);
 	modulate.a = 20.0;

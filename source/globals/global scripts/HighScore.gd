@@ -50,6 +50,7 @@ func get_percent(song = "", diff = ""): return float(percent_data.get(set_song(s
 func get_rank(song = "", diff = ""): return str(rank_data.get(set_song(song, diff), "???"));
 
 func unlocksong(song, icon, color, weekName, diffs): unlockSongs[song] = {"icon": icon,  "color": color, "week name": weekName, "diffs": diffs}; save_song();
+func set_song(song, diff): return str(song, diff);
 
 func unlockweek(week, last_week, week_name, week_locked): 
 	if last_week != week_name && week_locked: 
@@ -57,19 +58,13 @@ func unlockweek(week, last_week, week_name, week_locked):
 	else:
 		return true;
 		
-func set_song(song, diff):
-	return str(song, diff);
-	
 func update_version():
 	var version = 1;
 	
-	if score_data.get("version", 0) != version:
-		clearScore();
-	if rank_data.get("version", 0) != version:
-		clearRank();
-	if percent_data.get("version", 0) != version:
-		clearPercent();
-		
+	if score_data.get("version", 0) != version: clearScore();
+	if rank_data.get("version", 0) != version: clearRank();
+	if percent_data.get("version", 0) != version: clearPercent();
+	
 	score_data["version"] = version;
 	rank_data["version"] = version;
 	percent_data["version"] = version;

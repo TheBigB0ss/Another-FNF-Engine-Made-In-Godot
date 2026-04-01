@@ -40,9 +40,11 @@ func _ready():
 		
 	#print(stickersArray)
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	process_mode = 2 if get_tree().paused else 0;
-	
+	for i in stickersGrp.get_children():
+		i.scale = lerp(i.scale, Vector2(1.0, 1.0), 0.90);
+		
 func spawnStickers():
 	var count = stickersGrp.get_child_count();
 	
@@ -59,6 +61,7 @@ func spawnStickers():
 	sticker.texture = sticker_textures[random_sticker];
 	sticker.position = Vector2(randi_range(0, 1380), randi_range(0, 810));
 	sticker.rotation = deg_to_rad(randi_range(-20, 20));
+	sticker.scale = Vector2(1.2, 1.2);
 	stickersGrp.add_child(sticker);
 	
 	Global.can_use_menus = stickersGrp.get_child_count() > 0;

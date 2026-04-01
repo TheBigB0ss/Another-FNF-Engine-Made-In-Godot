@@ -338,7 +338,7 @@ func set_options():
 		"visual": {
 			"rating mode":{
 				"value": array_opts["rating mode"]["options"], 
-				"description": "choose how the ranking will behave on the game screen", 
+				"description": "choose how the rating will behave on the game screen", 
 				"array value": [array_opts["rating mode"]["value"], "rating mode"]
 			},
 			"hud mode":{

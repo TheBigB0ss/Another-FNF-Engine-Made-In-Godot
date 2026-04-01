@@ -214,6 +214,7 @@ zoom = Vector2(0.8, 0.8)
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 
-[node name="EventLoader" type="Node" parent="." unique_id=459085608]
+[node name="EventLoader" type="Node" parent="." unique_id=459085608 node_paths=PackedStringArray("scene")]
 script = ExtResource("2_4fsh2")
+scene = NodePath("..")
 metadata/_custom_type_script = "uid://bylq1p6vnb3qd"

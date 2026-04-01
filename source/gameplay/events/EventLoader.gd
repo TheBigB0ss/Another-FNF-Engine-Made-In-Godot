@@ -1,7 +1,8 @@
 class_name EventLoader extends Node
 
 var array_events_notes = [];
-@onready var main_scene = get_tree().current_scene;
+@export var scene:Node2D;
+var main_scene = null;
 
 var bf;
 var dad;
@@ -16,11 +17,12 @@ var stage;
 signal event_emit(event_name);
 
 func _ready() -> void:
+	main_scene = scene;
 	if !SongData.songEvents.is_empty():
 		for i in SongData.songEvents:
 			array_events_notes.insert(0, [i[0], i[1], i[2], i[3], i[4]]);
 			
-func load_(scene):
+func load_():
 	bf = scene.bf;
 	dad = scene.dad;
 	gf = scene.gf;
@@ -108,16 +110,16 @@ func changeChar(id, newCharacter):
 			main_scene.bf = newChar;
 			bf = newChar;
 			
-			if iconP1 is Icon:
-				iconP1.reload_icon(bf.curIcon);
-			elif iconP1 is AnimatedIcon:
-				iconP1.icon_frames = "assets/images/icons/animated/%s/%s.res"%[bf.curIcon, bf.curIcon];
-				iconP1.icon_char = bf.curIcon;
+			if main_scene.iconP1 is Icon:
+				main_scene.iconP1.reload_icon(main_scene.bf.curIcon);
+			elif main_scene.iconP1 is AnimatedIcon:
+				main_scene.iconP1.icon_frames = "assets/images/icons/animated/%s/%s.res"%[main_scene.bf.curIcon, main_scene.bf.curIcon];
+				main_scene.iconP1.icon_char = main_scene.bf.curIcon;
 				
-			bf.character.flip_h = !bf.is_player;
-			if !bf.is_player:
-				for i in bf.camera_pos.size():
-					bf.camera_pos[i] *= -1;
+			main_scene.bf.character.flip_h = !main_scene.bf.is_player;
+			if !main_scene.bf.is_player:
+				for i in main_scene.bf.camera_pos.size():
+					main_scene.bf.camera_pos[i] *= -1;
 					
 			main_scene.healthBar.tint_progress = Color("#ff000f") if GlobalOptions.updated_hud == "classic hud" else bf.healthBar_Color;
 			
@@ -129,16 +131,16 @@ func changeChar(id, newCharacter):
 			main_scene.dad = newChar;
 			dad = newChar;
 			
-			if iconP2 is Icon:
-				iconP2.reload_icon(dad.curIcon);
-			elif iconP2 is AnimatedIcon:
-				iconP2.icon_frames = "assets/images/icons/animated/%s/%s.res"%[dad.curIcon, dad.curIcon];
-				iconP2.icon_char = dad.curIcon;
+			if main_scene.iconP2 is Icon:
+				main_scene.iconP2.reload_icon(main_scene.dad.curIcon);
+			elif main_scene.iconP2 is AnimatedIcon:
+				main_scene.iconP2.icon_frames = "assets/images/icons/animated/%s/%s.res"%[main_scene.dad.curIcon, main_scene.dad.curIcon];
+				main_scene.iconP2.icon_char = main_scene.dad.curIcon;
 				
-			dad.character.flip_h = dad.is_player;
-			if dad.is_player:
-				for i in dad.camera_pos.size():
-					dad.camera_pos[i] *= -1;
+			main_scene.dad.character.flip_h = dad.is_player;
+			if main_scene.dad.is_player:
+				for i in main_scene.dad.camera_pos.size():
+					main_scene.dad.camera_pos[i] *= -1;
 					
 			main_scene.healthBar.tint_under = Color("#ff000f") if GlobalOptions.updated_hud == "classic hud" else dad.healthBar_Color;
 			

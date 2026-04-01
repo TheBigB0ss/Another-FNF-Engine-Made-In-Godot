@@ -3,7 +3,14 @@ extends Node2D
 @onready var characterGrp = $"character";
 @onready var characters_options = $"offset_layer/TabContainer/main settings/characters";
 @onready var cur_anim_text = $"offset_layer/TabContainer/anim settings/current_anim";
+@onready var cur_frame_text = $"offset_layer/TabContainer/anim settings/current_frame";
 @onready var pos_cross = $cross;
+@onready var frame_pointer = $"offset_layer/TabContainer/anim settings/frames_ui/pointer";
+@onready var frame_bar = $"offset_layer/TabContainer/anim settings/frames_ui/TextureProgressBar";
+@onready var frame_arrow_left = $"offset_layer/TabContainer/anim settings/frames_ui/last_frame";
+@onready var frame_arrow_right = $"offset_layer/TabContainer/anim settings/frames_ui/next_frame";
+@onready var frame_arrow_leftWall = $"offset_layer/TabContainer/anim settings/frames_ui/arrow_wall_left";
+@onready var frame_arrow_rightWall = $"offset_layer/TabContainer/anim settings/frames_ui/arrow_wall_right";
 @onready var camera = $Camera2D;
 
 @onready var ratingSpr = $rating_layer/rating;
@@ -19,7 +26,11 @@ var characterJson = {};
 var characterData = [];
 var offset_count = 0;
 
+var pointer_starter = Vector2.ZERO;
+
 func _ready():
+	pointer_starter = frame_pointer.position;
+	
 	Discord.update_discord_info("offset menu", "Is in menus");
 	SongData.isOnDeathScreen = false;
 	MusicManager._play_music(GlobalOptions.updated_pause_music, false, true);
@@ -105,7 +116,6 @@ func update_offset_value(x = 0, y = 0):
 			
 		if i.character is Sprite2D:
 			i.character.position = i.base_position + Vector2(x, y);
-			print(i.character.position)
 			
 func update_cross(x, y):
 	var midpoint = characterGrp.get_child(0).global_position;
@@ -251,6 +261,25 @@ func change_anim(change):
 			update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
 			play_anim();
 			
+func change_character_frame(frame = 1, instant = false):
+	var character = null
+	var max_frames = null;
+	
+	for i in characterGrp.get_children():
+		if i.character is Sprite2D:
+			character = i.character_anim;
+			max_frames = character.get_animation(i.posesList[cur_pose]).length;
+			
+			var val = abs((max_frames if frame > 0 else 0.0) if instant else character.current_animation_position+(frame/60.0));
+			character.seek(clamp(val, 0.0, max_frames), true);
+			
+		elif i.character is AnimatedSprite2D:
+			character = i.character
+			max_frames = character.sprite_frames.get_frame_count(i.posesList[cur_pose]);
+			
+			var val = (max_frames if frame > 0 else 0.0) if instant else character.frame+frame;
+			i.character.frame = clamp(val, 0.0, max_frames);
+			
 var holding_char = false;
 var rating_status = null;
 enum RatingState {
@@ -264,7 +293,46 @@ var can_grab = true;
 var animTimes = [];
 var animBeats = [];
 var specialAnims = [];
-func _process(delta: float) -> void:
+
+var last_mouse_x = 0;
+
+func _process(_delta: float) -> void:
+	for i in characterGrp.get_children():
+		var frame = 0;
+		var total_frames = 0;
+		
+		if i.character is AnimatedSprite2D:
+			frame = i.character.frame;
+			total_frames = i.character.sprite_frames.get_frame_count(i.posesList[cur_pose]);
+			
+		elif i.character is Sprite2D:
+			frame = int(round(i.character_anim.current_animation_position / i.character_anim.get_animation(i.posesList[cur_pose]).step));
+			total_frames = int(round(i.character_anim.get_animation(i.posesList[cur_pose]).length / i.character_anim.get_animation(i.posesList[cur_pose]).step))+1;
+			
+		var frame_position = (frame/float(total_frames-1))*100;
+		
+		cur_frame_text.text = "frame: "+str(frame+1, " / ", total_frames);
+		frame_pointer.position.x = pointer_starter.x+frame_position*2.5;
+		
+		frame_bar.value = float(frame);
+		frame_bar.max_value = total_frames-1;
+		
+	if Input.is_action_just_pressed("mouse_click"):
+		if mouse_inside(frame_arrow_left, frame_arrow_left.texture): change_character_frame(-1);
+		elif mouse_inside(frame_arrow_right, frame_arrow_right.texture): change_character_frame(1);
+		elif mouse_inside(frame_arrow_leftWall, frame_arrow_leftWall.texture): change_character_frame(-1, true);
+		elif mouse_inside(frame_arrow_rightWall, frame_arrow_rightWall.texture): change_character_frame(1, true);
+		
+	var direction = 0;
+	if get_viewport().get_mouse_position().x > last_mouse_x: direction = 1;
+	elif get_viewport().get_mouse_position().x < last_mouse_x: direction = -1;
+	last_mouse_x = get_viewport().get_mouse_position().x;
+	if mouse_inside(frame_pointer, frame_pointer.texture):
+		if Input.is_action_pressed("mouse_click"):
+			frame_pointer.position.x += direction * 5;
+			frame_pointer.position.x = clamp(frame_pointer.position.x, pointer_starter.x, pointer_starter.x + 250);
+			change_character_frame(direction);
+			
 	if adjusting_rating:
 		var mouse = get_viewport().get_mouse_position();
 		

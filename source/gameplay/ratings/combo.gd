@@ -34,7 +34,7 @@ func pop_up_rating():
 	acceleration = Vector2(0, 550);
 	velocity = Vector2(-randi_range(0, 10),-randi_range(140, 175));
 	
-	position = coolComboPos;
+	global_position = coolComboPos;
 	
 	texture = load("res://assets/images/hud/rating/%s/combo%s.png"%[folderPart, ratingPart]);
 	modulate.a = 20.0;

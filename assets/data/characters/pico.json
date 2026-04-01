@@ -4,53 +4,67 @@
 	"FlipY": false,
 	"HealthBarColor": "#abeb3bff",
 	"HealthIcon": "pico",
-	"LoopAnim": false,
 	"Poses": [
 		{
 			"Anim": "idle dance",
+			"Anim Time": 5,
 			"Name": "Pico Idle Dance",
 			"Offset": [
 				-30.0,
 				0.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singLeft",
+			"Anim Time": 5,
 			"Name": "Pico Note Right",
 			"Offset": [
 				-80.0,
 				0.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singDown",
+			"Anim Time": 5,
 			"Name": "Pico Down Note",
 			"Offset": [
 				-79.0,
 				42.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singUp",
+			"Anim Time": 5,
 			"Name": "pico Up note",
 			"Offset": [
 				-15.0,
 				-10.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singRight",
+			"Anim Time": 5,
 			"Name": "Pico NOTE LEFT",
 			"Offset": [
 				58.0,
 				6.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		}
 	],
-	"anim time": 5.0,
+	"camera follow pos": false,
 	"cameraPos": [
-		50.0,
-		-40.0
+		-140.0,
+		-50.0
 	],
 	"isPlayer": true,
 	"scale": [

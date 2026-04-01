@@ -39,7 +39,7 @@ func _process(delta):
 var nums = [];
 var scale_factor = 0.3 if SongData.isPixelStage else 1.0;
 func pop_up_rating():
-	position = coolNumsPos;
+	global_position = coolNumsPos;
 	nums = [];
 	var coolCombo = get_tree().current_scene.get("combo");
 	var combo = str(coolCombo) if GlobalOptions.updated_hud != "classic hud" else str(coolCombo).pad_zeros(3);
