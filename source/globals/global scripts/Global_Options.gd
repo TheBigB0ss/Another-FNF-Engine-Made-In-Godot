@@ -96,6 +96,9 @@ func _ready():
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if GlobalOptions.full_screen else DisplayServer.WINDOW_MODE_WINDOWED);
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if GlobalOptions.vsync else DisplayServer.VSYNC_DISABLED);
 	
+func update_vsync(toggle): DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if toggle else DisplayServer.VSYNC_DISABLED);
+func update_windowMode(toggle): DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if toggle else DisplayServer.WINDOW_MODE_WINDOWED);
+
 func save_settings():
 	var new_jsonFile = FileAccess.open("user://Settings.json", FileAccess.WRITE);
 	new_jsonFile.store_string(JSON.stringify(settingsJson));

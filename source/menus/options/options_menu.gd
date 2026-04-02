@@ -198,9 +198,9 @@ func set_change_bool(cur_opt, value):
 	
 	match settings.get_child(cur_opt).opt_name:
 		"full screen":
-			Global.update_windowMode(settings.get_child(cur_opt).opt_type);
+			GlobalOptions.update_windowMode(settings.get_child(cur_opt).opt_type);
 		"vsync":
-			Global.update_vsync(settings.get_child(cur_opt).opt_type);
+			GlobalOptions.update_vsync(settings.get_child(cur_opt).opt_type);
 			
 func set_change_array(cur_opt, change):
 	var new_opt = settings.get_child(cur_opt);
