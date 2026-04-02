@@ -30,7 +30,7 @@ offset_left = 807.0
 offset_top = 23.0
 offset_right = 1231.0
 offset_bottom = 462.0
-current_tab = 1
+current_tab = 2
 
 [node name="main settings" type="TabBar" parent="offset_layer/TabContainer" unique_id=138948233]
 visible = false
@@ -178,6 +178,7 @@ max_value = 9000.0
 step = 10.0
 
 [node name="anim settings" type="TabBar" parent="offset_layer/TabContainer" unique_id=1814175706]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
@@ -361,7 +362,6 @@ offset_bottom = 225.0
 text = "is a special anim?"
 
 [node name="help" type="TabBar" parent="offset_layer/TabContainer" unique_id=751837879]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 

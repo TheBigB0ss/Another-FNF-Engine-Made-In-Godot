@@ -1,35 +1,30 @@
-extends Node
+extends AudioStreamPlayer2D
 
-var music = AudioStreamPlayer2D.new();
-var cool_loop = false;
+var music_loop = false;
 
-func _ready() -> void:
-	add_child(music);
+func _play_music(to_load, music_top_level, loop, volume = 0.0):
+	stream = load("res://assets/music/%s.ogg"%[to_load]);
+	top_level = music_top_level;
+	volume_db = volume;
+	music_loop = loop;
+	play(0.0);
 	
-func _play_music(to_load, top_level, loop, volume = 0.0):
-	music.stream = load("res://assets/music/%s.ogg"%[to_load]);
-	music.top_level = top_level;
-	music.volume_db = volume;
-	cool_loop = loop;
-	music.play(0.0);
+func _play_song(to_load, music_top_level, loop, volume = 0.0):
+	stream = load("res://assets/songs/%s.ogg"%[to_load]);
+	top_level = music_top_level;
+	volume_db = volume;
+	music_loop = loop;
+	play(0.0);
 	
-func _play_song(to_load, top_level, loop, volume = 0.0):
-	music.stream = load("res://assets/songs/%s.ogg"%[to_load]);
-	music.top_level = top_level;
-	music.volume_db = volume;
-	cool_loop = loop;
-	music.play(0.0);
-	
-func _process(delta: float) -> void:
-	if !music.playing:
+func _process(_delta: float) -> void:
+	if !playing && !music_loop:
 		return;
 		
-	if !cool_loop:
-		return;
-	var songPos = music.get_playback_position();
-	var songTime = music.stream.get_length();
+	var songPos = get_playback_position();
+	var songTime = stream.get_length();
+	
 	if floor(songPos) >= floor(songTime):
-		music.play(0.0);
+		play(0.0);
 		
 func _stop_music():
-	music.stop();
+	stop();

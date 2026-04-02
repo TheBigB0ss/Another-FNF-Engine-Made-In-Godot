@@ -41,7 +41,6 @@
 			"role": "note splash and song cards artist",
 			"icon": "NOVAIS",
 			"social midia": {
-				"twitter": "https://x.com/Novaizes",
 				"youtube": "https://www.youtube.com/@NoviasNovinhas"
 			},
 			"bg_color": "#ff6800"
@@ -123,11 +122,11 @@
 		},
 		{
 			"team": "Another FNF Engine made in Godot",
-			"name": "Gaby",
+			"name": "Astra",
 			"role": "pixel note splash artist",
-			"icon": "gaby",
+			"icon": "Astra",
 			"social midia": {
-				"twitter": "https://x.com/UTGabyyOfc"
+				"twitter": "https://x.com/UTAstra"
 			},
 			"bg_color": "#d000ff"
 		},

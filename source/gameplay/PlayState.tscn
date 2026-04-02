@@ -155,13 +155,14 @@ label_settings = SubResource("LabelSettings_ghwrx")
 horizontal_alignment = 1
 
 [node name="botplayLabel" type="Label" parent="hud/Hud_Layer" unique_id=1540411430]
-offset_left = 550.0
-offset_top = 170.0
-offset_right = 3749.0
-offset_bottom = 856.0
+offset_left = 559.0
+offset_top = 171.0
+offset_right = 3758.0
+offset_bottom = 857.0
 scale = Vector2(0.05, 0.05)
 text = "BOTPLAY"
 label_settings = SubResource("LabelSettings_3ypwt")
+horizontal_alignment = 1
 
 [node name="LyricGrp" type="Node2D" parent="hud/Hud_Layer" unique_id=431414764]
 position = Vector2(440, 466)

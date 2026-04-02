@@ -34,14 +34,6 @@ func _process(_delta):
 	curBeat = floor(curStep / 4);
 	curSection = floor(curStep/16);
 	
-	#if lastBeat < curBeat && curBeat > lastBeat:
-		#lastBeat = curBeat;
-		#beatHit();
-		#
-	#if lastStep < curStep && curStep > lastStep:
-		#lastStep = curStep;
-		#stepHit();
-		
 	if lastSection != curSection:
 		lastSection = curSection;
 		changeSection();

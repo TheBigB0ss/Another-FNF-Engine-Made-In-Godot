@@ -9,7 +9,7 @@ var pico_data = {};
 var pico_note_array = [];
 var song = "";
 
-const tankmanPreload = preload("res://assets/stages/week7/tankmanKilled1.tscn");
+const tankmanPreload = preload("res://source/stages/battlefield/TankmanSoldier.tscn");
 
 func _ready() -> void:
 	Conductor.connect("new_beat", beat_hit);

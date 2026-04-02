@@ -1,14 +1,5 @@
 extends Stage
 
-enum Paratrooters{
-	Freddy = 0,
-	Box = 1,
-	Soldier1 = 2,
-	Soldier2 = 3
-};
-var parashooterId = null;
-var paratrootersuffix = "";
-
 @onready var soldiersGrp = $soldiers;
 @onready var paratrooters = $paratroopers;
 
@@ -20,7 +11,6 @@ var steve_data = {};
 var steve_time = false;
 
 var tank_angle = 0.0;
-var angleTime = 0.0;
 
 func _ready():
 	if SongData.isPlaying:
@@ -37,16 +27,6 @@ func _process(delta):
 	rolling_tank2.position.x -= 420;
 	rolling_tank2.rotation = tank_angle + PI/2;
 	
-	for i in paratrooters.get_children():
-		i.position.y += 4.0/2.0;
-		
-		angleTime += delta;
-		i.rotation = sin(angleTime/1.5) * deg_to_rad(24);
-		
-		if i.position.y >= 1310:
-			paratrooters.remove_child(i);
-			i.queue_free();
-			
 	if SongData.isPlaying:
 		if game.curSong == "stress-remix":
 			if steve_time:
@@ -66,8 +46,9 @@ func beat_hit(beat):
 		crowd_dance();
 		
 	if beat % 6 == 0 && !GlobalOptions.low_quality:
-		if int(randf_range(0, 50)) <= 20:
-			create_parashooter();
+		if int(randf_range(0, 50)) <= 23:
+			var newParashooter = ParaShooter.new();
+			paratrooters.add_child(newParashooter);
 			
 	if game.curSong == "stress-remix":
 		match beat:
@@ -81,30 +62,4 @@ func crowd_dance():
 	while (count < soldiersGrp.get_child_count()):
 		count += 1;
 		soldiersGrp.get_child(count-1).play("FG_Tankmen%s"%[count]);
-		
-func create_parashooter():
-	parashooterId = null;
-	paratrootersuffix = "";
-	if int(randf_range(0, 100)) > 10:
-		parashooterId = Paratrooters.Soldier1 if int(randf_range(0, 50)) <= 25 else Paratrooters.Soldier2;
-	else:
-		parashooterId = Paratrooters.Box if int(randf_range(0, 50)) <= 35 else Paratrooters.Freddy;
-		
-	match parashooterId:
-		Paratrooters.Soldier1:
-			paratrootersuffix = "Tankmen1";
-		Paratrooters.Soldier2:
-			paratrootersuffix = "Tankmen2";
-		Paratrooters.Box:
-			paratrootersuffix = "Box";
-		Paratrooters.Freddy:
-			paratrootersuffix = "Freddy";
-			
-	if paratrootersuffix != "" && parashooterId != null:
-		var newParatrooter = AnimatedSprite2D.new();
-		newParatrooter.sprite_frames = load("res://assets/stages/week7/remix/paratroopers.res");
-		newParatrooter.position.x = randf_range(45, 675);
-		newParatrooter.play("BG_Falling%s"%[paratrootersuffix]);
-		newParatrooter.flip_h = randf_range(0,100) <= 50 && paratrootersuffix != "Freddy";
-		paratrooters.add_child(newParatrooter);
 		

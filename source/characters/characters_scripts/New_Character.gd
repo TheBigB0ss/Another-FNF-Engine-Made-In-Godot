@@ -38,7 +38,7 @@ var have_death_animation = false:
 		notify_property_list_changed();
 var death_scene = "";
 
-var anim_type: CHARACTER_ANIM_TYPE = CHARACTER_ANIM_TYPE.FREEZE:
+var anim_type:CHARACTER_ANIM_TYPE = CHARACTER_ANIM_TYPE.FREEZE:
 	set(val):
 		anim_type = val;
 		notify_property_list_changed();
@@ -176,8 +176,9 @@ func loop_anim():
 		1:
 			character_anim.seek(0.0);
 		2:
-			if character_anim.current_animation_position > frame_count:
-				character_anim.seek(0.0);
+			var limit = frame_count;
+			if character_anim.current_animation_position > limit:
+				character_anim.seek(0.0, true);
 				
 func _get_property_list():
 	var properties: Array[Dictionary] = [];

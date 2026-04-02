@@ -136,11 +136,10 @@ func _ready():
 	print("song list is: " + str(playlist));
 	print("song diff is: " + str(songDiff));
 	
-	if GlobalOptions.rating_mode == "hud element":
-		for i in [rating_spr, combo_spr, nums_spr]:
+	for i in [rating_spr, combo_spr, nums_spr]:
+		if GlobalOptions.rating_mode == "hud element":
 			i.reparent($rating/Rating_Layer, true);
-	elif GlobalOptions.rating_mode == "game element":
-		for i in [rating_spr, combo_spr, nums_spr]:
+		elif GlobalOptions.rating_mode == "game element":
 			i.reparent($hud, true);
 			
 	splash_normal = preload("res://source/arrows/splashes/noteSplashes.tscn");
@@ -471,6 +470,9 @@ func pressedNote(note):
 	var ms = (note.strumTime - Conductor.getSongTime);
 	var pressed = false;
 	
+	if GlobalOptions.isUsingBot:
+		return;
+		
 	if !pressed:
 		for i in rating_data.keys():
 			if ms <= rating_data[i]["Ms"][0] && !ms <= rating_data[i]["Ms"][1]:
@@ -700,6 +702,7 @@ func startCoutdown():
 	start_song = true;
 	
 	var countdownPath = "default" if !SongData.isPixelStage else "pixel";
+	var idleCounter = 0;
 	
 	if skipIntro && is_on_intro:
 		can_pause = true;
@@ -712,16 +715,16 @@ func startCoutdown():
 		
 		return;
 		
+	bf.beat_dance(idleCounter);
+	dad.beat_dance(idleCounter);
+	if is_instance_valid(gf):
+		gf.beat_dance(idleCounter);
+	if SongData.haveTwoOpponents && is_instance_valid(new_opponent):
+		new_opponent.beat_dance(idleCounter);
+		
 	for i in 5:
 		await get_tree().create_timer(Conductor.crochet/1000).timeout;
 		
-		bf.beat_dance(i);
-		dad.beat_dance(i);
-		if is_instance_valid(gf):
-			gf.beat_dance(i);
-		if SongData.haveTwoOpponents && is_instance_valid(new_opponent):
-			new_opponent.beat_dance(i);
-			
 		if countdownSprite != null:
 			match i:
 				0:
@@ -746,6 +749,8 @@ func startCoutdown():
 						voices.play(0.0);
 					inst.play(0.0);
 					
+		idleCounter += 1;
+		
 func set_contdownSpr(path, spr):
 	var tween = get_tree().create_tween();
 	tween.tween_property(countdownSprite, "modulate:a", 1.0, 0.14);
@@ -768,15 +773,17 @@ func finishSong():
 	SongData.death_count = 0;
 	
 	var diffSet = "" if songDiff == "" else str('-', songDiff);
-	if score > HighScore.get_score(playlist[0], diffSet):
-		HighScore.get_song_score(playlist[0], diffSet, score);
-		
-	if setRank(HighScore.get_rank(playlist[0], diffSet), rankName):
-		HighScore.get_song_rank(playlist[0], diffSet, rankName);
-		
-	if accuracyPercent > HighScore.get_percent(playlist[0], diffSet):
-		HighScore.get_song_percent(playlist[0], diffSet, accuracyPercent);
-		
+	
+	if !GlobalOptions.isUsingBot:
+		if score > HighScore.get_score(playlist[0], diffSet):
+			HighScore.get_song_score(playlist[0], diffSet, score);
+			
+		if setRank(HighScore.get_rank(playlist[0], diffSet), rankName):
+			HighScore.get_song_rank(playlist[0], diffSet, rankName);
+			
+		if accuracyPercent > HighScore.get_percent(playlist[0], diffSet):
+			HighScore.get_song_percent(playlist[0], diffSet, accuracyPercent);
+			
 	inst.stop();
 	voices.stop();
 	can_pause = false;
@@ -830,6 +837,10 @@ func updateScoreText():
 	rankName = newRank();
 	accuracyPercent = snapped(float(notesPlayed/totalHits)*100, 0.01) if totalHits > 0 else 0.0;
 	
+	if GlobalOptions.isUsingBot:
+		scoreText.text = "BOTPLAY ON. SCORE WON'T BE SAVED";
+		return;
+		
 	scoreText.text = ('Score: %s / Misses: %s / Rating: %s (%s) / Rank: %s'%[int(score), int(misses), ratingName, str(accuracyPercent, "%"), rankName]) if GlobalOptions.updated_hud == "new hud" else ('Score: %s'%[int(score)]);
 	
 	if GlobalOptions.show_ratingLabel:

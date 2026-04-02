@@ -10,11 +10,7 @@ signal end_cutscene;
 signal end_senpai_cutscene;
 signal end_tankman_cutscene;
 
-func _ready():
-	update_windowMode(GlobalOptions.full_screen);
-	update_vsync(GlobalOptions.vsync);
-	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	Engine.max_fps = GlobalOptions.fps;
 	
 func get_key(key_code):
@@ -54,12 +50,6 @@ func getUserName():
 	
 func closeGame():
 	get_tree().quit();
-	
-func update_windowMode(toggle):
-	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if toggle else DisplayServer.WINDOW_MODE_WINDOWED);
-	
-func update_vsync(toggle):
-	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if toggle else DisplayServer.VSYNC_DISABLED);
 	
 func changeScene(scene, useTransition = true, use_stickers = true):
 	process_mode = 2 if get_tree().paused else 0;
