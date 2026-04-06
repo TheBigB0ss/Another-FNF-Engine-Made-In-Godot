@@ -49,23 +49,23 @@ func _ready():
 func _input(event):
 	if event is InputEventKey:
 		if event.pressed && !event.echo:
-			if event.keycode in [Global.get_key("ui_down")]:
+			if event.keycode in [GlobalOptions.get_key("ui_down")]:
 				changeDev(1);
 				
-			if event.keycode in [Global.get_key("ui_up")]:
+			if event.keycode in [GlobalOptions.get_key("ui_up")]:
 				changeDev(-1);
 				
 			if len(creditsJson["dev_info"][creditSelected]["social midia"].keys()) > 0:
-				if event.keycode in [Global.get_key("ui_left")]:
+				if event.keycode in [GlobalOptions.get_key("ui_left")]:
 					change_social_midia(-1);
 					
-				if event.keycode in [Global.get_key("ui_right")]:
+				if event.keycode in [GlobalOptions.get_key("ui_right")]:
 					change_social_midia(1);
 					
-				if (event.keycode in [Global.get_key("enter")] || event.keycode in [KEY_KP_ENTER]):
+				if (event.keycode in [GlobalOptions.get_key("enter")] || event.keycode in [KEY_KP_ENTER]):
 					open_link();
 					
-			if event.keycode in [Global.get_key("escape")]:
+			if event.keycode in [GlobalOptions.get_key("escape")]:
 				Global.changeScene("menus/main_menu/MainMenu", true, false);
 				
 func changeDev(shit):

@@ -27,7 +27,7 @@ signal releaseNote(data)
 
 func _ready() -> void:
 	connect("canPress", pressed);
-	connect("releaseNote" , release);
+	connect("releaseNote", release);
 	
 	strumNode = Node2D.new();
 	add_child(strumNode);
@@ -90,7 +90,6 @@ func _process(delta):
 		
 		if !note.is_pressing:
 			note.position.y = strumY + (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed) if GlobalOptions.down_scroll else strumY - (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed);
-			
 		else:
 			note.position.y = strumY;
 			

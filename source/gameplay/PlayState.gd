@@ -673,15 +673,15 @@ func setPercent():
 func _input(ev):
 	if ev is InputEventKey:
 		if ev.pressed && !ev.echo:
-			if ev.keycode in [KEY_R]:
+			if ev.keycode in [KEY_R] && GlobalOptions.restart_action:
 				playerDead();
 				
-			if ev.keycode in [Global.get_key("7")]:
+			if ev.keycode in [GlobalOptions.get_key("7")]:
 				SongData.week_songs = playlist[0];
 				SongData.isPlaying = false;
 				Global.changeScene("menus/editors/chart_editor/chartState", true, false);
 				
-			if (ev.keycode in [Global.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && can_pause && !TennaJumpscare.itsTvTime:
+			if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && can_pause:
 				pause_menu.can_use = true;
 				pause_menu.visible = true;
 				

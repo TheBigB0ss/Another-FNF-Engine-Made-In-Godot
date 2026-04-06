@@ -19,7 +19,7 @@ func _ready():
 func _input(ev):
 	if ev is InputEventKey:
 		if ev.pressed && !ev.echo:
-			if ev.keycode in [Global.get_key("F11")] && can_take_a_shot:
+			if ev.keycode in [GlobalOptions.get_key("F11")] && can_take_a_shot:
 				timer.start();
 				screen_shot();
 				exe_screen_shots();

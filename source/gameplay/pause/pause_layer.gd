@@ -72,11 +72,11 @@ func _process(delta):
 func _input(ev):
 	if ev is InputEventKey:
 		if ev.pressed && !ev.echo && can_use && Global.can_use_menus:
-			if ev.keycode in [Global.get_key("ui_down")]:
+			if ev.keycode in [GlobalOptions.get_key("ui_down")]:
 				change_opt(1);
 				Sound.playAudio("scrollMenu", false);
 				
-			if ev.keycode in [Global.get_key("ui_up")]:
+			if ev.keycode in [GlobalOptions.get_key("ui_up")]:
 				change_opt(-1);
 				Sound.playAudio("scrollMenu", false);
 				
@@ -85,7 +85,7 @@ func change_opt(opt):
 	cur_option = wrapi(cur_option, 0, len(opts));
 	
 	for i in opts.size():
-		options_grp.get_child(i).modulate.a = 1 if i == cur_option else 0.5;
+		options_grp.get_child(i).modulate.a = (1 if i == cur_option else 0.5);
 		
 func _choice_pause_opts():
 	match opts[cur_option]:
@@ -146,11 +146,7 @@ func _choice_pause_opts():
 			SongData.restartSong = true;
 			SongData.isOnChartMode = false;
 			
-			var default_chart = null;
-			var songDiff = "" if SongData.week_diffs == "" else SongData.week_diffs;
-			var song = SongData.week_songs[0];
-			
-			SongData.loadJson(song, songDiff, default_chart);
+			SongData.loadJson(SongData.week_songs[0], SongData.week_diffs, null);
 			Global.reloadScene(true, false, 3.5);
 			
 func stop_shit():

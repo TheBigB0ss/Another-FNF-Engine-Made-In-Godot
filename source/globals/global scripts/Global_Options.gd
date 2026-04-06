@@ -6,7 +6,7 @@ var settingsJson = {};
 var pause_options = false;
 var down_scroll = false;
 var middle_scroll = false;
-var no_R = false;
+var restart_action = false;
 var hide_hud = false;
 var fps = 60;
 var vsync = true;
@@ -18,6 +18,12 @@ var show_fps = true;
 var full_screen = false;
 var volume = 1;
 var isUsingBot = false;
+
+var updated_pause_music = "pause song";
+var updated_hud = "new hud";
+var updated_cam = "normal";
+var updated_icon = "default";
+var rating_mode = "hud element";
 
 var use_shader = true;
 var show_splashes = true;
@@ -49,35 +55,6 @@ var ratings_positions = {
 	"nums": []
 };
 
-var array_opts = {
-	"pause music": {
-		"options": ["pause song", "breakfast"],
-		"value": 0
-	},
-	"hud mode": {
-		"options": ["new hud", "classic hud"],
-		"value": 0
-	},
-	"camera mode": {
-		"options": ["normal", "smooth"],
-		"value": 0
-	},
-	"icon type": {
-		"options": ["default", "new bouncy", "golden apple", "disabled"],
-		"value": 0
-	},
-	"rating mode":{
-		"options": ["hud element", "game element"],
-		"value": 0
-	}
-};
-
-var updated_pause_music = "pause song";
-var updated_hud = "new hud";
-var updated_cam = "normal";
-var updated_icon = "default";
-var rating_mode = "hud element";
-
 signal ghost_tapping_miss(note);
 
 func _ready():
@@ -88,7 +65,7 @@ func _ready():
 		for j in keys.keys():
 			keys_list.append(j);
 			
-	if !settingsJson.has("version") or settingsJson["version"] != 1:
+	if !settingsJson.has("version") or settingsJson["version"] != 2:
 		reset_settings();
 		
 	apply_changes();
@@ -115,48 +92,42 @@ func load_settings():
 	else:
 		reset_settings();
 		
-func get_setting(setting, value):
-	settingsJson[setting] = value;
-	save_settings();
-	
-func save_opts_dic(opt, value):
-	settingsJson["array opts"][opt]["value"] = value;
-	save_settings();
-	
-func rebind_keys(key_selected, new_key, key_value):
-	settingsJson["keys"][key_selected][0] = key_value;
-	settingsJson["keys"][key_selected][1] = new_key;
-	
-	save_settings();
-	
 func reset_settings():
 	settingsJson = {
-		"version": 1,
-		"pause music": "pause song",
-		"hud mode": "new hud",
-		"camera mode": "normal",
-		"icon type": "default",
-		"down scroll": false,
-		"rating mode": "hud element",
-		"middle scroll": false,
-		"no R": false,
-		"hide hud": false,
-		"vsync": true,
-		"ghost tapping": true,
-		"low quality": false,
-		"time bar alpha": 1.0,
-		"health bar alpha": 1.0,
-		"fps": 60,
-		"screen zoom": true,
-		"use shader": true,
-		"show splashes": true,
-		"show song card": true,
-		"full screen": false,
-		"show FPS": true,
-		"show rating label": false,
-		"rating_pos": [635, 235],
-		"combo_pos": [695, 285],
-		"nums_pos": [464, 293],
+		"version": 2,
+		"meta":{
+			"rating_pos": [635, 235],
+			"combo_pos": [695, 285],
+			"nums_pos": [464, 293],
+		},
+		"graphics": {
+			"fps": int(60),
+			"vsync": true,
+			"fullscreen": false,
+			"low quality": false,
+			"use shader": true
+		},
+		"gameplay": {
+			"down scroll": false,
+			"middle scroll": false,
+			"ghost tapping": true,
+			"r to restart": false,
+			"pause music": "pause song",
+			"camera mode": "normal"
+		},
+		"visual": {
+			"hud mode": "new hud",
+			"rating mode": "hud element",
+			"icon type": "default",
+			"hide hud": false,
+			"screen zoom": true,
+			"show splashes": true,
+			"show song card": true,
+			"show fps": true,
+			"show rating label": false,
+			"time bar alpha": 1.0,
+			"health bar alpha": 1.0
+		},
 		"keys":{
 			"left": [KEY_LEFT, "left", 1],
 			"down": [KEY_DOWN, "down", 1],
@@ -173,66 +144,31 @@ func reset_settings():
 			"7": [KEY_7, "7", 3],
 			"F11": [KEY_F11, "F11", 3]
 		},
-		"array opts":{
+		"options": {
 			"pause music": {
-				"options": ["pause song", "breakfast"],
-				"value": 0
+				"list": ["pause song", "breakfast"],
+				"index": 0
 			},
 			"hud mode": {
-				"options": ["new hud", "classic hud"],
-				"value": 0
+				"list": ["new hud", "classic hud"],
+				"index": 0
 			},
 			"camera mode": {
-				"options": ["normal", "smooth"],
-				"value": 0
+				"list": ["normal", "smooth"],
+				"index": 0
 			},
 			"icon type": {
-				"options": ["default", "disabled"],
-				"value": 0
+				"list": ["default", "disabled"],
+				"index": 0
 			},
-			"rating mode":{
-				"options": ["hud element", "game element"],
-				"value": 0
+			"rating mode": {
+				"list": ["hud element", "game element"],
+				"index": 0
 			}
 		},
 		"volume": 1
 	};
 	save_settings();
-	
-func apply_changes():
-	down_scroll = settingsJson["down scroll"];
-	middle_scroll = settingsJson["middle scroll"];
-	no_R = settingsJson["no R"];
-	hide_hud = settingsJson["hide hud"];
-	vsync = settingsJson["vsync"];
-	ghost_tapping = settingsJson["ghost tapping"];
-	low_quality = settingsJson["low quality"];
-	time_bar_alpha = settingsJson["time bar alpha"];
-	health_bar_alpha = settingsJson["health bar alpha"];
-	keys = settingsJson["keys"];
-	array_opts = settingsJson["array opts"];
-	fps = int(settingsJson["fps"]);
-	
-	updated_hud = settingsJson["hud mode"];
-	updated_pause_music = settingsJson["pause music"];
-	updated_cam = settingsJson["camera mode"];
-	updated_icon = settingsJson["icon type"];
-	rating_mode = settingsJson["rating mode"];
-	
-	show_fps = settingsJson["show FPS"];
-	full_screen = settingsJson["full screen"];
-	use_shader = settingsJson["use shader"];
-	show_splashes = settingsJson["show splashes"];
-	show_songCard = settingsJson["show song card"];
-	screen_zoom = settingsJson["screen zoom"];
-	show_ratingLabel = settingsJson["show rating label"];
-	volume = settingsJson["volume"];
-	
-	ratings_positions["rating"] = settingsJson["rating_pos"];
-	ratings_positions["combo"] = settingsJson["combo_pos"];
-	ratings_positions["nums"] = settingsJson["nums_pos"];
-	
-	update_keys();
 	
 func update_keys():
 	for i in keys.keys():
@@ -251,35 +187,122 @@ func check_key_bind(key_id, key_index):
 			
 	return false;
 	
-func add_new_option(your_variable, new_option, value):
-	load_settings();
+func get_key(key_code):
+	var ev = InputEventKey.new();
+	ev.keycode = keys[key_code][0];
+	return ev.keycode;
 	
-	settingsJson[new_option] = value;
-	your_variable = settingsJson[new_option];
+func apply_changes():
+	down_scroll = settingsJson["gameplay"]["down scroll"];
+	middle_scroll = settingsJson["gameplay"]["middle scroll"];
+	ghost_tapping = settingsJson["gameplay"]["ghost tapping"];
+	restart_action = settingsJson["gameplay"]["r to restart"];
 	
+	vsync = settingsJson["graphics"]["vsync"];
+	low_quality = settingsJson["graphics"]["low quality"];
+	fps = int(settingsJson["graphics"]["fps"]);
+	full_screen = settingsJson["graphics"]["fullscreen"];
+	use_shader = settingsJson["graphics"]["use shader"];
+	
+	hide_hud = settingsJson["visual"]["hide hud"];
+	time_bar_alpha = settingsJson["visual"]["time bar alpha"];
+	health_bar_alpha = settingsJson["visual"]["health bar alpha"];
+	show_fps = settingsJson["visual"]["show fps"];
+	show_splashes = settingsJson["visual"]["show splashes"];
+	show_songCard = settingsJson["visual"]["show song card"];
+	screen_zoom = settingsJson["visual"]["screen zoom"];
+	show_ratingLabel = settingsJson["visual"]["show rating label"];
+	
+	updated_hud = settingsJson["visual"]["hud mode"];
+	rating_mode = settingsJson["visual"]["rating mode"];
+	updated_icon = settingsJson["visual"]["icon type"];
+	
+	updated_pause_music = settingsJson["gameplay"]["pause music"];
+	updated_cam = settingsJson["gameplay"]["camera mode"];
+	
+	volume = settingsJson["volume"];
+	
+	ratings_positions["rating"] = settingsJson["meta"]["rating_pos"];
+	ratings_positions["combo"] = settingsJson["meta"]["combo_pos"];
+	ratings_positions["nums"] = settingsJson["meta"]["nums_pos"];
+	
+	keys = settingsJson["keys"];
+	
+	Engine.max_fps = fps;
+	
+	update_keys();
+	
+func get_option_value(opt_name):
+	return settingsJson["options"][opt_name]["list"][settingsJson["options"][opt_name]["index"]];
+	
+func get_value(opt_name, category):
+	return settingsJson[category][opt_name];
+	
+func set_setting(setting, category, value):
+	settingsJson[category][setting] = value;
+	apply_changes();
+	save_settings();
+	
+func save_opts_dic(opt, value):
+	settingsJson["options"][opt]["index"] = value;
+	apply_changes();
+	save_settings();
+	
+func rebind_keys(key_selected, new_key, key_value):
+	settingsJson["keys"][key_selected][0] = key_value;
+	settingsJson["keys"][key_selected][1] = new_key;
+	
+	save_settings();
+	
+func change_array_opt(opt_name, change, category):
+	settingsJson["options"][opt_name]["index"] += change;
+	settingsJson["options"][opt_name]["index"] = wrapi(settingsJson["options"][opt_name]["index"], 0, len(settingsJson["options"][opt_name]["list"]));
+	
+	var newId = settingsJson["options"][opt_name]["index"];
+	var new_value = settingsJson["options"][opt_name]["list"][newId];
+	
+	set_setting(opt_name, category, new_value);
+	save_opts_dic(opt_name, settingsJson["options"][opt_name]["index"]);
+	
+func change_bool_opt(opt_name, category):
+	var value = settingsJson[category][opt_name];
+	value = !value;
+	
+	set_setting(opt_name, category, value);
+	
+	match opt_name:
+		"fullscreen":
+			update_windowMode(value);
+		"vsync":
+			update_vsync(value);
+			
+func change_int_opt(opt_name, category, change, min_value, max_value):
+	settingsJson[category][opt_name] += change;
+	settingsJson[category][opt_name] = clamp(settingsJson[category][opt_name], min_value, max_value);
+	apply_changes();
 	save_settings();
 	
 func set_options():
 	return {
 		"graphics": {
-			"fps":{
-				"value": int(fps), 
-				"description": "change FPS LIMIT"
+			"fps": {
+				"value": int(settingsJson["graphics"]["fps"]),
+				"description": "change FPS"
 			},
-			"vsync":{
-				"value": vsync, 
-				"description": "enable vsync"
+			"vsync": {
+				"value": settingsJson["graphics"]["vsync"],
+				"description": "disable vsync?"
 			},
-			"low quality":{
-				"value": low_quality, 
-				"description": "this helps... I think..."
+			"low quality": {
+				"value": settingsJson["graphics"]["low quality"],
+				"description": "this helps... I guess..."
 			},
-			"use shader":{
-				"value": use_shader, 
+			"use shader": {
+				"value": settingsJson["graphics"]["use shader"],
 				"description": "disable shaders?"
 			},
-			"full screen":{
-				"value": full_screen,
+			"fullscreen": {
+				"value": settingsJson["graphics"]["fullscreen"],
 				"description": "full screen mode"
 			}
 		},
@@ -337,81 +360,85 @@ func set_options():
 				"description": "change chart key"
 			},
 			"Screenshot Key:":{
-				"value": keys["F11"][1], 
+				"value": keys["F11"][1],
 				"description": "change screenshot key"
 			}
 		},
 		"visual": {
-			"rating mode":{
-				"value": array_opts["rating mode"]["options"], 
-				"description": "choose how the rating will behave on the game screen", 
-				"array value": [array_opts["rating mode"]["value"], "rating mode"]
+			"hud mode": {
+				"value": settingsJson["options"]["hud mode"]["list"],
+				"description": "choice hud mode",
+				"ID": settingsJson["options"]["hud mode"]["index"]
 			},
-			"hud mode":{
-				"value": array_opts["hud mode"]["options"], 
-				"description": "choice hud mode", 
-				"array value": [array_opts["hud mode"]["value"], "hud mode"]
+			"rating mode": {
+				"value": settingsJson["options"]["rating mode"]["list"],
+				"description": "choose how the rating will behave on the game screen",
+				"ID": settingsJson["options"]["rating mode"]["index"]
 			},
-			"icon type":{
-				"value": array_opts["icon type"]["options"], 
-				"description": "choice your icon bouncy", 
-				"array value": [array_opts["icon type"]["value"], "icon type"]
+			"icon type": {
+				"value": settingsJson["options"]["icon type"]["list"],
+				"description": "icon style",
+				"ID": settingsJson["options"]["icon type"]["index"]
 			},
-			"health bar alpha":{
-				"value": health_bar_alpha,
-				"description": "your health bar opacity"
-			},
-			"time bar alpha":{
-				"value": time_bar_alpha, 
-				"description": "your time bar opacity"
-			},
-			"show FPS":{
-				"value": show_fps, 
+			"show fps":{
+				"value": settingsJson["visual"]["show fps"], 
 				"description": "show fps count"
 			},
 			"show splashes":{
-				"value": show_splashes,
+				"value": settingsJson["visual"]["show splashes"],
 				"description": "show note splashes"
 			},
 			"show song card":{
-				"value": show_songCard, 
+				"value": settingsJson["visual"]["show song card"],
 				"description": "show song name"
 			},
 			"show rating label":{
-				"value": show_ratingLabel, 
+				"value": settingsJson["visual"]["show rating label"],
 				"description": "enable rating label"
 			},
 			"hide hud":{
-				"value": hide_hud, 
+				"value": settingsJson["visual"]["hide hud"], 
 				"description": "hide your hud"
 			},
 			"screen zoom":{
-				"value": screen_zoom, 
+				"value": settingsJson["visual"]["screen zoom"],
 				"description": "disable camera zoom"
+			},
+			"health bar alpha": {
+				"value": settingsJson["visual"]["health bar alpha"],
+				"description": "health bar opacity"
+			},
+			"time bar alpha": {
+				"value": settingsJson["visual"]["time bar alpha"],
+				"description": "time bar opacity"
 			}
 		},
 		"gameplay": {
-			"ghost tapping":{
-				"value": ghost_tapping,
+			"ghost tapping": {
+				"value": settingsJson["gameplay"]["ghost tapping"],
 				"description": "disable ghost tapping?"
 			},
-			"down scroll":{
-				"value": down_scroll,
+			"down scroll": {
+				"value": settingsJson["gameplay"]["down scroll"],
 				"description": "down scroll mode"
 			},
-			"middle scroll":{
-				"value": middle_scroll,
+			"middle scroll": {
+				"value": settingsJson["gameplay"]["middle scroll"],
 				"description": "middle scroll mode"
 			},
-			"camera mode": {
-				"value": array_opts["camera mode"]["options"], 
-				"description": "section camera type", 
-				"array value": [array_opts["camera mode"]["value"], "camera mode"]
+			"r to restart":{
+				"value": settingsJson["gameplay"]["r to restart"],
+				"description": "press R for an instant and painless death"
 			},
-			"pause music":{
-				"value": array_opts["pause music"]["options"],
-				"description": "choice the pause song", 
-				"array value": [array_opts["pause music"]["value"], "pause music"]
+			"camera mode": {
+				"value": settingsJson["options"]["camera mode"]["list"],
+				"description": "camera type",
+				"ID": settingsJson["options"]["camera mode"]["index"]
+			},
+			"pause music": {
+				"value": settingsJson["options"]["pause music"]["list"],
+				"description": "pause music",
+				"ID": settingsJson["options"]["pause music"]["index"]
 			}
 		}
 	};

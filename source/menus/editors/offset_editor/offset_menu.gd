@@ -367,9 +367,9 @@ func _process(_delta: float) -> void:
 		comboSpr.position = Vector2(%combo_x.value, %combo_y.value);
 		numsSpr.position = Vector2(%nums_x.value, %nums_y.value);
 		
-		GlobalOptions.get_setting("rating_pos", [%rating_x.value, %rating_y.value]);
-		GlobalOptions.get_setting("combo_pos", [%combo_x.value, %combo_y.value]);
-		GlobalOptions.get_setting("nums_pos", [%nums_x.value, %nums_y.value]);
+		GlobalOptions.set_setting("rating_pos", "meta", [%rating_x.value, %rating_y.value]);
+		GlobalOptions.set_setting("combo_pos", "meta", [%combo_x.value, %combo_y.value]);
+		GlobalOptions.set_setting("nums_pos", "meta", [%nums_x.value, %nums_y.value]);
 		
 	#elif can_grab && !adjusting_rating:
 		#var mouse = characterGrp.to_local(get_global_mouse_position());

@@ -1,7 +1,7 @@
-[gd_scene load_steps=72 format=3 uid="uid://f0c72kmnsor3"]
+[gd_scene format=3 uid="uid://f0c72kmnsor3"]
 
-[ext_resource type="Script" uid="uid://dkywaw07upwi1" path="res://assets/images/chart characters/enemy/enemy_chart.gd" id="1_w145o"]
-[ext_resource type="Texture2D" uid="uid://0guh04poosg6" path="res://assets/images/chart characters/enemy/enemy_chart.png" id="2_vqf0j"]
+[ext_resource type="Script" uid="uid://dkywaw07upwi1" path="res://assets/images/editors/chart preview/enemy/enemy_chart.gd" id="1_w145o"]
+[ext_resource type="Texture2D" uid="uid://0guh04poosg6" path="res://assets/images/editors/chart preview/enemy/enemy_chart.png" id="2_vqf0j"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2ks3p"]
 atlas = ExtResource("2_vqf0j")

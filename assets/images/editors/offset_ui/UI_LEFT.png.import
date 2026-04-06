@@ -2,22 +2,24 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cnfdgyj6x7m6g"
-path="res://.godot/imported/gaby.png-4104ebf403c7b06be6c842df6cc27fe8.ctex"
+uid="uid://c4iv46257vg3j"
+path="res://.godot/imported/UI_LEFT.png-9546c18d98146ecc563e3020492a4853.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/credits/icons/gaby.png"
-dest_files=["res://.godot/imported/gaby.png-4104ebf403c7b06be6c842df6cc27fe8.ctex"]
+source_file="res://assets/images/editors/offset_ui/UI_LEFT.png"
+dest_files=["res://.godot/imported/UI_LEFT.png-9546c18d98146ecc563e3020492a4853.ctex"]
 
 [params]
 
 compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
@@ -25,6 +27,10 @@ mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false

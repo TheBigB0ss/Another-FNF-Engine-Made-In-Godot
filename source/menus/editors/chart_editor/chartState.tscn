@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://bsv6b7kj5cykg" path="res://source/menus/editors/chart_editor/chartState.gd" id="1_0k01q"]
 [ext_resource type="Texture2D" uid="uid://bx5opmuyd8cpm" path="res://assets/images/menuBgs/chart_BG.png" id="2_nlb02"]
 [ext_resource type="Script" uid="uid://g5ydanm2cc3t" path="res://source/menus/editors/chart_editor/grid.gd" id="3_nvrt8"]
-[ext_resource type="PackedScene" uid="uid://bs3bmha3d0luc" path="res://assets/images/chart characters/bf/chart-bf.tscn" id="6_ewqos"]
-[ext_resource type="PackedScene" uid="uid://f0c72kmnsor3" path="res://assets/images/chart characters/enemy/enemy_chart.tscn" id="7_w8f1m"]
+[ext_resource type="PackedScene" uid="uid://bs3bmha3d0luc" path="res://source/menus/editors/chart_editor/characters/chart-bf.tscn" id="6_ewqos"]
+[ext_resource type="Texture2D" uid="uid://butl2egj5i38n" path="res://assets/images/hud/timeBar.png" id="6_w8f1m"]
+[ext_resource type="PackedScene" uid="uid://f0c72kmnsor3" path="res://source/menus/editors/chart_editor/characters/enemy_chart.tscn" id="7_w8f1m"]
 
 [node name="ChartState" type="Node2D" unique_id=1858587677]
 script = ExtResource("1_0k01q")
@@ -99,13 +100,72 @@ offset_top = 192.0
 offset_right = 391.0
 offset_bottom = 694.0
 tab_alignment = 1
-current_tab = 5
+current_tab = 0
 all_tabs_in_front = true
+
+[node name="help" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=577019770]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="chart_info" type="Label" parent="chart_UI/chart_objs/TabContainer/help" unique_id=850742220]
+layout_mode = 0
+offset_left = 1.9999995
+offset_top = -1.0000019
+offset_right = 496.0
+offset_bottom = 438.0
+scale = Vector2(0.755, 0.755)
+text = "- Press A / D to change section
+
+- Hold CTRL and click to place a note
+
+- Click and drag to select notes, then press CTRL + C / CTRL + V
+to copy and paste
+
+- Press Q / E to change note length
+
+- Press SPACE to play / pause the song
+
+- Use W / S or the mouse wheel to scroll through the grid
+
+- Click and drag to select notes, then press DEL to delete them
+
+              chart preview:
+"
+
+[node name="preview" type="Node2D" parent="chart_UI/chart_objs/TabContainer/help" unique_id=48762639]
+position = Vector2(40, -15)
+
+[node name="ColorRect" type="ColorRect" parent="chart_UI/chart_objs/TabContainer/help/preview" unique_id=974319065]
+offset_left = 6.0000076
+offset_top = 327.0
+offset_right = 59.57852
+offset_bottom = 372.1964
+scale = Vector2(5.2819676, 3.0312147)
+color = Color(1, 1, 1, 0.46666667)
+
+[node name="chart-bf" parent="chart_UI/chart_objs/TabContainer/help/preview" unique_id=1845491327 instance=ExtResource("6_ewqos")]
+position = Vector2(203.00002, 426)
+scale = Vector2(0.3, 0.3)
+
+[node name="enemy_chart" parent="chart_UI/chart_objs/TabContainer/help/preview" unique_id=1373808594 instance=ExtResource("7_w8f1m")]
+position = Vector2(73, 401)
+scale = Vector2(0.3, 0.3)
+
+[node name="timeBar" type="TextureProgressBar" parent="chart_UI/chart_objs/TabContainer/help" unique_id=882178308]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 452.99997
+offset_right = 417.0
+offset_bottom = 471.99997
+scale = Vector2(0.85, 0.85)
+texture_under = ExtResource("6_w8f1m")
+texture_progress = ExtResource("6_w8f1m")
+tint_under = Color(0, 0, 0, 1)
 
 [node name="chart" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=751395330]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 0
+metadata/_tab_index = 1
 
 [node name="Bpm" type="SpinBox" parent="chart_UI/chart_objs/TabContainer/chart" unique_id=1875445626]
 unique_name_in_owner = true
@@ -157,7 +217,7 @@ text = "Mute Vocals?"
 [node name="section" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=1531575711]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 1
+metadata/_tab_index = 2
 
 [node name="must_hit" type="CheckBox" parent="chart_UI/chart_objs/TabContainer/section" unique_id=792335211]
 unique_name_in_owner = true
@@ -230,7 +290,7 @@ text = "add section"
 [node name="note" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=468888128]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 2
+metadata/_tab_index = 3
 
 [node name="note_sustain_lenght" type="SpinBox" parent="chart_UI/chart_objs/TabContainer/note" unique_id=1953522895]
 unique_name_in_owner = true
@@ -264,7 +324,7 @@ offset_bottom = 140.0
 [node name="events" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=420962452]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 3
+metadata/_tab_index = 4
 
 [node name="events_text" type="Label" parent="chart_UI/chart_objs/TabContainer/events" unique_id=2040479995]
 layout_mode = 0
@@ -321,7 +381,7 @@ value 2:"
 [node name="song" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=293273335]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 4
+metadata/_tab_index = 5
 
 [node name="song_name" type="LineEdit" parent="chart_UI/chart_objs/TabContainer/song" unique_id=1308251234]
 unique_name_in_owner = true
@@ -489,53 +549,6 @@ offset_top = 230.0
 offset_right = 265.0
 offset_bottom = 253.0
 text = "stage:"
-
-[node name="help" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=577019770]
-layout_mode = 2
-metadata/_tab_index = 5
-
-[node name="chart_info2" type="Label" parent="chart_UI/chart_objs/TabContainer/help" unique_id=850742220]
-layout_mode = 0
-offset_left = 7.0
-offset_top = 15.0
-offset_right = 440.0
-offset_bottom = 454.0
-scale = Vector2(0.755, 0.755)
-text = "-use A/D to change section
-
--Hold CTRL and CLICK to position a note
-
--Use drag select and ctrl c and v to copy and paste notes
-
--Use Q/E to change note lenght
-
--Press SPACE to resume the song
-
--Use W/S or mouse wheel to navigate the grid
-
-
-
-
-chart preview:
-"
-
-[node name="preview" type="Node2D" parent="chart_UI/chart_objs/TabContainer/help" unique_id=48762639]
-
-[node name="ColorRect" type="ColorRect" parent="chart_UI/chart_objs/TabContainer/help/preview" unique_id=974319065]
-offset_left = 6.0000076
-offset_top = 327.0
-offset_right = 59.57852
-offset_bottom = 372.1964
-scale = Vector2(5.2819676, 3.0312147)
-color = Color(1, 1, 1, 0.46666667)
-
-[node name="chart-bf" parent="chart_UI/chart_objs/TabContainer/help/preview" unique_id=1845491327 instance=ExtResource("6_ewqos")]
-position = Vector2(203.00002, 418.00003)
-scale = Vector2(0.3, 0.3)
-
-[node name="enemy_chart" parent="chart_UI/chart_objs/TabContainer/help/preview" unique_id=1373808594 instance=ExtResource("7_w8f1m")]
-position = Vector2(73, 395)
-scale = Vector2(0.3, 0.3)
 
 [node name="chart_info" type="Label" parent="chart_UI/chart_objs" unique_id=1099617167]
 layout_mode = 0

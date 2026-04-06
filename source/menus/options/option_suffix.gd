@@ -11,9 +11,6 @@ var alphabetGrp = Node2D.new();
 var new_alphabetGrp = Node2D.new();
 
 func _ready() -> void:
-	var offSetShit = 0;
-	var coolOffset = 140;
-	
 	add_child(alphabetGrp);
 	add_child(new_alphabetGrp);
 	add_child(checkBoxGrp);
@@ -31,7 +28,6 @@ func _ready() -> void:
 		alphabet._creat_word(new_options[i].opt_name);
 		alphabetGrp.add_child(alphabet)
 		alphabetGrp.position.x = 70;
-		offSetShit += coolOffset;
 		
 		var frame_texture = alphabet.global_anim.sprite_frames.get_frame_texture(alphabet.global_anim.animation, alphabet.global_anim.frame).get_width();
 		var frame_widht = frame_texture*alphabet.global_anim.sprite_frames.get_frame_count(alphabet.global_anim.animation);
@@ -44,7 +40,7 @@ func _ready() -> void:
 				update_text(str("<", new_options[i].opt_type, ">"), -80, false);
 				
 			TYPE_ARRAY:
-				update_text(str("<", new_options[i].opt_type[new_options[i].array_val["array value"][0] if new_options[i].array_val != null else 0], ">"), -20, false);
+				update_text(str("<", new_options[i].opt_type[new_options[i].cur_option if new_options[i].cur_option != null else 0], ">"), -20, false);
 				
 			TYPE_STRING:
 				suffix_x += 60;
@@ -53,36 +49,32 @@ func _ready() -> void:
 			TYPE_BOOL:
 				var check_sprite = AnimatedSprite2D.new();
 				check_sprite.sprite_frames = load("res://assets/images/options menu/checkboxThingie.res");
-				check_sprite.position.x = suffix_x;
-				check_sprite.position.y = suffix_y;
+				check_sprite.position = Vector2(suffix_x, suffix_y);
 				checkBoxGrp.add_child(check_sprite);
 				update_bool_spr(new_options[i].opt_type);
 				
 	GlobalOptions.updated_options = new_options;
 	
-func update_bool_spr(new_value):
-	if !new_value:
-		checkBoxGrp.get_child(cur_suffix).play("Check Box unselecting");
-		checkBoxGrp.get_child(cur_suffix).offset.y = -50;
-		checkBoxGrp.get_child(cur_suffix).connect("animation_finished", Callable(self, "unselected_box"));
-	else:
-		checkBoxGrp.get_child(cur_suffix).play("Check Box selecting animation");
-		checkBoxGrp.get_child(cur_suffix).offset.y = -50;
-		
 func update_text(new_text, new_x = 0, is_bold = true):
 	for i in new_alphabetGrp.get_children():
 		new_alphabetGrp.remove_child(i);
 		i.queue_free();
 		
 	var alphabet = Alphabet.new();
-	new_alphabetGrp.position.x = suffix_x+new_x;
-	new_alphabetGrp.position.y = suffix_y;
 	alphabet.isBold = is_bold;
 	alphabet._clear_word();
 	alphabet._creat_word(new_text);
 	new_alphabetGrp.add_child(alphabet);
+	new_alphabetGrp.position = Vector2(suffix_x+new_x, suffix_y);
 	
-func unselected_box():
-	if checkBoxGrp.get_child(cur_suffix).animation == "Check Box unselecting":
-		checkBoxGrp.get_child(cur_suffix).play("Check Box unselected");
-		checkBoxGrp.get_child(cur_suffix).offset.y = 0;
+func update_bool_spr(new_value):
+	var check_box_sprite = checkBoxGrp.get_child(cur_suffix);
+	
+	check_box_sprite.offset.y = -50;
+	check_box_sprite.play("Check Box unselecting" if !new_value else "Check Box selecting animation");
+	check_box_sprite.connect("animation_finished", Callable(self, "unselected_box").bind(check_box_sprite));
+	
+func unselected_box(sprite):
+	if sprite.animation == "Check Box unselecting":
+		sprite.play("Check Box unselected");
+		sprite.offset.y = 0;

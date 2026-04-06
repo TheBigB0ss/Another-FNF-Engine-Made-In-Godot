@@ -38,6 +38,7 @@ var new_chartData = {};
 
 @onready var chartBf = $"chart_UI/chart_objs/TabContainer/help/preview/chart-bf";
 @onready var chartEnemy = $chart_UI/chart_objs/TabContainer/help/preview/enemy_chart;
+@onready var timeBar = $chart_UI/chart_objs/TabContainer/help/timeBar;
 
 var events_readjustment = {};
 var curselected_note = [];
@@ -229,6 +230,8 @@ func _ready():
 		load_section();
 		eventNote_adjustment();
 		
+	timeBar.max_value = inst.stream.get_length();
+	
 func change_event_text(_item):
 	event_text.text = "Event: %s\n\n%s"%[event_text_array[events_button.selected], events[event_text_array[events_button.selected]]];
 	
@@ -325,6 +328,16 @@ func _input(ev):
 		if ev.pressed:
 			if %song_name.has_focus() or %song_difficulty.has_focus() or %"value 1".has_focus() or %"value 2".has_focus():
 				return;
+				
+			if ev.keycode in [KEY_DELETE]:
+				for i in new_chartData["song"]["notes"][curSection]["sectionNotes"].size():
+					for j in selected_notes:
+						if j == null:
+							continue;
+						delete_note(j.strumTime+section_start_time(), j.noteData);
+						selected_notes.erase(j);
+						
+				load_section();
 				
 			if ev.keycode in [KEY_Q] && curselected_note != []:
 				if %note_sustain_lenght.value > 0:
@@ -496,6 +509,8 @@ func _process(delta):
 		
 	last_tile = add_new_tile;
 	
+	timeBar.value = Conductor.getSongTime/1000;
+	
 	if !mouse_inside_ui && !$FileDialog.visible && !$FileDialogEvents.visible:
 		for i in arrayNotes:
 			if i == null:
@@ -505,18 +520,13 @@ func _process(delta):
 				if selected_notes.has(i):
 					continue;
 					
+				i.modulate = Color(0.151, 0.574, 1.0, 1.0);
 				selected_notes.append(i);
-			#else:
-			#	if !selected_notes.is_empty():
-			#		selected_notes.erase(i);
-			#		i.modulate = Color(1.0, 1.0, 1.0, 1.0);
-					
-		for i in selected_notes:
-			if i == null:
-				continue;
 				
-			i.modulate = Color(0.151, 0.574, 1.0, 1.0);
-			
+			elif !obj_inside_block(i.note, 8) && selectionRect != Rect2():
+				i.modulate = Color(1.0, 1.0, 1.0, 1.0);
+				selected_notes.erase(i);
+				
 		if Input.is_action_just_pressed("mouse_click") && mouse_inside && !grab_notes:
 			var note_data = 8 if !add_new_tile else 12;
 			var note_pos = floor(get_global_mouse_position().x / grid_size)-15;
@@ -524,7 +534,6 @@ func _process(delta):
 			if note_pos != -1:
 				if note_pos < note_data:
 					add_note(selection.position.y, note_pos, 0, note_types[note_type_button.selected]);
-					
 				elif note_pos >= note_data:
 					add_event_note(selection.position.y, note_pos, event_text_array[events_button.selected], %"value 1".text, %"value 2".text);
 					
@@ -603,13 +612,13 @@ func _process(delta):
 			if note.strumTime > Conductor.getSongTime-section_start_time():
 				note.gotHit = false;
 		else:
-			if note.strumTime < Conductor.getSongTime-section_start_time():
+			if note.strumTime <= Conductor.getSongTime-section_start_time():
 				note.gotHit = true;
-				if note.chart_player:
-					chartBf.play_cool_anim(note.noteData);
-				else:
-					chartEnemy.play_cool_anim(note.noteData);
-					
+				if note.chart_player: chartBf.play_cool_anim(note.noteData);
+				else: chartEnemy.play_cool_anim(note.noteData);
+				
+		for i in [chartBf, chartEnemy]:
+			i.goToIdle = (note.strumTime+note.sustainLength <= Conductor.getSongTime-section_start_time()) if note.sustainLength > 0.0 else true;
 		note.modulate.a = 0.5 if note.gotHit else 1.0;
 		
 	if mouse_pos.x >= gridX+250 && mouse_pos.x <= gridX+grid_scaleX && mouse_pos.y > gridY && mouse_pos.y < gridY + grid_size+585:
@@ -771,6 +780,7 @@ func add_note(strumtime, noteData, _sustain, type):
 func delete_note(strumtime, noteData):
 	var notes_deleted = [];
 	for i in new_chartData["song"]["notes"][curSection]["sectionNotes"]:
+		#print(i[0], " ", strumtime)
 		if int(i[0]) == int(strumtime) && i[1] == int(noteData):
 			notes_deleted.append(i);
 			if i == curselected_note:

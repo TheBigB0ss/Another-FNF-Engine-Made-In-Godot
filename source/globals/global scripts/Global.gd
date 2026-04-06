@@ -10,14 +10,6 @@ signal end_cutscene;
 signal end_senpai_cutscene;
 signal end_tankman_cutscene;
 
-func _process(_delta: float) -> void:
-	Engine.max_fps = GlobalOptions.fps;
-	
-func get_key(key_code):
-	var ev = InputEventKey.new();
-	ev.keycode = GlobalOptions.keys[key_code][0];
-	return ev.keycode;
-	
 func getFolderShit(folder):
 	var file = [];
 	var coolFolder = DirAccess.open("res://%s"%[folder]);

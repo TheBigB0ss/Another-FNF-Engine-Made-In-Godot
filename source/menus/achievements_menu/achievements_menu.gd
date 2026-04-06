@@ -52,23 +52,23 @@ func _ready():
 func _input(ev):
 	if ev is InputEventKey:
 		if ev.pressed && Global.can_use_menus:
-			if ev.keycode in [Global.get_key("escape")] && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("escape")] && !ev.echo:
 				Global.cur_thing = 0;
 				Global.changeScene("menus/main_menu/MainMenu", true, false);
 				
-			if (ev.keycode in [Global.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo:
+			if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo:
 				seeingAchievementStatus = !seeingAchievementStatus;
 				
-			if ev.keycode in [Global.get_key("ui_down")] && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("ui_down")] && !ev.echo:
 				change_achievement(1*achievements_row);
 				
-			if ev.keycode in [Global.get_key("ui_up")] && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("ui_up")] && !ev.echo:
 				change_achievement(-1*achievements_row);
 				
-			if ev.keycode in [Global.get_key("ui_left")] && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("ui_left")] && !ev.echo:
 				change_achievement(-1);
 				
-			if ev.keycode in [Global.get_key("ui_right")] && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("ui_right")] && !ev.echo:
 				change_achievement(1);
 				
 func change_achievement(change):

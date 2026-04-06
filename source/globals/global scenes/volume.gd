@@ -19,10 +19,10 @@ func _ready():
 func _input(ev):
 	if ev is InputEventKey:
 		if ev.pressed:
-			if ev.keycode in [Global.get_key("equal")]:
+			if ev.keycode in [GlobalOptions.get_key("equal")]:
 				volume_shit(GlobalOptions.volume + 0.1);
 				
-			if ev.keycode in [Global.get_key("minus")]:
+			if ev.keycode in [GlobalOptions.get_key("minus")]:
 				volume_shit(GlobalOptions.volume - 0.1);
 				
 func volume_shit(volume_value, muted = false):

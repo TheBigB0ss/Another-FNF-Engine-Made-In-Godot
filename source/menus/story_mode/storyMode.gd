@@ -89,31 +89,31 @@ var choiced = false;
 func _input(ev):
 	if ev is InputEventKey:
 		if Global.can_use_menus:
-			if ev.keycode in [Global.get_key("escape")] && ev.pressed && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("escape")] && ev.pressed && !ev.echo:
 				Global.cur_thing = 0;
 				Global.changeScene("menus/main_menu/MainMenu", true, false);
 				
-			if ev.keycode in [Global.get_key("ui_down")] && ev.pressed && !noSpam && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("ui_down")] && ev.pressed && !noSpam && !ev.echo:
 				changeWeek(1);
 				
-			if ev.keycode in [Global.get_key("ui_up")] && ev.pressed && !noSpam && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("ui_up")] && ev.pressed && !noSpam && !ev.echo:
 				changeWeek(-1);
 				
 			if SongData.chart_dont_exist && $warning.visible:
-				if (ev.keycode in [Global.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && ev.pressed && !ev.echo:
+				if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && ev.pressed && !ev.echo:
 					$warning.visible = false;
 					noSpam = false;
 			else:
-				if (ev.keycode in [Global.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && ev.pressed && !noSpam && !ev.echo:
+				if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && ev.pressed && !noSpam && !ev.echo:
 					go_to_week();
 					
-			if ev.keycode in [Global.get_key("ui_left")] && !noSpam && ev.pressed && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("ui_left")] && !noSpam && ev.pressed && !ev.echo:
 				leftArrow.play("arrow push left");
 				changeDiff(-1);
 			else:
 				leftArrow.play("arrow left");
 				
-			if ev.keycode in [Global.get_key("ui_right")] && !noSpam && ev.pressed && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("ui_right")] && !noSpam && ev.pressed && !ev.echo:
 				rightArrow.play("arrow push right");
 				changeDiff(1);
 			else:

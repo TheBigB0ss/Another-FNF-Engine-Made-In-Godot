@@ -39,20 +39,19 @@ func _ready():
 			characters_spr_array.append(get_json_text()["structure"][i]["character"]);
 			dialogue_array.append(get_json_text()["structure"][i]["text"]);
 			
-	the_box.position = Vector2(640, 415);
-	box_text.position = Vector2(150, 465);
-	
 	box_text.visible_characters = 0;
 	is_pixel_box = SongData.isPixelStage;
 	
 	if is_pixel_box:
+		the_box.position = Vector2(640, 415);
+		box_text.position = Vector2(195, 465);
 		the_box.scale = Vector2(5.4, 5);
 		the_box.texture_filter = AnimatedSprite2D.TEXTURE_FILTER_NEAREST;
 		box_pixel_part = "pixel";
 	else:
 		cool_hand.hide();
 		the_box.position = Vector2(650, 535);
-		box_text.position = Vector2(120, 490);
+		box_text.position = Vector2(165, 490);
 		box_text.modulate = Color("#000000");
 		box_pixel_part = "default";
 		
@@ -164,7 +163,7 @@ func set_text(text):
 	for i in text:
 		new_text += i;
 		letter_count += 1;
-		if letter_count % 48 == 0 && len(new_text) > 0:
+		if letter_count % 44 == 0 && len(new_text) > 0:
 			new_text += "\n";
 			
 	return new_text;
@@ -175,12 +174,12 @@ var dialogue_path = {
 	"bf": "BallonRight"
 };
 
-func remove_chars(char):
-	for i in char.get_children():
+func remove_chars(_char):
+	for i in _char.get_children():
 		i.queue_free();
-		char.remove_child(i);
+		_char.remove_child(i);
 		
-func update_text(text, char, char_spr):
+func update_text(text, _char, char_spr):
 	box_text.text = "";
 	letter_count = 0;
 	
@@ -210,9 +209,9 @@ func update_text(text, char, char_spr):
 				the_box.play("Text Box Appear instance 1");
 				
 	if dialogue_spr == "Ballon":
-		the_box.play(dialogue_path[char]);
+		the_box.play(dialogue_path[_char]);
 		
-	match char:
+	match _char:
 		"dad":
 			opponent = load("res://source/characters/dialogue portraits/%s.tscn"%[char_spr]).instantiate();
 			opponentGrp.add_child(opponent);

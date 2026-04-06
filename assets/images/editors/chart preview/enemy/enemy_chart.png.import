@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cj2xlr6n2atcu"
-path="res://.godot/imported/UI_RIGHT_WALL.png-d156fc8ae16cd04e56c4955bcd560343.ctex"
+uid="uid://0guh04poosg6"
+path="res://.godot/imported/enemy_chart.png-b82c164f0e8a3812a92ee8308bb8257f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/hud/offset_ui/UI_RIGHT_WALL.png"
-dest_files=["res://.godot/imported/UI_RIGHT_WALL.png-d156fc8ae16cd04e56c4955bcd560343.ctex"]
+source_file="res://assets/images/editors/chart preview/enemy/enemy_chart.png"
+dest_files=["res://.godot/imported/enemy_chart.png-b82c164f0e8a3812a92ee8308bb8257f.ctex"]
 
 [params]
 

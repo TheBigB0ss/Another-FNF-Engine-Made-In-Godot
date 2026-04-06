@@ -149,28 +149,28 @@ func _process(delta):
 func _input(ev):
 	if ev is InputEventKey:
 		if ev.pressed && Global.can_use_menus:
-			if ev.keycode in [Global.get_key("escape")] && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("escape")] && !ev.echo:
 				Global.cur_thing = 0;
 				Global.changeScene("menus/main_menu/MainMenu", true, false);
 				
-			if ev.keycode in [Global.get_key("ui_down")] && !ev.echo && !noSpam:
+			if ev.keycode in [GlobalOptions.get_key("ui_down")] && !ev.echo && !noSpam:
 				change_song(1);
 				
-			if ev.keycode in [Global.get_key("ui_up")] && !ev.echo && !noSpam:
+			if ev.keycode in [GlobalOptions.get_key("ui_up")] && !ev.echo && !noSpam:
 				change_song(-1);
 				
-			if ev.keycode in [Global.get_key("ui_left")] && !noSpam && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("ui_left")] && !noSpam && !ev.echo:
 				changeDiff(-1);
 				
-			if ev.keycode in [Global.get_key("ui_right")] && !noSpam && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("ui_right")] && !noSpam && !ev.echo:
 				changeDiff(1);
 				
 			if SongData.chart_dont_exist && $warning.visible:
-				if (ev.keycode in [Global.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo:
+				if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo:
 					$warning.visible = false;
 					noSpam = false;
 			else:
-				if (ev.keycode in [Global.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo && !noSpam:
+				if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo && !noSpam:
 					noSpam = true;
 					go_to_song(songs[cur_song], diffs[cur_diff if !cur_diff > diffs.size()-1 else 0]);
 					
@@ -183,10 +183,9 @@ func beat_hit(beat):
 		for letterID in song_stuff.get_child(i).get_child_count():
 			if songs[i] == "test":
 				if beat % 2 == 0 && letterID % 2 == 0:
-					song_stuff.get_child(i).get_children()[letterID].scale = Vector2(1.5,1.5)
-					
+					song_stuff.get_child(i).get_children()[letterID].scale = Vector2(1.2,1.2);
 				elif beat % 2 != 0 && letterID % 2 != 0:
-					song_stuff.get_child(i).get_children()[letterID].scale = Vector2(1.5,1.5)
+					song_stuff.get_child(i).get_children()[letterID].scale = Vector2(1.2,1.2);
 					
 func go_to_song(song, diff_path):
 	SongData.loadJson(song, diff_path);

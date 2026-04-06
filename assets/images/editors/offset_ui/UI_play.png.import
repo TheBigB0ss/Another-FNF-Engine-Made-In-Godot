@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ckkrwrljw3sjd"
-path="res://.godot/imported/UI_LEFT_WALL.png-bc1019262f5344d50190e31d1c27f964.ctex"
+uid="uid://dagq6vangwi1e"
+path="res://.godot/imported/UI_play.png-c18c6dac6ffbad5284d32a903a21a4e2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/hud/offset_ui/UI_LEFT_WALL.png"
-dest_files=["res://.godot/imported/UI_LEFT_WALL.png-bc1019262f5344d50190e31d1c27f964.ctex"]
+source_file="res://assets/images/editors/offset_ui/UI_play.png"
+dest_files=["res://.godot/imported/UI_play.png-c18c6dac6ffbad5284d32a903a21a4e2.ctex"]
 
 [params]
 

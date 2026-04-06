@@ -10,8 +10,10 @@ var charData = {};
 var animList = [];
 var posesList = [];
 
+var goToIdle = true;
+
 func _ready():
-	var jsonFile = FileAccess.open("res://assets/images/chart characters/enemy/enemy_chart.json",FileAccess.READ);
+	var jsonFile = FileAccess.open("res://assets/images/editors/chart preview/enemy/enemy_chart.json", FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
 	charData = jsonData.get_data();
@@ -38,6 +40,9 @@ func play_cool_anim(anim_id):
 func _process(delta):
 	if curAnim != "idle dance":
 		idleTimer += delta;
+		
+	if !goToIdle:
+		return;
 		
 	if idleTimer >= Conductor.stepCrochet * 5 * 0.001:
 		if curAnim != "idle dance":

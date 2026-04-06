@@ -9,7 +9,7 @@ func _ready():
 	#reset_achievements();
 	load_achievements();
 	
-	if !achievements.has("version") or achievements["version"] != 1:
+	if !achievements.has("version") or achievements["version"] != 2:
 		reset_achievements();
 		
 	if devMode:
@@ -78,7 +78,7 @@ func save_achievements():
 	
 func reset_achievements():
 	achievements = {
-		"version": 1,
+		"version": 2,
 		"you can do it":{
 			"description": "beat tutorial",
 			"value": false,
@@ -203,40 +203,40 @@ func reset_achievements():
 			"secret achievement": false,
 			"achievement index": 18
 		},
-		"what time is it":{
-			"description": "IT'S TV TIME!!!",
-			"value": false,
-			"special achievement": true,
-			"secret achievement": true,
-			"achievement index": 19
-		},
+		#"what time is it":{
+			#"description": "IT'S TV TIME!!!",
+			#"value": false,
+			#"special achievement": true,
+			#"secret achievement": true,
+			#"achievement index": 19
+		#}, sorry folks
 		"debug mode":{
 			"description": "beat test song",
 			"value": false,
 			"special achievement": false,
 			"secret achievement": true,
-			"achievement index": 20
+			"achievement index": 19
 		},
 		"combo master":{
 			"description": "complete a song with FC",
 			"value": false,
 			"special achievement": true,
 			"secret achievement": false,
-			"achievement index": 21
+			"achievement index": 20
 		},
 		"perfectionist":{
 			"description": "complete a song with SFC or GFC",
 			"value": false,
 			"special achievement": true,
 			"secret achievement": false,
-			"achievement index": 22
+			"achievement index": 21
 		},
 		"funkin master":{
 			"description": "unlock all achievements",
-			"value": [0, 23, false],
+			"value": [0, 22, false],
 			"special achievement": true,
 			"secret achievement": false,
-			"achievement index": 23
+			"achievement index": 22
 		}
 	};
 	

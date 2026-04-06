@@ -16,19 +16,9 @@ var you_delete_kenny = false;
 func _ready():
 	Discord.update_discord_info("main menu", "Is in menus");
 	
-	#var kenny_file = FileAccess;
-	#var kenny_img = "res://assets/Kenny (don't delete he).png"
-	#if kenny_file.file_exists(kenny_img):
-	#	print("kenny exist")
-	#	you_delete_kenny = false;
-	#else:
-	#	print("you kill him...")
-	#	you_delete_kenny = true;
-	
-	get_tree().get_root().files_dropped.connect(drop_new_bg_image);
-	
 	for i in options:
-		var menu_opts = load("res://assets/images/mainMenu/%s.tscn"%[i]).instantiate();
+		var menu_opts = AnimatedSprite2D.new();
+		menu_opts.sprite_frames = load("res://assets/images/mainMenu/%s.res"%[i]);
 		menu_opts.play(i + " idle");
 		menu_opts.position.y = offSetShit;
 		menu_opts.position.x = -30;
@@ -39,33 +29,21 @@ func _ready():
 	
 	coolOptions.position.y = float((720/2.0)-(coolOffset*curOption));
 	
-func drop_new_bg_image(file):
-	var newBg_image = Image.new();
-	newBg_image.load(file[0]);
-	
-	var newBg_texture = ImageTexture.new();
-	newBg_texture.set_image(newBg_image);
-	
-	new_bg.texture = newBg_texture;
-	new_bg.show();
-	if new_bg.texture != null:
-		cool_bg.hide();
-		
 var choiced = false;
 func _input(ev):
 	if ev is InputEventKey:
 		if ev.pressed && !ev.echo && Global.can_use_menus:
-			if ev.keycode in [Global.get_key("ui_down")] && !noSpam:
+			if ev.keycode in [GlobalOptions.get_key("ui_down")] && !noSpam:
 				changeItem(1);
 				
-			if ev.keycode in [Global.get_key("ui_up")] && !noSpam:
+			if ev.keycode in [GlobalOptions.get_key("ui_up")] && !noSpam:
 				changeItem(-1);
 				
 			if ev.keycode in [KEY_F5] && !noSpam:
 				noSpam = true;
 				Global.changeScene("/menus/achievements_menu/achievements_menu", true, false);
 				
-			if (ev.keycode in [Global.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !noSpam:
+			if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !noSpam:
 				noSpam = true;
 				choiced = true;
 				Sound.playAudio("confirmMenu", false);
@@ -81,7 +59,7 @@ func _input(ev):
 					"options":
 						Global.changeScene("/menus/options/options_menu", true, false);
 						
-			if ev.keycode in [Global.get_key("escape")] && !noSpam:
+			if ev.keycode in [GlobalOptions.get_key("escape")] && !noSpam:
 				noSpam = true;
 				Global.changeScene("/menus/title_menu/titleMenu", true, false);
 				Global.finished_intro = true;

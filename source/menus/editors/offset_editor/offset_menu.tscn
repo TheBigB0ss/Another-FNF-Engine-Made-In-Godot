@@ -2,17 +2,17 @@
 
 [ext_resource type="Script" uid="uid://y1n73jvmvg2n" path="res://source/menus/editors/offset_editor/offset_menu.gd" id="1_vft5f"]
 [ext_resource type="PackedScene" uid="uid://ci7s7lxw8p2bl" path="res://source/stages/stage/stage.tscn" id="2_l24p0"]
-[ext_resource type="Texture2D" uid="uid://b23ynj36pxt2r" path="res://assets/images/hud/offset_ui/ui_pointer.png" id="3_hopd8"]
+[ext_resource type="Texture2D" uid="uid://b23ynj36pxt2r" path="res://assets/images/editors/offset_ui/ui_pointer.png" id="3_hopd8"]
 [ext_resource type="Texture2D" uid="uid://dl8ob6uqlxroc" path="res://assets/images/hud/rating/default/sick.png" id="3_n322e"]
 [ext_resource type="Texture2D" uid="uid://cj6lp01iqfivo" path="res://assets/images/hud/rating/default/combo.png" id="3_v3n4i"]
 [ext_resource type="Texture2D" uid="uid://duy7maeuccjue" path="res://assets/images/cross.png" id="4_i0ff4"]
 [ext_resource type="Script" uid="uid://et1x2odfrswb" path="res://source/menus/editors/offset_editor/offsetNums.gd" id="4_qyjxo"]
-[ext_resource type="Texture2D" uid="uid://80xkslengvv2" path="res://assets/images/hud/offset_ui/ui_bar.png" id="4_xty76"]
-[ext_resource type="Texture2D" uid="uid://p62e8iawbjv5" path="res://assets/images/hud/offset_ui/UI_RIGHT.png" id="5_bn4vb"]
+[ext_resource type="Texture2D" uid="uid://80xkslengvv2" path="res://assets/images/editors/offset_ui/ui_bar.png" id="4_xty76"]
+[ext_resource type="Texture2D" uid="uid://p62e8iawbjv5" path="res://assets/images/editors/offset_ui/UI_RIGHT.png" id="5_bn4vb"]
 [ext_resource type="Script" uid="uid://essfoa0h4nwy" path="res://source/alphabet/alphabetObject.gd" id="6_v3n4i"]
-[ext_resource type="Texture2D" uid="uid://c4iv46257vg3j" path="res://assets/images/hud/offset_ui/UI_LEFT.png" id="6_wtymh"]
-[ext_resource type="Texture2D" uid="uid://ckkrwrljw3sjd" path="res://assets/images/hud/offset_ui/UI_LEFT_WALL.png" id="7_o6sf4"]
-[ext_resource type="Texture2D" uid="uid://cj2xlr6n2atcu" path="res://assets/images/hud/offset_ui/UI_RIGHT_WALL.png" id="8_125xj"]
+[ext_resource type="Texture2D" uid="uid://c4iv46257vg3j" path="res://assets/images/editors/offset_ui/UI_LEFT.png" id="6_wtymh"]
+[ext_resource type="Texture2D" uid="uid://ckkrwrljw3sjd" path="res://assets/images/editors/offset_ui/UI_LEFT_WALL.png" id="7_o6sf4"]
+[ext_resource type="Texture2D" uid="uid://cj2xlr6n2atcu" path="res://assets/images/editors/offset_ui/UI_RIGHT_WALL.png" id="8_125xj"]
 
 [node name="OffsetMenu" type="Node2D" unique_id=720753676]
 script = ExtResource("1_vft5f")
@@ -30,12 +30,39 @@ offset_left = 807.0
 offset_top = 23.0
 offset_right = 1231.0
 offset_bottom = 462.0
-current_tab = 2
+current_tab = 0
+
+[node name="help" type="TabBar" parent="offset_layer/TabContainer" unique_id=751837879]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="infos" type="RichTextLabel" parent="offset_layer/TabContainer/help" unique_id=1116520503]
+layout_mode = 0
+offset_left = 3.9999995
+offset_top = 7.0
+offset_right = 442.0
+offset_bottom = 412.2705
+scale = Vector2(0.9575283, 0.9795926)
+bbcode_enabled = true
+text = "Hello, welcome to the offset menu!
+Here is some information on how to use the menu :)
+
+-E/Q: Change the current animation
+
+-Space: Play the current animation
+
+-Use your keyboard keys to change the animation offset.
+
+-W/A/S/D: to move camera
+
+-Mouse Scroll: change camera zoom
+
+-Shift + Mouse Press to drag camera cross"
 
 [node name="main settings" type="TabBar" parent="offset_layer/TabContainer" unique_id=138948233]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 0
+metadata/_tab_index = 1
 
 [node name="characters_text" type="Label" parent="offset_layer/TabContainer/main settings" unique_id=2037261862]
 layout_mode = 0
@@ -180,7 +207,7 @@ step = 10.0
 [node name="anim settings" type="TabBar" parent="offset_layer/TabContainer" unique_id=1814175706]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 1
+metadata/_tab_index = 2
 
 [node name="frames_ui" type="Control" parent="offset_layer/TabContainer/anim settings" unique_id=785130326]
 anchors_preset = 0
@@ -360,33 +387,6 @@ offset_top = 194.0
 offset_right = 162.0
 offset_bottom = 225.0
 text = "is a special anim?"
-
-[node name="help" type="TabBar" parent="offset_layer/TabContainer" unique_id=751837879]
-layout_mode = 2
-metadata/_tab_index = 2
-
-[node name="infos" type="RichTextLabel" parent="offset_layer/TabContainer/help" unique_id=1116520503]
-layout_mode = 0
-offset_left = 3.9999995
-offset_top = 7.0
-offset_right = 442.0
-offset_bottom = 412.2705
-scale = Vector2(0.9575283, 0.9795926)
-bbcode_enabled = true
-text = "Hello, welcome to the offset menu!
-Here is some information on how to use the menu :)
-
--E/Q: Change the current animation
-
--Space: Play the current animation
-
--Use your keyboard keys to change the animation offset.
-
--W/A/S/D: to move camera
-
--Mouse Scroll: change camera zoom
-
--Shift + Mouse Press to drag camera cross"
 
 [node name="rating_node" type="Control" parent="." unique_id=1025969622]
 visible = false

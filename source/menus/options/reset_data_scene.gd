@@ -26,13 +26,13 @@ func _ready() -> void:
 func _input(ev):
 	if ev is InputEventKey:
 		if ev.pressed && get_tree().current_scene.get("is_on_reset_menu"):
-			if ev.keycode in [Global.get_key("ui_left")] && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("ui_left")] && !ev.echo:
 				change_opt(-1);
 				
-			if ev.keycode in [Global.get_key("ui_right")] && !ev.echo:
+			if ev.keycode in [GlobalOptions.get_key("ui_right")] && !ev.echo:
 				change_opt(1);
 				
-			if (ev.keycode in [Global.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo:
+			if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo:
 				match opt[cur_opt]:
 					"yes":
 						Sound.playAudio("confirmMenu", false);
