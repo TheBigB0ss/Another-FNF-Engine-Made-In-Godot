@@ -44,7 +44,7 @@ func volume_shit(volume_value, muted = false):
 		else:
 			i.modulate.a = 0;
 			
-	GlobalOptions.get_setting("volume", GlobalOptions.volume);
+	GlobalOptions.set_setting("volume", "meta", GlobalOptions.volume);
 	
 func show_volume_button():
 	var tween = get_tree().create_tween();

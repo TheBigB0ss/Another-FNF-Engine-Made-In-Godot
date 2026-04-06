@@ -99,6 +99,7 @@ func reset_settings():
 			"rating_pos": [635, 235],
 			"combo_pos": [695, 285],
 			"nums_pos": [464, 293],
+			"volume": 1
 		},
 		"graphics": {
 			"fps": int(60),
@@ -165,8 +166,7 @@ func reset_settings():
 				"list": ["hud element", "game element"],
 				"index": 0
 			}
-		},
-		"volume": 1
+		}
 	};
 	save_settings();
 	
@@ -220,7 +220,7 @@ func apply_changes():
 	updated_pause_music = settingsJson["gameplay"]["pause music"];
 	updated_cam = settingsJson["gameplay"]["camera mode"];
 	
-	volume = settingsJson["volume"];
+	volume = settingsJson["meta"]["volume"];
 	
 	ratings_positions["rating"] = settingsJson["meta"]["rating_pos"];
 	ratings_positions["combo"] = settingsJson["meta"]["combo_pos"];
