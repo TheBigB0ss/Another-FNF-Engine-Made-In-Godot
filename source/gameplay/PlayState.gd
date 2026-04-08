@@ -237,8 +237,9 @@ func _ready():
 		for i in [iconP1, iconP2]:
 			i.position.y = 65;
 			
-		iconP3.position.y = 95;
-		
+		if iconP3 != null:
+			iconP3.position.y = 125;
+			
 	if GlobalOptions.middle_scroll:
 		playerStrum.position.x = 478;
 		opponentStrum.visible = false;
@@ -358,8 +359,8 @@ func _process(delta: float) -> void:
 			return;
 			
 		if abs(inst.get_playback_position() - Conductor.getSongTime / 1000) > 0.03 && Time.get_ticks_msec() - last_song_seek > 500:
-			inst.seek(Conductor.getSongTime / 1000);
-			voices.seek(Conductor.getSongTime / 1000);
+			for i in [inst, voices]:
+				i.seek(Conductor.getSongTime / 1000);
 			last_song_seek = Time.get_ticks_msec();
 	else:
 		inst.stream_paused = true;
@@ -715,40 +716,37 @@ func startCoutdown():
 		
 		return;
 		
-	bf.beat_dance(idleCounter);
-	dad.beat_dance(idleCounter);
-	if is_instance_valid(gf):
-		gf.beat_dance(idleCounter);
+	for i in [bf, dad, gf]:
+		if !is_instance_valid(i):
+			i.beat_dance(idleCounter);
+			
 	if SongData.haveTwoOpponents && is_instance_valid(new_opponent):
 		new_opponent.beat_dance(idleCounter);
 		
 	for i in 5:
 		await get_tree().create_timer(Conductor.crochet/1000).timeout;
 		
-		if countdownSprite != null:
-			match i:
-				0:
-					if GlobalOptions.updated_hud != "classic hud":
-						set_contdownSpr(countdownPath, countdownset[countdownPath][0] + ratingPart);
-					Sound.playAudio("intro3", SongData.isPixelStage);
-				1:
-					set_contdownSpr(countdownPath, countdownset[countdownPath][1] + ratingPart);
-					Sound.playAudio("intro2", SongData.isPixelStage);
-				2:
-					set_contdownSpr(countdownPath, countdownset[countdownPath][2] + ratingPart);
-					Sound.playAudio("intro1", SongData.isPixelStage);
-				3:
-					set_contdownSpr(countdownPath, countdownset[countdownPath][3] + ratingPart);
-					Sound.playAudio("introGo", SongData.isPixelStage);
-				4:
-					countdownSprite.hide();
-					can_pause = true;
-					is_on_intro = false;
-					
-					if SongData.needVoice:
-						voices.play(0.0);
-					inst.play(0.0);
-					
+		if countdownSprite == null:
+			continue;
+			
+		if i > 3:
+			can_pause = true;
+			is_on_intro = false;
+			
+			if SongData.needVoice:
+				voices.play(0.0);
+			inst.play(0.0);
+			
+			countdownSprite.queue_free();
+			
+			continue;
+			
+		Sound.playAudio(["intro3", "intro2", "intro1", "introGo"][i], SongData.isPixelStage);
+		if GlobalOptions.updated_hud == "classic hud" && i == 0:
+			continue;
+			
+		set_contdownSpr(countdownPath, countdownset[countdownPath][i] + ratingPart);
+		
 		idleCounter += 1;
 		
 func set_contdownSpr(path, spr):

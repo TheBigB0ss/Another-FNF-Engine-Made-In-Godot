@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://f0c72kmnsor3"]
 
-[ext_resource type="Script" uid="uid://dkywaw07upwi1" path="res://assets/images/editors/chart preview/enemy/enemy_chart.gd" id="1_w145o"]
+[ext_resource type="Script" uid="uid://dkywaw07upwi1" path="res://source/menus/editors/chart_editor/characters/enemy_chart.gd" id="1_w145o"]
 [ext_resource type="Texture2D" uid="uid://0guh04poosg6" path="res://assets/images/editors/chart preview/enemy/enemy_chart.png" id="2_vqf0j"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2ks3p"]
@@ -575,10 +575,10 @@ animations = [{
 "speed": 13.0
 }]
 
-[node name="enemy_chart" type="Node2D"]
+[node name="enemy_chart" type="Node2D" unique_id=2145960487]
 script = ExtResource("1_w145o")
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=736081421]
 sprite_frames = SubResource("SpriteFrames_hk35t")
 animation = &"idle"
 autoplay = "idle"

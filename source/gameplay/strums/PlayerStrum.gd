@@ -93,8 +93,10 @@ func _process(delta):
 		else:
 			note.position.y = strumY;
 			
-		if note.MissedlongNote or note.missTimer > 0:
-			note.position.y = strumY + (Conductor.getSongTime - note.release_time) * (0.45 * Conductor.songSpeed) if GlobalOptions.down_scroll else strumY - (Conductor.getSongTime - note.release_time) * (0.45 * Conductor.songSpeed);
+		if note.missedLongNote or note.missTimer > 0:
+			var releaseDiff = (Conductor.getSongTime - note.release_time);
+			var speed = 0.45 * Conductor.songSpeed;
+			note.position.y = strumY + releaseDiff * speed if GlobalOptions.down_scroll else strumY - releaseDiff * speed;
 			
 		if !note.isPlayer:
 			continue;
@@ -106,7 +108,7 @@ func _process(delta):
 		if Conductor.getSongTime > 320 + note.strumTime && note.sustainLength <= 0:
 			notes_to_delete.append(note);
 			
-		elif Conductor.getSongTime > 320 + note.strumTime + note.sustainLength && note.sustainLength > 0 && !note.is_pressing:
+		if Conductor.getSongTime > 335+(note.strumTime+note.ogSustain) && note.sustainLength > 0 && !note.is_pressing:
 			notes_to_delete.append(note);
 			
 	playerNotes = playerNotes.filter(func(note): return note != null);
@@ -140,7 +142,7 @@ func _process(delta):
 				
 			if note.sustainLength <= 0 or !note.isSustain: continue;
 			
-			if Input.is_action_pressed(key) && note.MissedlongNote && !note.missed && note.missTimer <= 0:
+			if Input.is_action_pressed(key) && note.missedLongNote && !note.missed && note.missTimer <= 0:
 				if note.sustainLength <= 0:
 					note.is_pressing = false;
 					notes_to_delete.append(note);
@@ -151,13 +153,13 @@ func _process(delta):
 		if !note.is_pressing: continue;
 		
 		if !Input.is_action_pressed(key):
-			note.MissedlongNote = true;
+			note.missedLongNote = true;
 			note.release_time = Conductor.getSongTime;
 		else:
-			if note.missTimer <= 0.13 && note.MissedlongNote:
+			if note.missTimer <= 0.13 && note.missedLongNote:
 				note.release_time = 0.0;
 				note.is_pressing = true;
-				note.MissedlongNote = false;
+				note.missedLongNote = false;
 				note.missed = false;
 				note.missTimer = 0.0;
 				

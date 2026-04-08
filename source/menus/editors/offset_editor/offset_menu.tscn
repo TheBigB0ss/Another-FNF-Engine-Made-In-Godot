@@ -430,7 +430,6 @@ offset_right = 986.563
 offset_bottom = 74.0
 min_value = -9000.0
 max_value = 9000.0
-step = 10.0
 
 [node name="rating_y_text" type="Label" parent="rating_layer" unique_id=696673274]
 offset_left = 1009.0
@@ -447,7 +446,6 @@ offset_right = 1163.56
 offset_bottom = 74.0
 min_value = -9000.0
 max_value = 9000.0
-step = 10.0
 
 [node name="combo_x_text" type="Label" parent="rating_layer" unique_id=1685313131]
 offset_left = 832.0
@@ -464,7 +462,6 @@ offset_right = 990.563
 offset_bottom = 124.0
 min_value = -9000.0
 max_value = 9000.0
-step = 10.0
 
 [node name="combo_y_text" type="Label" parent="rating_layer" unique_id=78743297]
 offset_left = 1010.0
@@ -481,7 +478,6 @@ offset_right = 1169.56
 offset_bottom = 124.0
 min_value = -9000.0
 max_value = 9000.0
-step = 10.0
 
 [node name="nums_x_text" type="Label" parent="rating_layer" unique_id=119572425]
 offset_left = 832.0
@@ -498,7 +494,6 @@ offset_right = 986.563
 offset_bottom = 174.0
 min_value = -9000.0
 max_value = 9000.0
-step = 10.0
 
 [node name="nums_y_text" type="Label" parent="rating_layer" unique_id=1622924500]
 offset_left = 1007.0
@@ -515,7 +510,6 @@ offset_right = 1161.56
 offset_bottom = 174.0
 min_value = -9000.0
 max_value = 9000.0
-step = 10.0
 
 [node name="text_layer" type="CanvasLayer" parent="." unique_id=867981418]
 layer = 3

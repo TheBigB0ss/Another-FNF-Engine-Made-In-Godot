@@ -113,6 +113,9 @@ func getFolderShit(folder):
 func addCharToList():
 	var charList = [];
 	for i in getFolderShit("assets/data/characters/"):
+		if i == "none.json":
+			continue;
+			
 		if i.ends_with(".json"):
 			charList.append(i);
 			

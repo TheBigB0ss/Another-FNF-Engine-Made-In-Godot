@@ -86,7 +86,7 @@ func _process(delta):
 		note.rotation = strum.rotation;
 		note.modulate.a = strum.modulate.a;
 		
-		if !note.is_pressing or note.MissedlongNote or note.missed:
+		if !note.is_pressing or note.missedLongNote or note.missed:
 			note.position.y = strumY + (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed) if GlobalOptions.down_scroll else strumY - (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed);
 		else:
 			note.position.y = strumY;

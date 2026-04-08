@@ -41,7 +41,7 @@ func _ready():
 	elif GlobalOptions.rating_mode == "game element":
 		for i in [ratingSpr, comboSpr, numsSpr]:
 			i.reparent($rating_node, true);
-	
+			
 	for i in addCharToList():
 		if i.contains(".json"):
 			replaced = i.replace(".json", "");
@@ -75,7 +75,7 @@ func get_char_json(character, cur_offset, option):
 	jsonFile.close();
 	return offset["Poses"][cur_offset][option];
 	
-func change_character(char):
+func change_character(_char):
 	for i in characterGrp.get_children():
 		characterGrp.remove_child(i);
 		i.queue_free();
@@ -105,6 +105,7 @@ func change_character(char):
 		update_cross(i.charData["cameraPos"][0], i.charData["cameraPos"][1]);
 		update_scale_value(i.charData["scale"][0], i.charData["scale"][1]);
 		flip_char(i.charData["FlipX"], i.charData["FlipY"]);
+		change_anim(0);
 		
 	set_rating_pos();
 	
@@ -180,7 +181,7 @@ func mouse_inside(spr, texture):
 	return false;
 	
 var char_scale = Vector2.ZERO;
-func mouse_inside_character(spr):
+func mouse_inside_character(spr, offset):
 	var mouse = get_global_mouse_position();
 	var size = null;
 	
@@ -192,7 +193,10 @@ func mouse_inside_character(spr):
 		size = spr.get_texture().get_size() * spr.scale;
 		char_scale = spr.scale;
 		
-	if mouse.x > spr.global_position.x - size.x / 2 && mouse.x < spr.global_position.x + size.x / 2 && mouse.y > spr.global_position.y - size.y / 2 && mouse.y < spr.global_position.y + size.y / 2:
+	if (mouse.x > spr.global_position.x - size.x / offset 
+	&& mouse.x < spr.global_position.x + size.x / offset 
+	&& mouse.y > spr.global_position.y - size.y / offset 
+	&& mouse.y < spr.global_position.y + size.y / offset):
 		return true;
 		
 	return false;
@@ -371,22 +375,16 @@ func _process(_delta: float) -> void:
 		GlobalOptions.set_setting("combo_pos", "meta", [%combo_x.value, %combo_y.value]);
 		GlobalOptions.set_setting("nums_pos", "meta", [%nums_x.value, %nums_y.value]);
 		
-	#elif can_grab && !adjusting_rating:
-		#var mouse = characterGrp.to_local(get_global_mouse_position());
-		#var mouse_shit = get_viewport().gui_get_hovered_control() is TabBar or get_viewport().gui_get_hovered_control() is SpinBox or get_viewport().gui_get_hovered_control() is CheckBox or get_viewport().gui_get_hovered_control() is Button or get_viewport().gui_get_hovered_control() is OptionButton;
-		#var character = null;
-		#
-		#for i in characterGrp.get_children():
-			#character = i.character;
-			#
-		#if Input.is_action_pressed("mouse_click") && mouse_inside_character(character):
-			#holding_char = !$FileDialog.visible;
-		#else:
-			#holding_char = false;
-			#
-		#if holding_char:
-			#offset_array[cur_pose][0] = mouse.x/char_scale.x;
-			#offset_array[cur_pose][1] = mouse.y/char_scale.y;
+	if can_grab && !adjusting_rating:
+		if Input.is_action_pressed("mouse_click"):
+			if mouse_inside_character(characterGrp.get_child(0).character, 2):
+				holding_char = !$FileDialog.visible;
+		else:
+			holding_char = false;
+			
+		if holding_char:
+			%x_offset.value = characterGrp.to_local(get_global_mouse_position()).x/char_scale.x
+			%y_offset.value = characterGrp.to_local(get_global_mouse_position()).y/char_scale.y
 			
 	if !$FileDialog.visible:
 		if Input.is_action_pressed("ui_shift") && Input.is_action_pressed("mouse_click"):
@@ -478,7 +476,10 @@ func _process(_delta: float) -> void:
 func addCharToList():
 	var charList = [];
 	for i in getFolderShit("assets/data/characters/"):
-		if i.ends_with(".json") && !i == "none":
+		if i == "none.json":
+			continue;
+			
+		if i.ends_with(".json"):
 			charList.append(i);
 			
 	return charList;

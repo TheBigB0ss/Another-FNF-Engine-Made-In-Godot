@@ -34,6 +34,7 @@ var strumTime = 0;
 var noteData = 0;
 var isSustain = false;
 var sustainLength = 0.0;
+var ogSustain = 0.0;
 
 var no_anim = false;
 var is_hey_note = false;
@@ -43,7 +44,7 @@ var is_a_bad_note = false;
 
 var missed = false;
 var release_time = 0.0;
-var MissedlongNote = false;
+var missedLongNote = false;
 var missTimer = 0.0;
 
 var isStrumNote = false;
@@ -147,7 +148,9 @@ func set_note_scale(parent_scale, pixelNote, newOpponentNote):
 	return new_noteScale;
 	
 @onready var main_scene = get_tree().current_scene;
+
 func _ready():
+	ogSustain = sustainLength;
 	self.scale = Vector2(0.65, 0.65);
 	 
 	add_child(strumNote);
@@ -243,12 +246,13 @@ func _process(delta: float) -> void:
 				noteEnd.queue_free();
 				noteLine.queue_free();
 				
-	if MissedlongNote:
+	if missedLongNote:
 		missTimer += delta;
 		
-	if missed or MissedlongNote && sustainLength > 0.0:
+	if missed or missedLongNote && sustainLength > 0.0:
 		if missTimer > 0.13:
 			can_press = false;
+			is_pressing = false;
 			miss_note();
 			
 func play_note_anim(anim):
@@ -308,7 +312,7 @@ func miss_note():
 	
 	main_scene.health = max(main_scene.health - 4, 0.0);
 	if isSustain && sustainLength > 0.0:
-		MissedlongNote = true;
+		missedLongNote = true;
 		emit_signal("longNoteMissed", self);
 	else:
 		emit_signal("noteMissed", self);

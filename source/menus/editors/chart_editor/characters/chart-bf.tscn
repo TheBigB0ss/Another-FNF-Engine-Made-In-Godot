@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bs3bmha3d0luc"]
 
-[ext_resource type="Script" uid="uid://cithgl1w0skdv" path="res://assets/images/editors/chart preview/bf/chart-bf.gd" id="1_1nc30"]
+[ext_resource type="Script" uid="uid://cithgl1w0skdv" path="res://source/menus/editors/chart_editor/characters/chart-bf.gd" id="1_1nc30"]
 [ext_resource type="Texture2D" uid="uid://ta4oaw7lkwmx" path="res://assets/images/editors/chart preview/bf/chart-bf.png" id="2_wqw6q"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ag647"]
@@ -575,10 +575,10 @@ animations = [{
 "speed": 13.0
 }]
 
-[node name="chart-bf" type="Node2D"]
+[node name="chart-bf" type="Node2D" unique_id=1087730310]
 script = ExtResource("1_1nc30")
 
-[node name="character" type="AnimatedSprite2D" parent="."]
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=518251865]
 sprite_frames = SubResource("SpriteFrames_r8kc0")
 animation = &"idle"
 autoplay = "idle"
