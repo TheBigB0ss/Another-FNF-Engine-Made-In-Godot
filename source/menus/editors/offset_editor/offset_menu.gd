@@ -202,6 +202,7 @@ func mouse_inside_character(spr, offset):
 	return false;
 	
 var pos_change_value = 0;
+
 func _input(ev):
 	if ev is InputEventMouseMotion:
 		update_cursor(cursor);
@@ -284,7 +285,6 @@ func change_character_frame(frame = 1, instant = false):
 			var val = (max_frames if frame > 0 else 0.0) if instant else character.frame+frame;
 			i.character.frame = clamp(val, 0.0, max_frames);
 			
-var holding_char = false;
 var rating_status = null;
 enum RatingState {
 	RATING = 0,
@@ -293,6 +293,7 @@ enum RatingState {
 };
 
 var can_grab = true;
+var dragging_character = false;
 
 var animTimes = [];
 var animBeats = [];
@@ -301,6 +302,8 @@ var specialAnims = [];
 var last_mouse_x = 0;
 
 func _process(_delta: float) -> void:
+	pos_change_value = 1 if !Input.is_action_pressed("ui_shift") else 10;
+	
 	for i in characterGrp.get_children():
 		var frame = 0;
 		var total_frames = 0;
@@ -322,31 +325,51 @@ func _process(_delta: float) -> void:
 		frame_bar.max_value = total_frames-1;
 		
 	if Input.is_action_just_pressed("mouse_click"):
-		if mouse_inside(frame_arrow_left, frame_arrow_left.texture): change_character_frame(-1);
-		elif mouse_inside(frame_arrow_right, frame_arrow_right.texture): change_character_frame(1);
-		elif mouse_inside(frame_arrow_leftWall, frame_arrow_leftWall.texture): change_character_frame(-1, true);
-		elif mouse_inside(frame_arrow_rightWall, frame_arrow_rightWall.texture): change_character_frame(1, true);
+		if mouse_inside(frame_arrow_left, frame_arrow_left.texture): change_character_frame(-1); return;
+		elif mouse_inside(frame_arrow_right, frame_arrow_right.texture): change_character_frame(1); return;
+		elif mouse_inside(frame_arrow_leftWall, frame_arrow_leftWall.texture): change_character_frame(-1, true); return;
+		elif mouse_inside(frame_arrow_rightWall, frame_arrow_rightWall.texture): change_character_frame(1, true); return;
 		
 	var direction = 0;
 	if get_viewport().get_mouse_position().x > last_mouse_x: direction = 1;
 	elif get_viewport().get_mouse_position().x < last_mouse_x: direction = -1;
 	last_mouse_x = get_viewport().get_mouse_position().x;
+	
 	if mouse_inside(frame_pointer, frame_pointer.texture):
+		if Input.is_action_just_released("mouse_click"):
+			return;
+			
 		if Input.is_action_pressed("mouse_click"):
 			frame_pointer.position.x += direction * 5;
 			frame_pointer.position.x = clamp(frame_pointer.position.x, pointer_starter.x, pointer_starter.x + 250);
 			change_character_frame(direction);
+			return;
 			
+	if can_grab && !adjusting_rating:
+		if Input.is_action_pressed("mouse_click"):
+			if Input.is_action_pressed("ui_shift"):
+				update_cross(get_global_mouse_position().x - characterGrp.get_child(0).global_position.x, get_global_mouse_position().y - characterGrp.get_child(0).global_position.y);
+				return;
+				
+			if mouse_inside_character(characterGrp.get_child(0).character, (1 if characterGrp.get_child(0).character is AnimatedSprite2D else 14)):
+				dragging_character = true;
+				
+	if Input.is_action_just_released("mouse_click"):
+		dragging_character = false;
+		
+	if dragging_character:
+		%x_offset.value = characterGrp.to_local(get_global_mouse_position()).x/char_scale.x;
+		%y_offset.value = characterGrp.to_local(get_global_mouse_position()).y/char_scale.y;
+		return;
+		
 	if adjusting_rating:
 		var mouse = get_viewport().get_mouse_position();
 		
 		if Input.is_action_just_pressed("mouse_click"):
 			if mouse_inside(comboSpr, comboSpr.texture):
 				rating_status = RatingState.COMBO;
-				
 			elif mouse_inside(numsSpr, numsSpr.shit_spr.texture):
 				rating_status = RatingState.NUMS;
-				
 			elif mouse_inside(ratingSpr, ratingSpr.texture):
 				rating_status = RatingState.RATING;
 				
@@ -355,11 +378,9 @@ func _process(_delta: float) -> void:
 				RatingState.COMBO:
 					%combo_x.value = mouse.x;
 					%combo_y.value = mouse.y;
-					
 				RatingState.NUMS:
 					%nums_x.value = mouse.x;
 					%nums_y.value = mouse.y;
-					
 				RatingState.RATING:
 					%rating_x.value = mouse.x;
 					%rating_y.value = mouse.y;
@@ -375,21 +396,7 @@ func _process(_delta: float) -> void:
 		GlobalOptions.set_setting("combo_pos", "meta", [%combo_x.value, %combo_y.value]);
 		GlobalOptions.set_setting("nums_pos", "meta", [%nums_x.value, %nums_y.value]);
 		
-	if can_grab && !adjusting_rating:
-		if Input.is_action_pressed("mouse_click"):
-			if mouse_inside_character(characterGrp.get_child(0).character, 2):
-				holding_char = !$FileDialog.visible;
-		else:
-			holding_char = false;
-			
-		if holding_char:
-			%x_offset.value = characterGrp.to_local(get_global_mouse_position()).x/char_scale.x
-			%y_offset.value = characterGrp.to_local(get_global_mouse_position()).y/char_scale.y
-			
 	if !$FileDialog.visible:
-		if Input.is_action_pressed("ui_shift") && Input.is_action_pressed("mouse_click"):
-			update_cross(get_global_mouse_position().x - characterGrp.get_child(0).global_position.x, get_global_mouse_position().y - characterGrp.get_child(0).global_position.y);
-			
 		if Input.is_action_just_released("mouse_wheel_down"):
 			if camera.zoom.x < 0.50:
 				return;
@@ -411,10 +418,7 @@ func _process(_delta: float) -> void:
 			var curPos = get_global_mouse_position();
 			camera.position += lastPos - curPos;
 			
-	if (Input.is_action_just_released("mouse_click") or !Input.is_action_just_pressed("mouse_click")) && !can_grab:
-		can_grab = true;
-		
-	pos_change_value = 1 if Input.is_action_pressed("ui_shift") else 10;
+	can_grab = !block_grab
 	
 	cursor = "pointer" if get_viewport().gui_get_hovered_control() is TabBar or get_viewport().gui_get_hovered_control() is SpinBox or get_viewport().gui_get_hovered_control() is CheckBox or get_viewport().gui_get_hovered_control() is Button or get_viewport().gui_get_hovered_control() is OptionButton else "default";
 	
@@ -499,6 +503,7 @@ func getFolderShit(folder):
 func save_file() -> void:
 	$FileDialog.popup_centered();
 	
+var block_grab = false;
 func _on_file_dialog_file_selected(json):
 	var new_jsonFile = FileAccess.open(json, FileAccess.WRITE);
 	new_jsonFile.store_string(JSON.stringify(characterJson, "\t"));
@@ -507,13 +512,13 @@ func _on_file_dialog_file_selected(json):
 	print('save: ', json);
 	
 func _on_x_scale_value_changed(value: float) -> void:
-	holding_char = false;
-	can_grab = false;
+	dragging_character = false;
+	block_grab = true;
 	update_scale_value(value, %y_scale.value);
 	
 func _on_y_scale_value_changed(value: float) -> void:
-	holding_char = false;
-	can_grab = false;
+	dragging_character = false;
+	block_grab = true;
 	update_scale_value(%x_scale.value, value);
 	
 func _on_flip_x_pressed() -> void:
@@ -523,17 +528,18 @@ func _on_flip_y_pressed() -> void:
 	flip_char(%flipX.button_pressed, %flipY.button_pressed);
 	
 func _on_camera_x_value_changed(value: float) -> void:
-	holding_char = false;
-	can_grab = false;
+	dragging_character = false;
+	block_grab = true;
 	update_cross(value, %camera_Y.value);
 	
 func _on_camera_y_value_changed(value: float) -> void:
-	holding_char = false;
-	can_grab = false;
+	dragging_character = false;
+	block_grab = true;
 	update_cross(%camera_X.value, value);
 	
 func _on_y_offset_value_changed(value: float) -> void:
-	can_grab = false;
+	dragging_character = false;
+	block_grab = true;
 	if offset_array.is_empty():
 		return;
 		
@@ -541,7 +547,8 @@ func _on_y_offset_value_changed(value: float) -> void:
 	update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
 	
 func _on_x_offset_value_changed(value: float) -> void:
-	can_grab = false;
+	dragging_character = false;
+	block_grab = true;
 	if offset_array.is_empty():
 		return;
 		

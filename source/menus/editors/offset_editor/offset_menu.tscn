@@ -31,6 +31,7 @@ offset_top = 23.0
 offset_right = 1231.0
 offset_bottom = 462.0
 current_tab = 0
+tab_focus_mode = 0
 
 [node name="help" type="TabBar" parent="offset_layer/TabContainer" unique_id=751837879]
 layout_mode = 2
