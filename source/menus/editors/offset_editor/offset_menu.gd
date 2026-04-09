@@ -28,6 +28,8 @@ var offset_count = 0;
 
 var pointer_starter = Vector2.ZERO;
 
+var charScale = Vector2.ONE;
+
 func _ready():
 	pointer_starter = frame_pointer.position;
 	
@@ -105,6 +107,7 @@ func change_character(_char):
 		update_cross(i.charData["cameraPos"][0], i.charData["cameraPos"][1]);
 		update_scale_value(i.charData["scale"][0], i.charData["scale"][1]);
 		flip_char(i.charData["FlipX"], i.charData["FlipY"]);
+		
 		change_anim(0);
 		
 	set_rating_pos();
@@ -131,6 +134,10 @@ func update_scale_value(x = 1, y = 1):
 		i.character.scale.x = x;
 		i.character.scale.y = y;
 		
+	charScale = Vector2(%x_scale.value, %y_scale.value);
+	%x_scale.value = x;
+	%y_scale.value = y;
+	
 func flip_char(flipX, flipY):
 	for i in characterGrp.get_children():
 		i.character.flip_h = flipX;
@@ -201,6 +208,7 @@ func mouse_inside_character(spr, offset):
 		
 	return false;
 	
+var block_grab = false;
 var pos_change_value = 0;
 
 func _input(ev):
@@ -208,7 +216,22 @@ func _input(ev):
 		update_cursor(cursor);
 		
 	if ev is InputEventKey:
-		if ev.pressed && !ev.echo:
+		if ev.pressed:
+			if ev.echo:
+				if ev.keycode in [KEY_W]:
+					camera.offset.y -= 20;
+					
+				if ev.keycode in [KEY_S]:
+					camera.offset.y += 20;
+					
+				if ev.keycode in [KEY_D]:
+					camera.offset.x += 20;
+					
+				if ev.keycode in [KEY_A]:
+					camera.offset.x -= 20;
+					
+				return;
+				
 			if ev.keycode in [KEY_TAB]:
 				adjusting_rating = !adjusting_rating;
 				set_rating_pos();
@@ -243,19 +266,19 @@ func _input(ev):
 					offset_array[cur_pose][1] -= pos_change_value;
 					update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
 					
-		if ev.pressed:
-			if ev.keycode in [KEY_W]:
-				camera.offset.y -= 20;
-				
-			if ev.keycode in [KEY_S]:
-				camera.offset.y += 20;
-				
-			if ev.keycode in [KEY_D]:
-				camera.offset.x += 20;
-				
-			if ev.keycode in [KEY_A]:
-				camera.offset.x -= 20;
-				
+				if ev.alt_pressed:
+					if ev.keycode in [KEY_DOWN]:
+						charScale.y -= 1;
+						
+					if ev.keycode in [KEY_UP]:
+						charScale.y += 1;
+						
+					if ev.keycode in [KEY_RIGHT]:
+						charScale.x += 1;
+						
+					if ev.keycode in [KEY_LEFT]:
+						charScale.x -= 1;
+					
 func change_anim(change):
 	if offset_array != []:
 		cur_pose += change;
@@ -292,7 +315,6 @@ enum RatingState {
 	NUMS = 2
 };
 
-var can_grab = true;
 var dragging_character = false;
 
 var animTimes = [];
@@ -302,6 +324,7 @@ var specialAnims = [];
 var last_mouse_x = 0;
 
 func _process(_delta: float) -> void:
+	update_scale_value(charScale.x, charScale.y);
 	pos_change_value = 1 if !Input.is_action_pressed("ui_shift") else 10;
 	
 	for i in characterGrp.get_children():
@@ -345,13 +368,18 @@ func _process(_delta: float) -> void:
 			change_character_frame(direction);
 			return;
 			
-	if can_grab && !adjusting_rating:
+	if !adjusting_rating:
+		if get_viewport().gui_get_hovered_control() is SpinBox:
+			
+			return;
+			
 		if Input.is_action_pressed("mouse_click"):
+			block_grab = false;
 			if Input.is_action_pressed("ui_shift"):
 				update_cross(get_global_mouse_position().x - characterGrp.get_child(0).global_position.x, get_global_mouse_position().y - characterGrp.get_child(0).global_position.y);
 				return;
 				
-			if mouse_inside_character(characterGrp.get_child(0).character, (1 if characterGrp.get_child(0).character is AnimatedSprite2D else 14)):
+			if mouse_inside_character(characterGrp.get_child(0).character, (2 if characterGrp.get_child(0).character is AnimatedSprite2D else 14)):
 				dragging_character = true;
 				
 	if Input.is_action_just_released("mouse_click"):
@@ -418,8 +446,6 @@ func _process(_delta: float) -> void:
 			var curPos = get_global_mouse_position();
 			camera.position += lastPos - curPos;
 			
-	can_grab = !block_grab
-	
 	cursor = "pointer" if get_viewport().gui_get_hovered_control() is TabBar or get_viewport().gui_get_hovered_control() is SpinBox or get_viewport().gui_get_hovered_control() is CheckBox or get_viewport().gui_get_hovered_control() is Button or get_viewport().gui_get_hovered_control() is OptionButton else "default";
 	
 	for i in characterGrp.get_children():
@@ -503,7 +529,6 @@ func getFolderShit(folder):
 func save_file() -> void:
 	$FileDialog.popup_centered();
 	
-var block_grab = false;
 func _on_file_dialog_file_selected(json):
 	var new_jsonFile = FileAccess.open(json, FileAccess.WRITE);
 	new_jsonFile.store_string(JSON.stringify(characterJson, "\t"));
@@ -512,13 +537,9 @@ func _on_file_dialog_file_selected(json):
 	print('save: ', json);
 	
 func _on_x_scale_value_changed(value: float) -> void:
-	dragging_character = false;
-	block_grab = true;
 	update_scale_value(value, %y_scale.value);
 	
 func _on_y_scale_value_changed(value: float) -> void:
-	dragging_character = false;
-	block_grab = true;
 	update_scale_value(%x_scale.value, value);
 	
 func _on_flip_x_pressed() -> void:
@@ -528,18 +549,12 @@ func _on_flip_y_pressed() -> void:
 	flip_char(%flipX.button_pressed, %flipY.button_pressed);
 	
 func _on_camera_x_value_changed(value: float) -> void:
-	dragging_character = false;
-	block_grab = true;
 	update_cross(value, %camera_Y.value);
 	
 func _on_camera_y_value_changed(value: float) -> void:
-	dragging_character = false;
-	block_grab = true;
 	update_cross(%camera_X.value, value);
 	
 func _on_y_offset_value_changed(value: float) -> void:
-	dragging_character = false;
-	block_grab = true;
 	if offset_array.is_empty():
 		return;
 		
@@ -547,8 +562,6 @@ func _on_y_offset_value_changed(value: float) -> void:
 	update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
 	
 func _on_x_offset_value_changed(value: float) -> void:
-	dragging_character = false;
-	block_grab = true;
 	if offset_array.is_empty():
 		return;
 		
@@ -567,8 +580,3 @@ func _on_beat_time_value_changed(value: float) -> void:
 		
 	animBeats[cur_pose] = value;
 	
-func _on_is_special_toggled(toggled_on: bool) -> void:
-	if specialAnims.is_empty():
-		return;
-		
-	specialAnims[cur_pose] = toggled_on;

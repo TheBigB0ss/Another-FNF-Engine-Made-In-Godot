@@ -52,13 +52,15 @@ Here is some information on how to use the menu :)
 
 -Space: Play the current animation
 
--Use your keyboard keys to change the animation offset.
+-ALT + arrow keys: change the character scale
 
--W/A/S/D: to move camera
+-arrow keys: change the animation offset.
+
+-W/A/S/D: move camera
 
 -Mouse Scroll: change camera zoom
 
--Shift + Mouse Press to drag camera cross"
+-Shift + Mouse Press: drag camera cross"
 
 [node name="main settings" type="TabBar" parent="offset_layer/TabContainer" unique_id=138948233]
 visible = false
@@ -290,6 +292,9 @@ offset_left = 62.0
 offset_top = 13.0
 offset_right = 148.56299
 offset_bottom = 44.0
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+min_value = -100.0
 value = 1.0
 
 [node name="y_scale_label" type="Label" parent="offset_layer/TabContainer/anim settings" unique_id=12755466]
@@ -307,6 +312,9 @@ offset_left = 211.0
 offset_top = 13.0
 offset_right = 297.56006
 offset_bottom = 44.0
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+min_value = -100.0
 value = 1.0
 
 [node name="anim_time_text" type="Label" parent="offset_layer/TabContainer/anim settings" unique_id=634919882]
@@ -324,6 +332,7 @@ offset_left = 86.0
 offset_top = 110.0
 offset_right = 186.0
 offset_bottom = 141.0
+mouse_filter = 2
 min_value = 1.0
 value = 5.0
 
@@ -342,6 +351,8 @@ offset_left = 86.0
 offset_top = 155.0
 offset_right = 186.0
 offset_bottom = 186.0
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
 min_value = 1.0
 value = 2.0
 
@@ -360,6 +371,7 @@ offset_left = 67.0
 offset_top = 64.0
 offset_right = 153.56299
 offset_bottom = 95.0
+mouse_filter = 2
 min_value = -10000.0
 max_value = 10000.0
 
@@ -378,6 +390,7 @@ offset_left = 229.0
 offset_top = 64.0
 offset_right = 315.56006
 offset_bottom = 95.0
+mouse_filter = 2
 min_value = -9000.0
 max_value = 9000.0
 

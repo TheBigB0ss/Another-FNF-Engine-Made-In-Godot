@@ -16,10 +16,10 @@ func _init() -> void:
 	Conductor.new_beat.connect(beat_hit);
 	Conductor.new_step.connect(step_hit);
 	
-func step_hit(step) -> void:
+func step_hit(_step) -> void:
 	pass
 	
-func beat_hit(beat) -> void:
+func beat_hit(_beat) -> void:
 	pass
 	
 func init_json(path):
