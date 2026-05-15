@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://chfwtkdhmc256"]
 
-[ext_resource type="Script" uid="uid://dqqm45nhxoo5r" path="res://source/characters/characters_scripts/New_Character.gd" id="1_3vvub"]
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_3vvub"]
 [ext_resource type="Texture2D" uid="uid://dcskrd3cmc1wb" path="res://assets/stages/week7/remix/steve.png" id="1_h8btb"]
 
 [sub_resource type="Animation" id="Animation_cw2pn"]
@@ -251,14 +251,14 @@ _data = {
 [node name="steve" type="Node2D" unique_id=1825381303]
 script = ExtResource("1_3vvub")
 json_path = "res://assets/data/characters/steve.json"
-anim_type = 1
+anim_type = 3
 have_death_animation = false
 
 [node name="Character_Sprite" type="Sprite2D" parent="." unique_id=123205747]
 texture = ExtResource("1_h8btb")
-offset = Vector2(2, 7)
+offset = Vector2(-4.5, 0)
 region_enabled = true
-region_rect = Rect2(2468, 0, 455, 667)
+region_rect = Rect2(436, 678, 432, 681)
 
 [node name="Character_Animation" type="AnimationPlayer" parent="." unique_id=316524023]
 libraries/ = SubResource("AnimationLibrary_mfpi1")

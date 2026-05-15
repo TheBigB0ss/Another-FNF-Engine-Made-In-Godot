@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://dkfjsi34abpcb"]
+
+[ext_resource type="Script" uid="uid://0hsas5igdq6k" path="res://source/stages/battlefield/Cutscene.gd" id="1_xm5ph"]
+[ext_resource type="Script" uid="uid://b34ctedtr57xe" path="res://addons/atlas_sprite/AtlasSprite.gd" id="2_wme06"]
+[ext_resource type="PackedScene" uid="uid://nuno0fp5tpiu" path="res://source/characters/bf.tscn" id="3_cl23b"]
+
+[node name="Cutscene" type="Node2D" unique_id=1181525979]
+script = ExtResource("1_xm5ph")
+
+[node name="pico anim" type="Node2D" parent="." unique_id=948491999]
+visible = false
+position = Vector2(703, 576)
+script = ExtResource("2_wme06")
+path = "res://assets/stages/week7/cutscene/pico"
+frame = 182.0
+metadata/_custom_type_script = "uid://b34ctedtr57xe"
+
+[node name="BoyfriendCutscene" parent="." unique_id=1571258161 instance=ExtResource("3_cl23b")]
+visible = false
+z_index = 45
+position = Vector2(1199, 801)
+anims_timer = {
+"attack": [2, 5, false],
+"dodge": [2, 5, false],
+"hey": [2, 5, false],
+"hit": [2, 5, false],
+"idle dance": [2, 5, false],
+"idle shaking": [2, 5, false],
+"pre attack": [2, 5, false],
+"singDown": [2, 5, false],
+"singDown MISS": [2, 5, false],
+"singLeft": [2, 5, false],
+"singLeft MISS": [2, 5, false],
+"singRight": [2, 5, false],
+"singRight MISS": [2, 5, false],
+"singUp": [2, 5, false],
+"singUp MISS": [2, 5, false]
+}
+
+[node name="Tankman" type="Node2D" parent="." unique_id=1040496296]
+visible = false
+z_index = 30
+position = Vector2(211, -440)
+script = ExtResource("2_wme06")
+path = "res://assets/stages/week7/cutscene/tankman"
+speed = 1.1
+frame = 913
+playing = false
+metadata/_custom_type_script = "uid://b34ctedtr57xe"

@@ -1,7 +1,7 @@
 @tool
 extends CharacterData
 
-enum CHARACTER_STATES {
+enum CHARACTER_STATES{
 	IDLE = 1,
 	SINGING = 2,
 	HOLDING = 3,
@@ -14,7 +14,8 @@ enum CHARACTER_ANIM_TYPE{
 	NONE = 3
 };
 
-@onready var character = $character;
+@onready var character = $"Character_Sprite" if has_node("Character_Sprite") else $character;
+@onready var character_anim = get_node_or_null("Character_Animation");
 
 var curCharacter = "";
 
@@ -57,7 +58,14 @@ var frame_count = 2.4;
 var anim_time = 5;
 var anim_beat = 2;
 
+var is_animated_sprite = false;
+
 func _ready():
+	is_animated_sprite = character is AnimatedSprite2D;
+	
+	if character_anim != null:
+		frame_count = 0.06;
+		
 	notify_property_list_changed();
 	curCharacter = json_path.get_file();
 	curCharacter = curCharacter.replace(".json", "");
@@ -72,8 +80,8 @@ func _ready():
 	
 	is_player = charData.get("isPlayer", is_player);
 	cam_follow_pos = charData.get("camera follow pos", cam_follow_pos);
-	camera_pos = charData.get("cameraPos", [0,0]);
 	curIcon = charData.get("HealthIcon", "no_icon");
+	camera_pos = charData.get("cameraPos", [0,0]);
 	
 	for i in charData["Poses"].size():
 		animList.append(charData["Poses"][i]["Anim"]);
@@ -87,7 +95,7 @@ func _ready():
 			charData["Poses"][i].get("special anim", false)
 		];
 		
-	base_position = self.position;
+	base_position = (self.position if character_anim == null else character.position);
 	
 	dance();
 	
@@ -96,6 +104,7 @@ func _process(delta):
 		return;
 		
 	if (curAnim.begins_with("sing") or curAnim.contains("sing") or special_anim) && characterState != CHARACTER_STATES.HOLDING:
+		characterState = CHARACTER_STATES.IDLE;
 		idleTimer += delta;
 		
 	if SongData.is_not_in_cutscene && !Global.is_on_video:
@@ -113,14 +122,14 @@ func dance():
 		_playAnim("danceRight" if can_dance else "danceLeft");
 		
 	if animList.has("idle dance"):
-		character.speed_scale = 1.0;
 		_playAnim("idle dance");
 		
 	if curCharacter == "picoSpeaker":
 		_playAnim("shoot%s"%[int(randf_range(1, 4))]);
 		
+var current_anim = character.animation if character is AnimatedSprite2D else "";
 func _playAnim(anim="", note:Note = null):
-	var longNote = note.isSustain && note.isSustain if is_instance_valid(note) else false;
+	var longNote = note.isSustain if is_instance_valid(note) else false;
 	for i in animList.size():
 		if animList[i] != anim:
 			continue;
@@ -129,9 +138,15 @@ func _playAnim(anim="", note:Note = null):
 		anim_time = anims_timer[anim][1];
 		special_anim = anims_timer[anim][2];
 		
-		character.offset.x = charData["Poses"][i]["Offset"][0];
-		character.offset.y = charData["Poses"][i]["Offset"][1];
+		var pose_offset = Vector2(charData["Poses"][i]["Offset"][0], charData["Poses"][i]["Offset"][1]);
 		
+		if is_animated_sprite:
+			character.offset.x = charData["Poses"][i]["Offset"][0];
+			character.offset.y = charData["Poses"][i]["Offset"][1];
+		else:
+			if !Engine.is_editor_hint():
+				character.position = (base_position + pose_offset);
+				
 		var prevState = characterState;
 		
 		if animList[i].contains("sing"):
@@ -144,24 +159,29 @@ func _playAnim(anim="", note:Note = null):
 		if characterState != CHARACTER_STATES.IDLE:
 			match characterState:
 				CHARACTER_STATES.HOLDING:
-					if prevState != CHARACTER_STATES.HOLDING or (character.animation != posesList[i] && curAnim != "idle dance" && curAnim != "hit"):
-						character.frame = 0;
+					if prevState != CHARACTER_STATES.HOLDING or (current_anim != posesList[i] && curAnim != "idle dance" && curAnim != "hit"):
+						reset_anim();
 					if prevState != CHARACTER_STATES.HOLDING:
-						character.frame = 0;
+						reset_anim();
 						
 				CHARACTER_STATES.SINGING:
-					character.frame = 0;
+					reset_anim();
 					
 		if animList[i].begins_with("sing") or charData["Poses"][i].has("Anim Time"):
 			idleTimer = 0;
 			
 		loop_anim();
 		
-		if character.animation == posesList[i] && animList[i].begins_with("sing") && characterState != CHARACTER_STATES.SINGING:
+		if current_anim == posesList[i] && animList[i].begins_with("sing") && characterState != CHARACTER_STATES.SINGING:
 			return;
 			
-		character.play(posesList[i]);
+		current_anim = posesList[i];
 		
+		if is_animated_sprite:
+			character.play(posesList[i]);
+		else:
+			character_anim.play(posesList[i]);
+			
 	curAnim = anim;
 	
 func loop_anim():
@@ -170,12 +190,16 @@ func loop_anim():
 		
 	match anim_type:
 		1:
-			character.frame = 0;
+			reset_anim();
 		2:
-			if (character.frame + character.frame_progress) > frame_count:
-				character.frame = 0;
-				character.frame_progress = 0;
-				
+			if is_animated_sprite:
+				if (character.frame + character.frame_progress) > frame_count:
+					character.frame = 0;
+					character.frame_progress = 0;
+			else:
+				if character_anim.current_animation_position > frame_count:
+					character_anim.seek(0.0, true);
+					
 func _get_property_list():
 	var properties: Array[Dictionary] = [];
 	
@@ -217,3 +241,9 @@ func beat_hit(beat) -> void:
 func beat_dance(beat):
 	if (beat % int(anim_beat) == 0) && !curAnim.begins_with("sing") && !special_anim:
 		dance();
+		
+func reset_anim():
+	if is_animated_sprite:
+		character.frame = 0;
+	else:
+		character_anim.seek(0.0);

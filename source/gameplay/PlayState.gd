@@ -259,7 +259,7 @@ func _ready():
 	if isStoryMode && SongData.death_count <= 0 && !SongData.restartSong && !curSong.contains("-remix"):
 		match curSong:
 			"ugh":
-				stage.ugh_cutscene();
+				stage.ugh_intro();
 			"guns":
 				stage.guns_intro();
 			"stress":
@@ -693,7 +693,7 @@ func _input(ev):
 				
 			if OS.is_debug_build():
 				if ev.keycode in [KEY_F1]:
-					set_new_achievement(SongData.weekName, false);
+					#set_new_achievement(SongData.weekName, false);
 					finishSong();
 					
 func startCoutdown():
@@ -702,6 +702,7 @@ func startCoutdown():
 	is_on_intro = true;
 	start_song = true;
 	
+	var countdown_audios = ["intro3", "intro2", "intro1", "introGo"];
 	var countdownPath = "default" if !SongData.isPixelStage else "pixel";
 	var idleCounter = 0;
 	
@@ -717,7 +718,7 @@ func startCoutdown():
 		return;
 		
 	for i in [bf, dad, gf]:
-		if !is_instance_valid(i):
+		if is_instance_valid(i):
 			i.beat_dance(idleCounter);
 			
 	if SongData.haveTwoOpponents && is_instance_valid(new_opponent):
@@ -741,7 +742,7 @@ func startCoutdown():
 			
 			continue;
 			
-		Sound.playAudio(["intro3", "intro2", "intro1", "introGo"][i], SongData.isPixelStage);
+		Sound.playAudio(countdown_audios[i], SongData.isPixelStage);
 		if GlobalOptions.updated_hud == "classic hud" && i == 0:
 			continue;
 			

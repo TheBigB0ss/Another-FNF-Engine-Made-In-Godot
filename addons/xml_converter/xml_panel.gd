@@ -41,7 +41,7 @@ func create_tscn_file(image, anim, haveLoop, fps):
 	var sprite = Sprite2D.new();
 	
 	node.name = anim;
-	node.set_script(preload("res://source/characters/characters_scripts/New_Character.gd"));
+	node.set_script(preload("res://source/characters/characters_scripts/Character.gd"));
 	sprite.name = "Character_Sprite";
 	animPlayer.name = "Character_Animation";
 	
@@ -155,7 +155,7 @@ func create_tscn_by_txt(image, anim, haveLoop, fps):
 	var sprite = Sprite2D.new();
 	
 	node.name = anim;
-	node.set_script(preload("res://source/characters/characters_scripts/New_Character.gd"));
+	node.set_script(preload("res://source/characters/characters_scripts/Character.gd"));
 	sprite.name = "Character_Sprite";
 	animPlayer.name = "Character_Animation";
 	
@@ -271,6 +271,12 @@ func add_anim(animPlayer, image, fps, loop, args = []):
 			};
 			
 			var anim_name = fileParser.get_named_attribute_value_safe("name");
+			if fileParser.get_node_type() != XMLParser.NODE_ELEMENT:
+				continue;
+				
+			if fileParser.get_node_name() != "SubTexture":
+				continue;
+				
 			if fileParser.get_named_attribute_value_safe("name") != "":
 				var animArray = [];
 				for i in fileParser.get_named_attribute_value_safe("name"):
@@ -383,6 +389,12 @@ func add_anim(animPlayer, image, fps, loop, args = []):
 			var frameTexture = AtlasTexture.new();
 			frameTexture.atlas = load("res://assets/%s.png"%[image])
 			
+			if fileParser.get_node_type() != XMLParser.NODE_ELEMENT:
+				continue;
+				
+			if fileParser.get_node_name() != "SubTexture":
+				continue;
+				
 			if fileParser.get_named_attribute_value_safe("name") != '':
 				var animArray = [];
 				for i in fileParser.get_named_attribute_value_safe("name"):

@@ -106,7 +106,13 @@ func _process(delta):
 		else:
 			note.position.y = strumY;
 			
-		if note == null or note.is_a_bad_note:
+		if Conductor.getSongTime > 320 + note.strumTime && note.sustainLength <= 0:
+			notes_to_delete.append(note);
+			
+		if Conductor.getSongTime > 335+(note.strumTime+note.ogSustain) && note.sustainLength > 0 && !note.is_pressing:
+			notes_to_delete.append(note);
+			
+		if note.is_a_bad_note:
 			continue;
 			
 		if Conductor.getSongTime >= note.strumTime && notesList.size() > 0:
@@ -133,6 +139,9 @@ func _process(delta):
 		if notes.reset_arrow_anim <= 0:
 			notes.play_note_anim("static");
 			
+	for i in notes_to_delete:
+		notesList.erase(i);
+		
 func sort_notes(a, b):
 	return a.strumTime < b.strumTime;
 	

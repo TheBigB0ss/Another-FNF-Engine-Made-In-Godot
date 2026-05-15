@@ -39,12 +39,14 @@ offset_left = 647.0
 offset_top = 151.0
 offset_right = 766.0
 offset_bottom = 258.0
+metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="." unique_id=700625411]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
 
 [node name="bg" type="ColorRect" parent="Control" unique_id=1239565702]
 layout_mode = 0

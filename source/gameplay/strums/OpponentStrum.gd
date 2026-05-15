@@ -67,6 +67,7 @@ func _ready() -> void:
 		for j in i["sectionNotes"]:
 			array_notes.insert(0, [j[0], j[1], j[2], j[3], i["gfSection"], i["altAnim"], i["mustHitSection"], false]);
 			
+var notes_to_delete = [];
 func _process(delta):
 	for i in array_notes:
 		var data = int(i[1])%(8 if !SongData.haveTwoOpponents else 12);
@@ -93,6 +94,12 @@ func _process(delta):
 			note.position.y = strumY + (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed) if GlobalOptions.down_scroll else strumY - (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed);
 		else:
 			note.position.y = strumY;
+			
+		if Conductor.getSongTime > 320 + note.strumTime && note.sustainLength <= 0:
+			notes_to_delete.append(note);
+			
+		if Conductor.getSongTime > 335+(note.strumTime+note.ogSustain) && note.sustainLength > 0 && !note.is_pressing:
+			notes_to_delete.append(note);
 			
 	opponents_strums = [opponentNotes] if !SongData.haveTwoOpponents else [opponentNotes, new_opponentNotes];
 	
@@ -126,6 +133,10 @@ func _process(delta):
 		if notes.reset_arrow_anim <= 0:
 			notes.play_note_anim("static");
 			
+	for i in notes_to_delete:
+		opponentNotes.erase(i);
+		notesList.erase(i);
+		
 func notesAppears():
 	var tw = get_tree().create_tween();
 	for i in strumNode.get_child_count():

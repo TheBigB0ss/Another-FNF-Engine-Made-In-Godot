@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://de51xg7o8kadi"]
 
-[ext_resource type="Script" uid="uid://dw0lkkcaqx4nr" path="res://source/characters/characters_scripts/bf_dead.gd" id="1_q874k"]
+[ext_resource type="Script" uid="uid://dw0lkkcaqx4nr" path="res://source/characters/characters_scripts/DeadCharacter.gd" id="1_q874k"]
 [ext_resource type="SpriteFrames" uid="uid://bakjttcgw1whp" path="res://assets/images/characters/bfDead.res" id="2_r7irk"]
 
 [node name="Bf dead" type="Node2D" unique_id=274398951]

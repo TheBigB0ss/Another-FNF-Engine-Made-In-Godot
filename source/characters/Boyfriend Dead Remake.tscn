@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b75fo0s14q5jf"]
 
-[ext_resource type="Script" uid="uid://dw0lkkcaqx4nr" path="res://source/characters/characters_scripts/bf_dead.gd" id="1_5h71c"]
+[ext_resource type="Script" uid="uid://dw0lkkcaqx4nr" path="res://source/characters/characters_scripts/DeadCharacter.gd" id="1_5h71c"]
 [ext_resource type="Texture2D" uid="uid://dxnv3qpoyxsrg" path="res://assets/images/characters/remixes/Boyfriend Dead Remake.png" id="2_g2yc5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_y55tj"]

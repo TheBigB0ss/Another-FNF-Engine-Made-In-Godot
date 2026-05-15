@@ -369,10 +369,6 @@ func _process(_delta: float) -> void:
 			return;
 			
 	if !adjusting_rating:
-		if get_viewport().gui_get_hovered_control() is SpinBox:
-			
-			return;
-			
 		if Input.is_action_pressed("mouse_click"):
 			block_grab = false;
 			if Input.is_action_pressed("ui_shift"):

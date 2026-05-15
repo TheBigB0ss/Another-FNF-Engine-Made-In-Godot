@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://hphgss72ykcs"]
 
-[ext_resource type="Script" uid="uid://dw0lkkcaqx4nr" path="res://source/characters/characters_scripts/bf_dead.gd" id="1_68dmj"]
+[ext_resource type="Script" uid="uid://dw0lkkcaqx4nr" path="res://source/characters/characters_scripts/DeadCharacter.gd" id="1_68dmj"]
 [ext_resource type="SpriteFrames" uid="uid://drx0nspfj7lmv" path="res://assets/images/characters/bfPixelsDEAD.res" id="2_muwmr"]
 
 [node name="Bf Pixel Dead" type="Node2D" unique_id=150652609]
