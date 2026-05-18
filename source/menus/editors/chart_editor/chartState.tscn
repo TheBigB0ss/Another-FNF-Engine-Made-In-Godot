@@ -100,10 +100,11 @@ offset_top = 192.0
 offset_right = 391.0
 offset_bottom = 694.0
 tab_alignment = 1
-current_tab = 0
+current_tab = 3
 all_tabs_in_front = true
 
 [node name="help" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=577019770]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -288,7 +289,6 @@ offset_bottom = 246.0
 text = "add section"
 
 [node name="note" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=468888128]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
@@ -320,6 +320,40 @@ layout_mode = 0
 offset_top = 109.0
 offset_right = 114.0
 offset_bottom = 140.0
+
+[node name="noteVal1" type="SpinBox" parent="chart_UI/chart_objs/TabContainer/note" unique_id=2133726858]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 192.0
+offset_right = 116.0
+offset_bottom = 223.0
+editable = false
+
+[node name="noteVal2" type="SpinBox" parent="chart_UI/chart_objs/TabContainer/note" unique_id=750218809]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 248.0
+offset_right = 116.0
+offset_bottom = 279.0
+editable = false
+
+[node name="val1Text" type="Label" parent="chart_UI/chart_objs/TabContainer/note" unique_id=128298394]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 171.0
+offset_right = 62.0
+offset_bottom = 194.0
+text = "value 1:"
+
+[node name="val2Text" type="Label" parent="chart_UI/chart_objs/TabContainer/note" unique_id=23403898]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 227.0
+offset_right = 62.0
+offset_bottom = 250.0
+text = "value 2:"
 
 [node name="events" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=420962452]
 visible = false

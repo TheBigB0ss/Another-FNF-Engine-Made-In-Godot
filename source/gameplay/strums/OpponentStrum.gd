@@ -65,7 +65,14 @@ func _ready() -> void:
 			
 	for i in SongData.songNotes:
 		for j in i["sectionNotes"]:
-			array_notes.insert(0, [j[0], j[1], j[2], j[3], i["gfSection"], i["altAnim"], i["mustHitSection"], false]);
+			var noteData = [j[0], j[1], j[2], j[3], i["gfSection"], i["altAnim"], i["mustHitSection"], false];
+			if j.size() > 4 && j[4] != null:
+				noteData.append(j[4]);
+				
+			if j.size() > 5 && j[5] != null:
+				noteData.append(j[5]);
+				
+			array_notes.insert(0, noteData);
 			
 var notes_to_delete = [];
 func _process(delta):
@@ -74,8 +81,12 @@ func _process(delta):
 		var distance = (i[0] - Conductor.getSongTime)*Conductor.songSpeed;
 		if GlobalOptions.down_scroll:
 			distance = -distance;
+			
+		var noteVal1 = i[8] if i.size() > 8 else null;
+		var noteVal2 = i[9] if i.size() > 9 else null;
+		
 		if distance <= 2150 && !i[7]:
-			spawnNote(i[0], data, i[2], i[3], i[4], i[5], i[6]);
+			spawnNote(i[0], data, i[2], i[3], i[4], i[5], i[6], noteVal1, noteVal2);
 			i[7] = true;
 			
 	for note in notesList:
@@ -95,6 +106,9 @@ func _process(delta):
 		else:
 			note.position.y = strumY;
 			
+		if note.isPlayer:
+			continue;
+			
 		if Conductor.getSongTime > 320 + note.strumTime && note.sustainLength <= 0:
 			notes_to_delete.append(note);
 			
@@ -110,6 +124,10 @@ func _process(delta):
 				
 			if Conductor.getSongTime >= note.strumTime:
 				note.opponent_pressed();
+				
+				if note.manyHits > 0:
+					continue;
+					
 				if note.sustainLength == 0:
 					strums.erase(note);
 					notesList.erase(note);
@@ -143,7 +161,7 @@ func notesAppears():
 		var strumNote = strumNode.get_child(i);
 		tw.tween_property(strumNote, "modulate:a", 1, 0.25+(0.1*i)).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT);
 		
-func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer):
+func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer, value1 = null, value2 = null):
 	var data = int(noteData)%4;
 	var is_a_player_note = isPlayer;
 	var is_second_opponent = false;
@@ -180,6 +198,10 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer)
 	note.isSustain = note.sustainLength > 0.0;
 	note.visible = !GlobalOptions.middle_scroll;
 	
+	if value1 != null && value2 != null && note.type == "Echo Note":
+		note.manyHits = value1;
+		note.amount = value2;
+		
 	note.rotation = strumNode.get_child(note.noteData).rotation;
 	note.modulate.a = strumNode.get_child(note.noteData).modulate.a;
 	note.strum_positions.y = strumNode.position.y + strumNode.get_child(note.noteData).position.y;

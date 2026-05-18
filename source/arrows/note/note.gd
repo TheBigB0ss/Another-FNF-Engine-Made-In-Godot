@@ -57,6 +57,12 @@ var hitTail = false;
 var chart_player = false;
 var isChartNote = false;
 
+var manyHits = 0;
+var amount = 0;
+
+var healthPerHit = 2.10;
+var healthPerHolding = 6.50;
+
 signal opponentNotePressed(note);
 signal notePressed(note);
 
@@ -66,9 +72,16 @@ signal longNoteMissed(note);
 func reload_note_type():
 	match type:
 		"Hurt Note":
-			note.sprite_frames = load("res://assets/images/arrows/hurt note/HurtNote.res" if !SongData.isPixelStage else "res://assets/images/arrows/pixel/hurt note/pixel_hurtNotes.tres");
+			note.sprite_frames = load("res://assets/images/arrows/hurt note/HurtNote.res" if !SongData.isPixelStage else "res://assets/images/arrows/pixel/hurt note/HurtNote_assets_pixel.res");
 			is_a_bad_note = true;
 			sustainLength = max(0,0);
+			
+		"Echo Note":
+			note.sprite_frames = load("res://assets/images/arrows/echo note/notes.res" if !SongData.isPixelStage else "res://assets/images/arrows/pixel/echo note/echo_pixel.res");
+			sustainLength = max(0,0);
+		_:
+			manyHits = 0;
+			amount = 0;
 			
 const notes_settings = {
 	0:{
@@ -178,6 +191,8 @@ func _ready():
 		noteEnd.show();
 		strumNote.hide();
 		
+	noteEnd.visible = isSustain;
+	
 	reload_note_data();
 	reload_note();
 	reload_note_type();
@@ -239,8 +254,11 @@ func _process(delta: float) -> void:
 			
 			noteLine.set_point_position(1, Vector2(0, sustainLength));
 			
-			pressed();
-			
+			if isPlayer:
+				pressed();
+				if missTimer <= 0:
+					main_scene.health = min(main_scene.health+healthPerHolding*delta, 100.0);
+					
 			if sustainLength <= 0:
 				missed = false;
 				noteEnd.queue_free();
@@ -260,7 +278,7 @@ func play_note_anim(anim):
 	
 var pressed_emit = false;
 func pressed(new_character = null):
-	if !isPlayer:
+	if missed:
 		return;
 		
 	if sustainLength <= 0:
@@ -270,10 +288,10 @@ func pressed(new_character = null):
 			else:
 				note_pressed = true;
 				emit_signal("notePressed", self);
-				main_scene.health = min(main_scene.health+2.30, 100.0);
+				main_scene.health = min(main_scene.health+healthPerHit, 100.0);
 			pressed_emit = true;
 			
-		queue_free();
+		destroy_note();
 	else:
 		if !pressed_emit:
 			emit_signal("notePressed", self);
@@ -281,9 +299,6 @@ func pressed(new_character = null):
 			
 		if is_instance_valid(note):
 			note.queue_free();
-			
-		if missTimer <= 0:
-			main_scene.health = min(main_scene.health+0.11, 100.0);
 			
 	if missTimer > 0:
 		return;
@@ -295,7 +310,7 @@ func pressed(new_character = null):
 func opponent_pressed(new_character = null):
 	if !isSustain:
 		emit_signal("opponentNotePressed", self);
-		queue_free();
+		destroy_note();
 		
 	new_character = (main_scene.dad if !secondOpponentNote else main_scene.new_opponent) if !is_instance_valid(new_character) else new_character;
 	main_scene.playCharacterAnim(self, new_character, false);
@@ -306,16 +321,31 @@ func miss_note():
 	if emit_miss:
 		return;
 		
-	emit_miss = true;
 	missed = true;
-	modulate.a = 0.3;
 	
 	main_scene.health = max(main_scene.health - 4, 0.0);
-	if isSustain && sustainLength > 0.0:
-		missedLongNote = true;
+	if isSustain:
 		emit_signal("longNoteMissed", self);
 	else:
 		emit_signal("noteMissed", self);
 		
 	main_scene.playBfMissAnim(self);
+	emit_miss = true;
 	
+func destroy_note():
+	if manyHits > 0 && type == "Echo Note":
+		pressed_emit = false;
+		
+		var tween = create_tween();
+		tween.tween_property(self, "strumTime", strumTime + (amount * Conductor.crochet), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
+		
+		#strumTime = lerp(strumTime, strumTime + amount*Conductor.crochet, Conductor.crochet/1000);
+		
+		manyHits -= 1;
+		
+		if manyHits <= 0:
+			queue_free();
+			
+		return;
+		
+	queue_free();

@@ -50,9 +50,15 @@ var note_types = [
 	"gf sing", 
 	"Hey!", 
 	"No Animation", 
-	"alt anim", 
+	"alt anim",
+	"Echo Note",
 	"Hurt Note"
 ];
+
+@onready var noteVal1Text = $chart_UI/chart_objs/TabContainer/note/val1Text;
+@onready var noteVal2Text = $chart_UI/chart_objs/TabContainer/note/val2Text;
+@onready var currentNoteSelected = $chart_UI/chart_objs/TabContainer/note/note_type;
+
 var events = {
 	"": "",
 	"add cam zoom": "Value 1 = zoom value",
@@ -146,7 +152,8 @@ func _ready():
 		events_button.add_item(i);
 		event_text_array.append(i);
 		
-	events_button.connect("item_selected",change_event_text);
+	events_button.connect("item_selected", change_event_text);
+	note_type_button.connect("item_selected", change_note_edit);
 	
 	add_new_tile = %new_opponent.button_pressed;
 	
@@ -235,6 +242,27 @@ func _ready():
 func change_event_text(_item):
 	event_text.text = "Event: %s\n\n%s"%[event_text_array[events_button.selected], events[event_text_array[events_button.selected]]];
 	
+func change_note_edit(_item):
+	match note_types[currentNoteSelected.selected]:
+		"Echo Note":
+			noteVal1Text.text = "many hits:";
+			noteVal2Text.text = "strumTime offset:";
+			
+			%noteVal1.editable = true;
+			%noteVal2.editable = true;
+			
+			%noteVal1.step = 1;
+			%noteVal2.step = 0.01;
+		_:
+			%noteVal1.editable = false;
+			%noteVal2.editable = false;
+			
+			%noteVal1.step = 1;
+			%noteVal2.step = 1;
+			
+			%noteVal1.value = 0;
+			%noteVal2.value = 0;
+			
 func get_icons(_char):
 	var icon = {}
 	var replaced = _char;
@@ -754,7 +782,19 @@ func add_note(strumtime, noteData, _sustain, type):
 	var note_sustain = 0;
 	var note_type = type;
 	
-	var new_note = [note_strumtime, note_data, note_sustain, note_type];
+	var new_note = [
+		note_strumtime,
+		note_data, 
+		note_sustain, 
+		note_type
+	] if note_types[currentNoteSelected.selected] != "Echo Note" else [
+		note_strumtime, 
+		note_data, 
+		note_sustain, 
+		note_type,
+		%noteVal1.value, 
+		%noteVal2.value
+	];
 	var exists = false;
 	
 	for i in new_chartData["song"]["notes"][curSection]["sectionNotes"]:
@@ -767,7 +807,19 @@ func add_note(strumtime, noteData, _sustain, type):
 	else:
 		new_chartData["song"]["notes"][curSection]["sectionNotes"].append(new_note);
 		if duet_notes:
-			new_chartData["song"]["notes"][curSection]["sectionNotes"].append([note_strumtime, int(noteData + 4)%8, note_sustain, note_type]);
+			new_chartData["song"]["notes"][curSection]["sectionNotes"].append([
+				note_strumtime, 
+				int(noteData + 4)%8, 
+				note_sustain, 
+				note_type
+			] if note_types[currentNoteSelected.selected] != "Echo Note" else [
+				note_strumtime, 
+				int(noteData + 4)%8, 
+				note_sustain, 
+				note_type,
+				%noteVal1.value, 
+				%noteVal2.value
+			]);
 			
 		curselected_note = new_note;
 		%note_sustain_lenght.value = curselected_note[2];

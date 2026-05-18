@@ -30,10 +30,11 @@ offset_left = 807.0
 offset_top = 23.0
 offset_right = 1231.0
 offset_bottom = 462.0
-current_tab = 0
+current_tab = 2
 tab_focus_mode = 0
 
 [node name="help" type="TabBar" parent="offset_layer/TabContainer" unique_id=751837879]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -208,7 +209,6 @@ max_value = 9000.0
 step = 10.0
 
 [node name="anim settings" type="TabBar" parent="offset_layer/TabContainer" unique_id=1814175706]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 

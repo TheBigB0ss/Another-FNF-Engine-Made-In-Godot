@@ -66,7 +66,14 @@ func _ready() -> void:
 	
 	for i in chart["song"]["notes"]:
 		for j in i["sectionNotes"]:
-			array_notes.insert(0, [j[0], j[1], j[2], j[3], i["gfSection"], i["altAnim"], i["mustHitSection"], false]);
+			var noteData = [j[0], j[1], j[2], j[3], i["gfSection"], i["altAnim"], i["mustHitSection"], false];
+			if j.size() > 4 && j[4] != null:
+				noteData.append(j[4]);
+				
+			if j.size() > 5 && j[5] != null:
+				noteData.append(j[5]);
+				
+			array_notes.insert(0, noteData);
 			
 func notesAppears():
 	var tw = get_tree().create_tween();
@@ -80,12 +87,16 @@ func _process(delta):
 		return;
 		
 	for i in array_notes:
-		var note_data = int(i[1])%8;
+		var data = int(i[1])%(8 if !SongData.haveTwoOpponents else 12);
 		var distance = (i[0] - Conductor.getSongTime)*Conductor.songSpeed;
 		if GlobalOptions.down_scroll:
 			distance = -distance;
+			
+		var noteVal1 = i[8] if i.size() > 8 else null;
+		var noteVal2 = i[9] if i.size() > 9 else null;
+		
 		if distance <= 2150 && !i[7]:
-			spawnNote(i[0], note_data, i[2], i[3], i[4], i[5], i[6]);
+			spawnNote(i[0], data, i[2], i[3], i[4], i[5], i[6], noteVal1, noteVal2);
 			i[7] = true;
 			
 	for note in notesList:
@@ -106,12 +117,13 @@ func _process(delta):
 		else:
 			note.position.y = strumY;
 			
-		if Conductor.getSongTime > 320 + note.strumTime && note.sustainLength <= 0:
-			notes_to_delete.append(note);
-			
-		if Conductor.getSongTime > 335+(note.strumTime+note.ogSustain) && note.sustainLength > 0 && !note.is_pressing:
-			notes_to_delete.append(note);
-			
+		if !note.isPlayer:
+			if Conductor.getSongTime > 320 + note.strumTime && note.sustainLength <= 0:
+				notes_to_delete.append(note);
+				
+			if Conductor.getSongTime > 335+(note.strumTime+note.ogSustain) && note.sustainLength > 0 && !note.is_pressing:
+				notes_to_delete.append(note);
+				
 		if note.is_a_bad_note:
 			continue;
 			
@@ -119,6 +131,10 @@ func _process(delta):
 			note.opponent_pressed(strum_char);
 			play_strum_anim(note, 0.40);
 			self.emit_signal("pressed_note", strum_char);
+			
+			if note.manyHits > 0:
+				continue;
+				
 			if note.sustainLength == 0:
 				notesList.erase(note);
 			else:
@@ -145,7 +161,7 @@ func _process(delta):
 func sort_notes(a, b):
 	return a.strumTime < b.strumTime;
 	
-func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer):
+func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer, value1 = null, value2 = null):
 	var note_data = int(noteData)%4;
 	var note = Note.new();
 	note.is_altAnim = isAltAnim;
@@ -160,6 +176,10 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer)
 	note.must_press = note.isPlayer;
 	note.isSustain = note.sustainLength > 0.0;
 	
+	if value1 != null && value2 != null && note.type == "Echo Note":
+		note.manyHits = value1;
+		note.amount = value2;
+		
 	note.scale = strumNode.get_child(note.noteData).scale;
 	note.rotation = strumNode.get_child(note.noteData).rotation;
 	note.modulate.a = strumNode.get_child(note.noteData).modulate.a;

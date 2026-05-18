@@ -178,9 +178,11 @@ func _ready():
 		
 	stageGrp.add_child(stage);
 	
-	bf.character.flip_h = !bf.is_player;
-	dad.character.flip_h = dad.is_player;
-	
+	if bf.character != null:
+		bf.character.flip_h = !bf.is_player;
+	if dad.character != null:
+		dad.character.flip_h = dad.is_player;
+		
 	if dad.is_player:
 		for i in dad.camera_pos.size()-1:
 			dad.camera_pos[i] *= -1;
@@ -366,7 +368,7 @@ func _process(delta: float) -> void:
 		inst.stream_paused = true;
 		voices.stream_paused = true;
 		
-	var helthLerpValue = lerp(float(healthBar.value), health, 0.40);
+	var helthLerpValue = lerp(float(healthBar.value), float(health), 0.40);
 	healthBar.value = helthLerpValue;
 	
 	if SongData.is_not_in_cutscene && !Global.is_on_video:
@@ -428,9 +430,7 @@ func _process(delta: float) -> void:
 			
 		finished_song = true;
 		
-	if health <= 0:
-		playerDead();
-		
+	checkPlayerDead();
 	set_icon();
 	newRank();
 	
@@ -628,7 +628,10 @@ func cam_follow_poses(new_char):
 	var camOffset = cam_offset_values.get(new_char.curAnim, Vector2.ZERO)*20;
 	sectionCamera.offset = lerp(sectionCamera.offset, camOffset, 0.07);
 	
-func playerDead():
+func checkPlayerDead():
+	if health > 0:
+		return;
+		
 	SongData.characters = {
 		"bf": [bf.global_position, bf.scale, bf.rotation, bf.death_scene, bf.have_death_animation],
 		"opponent": [dad.global_position, dad.scale, dad.rotation, dad.death_scene, dad.have_death_animation],
@@ -675,7 +678,7 @@ func _input(ev):
 	if ev is InputEventKey:
 		if ev.pressed && !ev.echo:
 			if ev.keycode in [KEY_R] && GlobalOptions.restart_action:
-				playerDead();
+				health = 0;
 				
 			if ev.keycode in [GlobalOptions.get_key("7")]:
 				SongData.week_songs = playlist[0];

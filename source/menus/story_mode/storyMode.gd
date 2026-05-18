@@ -263,10 +263,9 @@ func updateWeek():
 	for i in songs_weeks[curWeek]:
 		week_score += HighScore.get_score(i[0], "" if diffs[curDiff if !curDiff > diffs.size()-1 else 0] == "normal" else str("-", diffs[curDiff if !curDiff > diffs.size()-1 else 0].to_lower()));
 		
-	menu_gf.modulate = Color("#000000") if !is_unlocked else Color("#ffffff");
-	menu_bf.modulate = Color("#000000") if !is_unlocked else Color("#ffffff");
-	menu_opponent.modulate = Color("#000000") if !is_unlocked else Color("#ffffff");
-	
+	for i in [menu_gf, menu_bf, menu_opponent]:
+		i.modulate = Color("#000000") if !is_unlocked else Color("#ffffff");
+		
 func changeMenuCharacter():
 	var yellow_fellas = {
 		"bf": [yellowBf, menu_bf, 1],
@@ -275,7 +274,7 @@ func changeMenuCharacter():
 	};
 	
 	for i in yellow_fellas.keys():
-		var char = yellow_fellas[i][0];
+		var char_spr = yellow_fellas[i][0];
 		var char_grp = yellow_fellas[i][1];
 		var char_index = yellow_fellas[i][2];
 		
@@ -285,8 +284,8 @@ func changeMenuCharacter():
 				j.queue_free();
 				
 		if week_chars[curWeek][char_index] != "" && week_chars[curWeek][char_index] != null:
-			char = load("res://assets/images/weekCharacters/Menu_%s.tscn"%[week_chars[curWeek][char_index]]).instantiate();
-			char_grp.add_child(char);
+			char_spr = load("res://assets/images/weekCharacters/Menu_%s.tscn"%[week_chars[curWeek][char_index]]).instantiate();
+			char_grp.add_child(char_spr);
 			char_grp.show();
 		else:
 			char_grp.hide();

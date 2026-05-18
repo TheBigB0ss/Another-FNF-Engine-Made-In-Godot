@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://be8hd0ghf2bqe"
-path="res://.godot/imported/icon-darnell.png-b0737cb90fa084bc177900c386b01029.ctex"
+uid="uid://qy5rd08gwi4m"
+path="res://.godot/imported/HurtNote_assets_pixel.png-2c1256ecb6b3dc728606d82143c1260a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/icons/icon-darnell.png"
-dest_files=["res://.godot/imported/icon-darnell.png-b0737cb90fa084bc177900c386b01029.ctex"]
+source_file="res://assets/images/arrows/pixel/hurt note/HurtNote_assets_pixel.png"
+dest_files=["res://.godot/imported/HurtNote_assets_pixel.png-2c1256ecb6b3dc728606d82143c1260a.ctex"]
 
 [params]
 
