@@ -3,10 +3,11 @@
 [ext_resource type="Script" uid="uid://b5ire87v6dnbf" path="res://source/menus/achievements_menu/achievements_menu.gd" id="1_hhbmt"]
 [ext_resource type="Texture2D" uid="uid://ceq3mk0i6bngd" path="res://assets/images/menuBgs/menuDesat.png" id="2_vw640"]
 [ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_vw640"]
+[ext_resource type="Texture2D" uid="uid://butl2egj5i38n" path="res://assets/images/hud/timeBar.png" id="4_op38l"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_op38l"]
 font = ExtResource("3_vw640")
-font_size = 940
+font_size = 839
 shadow_size = 141
 shadow_color = Color(0, 0, 0, 1)
 
@@ -21,7 +22,7 @@ texture = ExtResource("2_vw640")
 [node name="colorBg" type="ColorRect" parent="." unique_id=205890972]
 offset_left = 209.0
 offset_right = 1081.0
-offset_bottom = 719.0
+offset_bottom = 720.0
 color = Color(0, 0, 0, 0.447059)
 
 [node name="achievements" type="Node2D" parent="." unique_id=45470877]
@@ -38,7 +39,7 @@ offset_bottom = 205.0
 layout_mode = 0
 offset_top = 584.0
 offset_right = 1280.0
-offset_bottom = 720.0
+offset_bottom = 755.0
 color = Color(0, 0, 0, 0.551)
 
 [node name="description_text" type="Label" parent="description_stuff" unique_id=1321694724]
@@ -52,13 +53,24 @@ scale = Vector2(0.05, 0.05)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 label_settings = SubResource("LabelSettings_op38l")
 
-[node name="esc_text" type="Label" parent="." unique_id=1245958649]
+[node name="progressBar" type="TextureProgressBar" parent="description_stuff" unique_id=1249455122]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 725.0
+offset_right = 402.0
+offset_bottom = 744.0
+texture_under = ExtResource("4_op38l")
+texture_progress = ExtResource("4_op38l")
+tint_under = Color(0, 0, 0, 1)
+
+[node name="progressText" type="Label" parent="description_stuff" unique_id=793770626]
 texture_filter = 1
-offset_left = 390.0
-offset_top = -55.0
-offset_right = 10854.0
-offset_bottom = 965.0
-scale = Vector2(0.05, 0.05)
+layout_mode = 0
+offset_left = 420.0
+offset_top = 719.0
+offset_right = 2386.335
+offset_bottom = 1457.0
+scale = Vector2(0.035, 0.035)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-text = "Press ESC to return"
+text = "100%"
 label_settings = SubResource("LabelSettings_op38l")

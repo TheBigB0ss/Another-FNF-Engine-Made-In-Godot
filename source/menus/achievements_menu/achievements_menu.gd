@@ -2,6 +2,8 @@ extends Node2D
 
 @onready var achievementsGrp = $achievements;
 @onready var descriptionText = $description_stuff/description_text;
+@onready var progressBar = $description_stuff/progressBar;
+@onready var progressText = $description_stuff/progressText;
 
 var cur_Achievement = 0;
 var coolOffset = 145;
@@ -16,6 +18,8 @@ var achievements_col = 5;
 var achievementName = Alphabet.new();
 
 func _ready():
+	progressBar.max_value = 100;
+	
 	for i in Achievements.achievements.keys():
 		if i != "version":
 			if !Achievements.get_achievement_info(i)["achievement_hide"]:
@@ -46,6 +50,9 @@ func _ready():
 	achievementName.scale = Vector2(0.55, 0.55);
 	achievementName.position = Vector2(20, 610);
 	$description_stuff.add_child(achievementName);
+	
+	progressBar.value = Achievements.progress;
+	progressText.text = str(Achievements.progress, "%");
 	
 	change_achievement(0);
 	
@@ -106,7 +113,7 @@ func _process(delta):
 				seeingAchievementStatus = !seeingAchievementStatus;
 				
 	if seeingAchievementStatus:
-		$description_stuff.position.y = lerp(float($description_stuff.position.y), 0.0, 0.25);
+		$description_stuff.position.y = lerp(float($description_stuff.position.y), -35.0, 0.25);
 		#$esc_text.position.y = lerp(float($esc_text.position.y), 15.0, 0.25);
 	else:
 		$description_stuff.position.y = lerp(float($description_stuff.position.y), 165.0, 0.25);

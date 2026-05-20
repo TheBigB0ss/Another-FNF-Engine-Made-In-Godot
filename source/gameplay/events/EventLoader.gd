@@ -51,12 +51,18 @@ func trigger_event(event_name, value1, value2):
 	emit_signal("event_emit", event_name);
 	match event_name:
 		"change song speed":
-			Conductor.songSpeed = value1.to_float();
+			var songTween = create_tween();
+			songTween.tween_property(Conductor, "songSpeed", value1.to_float(), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
 			
 		"change song pitch":
-			main_scene.inst.pitch_scale = lerp(main_scene.inst.pitch_scale, value1.to_float(), value2.to_float());
-			main_scene.voices.pitch_scale = lerp(main_scene.voices.pitch_scale, value1.to_float(), value2.to_float());
-			Conductor.songSpeed = lerp(Conductor.songSpeed, value1.to_float(), value2.to_float());
+			var instTween = create_tween();
+			instTween.tween_property(main_scene.inst, "pitch_scale", value1.to_float(), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
+			
+			var voicesTween = create_tween();
+			voicesTween.tween_property(main_scene.voices, "pitch_scale", value1.to_float(), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
+			
+			var songTween = create_tween();
+			songTween.tween_property(Conductor, "songSpeed", value1.to_float(), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
 			
 		"change character":
 			changeChar(value1, value2);
@@ -76,9 +82,9 @@ func trigger_event(event_name, value1, value2):
 		"add cam zoom":
 			main_scene.sectionCamera.zoom = Vector2(value1.to_float(), value1.to_float());
 			
-		"spawn popUp":
-			var new_popUp = preload("res://source/gameplay/events/pop ups/popUps.tscn").instantiate();
-			main_scene.hud.add_child(new_popUp);
+		#"spawn popUp":
+		#	var new_popUp = preload("res://source/gameplay/events/pop ups/popUps.tscn").instantiate();
+		#	main_scene.hud.add_child(new_popUp);
 			
 		"set lyric":
 			var string_steps = value2.split(",");

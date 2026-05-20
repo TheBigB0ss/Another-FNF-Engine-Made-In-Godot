@@ -111,11 +111,11 @@ func add_song(new_song, new_icon, new_color, new_week, diff):
 func _process(delta):
 	Conductor.getSongTime += delta*1000;
 	
-	song_stuff.position.y = lerp(float(song_stuff.position.y), float(350-coolOffset*cur_song), 0.18);
-	icons_stuff.position.y = lerp(float(icons_stuff.position.y), float(350-coolOffset*cur_song), 0.18);
+	song_stuff.position.y = lerp(float(song_stuff.position.y), float(350-coolOffset*cur_song), 0.20);
+	icons_stuff.position.y = lerp(float(icons_stuff.position.y), float(350-coolOffset*cur_song), 0.20);
 	$bg.modulate = lerp($bg.modulate, Color(bg_colors[cur_song][0], bg_colors[cur_song][1], bg_colors[cur_song][2]), 0.075);
 	
-	cur_score = lerp(int(cur_score), int(score), 0.7);
+	cur_score = lerp(float(cur_score), float(score), delta * 20.0);
 	
 	var diff_id = cur_diff if cur_diff <= diffs.size() - 1 else 0;
 	var diff_name = diffs[diff_id].to_lower();
@@ -127,10 +127,7 @@ func _process(delta):
 	rank = HighScore.get_rank(song, diff);
 	percent = HighScore.get_percent(song, diff);
 	
-	$scoreText.text = "SCORE: %s"%[int(cur_score)];
-	$percentText.text = "PERCENT: %s"%[str(float(percent), "%")];
-	$fcText.text = "RANK: %s"%[rank];
-	$fcText.modulate = Color(1.0, 0.892, 0.0, 1.0) if rank == "SFC" else Color.WHITE;
+	$scoreText.text = "SCORE: %s\nRANK: %s\nACCURACY: %s"%[snapped(round(cur_score), 1), rank, str(float(percent), "%")];
 	
 	if GlobalOptions.low_quality:
 		return;

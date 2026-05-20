@@ -32,45 +32,29 @@ position = Vector2(0, 349)
 [node name="ColorRect" type="ColorRect" parent="." unique_id=734661211]
 offset_left = 878.0
 offset_right = 918.0
-offset_bottom = 46.20247
+offset_bottom = 43.09642
 scale = Vector2(10.0542, 2.57562)
 color = Color(0.21, 0.21, 0.21, 0.454902)
 
-[node name="scoreText" type="Label" parent="." unique_id=1186018375]
-offset_left = 881.0
-offset_top = 1.0
-offset_right = 1025.0
-offset_bottom = 38.0
-scale = Vector2(0.6, 0.646)
-text = "score:"
-label_settings = SubResource("LabelSettings_i3c0a")
-
 [node name="difficultyText" type="Label" parent="." unique_id=291280583]
-offset_left = 886.0
-offset_top = 92.00001
-offset_right = 1456.0
-offset_bottom = 129.0
+offset_left = 905.00006
+offset_top = 85.0
+offset_right = 1475.0
+offset_bottom = 122.0
 scale = Vector2(0.6, 0.646)
 text = "<  >"
 label_settings = SubResource("LabelSettings_i3c0a")
 horizontal_alignment = 1
 
-[node name="fcText" type="Label" parent="." unique_id=157073158]
-offset_left = 881.0
-offset_top = 32.0
-offset_right = 1025.0
-offset_bottom = 69.0
+[node name="scoreText" type="Label" parent="." unique_id=157073158]
+offset_left = 880.0
+offset_top = 0.9999962
+offset_right = 1024.0
+offset_bottom = 118.0
 scale = Vector2(0.6, 0.645)
-text = "FC:"
-label_settings = SubResource("LabelSettings_i3c0a")
-
-[node name="percentText" type="Label" parent="." unique_id=763814449]
-offset_left = 881.0
-offset_top = 64.0
-offset_right = 1073.0
-offset_bottom = 101.0
-scale = Vector2(0.6, 0.645)
-text = "percent:"
+text = "SCORE:
+RANK:
+ACCURACY:"
 label_settings = SubResource("LabelSettings_i3c0a")
 
 [node name="Control" type="Control" parent="." unique_id=1875437788]

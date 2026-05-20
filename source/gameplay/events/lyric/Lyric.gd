@@ -45,6 +45,7 @@ func set_new_text(cool_text, new_steps):
 		
 	steps = new_steps;
 	syllablesLenght = syllables.size()-1;
+	
 func _process(_delta: float) -> void:
 	new_curStep = Conductor.curStep;
 	

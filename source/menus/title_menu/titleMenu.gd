@@ -127,9 +127,15 @@ func beat_hit(beat):
 	if !hasSkippedIntro && !Global.finished_intro:
 		match beat:
 			1:
-				create_text("big boss presents");
+				create_text("ninjamuffin99");
+				create_text("phantomArcade");
+				create_text("kawaisprite");
+				create_text("evilsk8er");
+			3:
+				create_text("present");
 			4:
 				hideText();
+				
 			5:
 				create_text("not association");
 				create_text("with");

@@ -1,10 +1,8 @@
 extends CanvasLayer
 
 @onready var options_grp = $'panel/options_grp';
-@onready var song_text = $'panel/song_text';
-@onready var difficulty_text = $'panel/difficulty_text';
+@onready var text = $'panel/text';
 @onready var pause_panel = $'panel';
-@onready var death_count_text = $'panel/deaths';
 
 var paused = false;
 var opts = ['RESUME', 'RESTART', 'BOTPLAY', 'OPTIONS', 'EXIT TO MENU'];
@@ -18,10 +16,6 @@ var coolOffset = 125;
 #var cool_arrow = Alphabet.new();
 
 func _ready():
-	song_text.text = "";
-	difficulty_text.text = "";
-	death_count_text.text = "";
-	
 	SongData.isOnPauseMode = false;
 	
 	if SongData.isOnChartMode:
@@ -42,9 +36,7 @@ func _ready():
 	if songName.contains("-REMIX"):
 		songName = songName.replace("-REMIX", "");
 		
-	death_count_text.text += str("DEATHS: ",SongData.death_count);
-	song_text.text += "SONG: %s"%[songName];
-	difficulty_text.text += "DIFFICULTY: %s"%[SongData.week_diffs.to_upper() if SongData.week_diffs != "" else "NORMAL"];
+	text.text = "SONG: %s\nDIFFICULTY: %s\nDEATHS: %s"%[songName, SongData.week_diffs.to_upper() if SongData.week_diffs != "" else "NORMAL", SongData.death_count];
 	
 	for j in opts.size():
 		if opts[j] == "BOTPLAY":

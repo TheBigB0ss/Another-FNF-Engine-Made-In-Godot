@@ -209,7 +209,7 @@ func changeDiff(shit):
 			tw.tween_property(rightArrow, "position", Vector2(1125,480), 0.02);
 			
 	for i in songs_weeks[curWeek]:
-		week_score += HighScore.get_score(i[0], "" if diffs[curDiff if !curDiff > diffs.size()-1 else 0] == "normal" else str("-", diffs[curDiff if !curDiff > diffs.size()-1 else 0].to_lower()))
+		week_score += HighScore.get_score(i[0], "" if diffs[curDiff if !curDiff > diffs.size()-1 else 0] == "normal" else str("-", diffs[curDiff if !curDiff > diffs.size()-1 else 0].to_lower()));
 		
 func changeWeek(shit):
 	week_score = 0;

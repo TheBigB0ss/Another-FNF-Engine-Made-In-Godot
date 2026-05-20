@@ -1,6 +1,9 @@
 extends Node
 
 var achievements = {};
+var progress = 0;
+var total_achievements = 0;
+var owned_achievements = 0;
 var devMode = false;
 
 signal end_achievement;
@@ -19,10 +22,18 @@ func _ready():
 				achievements[i]["secret achievement"] = false;
 				
 	for i in achievements.keys():
-		if i != "version":
-			if !achievements[i].has("special achievement"):
-				achievements[i]["special achievement"] = false;
-				
+		if i == "version":
+			continue;
+			
+		if !achievements[i].has("special achievement"):
+			achievements[i]["special achievement"] = false;
+			
+		total_achievements += 1;
+		if check_achievement_status(i):
+			owned_achievements += 1;
+			
+	progress = snapped((float(owned_achievements)/total_achievements) * 100, 1);
+	
 func unlock_achievement(achievement):
 	if typeof(achievements[achievement]["value"]) == TYPE_BOOL:
 		if achievements[achievement]["value"] == false:
@@ -42,7 +53,17 @@ func unlock_int_achievement(achievement, new_achievement, max_val, min_val):
 			AchievementPopUp.set_achievement(new_achievement, true if SongData.isPlaying else false);
 			achievements[new_achievement]["secret achievement"] = false;
 			achievements[new_achievement]["value"][2] = true;
-			print(achievements[new_achievement]["value"][2])
+			print(achievements[new_achievement]["value"][2]);
+			
+func check_achievement_status(achievement):
+	if achievement == "version":
+		return false;
+		
+	match typeof(achievements[achievement]["value"]):
+		TYPE_BOOL:
+			return achievements[achievement]["value"];
+		TYPE_ARRAY:
+			return achievements[achievement]["value"][2] or achievements[achievement]["value"][0] == achievements[achievement]["value"][1];
 			
 func get_achievement(achievement_name):
 	for i in achievements.keys():

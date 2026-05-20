@@ -67,8 +67,8 @@ var events = {
 	"play anim": "Value1 = character (0 = bf, 1 = dad, 2 = gf)\nValue2 = anim to play",
 	"flash": "Value1 = flash speed\nValue2 = flash color (in hexa code)",
 	#"set camera position": "Value1 = new camera position\n(example: 20(x), 20(y))\nValue2 = just for one section? (true or false)",
-	"spawn popUp": "nothing special",
-	"change song pitch": "Value 1 = new song pitch\nValue 2 = change velocity",
+	#"spawn popUp": "nothing special",
+	"change song pitch": "Value 1 = new song pitch",
 	"change song speed": "Value 1 = new song speed",
 	"set lyric": "Value 1 = Your Lyric Text (use :: if you want to split the text)\nValue 2 = steps (example: 10, 20, 30, 40...)"
 };
