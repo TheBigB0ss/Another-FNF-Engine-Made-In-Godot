@@ -125,11 +125,12 @@ func dance():
 		_playAnim("idle dance");
 		
 	if curCharacter == "picoSpeaker":
-		_playAnim("shoot%s"%[int(randf_range(1, 4))]);
+		_playAnim("shoot%s"%[randi_range(1, 4)]);
 		
 var current_anim = character.animation if character is AnimatedSprite2D else "";
 func _playAnim(anim="", note:Note = null):
 	var longNote = note.isSustain if is_instance_valid(note) else false;
+	
 	for i in animList.size():
 		if animList[i] != anim:
 			continue;
@@ -151,8 +152,10 @@ func _playAnim(anim="", note:Note = null):
 		
 		if animList[i].contains("sing"):
 			characterState = (CHARACTER_STATES.IDLE if note.sustainLength <= 0 or note.missedLongNote else CHARACTER_STATES.HOLDING) if longNote else CHARACTER_STATES.SINGING;
+			
 		elif special_anim:
 			characterState = CHARACTER_STATES.SPECIAL;
+			
 		elif curAnim == "idle dance":
 			characterState = CHARACTER_STATES.IDLE;
 			
@@ -178,10 +181,12 @@ func _playAnim(anim="", note:Note = null):
 		current_anim = posesList[i];
 		
 		if is_animated_sprite:
-			character.play(posesList[i]);
+			character.play(current_anim);
 		else:
-			character_anim.play(posesList[i]);
+			character_anim.play(current_anim);
 			
+		break;
+		
 	curAnim = anim;
 	
 func loop_anim():
@@ -189,9 +194,10 @@ func loop_anim():
 		return;
 		
 	match anim_type:
-		1:
+		CHARACTER_ANIM_TYPE.FREEZE:
 			reset_anim();
-		2:
+			
+		CHARACTER_ANIM_TYPE.REPEAT:
 			if is_animated_sprite:
 				if (character.frame + character.frame_progress) > frame_count:
 					character.frame = 0;

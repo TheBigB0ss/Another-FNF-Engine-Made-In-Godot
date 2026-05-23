@@ -289,12 +289,14 @@ func pressed(new_character = null):
 				note_pressed = true;
 				emit_signal("notePressed", self);
 				main_scene.health = min(main_scene.health+healthPerHit, 100.0);
+				
 			pressed_emit = true;
 			
 		destroy_note();
 	else:
 		if !pressed_emit:
 			emit_signal("notePressed", self);
+			
 			pressed_emit = true;
 			
 		if is_instance_valid(note):

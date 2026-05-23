@@ -73,19 +73,20 @@ func _ready() -> void:
 				
 			array_notes.insert(0, noteData);
 			
+	array_notes.sort_custom(func(a,b): return a[0]<b[0]);
+	
 func _process(delta):
 	for i in array_notes:
 		var data = int(i[1])%(8 if !SongData.haveTwoOpponents else 12);
 		var distance = (i[0] - Conductor.getSongTime)*Conductor.songSpeed;
-		if GlobalOptions.down_scroll:
-			distance = -distance;
-			
 		var noteVal1 = i[8] if i.size() > 8 else null;
 		var noteVal2 = i[9] if i.size() > 9 else null;
 		
 		if distance <= 2150 && !i[7]:
 			spawnNote(i[0], data, i[2], i[3], i[4], i[5], i[6], noteVal1, noteVal2);
-			i[7] = true;
+			array_notes.erase(i);
+		else:
+			break;
 			
 	for note in notesList:
 		if note == null:
@@ -119,7 +120,7 @@ func _process(delta):
 		if Conductor.getSongTime > 320 + note.strumTime && !note.isSustain && note.missed:
 			notes_to_delete.append(note);
 			
-		if Conductor.getSongTime > 335+(note.strumTime+note.ogSustain) && note.isSustain && !note.is_pressing && note.missed:
+		if Conductor.getSongTime > 335 + (note.strumTime+note.ogSustain) && note.isSustain && !note.is_pressing && note.missed:
 			notes_to_delete.append(note);
 			
 	playerNotes = playerNotes.filter(func(note): return note != null);
@@ -289,30 +290,34 @@ func delete_note(note_direction):
 		if note == null:
 			continue;
 			
-		if note.custom_note_dir == note_direction:
-			var distance = (note.strumTime - Conductor.getSongTime);
-			if distance <= new_strumTime && note.can_press:
-				new_strumTime = distance;
-				new_note = note;
+		if note.custom_note_dir != note_direction:
+			continue;
+			
+		var distance = (note.strumTime - Conductor.getSongTime);
+		if distance <= new_strumTime && note.can_press:
+			new_strumTime = distance;
+			new_note = note;
+			
+			new_note.pressed();
+			
+			if note.manyHits > 0:
+				return;
 				
-				new_note.pressed();
+			if !note.isSustain:
+				if new_note.is_a_bad_note:
+					new_note.miss_note();
+					
+				new_note.queue_free();
+				note.note_pressed = true;
+				notes_to_delete.append(note);
+			else:
+				if new_note.note != null:
+					new_note.note.queue_free();
+					
+				new_note.is_pressing = true;
 				
-				if note.manyHits > 0:
-					return;
-					
-				if !note.isSustain:
-					if new_note.is_a_bad_note:
-						new_note.miss_note();
-						
-					new_note.queue_free();
-					note.note_pressed = true;
-					notes_to_delete.append(note);
-				else:
-					if new_note.note != null:
-						new_note.note.queue_free();
-						
-					new_note.is_pressing = true;
-					
+		break;
+		
 func sort_notes(a, b):
 	if a != null && b != null:
 		return a.strumTime < b.strumTime;

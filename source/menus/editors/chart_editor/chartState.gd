@@ -253,7 +253,11 @@ func change_note_edit(_item):
 			
 			%noteVal1.step = 1;
 			%noteVal2.step = 0.01;
+			
 		_:
+			noteVal1Text.text = "value 1:";
+			noteVal2Text.text = "value 2:";
+			
 			%noteVal1.editable = false;
 			%noteVal2.editable = false;
 			

@@ -71,20 +71,21 @@ func _ready() -> void:
 				
 			array_notes.insert(0, noteData);
 			
+	array_notes.sort_custom(func(a,b): return a[0]<b[0]);
+	
 var notes_to_delete = [];
 func _process(delta):
 	for i in array_notes:
 		var data = int(i[1])%(8 if !SongData.haveTwoOpponents else 12);
 		var distance = (i[0] - Conductor.getSongTime)*Conductor.songSpeed;
-		if GlobalOptions.down_scroll:
-			distance = -distance;
-			
 		var noteVal1 = i[8] if i.size() > 8 else null;
 		var noteVal2 = i[9] if i.size() > 9 else null;
 		
 		if distance <= 2150 && !i[7]:
 			spawnNote(i[0], data, i[2], i[3], i[4], i[5], i[6], noteVal1, noteVal2);
-			i[7] = true;
+			array_notes.erase(i);
+		else:
+			break;
 			
 	for note in notesList:
 		if note == null:
@@ -103,13 +104,15 @@ func _process(delta):
 		else:
 			note.position.y = strumY;
 			
-		if !note.isPlayer:
-			if Conductor.getSongTime > 320 + note.strumTime && note.sustainLength <= 0:
-				notes_to_delete.append(note);
-				
-			if Conductor.getSongTime > 335+(note.strumTime+note.ogSustain) && note.sustainLength > 0 && !note.is_pressing:
-				notes_to_delete.append(note);
-				
+		if note.isPlayer:
+			continue;
+			
+		if Conductor.getSongTime > 320 + note.strumTime && note.sustainLength <= 0:
+			notes_to_delete.append(note);
+			
+		if Conductor.getSongTime > 335 + (note.strumTime+note.ogSustain) && note.sustainLength > 0 && !note.is_pressing:
+			notes_to_delete.append(note);
+			
 	for note in opponentNotes:
 		if note == null or note.isPlayer or note.is_a_bad_note or !note.secondOpponentNote:
 			continue;
@@ -121,8 +124,7 @@ func _process(delta):
 				continue;
 				
 			if note.sustainLength == 0:
-				opponentNotes.erase(note);
-				notesList.erase(note);
+				notes_to_delete.append(note);
 			else:
 				if note.note != null:
 					note.note.queue_free();
@@ -130,8 +132,7 @@ func _process(delta):
 				note.is_pressing = true;
 				if note.sustainLength <= 0:
 					note.is_pressing = false;
-					opponentNotes.erase(note);
-					notesList.erase(note);
+					notes_to_delete.append(note);
 					
 	opponentNotes = opponentNotes.filter(func(note): return note != null);
 	notesList = notesList.filter(func(note): return note != null);

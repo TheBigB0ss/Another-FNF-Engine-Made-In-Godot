@@ -559,24 +559,18 @@ func playBfMissAnim(curNote):
 	if curNote.is_a_bad_note:
 		if bf.animList.has("hit"):
 			bf._playAnim("hit");
-		#else:
-		#	bf.modulate = Color(0x5425dfff);
-		#	bf._playAnim(coolAnims);
 	else:
 		var miss_anim = coolAnims+" MISS";
 		
 		if bf.animList.has(miss_anim):
 			bf._playAnim(miss_anim);
-		#else:
-		#	bf.modulate = Color(0x5425dfff)
-		#	bf._playAnim(coolAnims);
 			
 func playCharacterAnim(curNote, new_char, isBf):
 	if curNote.no_anim:
 		return;
 		
 	var coolAnims = singAnims[int(curNote.noteData)%4];
-	var altAnim = "-alt" if curNote.is_altAnim && dad.animList.has(coolAnims+"-alt") else "";
+	var altAnim = "-alt" if curNote.is_altAnim && new_char.animList.has(coolAnims+"-alt") else "";
 	
 	if curNote.isGfNote && gf != null:
 		gf._playAnim(coolAnims, curNote);
@@ -888,4 +882,4 @@ func beat_hit(beat):
 		sectionCamera.zoom = SongData.stageZoomBeat;
 		
 func move_cam(smoothing, pos):
-	sectionCamera.global_position = (pos if !smoothing else lerp(sectionCamera.global_position, pos, 0.55));
+	sectionCamera.global_position = (pos if !smoothing else lerp(sectionCamera.global_position, pos, Conductor.crochet/1000));

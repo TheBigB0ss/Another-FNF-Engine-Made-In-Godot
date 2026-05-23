@@ -8,22 +8,22 @@ script = ExtResource("1_crp0m")
 json_path = "res://assets/data/characters/bf.json"
 healthBar_Color = Color(0, 0.8117647, 1, 1)
 is_player = true
-animTimes = {
-"attack": [2, 5],
-"dodge": [2, 5],
-"hey": [2, 5],
-"hit": [2, 5],
-"idle dance": [2, 5],
-"idle shaking": [2, 5],
-"pre attack": [2, 5],
-"singDown": [2, 5],
-"singDown MISS": [2, 5],
-"singLeft": [2, 5],
-"singLeft MISS": [2, 5],
-"singRight": [2, 5],
-"singRight MISS": [2, 5],
-"singUp": [2, 5],
-"singUp MISS": [2, 5]
+anims_timer = {
+"attack": [2, 5, false],
+"dodge": [2, 5, false],
+"hey": [2, 5, false],
+"hit": [2, 5, false],
+"idle dance": [2, 5, false],
+"idle shaking": [2, 5, false],
+"pre attack": [2, 5, false],
+"singDown": [2, 5, false],
+"singDown MISS": [2, 5, false],
+"singLeft": [2, 5, false],
+"singLeft MISS": [2, 5, false],
+"singRight": [2, 5, false],
+"singRight MISS": [2, 5, false],
+"singUp": [2, 5, false],
+"singUp MISS": [2, 5, false]
 }
 anim_type = 3
 have_death_animation = true

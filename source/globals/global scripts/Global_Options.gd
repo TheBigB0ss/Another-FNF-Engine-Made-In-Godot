@@ -9,6 +9,7 @@ var middle_scroll = false;
 var restart_action = false;
 var hide_hud = false;
 var fps = 60;
+var uncap_fps = false;
 var vsync = true;
 var ghost_tapping = true;
 var low_quality = false;
@@ -65,7 +66,7 @@ func _ready():
 		for j in keys.keys():
 			keys_list.append(j);
 			
-	if !settingsJson.has("version") or settingsJson["version"] != 2:
+	if !settingsJson.has("version") or settingsJson["version"] != 3:
 		reset_settings();
 		
 	apply_changes();
@@ -94,7 +95,7 @@ func load_settings():
 		
 func reset_settings():
 	settingsJson = {
-		"version": 2,
+		"version": 3,
 		"meta":{
 			"rating_pos": [635, 235],
 			"combo_pos": [695, 285],
@@ -103,6 +104,7 @@ func reset_settings():
 		},
 		"graphics": {
 			"fps": int(60),
+			"uncap fps": false,
 			"vsync": true,
 			"fullscreen": false,
 			"low quality": false,
@@ -201,6 +203,7 @@ func apply_changes():
 	vsync = settingsJson["graphics"]["vsync"];
 	low_quality = settingsJson["graphics"]["low quality"];
 	fps = int(settingsJson["graphics"]["fps"]);
+	uncap_fps = settingsJson["graphics"]["uncap fps"];
 	full_screen = settingsJson["graphics"]["fullscreen"];
 	use_shader = settingsJson["graphics"]["use shader"];
 	
@@ -228,7 +231,7 @@ func apply_changes():
 	
 	keys = settingsJson["keys"];
 	
-	Engine.max_fps = fps;
+	Engine.max_fps = fps if !uncap_fps else 0;
 	
 	update_keys();
 	
@@ -288,6 +291,10 @@ func set_options():
 			"fps": {
 				"value": int(settingsJson["graphics"]["fps"]),
 				"description": "change FPS"
+			},
+			"uncap fps": {
+				"value": settingsJson["graphics"]["uncap fps"],
+				"description": "uncap fps?"
 			},
 			"vsync": {
 				"value": settingsJson["graphics"]["vsync"],

@@ -163,8 +163,10 @@ func _playAnim(anim="", note:Note = null):
 		
 		if animList[i].contains("sing"):
 			characterState = (CHARACTER_STATES.IDLE if note.sustainLength <= 0 or note.missedLongNote else CHARACTER_STATES.HOLDING) if longNote else CHARACTER_STATES.SINGING;
+			
 		elif special_anim:
 			characterState = CHARACTER_STATES.SPECIAL;
+			
 		elif curAnim == "idle dance":
 			characterState = CHARACTER_STATES.IDLE;
 			frame = newFrame;
@@ -190,6 +192,8 @@ func _playAnim(anim="", note:Note = null):
 			
 		current_anim = posesList[i];
 		limit = newLimit;
+		
+		break;
 		
 	curAnim = anim;
 	

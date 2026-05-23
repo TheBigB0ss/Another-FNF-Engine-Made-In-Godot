@@ -74,20 +74,21 @@ func _ready() -> void:
 				
 			array_notes.insert(0, noteData);
 			
+	array_notes.sort_custom(func(a,b): return a[0]<b[0]);
+	
 var notes_to_delete = [];
 func _process(delta):
 	for i in array_notes:
 		var data = int(i[1])%(8 if !SongData.haveTwoOpponents else 12);
 		var distance = (i[0] - Conductor.getSongTime)*Conductor.songSpeed;
-		if GlobalOptions.down_scroll:
-			distance = -distance;
-			
 		var noteVal1 = i[8] if i.size() > 8 else null;
 		var noteVal2 = i[9] if i.size() > 9 else null;
 		
 		if distance <= 2150 && !i[7]:
 			spawnNote(i[0], data, i[2], i[3], i[4], i[5], i[6], noteVal1, noteVal2);
-			i[7] = true;
+			array_notes.erase(i);
+		else:
+			break;
 			
 	for note in notesList:
 		if note == null:
