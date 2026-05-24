@@ -30,9 +30,8 @@ func ugh_intro():
 	tankmanCutscene.show();
 	camera.position = Vector2(280, 698);
 	
-	tankmanCutscene.playing = true;
 	tankmanCutscene.frame = 0;
-	tankmanCutscene.limit = 226;
+	tankmanCutscene.limit = 80;
 	
 	SongData.is_not_in_cutscene = false;
 	Global.is_on_video = true;
@@ -41,9 +40,10 @@ func ugh_intro():
 	camera.zoom = Vector2(0.9, 0.9);
 	
 	await get_tree().create_timer(0.1).timeout;
+	tankmanCutscene.playing = true;
 	Sound.playAudio("week7_cutscene_voices/wellWellWell", false);
 	
-	await get_tree().create_timer(3).timeout
+	await get_tree().create_timer(3.6).timeout
 	tankmanCutscene.playing = false;
 	camera.position = Vector2(1090, 801);
 	
@@ -52,6 +52,8 @@ func ugh_intro():
 	Sound.playAudio("week7_cutscene_voices/bfBeep", false);
 	
 	await get_tree().create_timer(0.8).timeout
+	tankmanCutscene.frame = 81;
+	tankmanCutscene.limit = 221;
 	tankmanCutscene.playing = true;
 	bf_anim._playAnim("idle dance");
 	camera.position = Vector2(280, 698);

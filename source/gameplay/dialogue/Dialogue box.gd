@@ -100,7 +100,7 @@ func getTxt():
 	
 	match curSong:
 		"senpai", "roses", "thorns":
-			is_joke_dialogue = is_joke() <= 3000;
+			is_joke_dialogue = is_joke() <= 5;
 			
 	var path_file = ("res://assets/data/songs/%s/%sDialogue.txt"%[curSong, curSong]) if !is_joke_dialogue else ("res://assets/data/songs/%s/%sDialogue-joke.txt"%[curSong, curSong]);
 	var readTxt = FileAccess.open(path_file, FileAccess.READ);

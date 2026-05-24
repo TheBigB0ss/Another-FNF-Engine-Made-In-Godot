@@ -19,31 +19,13 @@ metadata/_custom_type_script = "uid://b34ctedtr57xe"
 visible = false
 z_index = 45
 position = Vector2(1199, 801)
-anims_timer = {
-"attack": [2, 5, false],
-"dodge": [2, 5, false],
-"hey": [2, 5, false],
-"hit": [2, 5, false],
-"idle dance": [2, 5, false],
-"idle shaking": [2, 5, false],
-"pre attack": [2, 5, false],
-"singDown": [2, 5, false],
-"singDown MISS": [2, 5, false],
-"singLeft": [2, 5, false],
-"singLeft MISS": [2, 5, false],
-"singRight": [2, 5, false],
-"singRight MISS": [2, 5, false],
-"singUp": [2, 5, false],
-"singUp MISS": [2, 5, false]
-}
 
 [node name="Tankman" type="Node2D" parent="." unique_id=1040496296]
-visible = false
 z_index = 30
 position = Vector2(211, -440)
 script = ExtResource("2_wme06")
 path = "res://assets/stages/week7/cutscene/tankman"
-speed = 1.1
-frame = 913
+speed = 1.2000000000000002
+frame = 68
 playing = false
 metadata/_custom_type_script = "uid://b34ctedtr57xe"

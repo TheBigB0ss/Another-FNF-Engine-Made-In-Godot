@@ -2,11 +2,13 @@ extends AudioStreamPlayer
 
 var music_loop = false;
 
-func _play_song(to_load, path, loop, volume = 0.0, mode = PROCESS_MODE_INHERIT):
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS;
+	
+func _play_song(to_load, path, loop, volume = 0.0):
 	stream = load("res://assets/%s/%s.ogg"%[path, to_load]);
 	volume_db = volume;
 	music_loop = loop;
-	process_mode = mode;
 	
 	play(0.0);
 	
@@ -17,6 +19,7 @@ func _process(_delta: float) -> void:
 	var songPos = get_playback_position();
 	var songTime = stream.get_length();
 	
+	print(floor(songPos), " ", floor(songTime))
 	if floor(songPos) >= floor(songTime):
 		play(0.0);
 		
