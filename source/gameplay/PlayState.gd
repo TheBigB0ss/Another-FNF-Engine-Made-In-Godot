@@ -221,7 +221,7 @@ func _ready():
 			i.modulate.a = GlobalOptions.health_bar_alpha if !GlobalOptions.hide_hud else 0.0;
 			
 	for i in [timeBar, timeText]:
-		i.modulate.a = GlobalOptions.time_bar_alpha;
+		i.visible = GlobalOptions.timeBar_mode != "disable";
 		
 	if GlobalOptions.hide_hud:
 		for i in [$hud/Hud_Layer/healthBar, $hud/Hud_Layer/icons, $hud/Hud_Layer/scoreLabel, $hud/Hud_Layer/timeLabel, $hud/Hud_Layer/timeBar]:
@@ -340,6 +340,7 @@ func add_icon(path, is_opponent, is_animated, icon_position):
 	
 func start_dialogue():
 	SongData.is_not_in_cutscene = false;
+	dialogue_box.start();
 	dialogue_box.show();
 	dialogue_box.pause_song();
 	
@@ -408,7 +409,17 @@ func _process(delta: float) -> void:
 	var maxMinutes = str(int(inst.stream.get_length()) / 60).pad_zeros(1);
 	var maxSeconds = str(int(inst.stream.get_length()) % 60).pad_zeros(2);
 	
-	timeText.text = curMinutes + ":" + curSeconds + " / " + maxMinutes + ":" + maxSeconds if Conductor.getSongTime >= 0 else "0:00 / " + maxMinutes + ":" + maxSeconds
+	var current_time = (curMinutes + ":" + curSeconds if Conductor.getSongTime >= 0 else "0:00");
+	
+	match GlobalOptions.timeBar_mode:
+		"default":
+			timeText.text = current_time + " / " + maxMinutes + ":" + maxSeconds;
+		"time elapsed":
+			timeText.text = current_time;
+		"time left":
+			var timeLeft = max(0, inst.stream.get_length() - inst.get_playback_position());
+			timeText.text = str(int(timeLeft) / 60).pad_zeros(1) + ":" + str(int(timeLeft) % 60).pad_zeros(2);
+			
 	if Conductor.getSongTime/1000 >= inst.stream.get_length() && !finished_song:
 		match curSong:
 			"test":
@@ -809,7 +820,7 @@ func finishSong():
 			
 			await get_tree().create_timer(0.1).timeout
 			
-			MusicManager._play_music("freakyMenu", true, true);
+			MusicManager._play_song("freakyMenu", "music", true);
 			Global.changeScene("menus/story_mode/storyMode", true, false);
 			SongData.isPlaying = false;
 			
@@ -821,7 +832,7 @@ func finishSong():
 	else:
 		await get_tree().create_timer(0.1).timeout
 		
-		MusicManager._play_music("freakyMenu", true, true);
+		MusicManager._play_song("freakyMenu", "music", true);
 		Global.changeScene("menus/freeplay/freeplay_menu", true, false);
 		SongData.isPlaying = false;
 		

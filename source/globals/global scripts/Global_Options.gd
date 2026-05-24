@@ -25,6 +25,7 @@ var updated_hud = "new hud";
 var updated_cam = "normal";
 var updated_icon = "default";
 var rating_mode = "hud element";
+var timeBar_mode = "default";
 
 var use_shader = true;
 var show_splashes = true;
@@ -66,7 +67,7 @@ func _ready():
 		for j in keys.keys():
 			keys_list.append(j);
 			
-	if !settingsJson.has("version") or settingsJson["version"] != 3:
+	if !settingsJson.has("version") or settingsJson["version"] != 4:
 		reset_settings();
 		
 	apply_changes();
@@ -95,7 +96,7 @@ func load_settings():
 		
 func reset_settings():
 	settingsJson = {
-		"version": 3,
+		"version": 4,
 		"meta":{
 			"rating_pos": [635, 235],
 			"combo_pos": [695, 285],
@@ -122,13 +123,13 @@ func reset_settings():
 			"hud mode": "new hud",
 			"rating mode": "hud element",
 			"icon type": "default",
+			"time bar type": "default",
 			"hide hud": false,
 			"screen zoom": true,
 			"show splashes": true,
 			"show song card": true,
 			"show fps": true,
 			"show rating label": false,
-			"time bar alpha": 1.0,
 			"health bar alpha": 1.0
 		},
 		"keys":{
@@ -166,6 +167,10 @@ func reset_settings():
 			},
 			"rating mode": {
 				"list": ["hud element", "game element"],
+				"index": 0
+			},
+			"time bar type": {
+				"list": ["default", "time left", "time elapsed", "disable"],
 				"index": 0
 			}
 		}
@@ -208,7 +213,8 @@ func apply_changes():
 	use_shader = settingsJson["graphics"]["use shader"];
 	
 	hide_hud = settingsJson["visual"]["hide hud"];
-	time_bar_alpha = settingsJson["visual"]["time bar alpha"];
+	#time_bar_alpha = settingsJson["visual"]["time bar alpha"];
+	timeBar_mode = settingsJson["visual"]["time bar type"];
 	health_bar_alpha = settingsJson["visual"]["health bar alpha"];
 	show_fps = settingsJson["visual"]["show fps"];
 	show_splashes = settingsJson["visual"]["show splashes"];
@@ -290,7 +296,7 @@ func set_options():
 		"graphics": {
 			"fps": {
 				"value": int(settingsJson["graphics"]["fps"]),
-				"description": "change FPS"
+				"description": "change FPS (won't work if the uncap fps is enable)"
 			},
 			"uncap fps": {
 				"value": settingsJson["graphics"]["uncap fps"],
@@ -302,7 +308,7 @@ func set_options():
 			},
 			"low quality": {
 				"value": settingsJson["graphics"]["low quality"],
-				"description": "this helps... I guess..."
+				"description": "it helps... I guess..."
 			},
 			"use shader": {
 				"value": settingsJson["graphics"]["use shader"],
@@ -387,6 +393,11 @@ func set_options():
 				"description": "icon style",
 				"ID": settingsJson["options"]["icon type"]["index"]
 			},
+			"time bar type":{
+				"value": settingsJson["options"]["time bar type"]["list"],
+				"description": "time bar mode",
+				"ID": settingsJson["options"]["time bar type"]["index"]
+			},
 			"show fps":{
 				"value": settingsJson["visual"]["show fps"], 
 				"description": "show fps count"
@@ -414,10 +425,6 @@ func set_options():
 			"health bar alpha": {
 				"value": settingsJson["visual"]["health bar alpha"],
 				"description": "health bar opacity"
-			},
-			"time bar alpha": {
-				"value": settingsJson["visual"]["time bar alpha"],
-				"description": "time bar opacity"
 			}
 		},
 		"gameplay": {

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dreyw8yboe7q3"
-path="res://.godot/imported/evilLeafy.png-e30fce95f2031d6cfec9ef49fa8af7ac.ctex"
+uid="uid://bok87s7wqpv05"
+path="res://.godot/imported/siit.png-fa0851b7b5c0ab9f20b534eab9b8f357.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/portraits/characters/evilLeafy.png"
-dest_files=["res://.godot/imported/evilLeafy.png-e30fce95f2031d6cfec9ef49fa8af7ac.ctex"]
+source_file="res://assets/images/portraits/characters/siit.png"
+dest_files=["res://.godot/imported/siit.png-fa0851b7b5c0ab9f20b534eab9b8f357.ctex"]
 
 [params]
 

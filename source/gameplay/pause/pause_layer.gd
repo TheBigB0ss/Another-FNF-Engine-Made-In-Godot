@@ -16,6 +16,7 @@ var coolOffset = 125;
 #var cool_arrow = Alphabet.new();
 
 func _ready():
+	MusicManager._stop_music();
 	SongData.isOnPauseMode = false;
 	
 	if SongData.isOnChartMode:
@@ -49,7 +50,7 @@ func _ready():
 	is_paused = true;
 	process_mode = 2;
 	
-func _process(delta):
+func _process(_delta):
 	MusicManager.volume_db = lerp(MusicManager.volume_db, 0.0, 0.005);
 	options_grp.position.y = lerp(float(options_grp.position.y), float(480-coolOffset*cur_option), 0.20);
 	
@@ -124,8 +125,7 @@ func _choice_pause_opts():
 			SongData.isOnChartMode = false;
 			SongData.death_count = 0;
 			
-			MusicManager.process_mode = 0;
-			MusicManager._play_music("freakyMenu", true, true);
+			MusicManager._play_song("freakyMenu", "music", true);
 			
 			Global.changeScene("menus/story_mode/storyMode" if SongData.isStoryMode else "menus/freeplay/freeplay_menu");
 			
@@ -151,13 +151,11 @@ func stop_shit():
 	get_tree().current_scene.voices.stop();
 	
 func _paused():
-	MusicManager.process_mode = 2;
-	MusicManager._play_music(GlobalOptions.updated_pause_music, true, true, -80.0);
+	MusicManager._play_song(GlobalOptions.updated_pause_music, "music", true, -80.0);
 	paused = true;
 	pause_panel.visible = true;
 	
 func _resume():
-	MusicManager.process_mode = 0;
 	MusicManager._stop_music();
 	paused = false;
 	pause_panel.visible = false;

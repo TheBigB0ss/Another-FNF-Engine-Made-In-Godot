@@ -31,7 +31,7 @@ func _ready():
 			Sound.playAudio("game over/fnf_loss_sfx", true);
 			
 func choice_voice_line():
-	return int(randi_range(1, 25));
+	return randi_range(1, 25);
 	
 var dead_confirmed = false;
 func _process(_delta: float) -> void:
@@ -47,9 +47,9 @@ func _process(_delta: float) -> void:
 			tw.tween_property(camera, "zoom", Vector2.ONE, 1.2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT);
 			
 			if death_anim.charPath == "Bf Pixel dead":
-				MusicManager._play_music("game over/gameOver-pixel", false, true);
+				MusicManager._play_song("game over/gameOver-pixel", "music", true);
 				
-			MusicManager._play_music("game over/gameOver", false, true);
+			MusicManager._play_song("game over/gameOver", "music", true);
 			
 			dead_confirmed = true;
 			
@@ -58,9 +58,9 @@ func _input(ev):
 	if ev is InputEventKey && SongData.isOnDeathScreen:
 		if ev.pressed && !ev.echo && !confirm:
 			if ev.keycode in [KEY_ENTER] && death_anim.curAnim != "dead":
-				MusicManager._play_music("game over/gameOverEnd", false, false);
+				MusicManager._play_song("game over/gameOverEnd", "music", false);
 				if death_anim.charPath == "Bf Pixel dead":
-					MusicManager._play_music("game over/gameOverEnd-pixel", false, true);
+					MusicManager._play_song("game over/gameOverEnd-pixel", "music", false);
 					
 				death_anim._playAnim("dead confirm");
 				death_anim.idleTimer = 0;
@@ -74,7 +74,7 @@ func _input(ev):
 			if ev.keycode in [KEY_ESCAPE]:
 				SongData.death_count = 0;
 				MusicManager._stop_music();
-				MusicManager._play_music("freakyMenu", true, true);
+				MusicManager._play_song("freakyMenu", "music", true);
 				Global.changeScene("menus/story_mode/storyMode" if SongData.isStoryMode else "menus/freeplay/freeplay_menu");
 				confirm = true;
 				SongData.isOnDeathScreen = false;

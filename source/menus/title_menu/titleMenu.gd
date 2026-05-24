@@ -29,19 +29,13 @@ func _ready():
 	
 	if !Global.finished_intro:
 		hide_guys();
-		MusicManager._play_music("freakyMenu", true, true);
+		MusicManager._play_song("freakyMenu", "music", true);
 	else:
 		show_guys();
 		Flash.flashAppears(1.3);
 		
 	enterText.play("Press Enter to Begin");
 	
-	if datetime.month == 12 && datetime.day == 25:
-		pass
-		
-	elif datetime.month == 10 && datetime.day == 31:
-		pass
-		
 	random_text_arr = [getTxt()];
 	
 func _process(delta):
@@ -49,7 +43,7 @@ func _process(delta):
 	Conductor.getSongTime += delta*1000;
 	
 func show_guys():
-	bambi.visible = (int(randf_range(0, 5000)) <= 5) && (datetime.month == 12 && datetime.day == 25);
+	bambi.visible = (randi_range(0, 5000) <= 5) && (datetime.month == 12 && datetime.day == 25);
 	gf.visible = !bambi.visible;
 	new_logo.show();
 	enterText.show();

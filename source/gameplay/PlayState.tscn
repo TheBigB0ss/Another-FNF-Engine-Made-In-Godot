@@ -137,12 +137,14 @@ tint_under = Color(0.12662369, 0.12662369, 0.12662369, 1)
 position = Vector2(2, -4)
 
 [node name="timeLabel" type="Label" parent="hud/Hud_Layer" unique_id=1238761713]
-offset_left = 520.935
-offset_top = 7.0
-offset_right = 5020.94
-offset_bottom = 614.0
+offset_left = 429.99997
+offset_top = 6.0
+offset_right = 8593.566
+offset_bottom = 613.0
 scale = Vector2(0.0489982, 0.0487552)
+text = "0:00/0:00"
 label_settings = SubResource("LabelSettings_08ga8")
+horizontal_alignment = 1
 
 [node name="scoreLabel" type="Label" parent="hud/Hud_Layer" unique_id=1862258188]
 offset_left = 291.0

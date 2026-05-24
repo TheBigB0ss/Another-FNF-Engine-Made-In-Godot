@@ -42,8 +42,8 @@ var coolOffset = 115;
 var score = 0;
 var week_score = 0;
 
-func loadJson(week):
-	var jsonFile = FileAccess.open("res://assets/data/weeks data/%s/%s.json"%[SongData.week_folder_path, week],FileAccess.READ);
+func loadJson(_week):
+	var jsonFile = FileAccess.open("res://assets/data/weeks data/%s/%s.json"%[SongData.week_folder_path, _week],FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
 	weekJson = jsonData.get_data();
@@ -141,78 +141,82 @@ func _process(delta):
 func go_to_week():
 	var is_unlocked = HighScore.unlockweek(last_weeks[curWeek], last_weeks[curWeek], new_weeks[curWeek], locked_weeks[curWeek]);
 	
-	if is_unlocked:
-		noSpam = true;
+	if !is_unlocked:
+		Sound.playAudio("cancelMenu", false);
+		return;
 		
-		var storyMode = true;
-		var songsList = [];
-		var diffsList = [];
-		var songPath = "";
+	noSpam = true;
+	
+	var storyMode = true;
+	var songsList = [];
+	var diffsList = [];
+	var songPath = "";
+	
+	for i in songs_weeks[curWeek]:
+		songsList.append(i[0]);
+		diffsList = diffs[curDiff if !curDiff > diffs.size()-1 else 0];
 		
-		for i in songs_weeks[curWeek]:
-			songsList.append(i[0]);
-			diffsList = diffs[curDiff if !curDiff > diffs.size()-1 else 0];
-			
-		SongData.week_songs = songsList;
-		SongData.week_diffs = diffsList;
-		SongData.isStoryMode = storyMode;
-		SongData.weekName = new_weeks[curWeek];
-		
-		if !curWeek > new_weeks.size()-1:
-			SongData.week = new_weeks[curWeek];
-		else:
-			SongData.week = "";
-			
-		songPath = songsList[0];
-		SongData.loadJson(songPath, diffsList);
-		
-		if !SongData.chart_dont_exist:
-			choiced = true;
-			Sound.playAudio("confirmMenu", false);
-			
-			if week_chars[curWeek][1] == "BF":
-				menu_bf.get_child(0).play("M bf HEY");
-				
-			await get_tree().create_timer(1).timeout;
-			Global.changeScene("gameplay/PlayState", true, false);
-			MusicManager._stop_music();
-		else:
-			choiced = false;
-			$warning.visible = true;
-			
-			var difficultyPath = "";
-			if diffsList == "" or diffsList == "normal":
-				difficultyPath = "res://assets/data/songs/%s/%s.json"%[songPath, songPath];
-			else:
-				difficultyPath = "res://assets/data/song/%s/%s-%s.json"%[songPath, songPath, diffsList];
-				
-			$warning/Label.text = "Missing Chart:\n%s"%[difficultyPath];
-			Sound.playAudio("cancelMenu", false);
+	SongData.week_songs = songsList;
+	SongData.week_diffs = diffsList;
+	SongData.isStoryMode = storyMode;
+	SongData.weekName = new_weeks[curWeek];
+	
+	if !curWeek > new_weeks.size()-1:
+		SongData.week = new_weeks[curWeek];
 	else:
+		SongData.week = "";
+		
+	songPath = songsList[0];
+	SongData.loadJson(songPath, diffsList);
+	
+	if SongData.chart_dont_exist:
+		choiced = false;
+		$warning.visible = true;
+		
+		var difficultyPath = "";
+		if diffsList == "" or diffsList == "normal":
+			difficultyPath = "res://assets/data/songs/%s/%s.json"%[songPath, songPath];
+		else:
+			difficultyPath = "res://assets/data/song/%s/%s-%s.json"%[songPath, songPath, diffsList];
+			
+		$warning/Label.text = "Missing Chart:\n%s"%[difficultyPath];
 		Sound.playAudio("cancelMenu", false);
 		
+		return;
+		
+	choiced = true;
+	Sound.playAudio("confirmMenu", false);
+	
+	if week_chars[curWeek][1] == "BF":
+		menu_bf.get_child(0).play("M bf HEY");
+		
+	await get_tree().create_timer(1).timeout;
+	Global.changeScene("gameplay/PlayState", true, false);
+	MusicManager._stop_music();
+	
 func changeDiff(shit):
-	week_score = 0;
 	var is_unlocked = HighScore.unlockweek(last_weeks[curWeek], last_weeks[curWeek], new_weeks[curWeek], locked_weeks[curWeek]);
 	
-	if is_unlocked:
-		curDiff += shit;
-		curDiff = wrapi(curDiff, 0, len(diffs));
-		diffSpr.texture = load("res://assets/images/difficulties/%s.png"%[diffs[curDiff]]);
+	if !is_unlocked:
+		return;
 		
-		var tw = get_tree().create_tween();
-		if diffSpr.texture.get_width() < 250:
-			tw.tween_property(leftArrow, "position", Vector2(811,480), 0.02);
-			tw.tween_property(rightArrow, "position", Vector2(1073,480), 0.02);
-		else:
-			tw.tween_property(leftArrow, "position", Vector2(763,480), 0.02);
-			tw.tween_property(rightArrow, "position", Vector2(1125,480), 0.02);
-			
+	curDiff += shit;
+	curDiff = wrapi(curDiff, 0, len(diffs));
+	diffSpr.texture = load("res://assets/images/difficulties/%s.png"%[diffs[curDiff]]);
+	
+	update_weekScore();
+	
+func update_weekScore():
+	week_score = 0;
+	var diff = diffs[curDiff if !curDiff > diffs.size()-1 else 0];
+	
 	for i in songs_weeks[curWeek]:
-		week_score += HighScore.get_score(i[0], "" if diffs[curDiff if !curDiff > diffs.size()-1 else 0] == "normal" else str("-", diffs[curDiff if !curDiff > diffs.size()-1 else 0].to_lower()));
+		var suffix = "";
+		if diff != "normal":
+			suffix = "-" + diff.to_lower();
+		week_score += HighScore.get_score(i[0], suffix);
 		
 func changeWeek(shit):
-	week_score = 0;
 	curWeek += shit;
 	Sound.playAudio("scrollMenu", false);
 	curWeek = wrapi(curWeek, 0, len(new_weeks));
@@ -222,13 +226,13 @@ func changeWeek(shit):
 	for j in new_weeks.size():
 		weeksSpr.get_child(j).modulate.a = 1 if j == curWeek else 0.5;
 		
-func updateWeek():
+	update_weekScore();
 	changeMenuCharacter();
 	
+func updateWeek():
 	SongData.weeks_data = weekJson;
 	
 	var is_unlocked = HighScore.unlockweek(last_weeks[curWeek], last_weeks[curWeek], new_weeks[curWeek], locked_weeks[curWeek]);
-	var is_locked = !is_unlocked;
 	
 	songText.text = '';
 	weekTitle.text = '';
@@ -236,56 +240,65 @@ func updateWeek():
 	diffs = ["easy", "normal", "hard"] if week_difficulties[curWeek] == [] else week_difficulties[curWeek];
 	
 	diffSpr.texture = load("res://assets/images/difficulties/%s.png"%[diffs[curDiff if !curDiff > diffs.size()-1 else 0]]);
-	var tw = get_tree().create_tween();
-	if diffSpr.texture.get_width() < 250:
-		tw.tween_property(leftArrow, "position", Vector2(811,480), 0.02);
-		tw.tween_property(rightArrow, "position", Vector2(1073,480), 0.02);
-	else:
-		tw.tween_property(leftArrow, "position", Vector2(763,480), 0.02);
-		tw.tween_property(rightArrow, "position", Vector2(1125,480), 0.02);
-		
-	locker.visible = is_locked;
-	leftArrow.visible = !is_locked;
-	rightArrow.visible = !is_locked;
-	diffSpr.visible = !is_locked;
-	weeksSpr.get_child(curWeek).modulate = Color.GRAY if is_locked else Color.WHITE;
 	
-	songText.text = "???" if is_locked else "";
+	locker.visible = !is_unlocked;
+	leftArrow.visible = is_unlocked;
+	rightArrow.visible = is_unlocked;
+	diffSpr.visible = is_unlocked;
+	weeksSpr.get_child(curWeek).modulate = Color.GRAY if !is_unlocked else Color.WHITE;
+	
+	songText.text = "???" if !is_unlocked else "";
 	
 	for i in songs_weeks[curWeek]:
-		if is_unlocked:
-			songText.text += i[0].to_upper()+"\n";
-			if songText.text.contains("-"):
-				songText.text = songText.text.replace("-", " ");
-				
+		if !is_unlocked:
+			continue;
+			
+		songText.text += i[0].to_upper()+"\n";
+		if songText.text.contains("-"):
+			songText.text = songText.text.replace("-", " ");
+			
 	weekTitle.text = "week locked" if !is_unlocked else week_description[curWeek];
 	
-	for i in songs_weeks[curWeek]:
-		week_score += HighScore.get_score(i[0], "" if diffs[curDiff if !curDiff > diffs.size()-1 else 0] == "normal" else str("-", diffs[curDiff if !curDiff > diffs.size()-1 else 0].to_lower()));
-		
+	update_weekScore();
+	
 	for i in [menu_gf, menu_bf, menu_opponent]:
+		if i == null:
+			continue;
+			
 		i.modulate = Color("#000000") if !is_unlocked else Color("#ffffff");
 		
 func changeMenuCharacter():
 	var yellow_fellas = {
-		"bf": [yellowBf, menu_bf, 1],
-		"gf": [yellowGf, menu_gf, 2],
-		"opponent": [menu_opponent, menu_opponent, 0]
+		"bf": [menu_bf, 1],
+		"gf": [menu_gf, 2],
+		"opponent": [menu_opponent, 0]
 	};
 	
 	for i in yellow_fellas.keys():
-		var char_spr = yellow_fellas[i][0];
-		var char_grp = yellow_fellas[i][1];
-		var char_index = yellow_fellas[i][2];
+		var char_grp = yellow_fellas[i][0];
+		var char_index = yellow_fellas[i][1];
 		
-		if char_grp != null:
-			for j in char_grp.get_children():
-				char_grp.remove_child(j);
-				j.queue_free();
+		var charName = week_chars[curWeek][char_index];
+		
+		if charName == "":
+			if char_grp.get_child(char_index) != null:
+				char_grp.get_child(char_index).queue_free();
 				
-		if week_chars[curWeek][char_index] != "" && week_chars[curWeek][char_index] != null:
-			char_spr = load("res://assets/images/weekCharacters/Menu_%s.tscn"%[week_chars[curWeek][char_index]]).instantiate();
-			char_grp.add_child(char_spr);
-			char_grp.show();
-		else:
-			char_grp.hide();
+			continue;
+			
+		if char_grp.get_child_count() > 0:
+			if char_grp.get_child(char_index) == null:
+				continue;
+				
+			var curChar = char_grp.get_child(char_index);
+			
+			if charName == curChar.name:
+				continue;
+				
+			curChar.queue_free();
+			
+		var path = "res://assets/images/weekCharacters/Menu_%s.tscn"%[charName];
+		var new_char = load(path).instantiate();
+		new_char.name = charName;
+		char_grp.add_child(new_char);
+		char_grp.show();

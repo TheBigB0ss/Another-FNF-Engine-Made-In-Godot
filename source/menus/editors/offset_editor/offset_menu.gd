@@ -35,7 +35,7 @@ func _ready():
 	
 	Discord.update_discord_info("offset menu", "Is in menus");
 	SongData.isOnDeathScreen = false;
-	MusicManager._play_music(GlobalOptions.updated_pause_music, false, true);
+	MusicManager._play_song(GlobalOptions.updated_pause_music, "music", true);
 	
 	if GlobalOptions.rating_mode == "hud element":
 		for i in [ratingSpr, comboSpr, numsSpr]:
@@ -237,7 +237,7 @@ func _input(ev):
 				set_rating_pos();
 				
 			if ev.keycode in [KEY_ESCAPE]:
-				MusicManager._play_music("freakyMenu", true, true);
+				MusicManager._play_song("freakyMenu", "music", true);
 				Global.changeScene("menus/main_menu/MainMenu", true, false);
 				
 			if !adjusting_rating:

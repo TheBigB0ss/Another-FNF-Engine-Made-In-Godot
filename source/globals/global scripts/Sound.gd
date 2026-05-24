@@ -20,8 +20,8 @@ func add_new_sound(sound, mode, volume = 0.0):
 	
 	new_audio.connect("finished", Callable(self, "_on_sound_finished").bind(new_audio));
 	
-func _on_sound_finished(audio):
-	audio.queue_free();
+func _on_sound_finished(_audio):
+	_audio.queue_free();
 	
 func stopAudio():
 	audio.stop();

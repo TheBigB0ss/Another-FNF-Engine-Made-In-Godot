@@ -23,7 +23,7 @@ var dialogue_array = [];
 var characters_array = [];
 var characters_spr_array = [];
 
-func _ready():
+func start():
 	curSong = SongData.song;
 	
 	if FileAccess.file_exists("res://assets/data/songs/%s/%sDialogue.txt"%[curSong, curSong]):
@@ -55,24 +55,6 @@ func _ready():
 		box_text.modulate = Color("#000000");
 		box_pixel_part = "default";
 		
-	match curSong:
-		"senpai", "roses":
-			box_text.modulate = Color("#692727");
-			box_text.add_theme_color_override("font_shadow_color", Color("#4a1717"));
-			box_text.add_theme_constant_override("shadow_offset_x", 2);
-			box_text.add_theme_constant_override("shadow_offset_y", 2);
-			
-			if !is_joke_dialogue:
-				MusicManager._play_music("Lunchbox", false, true, 1);
-				
-		"thorns":
-			cool_hand.hide();
-			opponentGrp.position = Vector2(220, 240);
-			MusicManager._play_music("LunchboxScary", false, true, 1);
-			
-		_:
-			MusicManager._play_music(GlobalOptions.updated_pause_music, false, true);
-			
 	if is_pixel_box:
 		match curSong:
 			"roses":
@@ -91,23 +73,36 @@ func _ready():
 	if !dialogue_array.is_empty() && !characters_array.is_empty() && !characters_spr_array.is_empty():
 		update_text(dialogue_array[cur_dialogue], characters_array[cur_dialogue], characters_spr_array[cur_dialogue]);
 		
+	match curSong:
+		"senpai", "roses":
+			box_text.modulate = Color("#692727");
+			box_text.add_theme_color_override("font_shadow_color", Color("#4a1717"));
+			box_text.add_theme_constant_override("shadow_offset_x", 2);
+			box_text.add_theme_constant_override("shadow_offset_y", 2);
+			
+			if !is_joke_dialogue:
+				MusicManager._play_song("Lunchbox", "music", true);
+				
+		"thorns":
+			cool_hand.hide();
+			opponentGrp.position = Vector2(220, 240);
+			MusicManager._play_song("LunchboxScary", "music", true);
+		_:
+			MusicManager._play_song(GlobalOptions.updated_pause_music, "music", true);
+			
 	if curSong == "senpai" && is_joke_dialogue:
-		MusicManager._play_music("friend inside me", false, true, 1);
+		MusicManager._play_song("friend inside me", "music", true);
 		
 var is_joke_dialogue = false;
 func getTxt():
 	var txtData = [];
 	var txtTexts = [];
-	var path_file = "res://assets/data/songs/%s/%sDialogue.txt"%[curSong, curSong];
 	
 	match curSong:
 		"senpai", "roses", "thorns":
-			if is_joke() <= 6:
-				is_joke_dialogue = true;
-				path_file =  "res://assets/data/songs/%s/%sDialogue-joke.txt"%[curSong, curSong];
-			else:
-				is_joke_dialogue = false;
-				
+			is_joke_dialogue = is_joke() <= 3000;
+			
+	var path_file = ("res://assets/data/songs/%s/%sDialogue.txt"%[curSong, curSong]) if !is_joke_dialogue else ("res://assets/data/songs/%s/%sDialogue-joke.txt"%[curSong, curSong]);
 	var readTxt = FileAccess.open(path_file, FileAccess.READ);
 	txtData = readTxt.get_as_text().split("\n");
 	
@@ -218,7 +213,9 @@ func update_text(text, _char, char_spr):
 			
 			if char_spr == "spirit":
 				opponent.is_trans = is_joke_dialogue;
-				
+				if opponent.is_trans:
+					opponent.reload();
+					
 			if curSong == "roses":
 				opponentGrp.visible = is_joke_dialogue;
 			else:

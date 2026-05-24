@@ -173,7 +173,8 @@ func _input(ev):
 					
 			if ev.keycode in [KEY_SPACE] && !ev.echo:
 				var inst_shit = songs[cur_song].to_lower() if diffs[cur_diff] != "remix" else str(songs[cur_song].to_lower(),"-remix");
-				MusicManager._play_song(inst_shit + "/Inst", true, true);
+				MusicManager._play_song(inst_shit + "/Inst", "songs", true);
+				
 				
 func beat_hit(beat):
 	for i in songs.size():

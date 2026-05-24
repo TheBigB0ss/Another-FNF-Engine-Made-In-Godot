@@ -30,7 +30,7 @@ var anim_list = [];
 
 func _ready() -> void:
 	Discord.update_discord_info("stage editor", "Is in menus");
-	MusicManager._play_music(GlobalOptions.updated_pause_music, false, true);
+	MusicManager._play_song(GlobalOptions.updated_pause_music, "music", true);
 	element_anim.connect("item_selected",  change_anim);
 	
 	for i in addStageToList():
@@ -123,7 +123,7 @@ func _input(ev) -> void:
 				
 		if ev.pressed && !ev.echo:
 			if ev.keycode in [KEY_ESCAPE] && !ev.echo:
-				MusicManager._play_music("freakyMenu", true, true);
+				MusicManager._play_song("freakyMenu", "music", true);
 				Global.changeScene("menus/main_menu/MainMenu", true, false);
 				
 func update_canera_offset(x, y):

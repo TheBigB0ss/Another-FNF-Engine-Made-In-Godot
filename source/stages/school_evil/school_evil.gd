@@ -33,8 +33,8 @@ func start_cutscene():
 	Global.is_on_video = true;
 	is_in_cutscene = true;
 	senpai_timer.start(0.6);
-	MusicManager.process_mode = 2;
-	MusicManager._play_music("LunchboxScary", false, true);
+	
+	MusicManager._play_song("LunchboxScary", "music", true);
 	
 func end_cutscene():
 	Global.is_on_video = false;

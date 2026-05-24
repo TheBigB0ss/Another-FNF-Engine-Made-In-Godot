@@ -1,19 +1,13 @@
-extends AudioStreamPlayer2D
+extends AudioStreamPlayer
 
 var music_loop = false;
 
-func _play_music(to_load, music_top_level, loop, volume = 0.0):
-	stream = load("res://assets/music/%s.ogg"%[to_load]);
-	top_level = music_top_level;
+func _play_song(to_load, path, loop, volume = 0.0, mode = PROCESS_MODE_INHERIT):
+	stream = load("res://assets/%s/%s.ogg"%[path, to_load]);
 	volume_db = volume;
 	music_loop = loop;
-	play(0.0);
+	process_mode = mode;
 	
-func _play_song(to_load, music_top_level, loop, volume = 0.0):
-	stream = load("res://assets/songs/%s.ogg"%[to_load]);
-	top_level = music_top_level;
-	volume_db = volume;
-	music_loop = loop;
 	play(0.0);
 	
 func _process(_delta: float) -> void:
