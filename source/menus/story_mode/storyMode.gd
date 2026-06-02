@@ -83,14 +83,13 @@ func _ready():
 			
 	changeMenuCharacter();
 	changeDiff(1);
-	changeWeek(Global.cur_thing);
+	changeWeek(curWeek);
 	
 var choiced = false;
 func _input(ev):
 	if ev is InputEventKey:
 		if Global.can_use_menus:
 			if ev.keycode in [GlobalOptions.get_key("escape")] && ev.pressed && !ev.echo:
-				Global.cur_thing = 0;
 				Global.changeScene("menus/main_menu/MainMenu", true, false);
 				
 			if ev.keycode in [GlobalOptions.get_key("ui_down")] && ev.pressed && !noSpam && !ev.echo:
@@ -220,7 +219,6 @@ func changeWeek(shit):
 	curWeek += shit;
 	Sound.playAudio("scrollMenu", false);
 	curWeek = wrapi(curWeek, 0, len(new_weeks));
-	Global.cur_thing = curWeek;
 	updateWeek();
 	
 	for j in new_weeks.size():
@@ -297,7 +295,7 @@ func changeMenuCharacter():
 				
 			curChar.queue_free();
 			
-		var path = "res://assets/images/weekCharacters/Menu_%s.tscn"%[charName];
+		var path = "res://source/characters/characters_storyMode/Menu_%s.tscn"%[charName];
 		var new_char = load(path).instantiate();
 		new_char.name = charName;
 		char_grp.add_child(new_char);

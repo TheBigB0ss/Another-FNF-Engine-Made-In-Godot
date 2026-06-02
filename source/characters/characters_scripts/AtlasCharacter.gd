@@ -116,16 +116,26 @@ func _process(delta):
 	if !Engine.is_editor_hint():
 		character_process(delta);
 		
+var prevState = null;
+var curNote:Note = null;
 func character_process(delta):
+	loop_anim();
+	
+	var oldState = characterState;
+	prevState = oldState;
+	
+	if curAnim.contains("sing"):
+		var longNote = curNote.sustainLength > 0 if is_instance_valid(curNote) else false;
+		var isHolding = !(curNote.sustainLength <= 0 or curNote.missedLongNote) if is_instance_valid(curNote) else false;
+		characterState = (CHARACTER_STATES.HOLDING if isHolding else CHARACTER_STATES.IDLE) if longNote else CHARACTER_STATES.SINGING;
+		
 	if (curAnim.begins_with("sing") or curAnim.contains("sing") or special_anim) && characterState != CHARACTER_STATES.HOLDING:
-		characterState = CHARACTER_STATES.IDLE;
 		idleTimer += delta;
 		
 	if SongData.is_not_in_cutscene && !Global.is_on_video:
 		if idleTimer >= Conductor.stepCrochet * anim_time * 0.001:
 			if curAnim.contains("sing") or special_anim:
 				dance();
-				frame = newFrame;
 				idleTimer = 0;
 				
 var can_dance = false;
@@ -135,6 +145,7 @@ func dance():
 	if have_anims:
 		can_dance = !can_dance;
 		_playAnim("danceRight" if can_dance else "danceLeft");
+		characterState = CHARACTER_STATES.IDLE;
 		
 	if animList.has("idle dance"):
 		_playAnim("idle dance");
@@ -142,10 +153,16 @@ func dance():
 var current_anim = "";
 var newLimit = 0;
 var newFrame = 0;
-func _playAnim(anim="", note:Note = null):
+func _playAnim(anim = ""):
 	playing = true;
-	var longNote = note.isSustain if is_instance_valid(note) else false;
 	for i in animList.size():
+		if characterState == CHARACTER_STATES.HOLDING:
+			if !is_instance_valid(curNote):
+				return;
+				
+			if anim.begins_with("sing") && curNote.curNoteAnim != anim:
+				anim = curNote.curNoteAnim;
+				
 		if animList[i] != anim:
 			continue;
 			
@@ -159,12 +176,7 @@ func _playAnim(anim="", note:Note = null):
 		anim_time = anims_timer[anim][1];
 		special_anim = anims_timer[anim][2];
 		
-		var prevState = characterState;
-		
-		if animList[i].contains("sing"):
-			characterState = (CHARACTER_STATES.IDLE if note.sustainLength <= 0 or note.missedLongNote else CHARACTER_STATES.HOLDING) if longNote else CHARACTER_STATES.SINGING;
-			
-		elif special_anim:
+		if special_anim:
 			characterState = CHARACTER_STATES.SPECIAL;
 			
 		elif curAnim == "idle dance":
@@ -174,8 +186,6 @@ func _playAnim(anim="", note:Note = null):
 		if characterState != CHARACTER_STATES.IDLE:
 			match characterState:
 				CHARACTER_STATES.HOLDING:
-					if prevState != CHARACTER_STATES.HOLDING or (current_anim != posesList[i] && curAnim != "idle dance" && curAnim != "hit"):
-						frame = newFrame;
 					if prevState != CHARACTER_STATES.HOLDING:
 						frame = newFrame;
 						
@@ -185,8 +195,6 @@ func _playAnim(anim="", note:Note = null):
 		if animList[i].begins_with("sing") or charData["Poses"][i].has("Anim Time"):
 			idleTimer = 0;
 			
-		loop_anim();
-		
 		if current_anim == posesList[i] && animList[i].begins_with("sing") && characterState != CHARACTER_STATES.SINGING:
 			return;
 			

@@ -13,7 +13,7 @@ var spriteStuff = {};
 		};
 		reload();
 		
-@export_range(0.1, 5.0, 0.1) var speed = 1.0;
+@export_range(0.1, 5.0, 0.001) var speed = 1.0;
 @export var frame = 0;
 @export var playing = true;
 @export var loop = false;
@@ -145,8 +145,11 @@ func create_sprite(data, keyID, index, spriteTransform):
 	spr.z_index = spriteZIndex;
 	spriteZIndex += 1;
 	
-var timer = 0.0;
 func _process(delta: float) -> void:
+	atlas_process(delta);
+	
+var timer = 0.0;
+func atlas_process(delta: float) -> void:
 	if animationData.is_empty():
 		return;
 		
@@ -167,10 +170,10 @@ func _process(delta: float) -> void:
 	spriteZIndex = 0;
 	
 	for i in symbols_elements.keys():
-		#symbols_elements[i].visible = false;
-		symbols_elements[i].queue_free();
+		symbols_elements[i].visible = false;
+		#symbols_elements[i].queue_free();
 		
-	symbols_elements.clear();
+	#symbols_elements.clear();
 	
 	var layers = animationData["AN"]["TL"]["L"].duplicate();
 	layers.reverse();

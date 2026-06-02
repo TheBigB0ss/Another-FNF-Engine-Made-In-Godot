@@ -10,7 +10,7 @@ func _ready():
 	
 	song = SongData.week_songs[0];
 	
-	death_anim = load("res://source/characters/Bf dead.tscn" if SongData.characters["bf"][3] == null or !SongData.characters["bf"][4] else SongData.characters["bf"][3]).instantiate();
+	death_anim = load("res://source/characters/characters_scenes/Bf dead.tscn" if SongData.characters["bf"][3] == null or !SongData.characters["bf"][4] else SongData.characters["bf"][3]).instantiate();
 	death_anim.global_position = SongData.characters["bf"][0];
 	death_anim.scale = SongData.characters["bf"][1];
 	death_anim.rotation = SongData.characters["bf"][2];

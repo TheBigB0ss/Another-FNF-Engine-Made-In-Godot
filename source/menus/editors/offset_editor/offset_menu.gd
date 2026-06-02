@@ -88,7 +88,7 @@ func change_character(_char):
 	characterData = [];
 	characterJson = {};
 	
-	var character = load("res://source/characters/%s.tscn"%[character_list[characters_options.selected]]).instantiate();
+	var character = load("res://source/characters/characters_scenes/%s.tscn"%[character_list[characters_options.selected]]).instantiate();
 	characterGrp.add_child(character);
 	
 	for i in characterGrp.get_children():

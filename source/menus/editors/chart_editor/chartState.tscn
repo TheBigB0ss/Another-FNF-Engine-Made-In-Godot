@@ -2,10 +2,17 @@
 
 [ext_resource type="Script" uid="uid://bsv6b7kj5cykg" path="res://source/menus/editors/chart_editor/chartState.gd" id="1_0k01q"]
 [ext_resource type="Texture2D" uid="uid://bx5opmuyd8cpm" path="res://assets/images/menuBgs/chart_BG.png" id="2_nlb02"]
+[ext_resource type="Shader" uid="uid://chi6jamggry1k" path="res://source/shaders/backdrops shaders/backdrop2.gdshader" id="2_qx6eb"]
 [ext_resource type="Script" uid="uid://g5ydanm2cc3t" path="res://source/menus/editors/chart_editor/grid.gd" id="3_nvrt8"]
+[ext_resource type="Texture2D" uid="uid://dsjjxpfhq7j7" path="res://assets/images/backdrop1.png" id="3_orogo"]
 [ext_resource type="PackedScene" uid="uid://bs3bmha3d0luc" path="res://source/menus/editors/chart_editor/characters/chart-bf.tscn" id="6_ewqos"]
 [ext_resource type="Texture2D" uid="uid://butl2egj5i38n" path="res://assets/images/hud/timeBar.png" id="6_w8f1m"]
 [ext_resource type="PackedScene" uid="uid://f0c72kmnsor3" path="res://source/menus/editors/chart_editor/characters/enemy_chart.tscn" id="7_w8f1m"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hab41"]
+shader = ExtResource("2_qx6eb")
+shader_parameter/tile_size = 100.0
+shader_parameter/scroll_speed = Vector2(0.5, 0.5)
 
 [node name="ChartState" type="Node2D" unique_id=1858587677]
 script = ExtResource("1_0k01q")
@@ -32,6 +39,12 @@ offset_left = 242.0
 offset_top = 17.0
 offset_right = 282.0
 offset_bottom = 57.0
+
+[node name="backDropBg" type="Sprite2D" parent="grid_objs" unique_id=370067848]
+material = SubResource("ShaderMaterial_hab41")
+position = Vector2(398, 342.99997)
+scale = Vector2(15.67, 15.67)
+texture = ExtResource("3_orogo")
 
 [node name="grid" type="Node2D" parent="grid_objs" unique_id=1572215888]
 position = Vector2(360, 80)
@@ -98,43 +111,40 @@ layout_mode = 0
 offset_left = 2.0
 offset_top = 192.0
 offset_right = 391.0
-offset_bottom = 694.0
+offset_bottom = 715.0
 tab_alignment = 1
-current_tab = 3
+current_tab = 0
 all_tabs_in_front = true
 
 [node name="help" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=577019770]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
 [node name="chart_info" type="Label" parent="chart_UI/chart_objs/TabContainer/help" unique_id=850742220]
 layout_mode = 0
 offset_left = 1.9999995
-offset_top = -1.0000019
-offset_right = 496.0
-offset_bottom = 438.0
+offset_top = 14.0
+offset_right = 508.0
+offset_bottom = 479.0
 scale = Vector2(0.755, 0.755)
 text = "- Press A / D to change section
-
-- Hold CTRL and click to place a note
-
+- Hold CTRL and click to place a note on both grids
+- Hold SHIFT and click to place a note in any Y position
 - Click and drag to select notes, then press CTRL + C / CTRL + V
-to copy and paste
-
+   to copy and paste. (also you can select which \"grid\" you want to 
+   paste the notes by just overlaping your mouse on it)
 - Press Q / E to change note length
-
 - Press SPACE to play / pause the song
-
 - Use W / S or the mouse wheel to scroll through the grid
-
 - Click and drag to select notes, then press DEL to delete them
+
+
 
               chart preview:
 "
 
 [node name="preview" type="Node2D" parent="chart_UI/chart_objs/TabContainer/help" unique_id=48762639]
-position = Vector2(40, -15)
+position = Vector2(39, -37)
 
 [node name="ColorRect" type="ColorRect" parent="chart_UI/chart_objs/TabContainer/help/preview" unique_id=974319065]
 offset_left = 6.0000076
@@ -154,10 +164,10 @@ scale = Vector2(0.3, 0.3)
 
 [node name="timeBar" type="TextureProgressBar" parent="chart_UI/chart_objs/TabContainer/help" unique_id=882178308]
 layout_mode = 0
-offset_left = 17.0
-offset_top = 452.99997
-offset_right = 417.0
-offset_bottom = 471.99997
+offset_left = 22.0
+offset_top = 445.99997
+offset_right = 422.0
+offset_bottom = 464.99997
 scale = Vector2(0.85, 0.85)
 texture_under = ExtResource("6_w8f1m")
 texture_progress = ExtResource("6_w8f1m")
@@ -248,11 +258,12 @@ text = "alt anim?"
 [node name="new_bpm" type="SpinBox" parent="chart_UI/chart_objs/TabContainer/section" unique_id=1438813343]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 139.0
-offset_top = 133.0
-offset_right = 222.063
-offset_bottom = 164.0
+offset_left = 5.0
+offset_top = 163.0
+offset_right = 91.5
+offset_bottom = 194.0
 max_value = 5000.0
+editable = false
 
 [node name="bpm_change" type="CheckBox" parent="chart_UI/chart_objs/TabContainer/section" unique_id=1703721649]
 unique_name_in_owner = true
@@ -275,20 +286,21 @@ value = 16.0
 [node name="clear_section" type="Button" parent="chart_UI/chart_objs/TabContainer/section" unique_id=68355817]
 layout_mode = 0
 offset_left = 5.0
-offset_top = 176.0
+offset_top = 199.0
 offset_right = 116.0
-offset_bottom = 207.0
+offset_bottom = 230.0
 text = "clear section"
 
 [node name="add_section" type="Button" parent="chart_UI/chart_objs/TabContainer/section" unique_id=256267654]
 layout_mode = 0
 offset_left = 5.0
-offset_top = 215.0
+offset_top = 238.0
 offset_right = 116.0
-offset_bottom = 246.0
+offset_bottom = 269.0
 text = "add section"
 
 [node name="note" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=468888128]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
@@ -455,18 +467,18 @@ text = "song difficulty:"
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 2.0
-offset_top = 161.0
+offset_top = 147.0
 offset_right = 137.0
-offset_bottom = 192.0
+offset_bottom = 178.0
 text = "is pixel stage?"
 
 [node name="have_voice_track" type="CheckBox" parent="chart_UI/chart_objs/TabContainer/song" unique_id=574438537]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 2.0
-offset_top = 130.0
+offset_top = 116.0
 offset_right = 127.0
-offset_bottom = 161.0
+offset_bottom = 147.0
 button_pressed = true
 text = "have voices?"
 
@@ -474,9 +486,9 @@ text = "have voices?"
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 2.0
-offset_top = 192.0
+offset_top = 178.0
 offset_right = 154.0
-offset_bottom = 223.0
+offset_bottom = 209.0
 text = "two opponents?"
 
 [node name="load_json" type="Button" parent="chart_UI/chart_objs/TabContainer/song" unique_id=653823735]
@@ -506,90 +518,90 @@ text = "save events"
 [node name="player1" type="OptionButton" parent="chart_UI/chart_objs/TabContainer/song" unique_id=1038043829]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 252.0
+offset_top = 235.0
 offset_right = 117.0
-offset_bottom = 277.64102
+offset_bottom = 260.64102
 scale = Vector2(0.93, 0.93)
 
 [node name="player1_text" type="Label" parent="chart_UI/chart_objs/TabContainer/song" unique_id=1331302819]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 228.0
+offset_top = 211.0
 offset_right = 69.0
-offset_bottom = 251.0
+offset_bottom = 234.0
 text = "player 1:"
 
 [node name="player2" type="OptionButton" parent="chart_UI/chart_objs/TabContainer/song" unique_id=624053094]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 315.0
+offset_top = 287.0
 offset_right = 117.0
-offset_bottom = 340.641
+offset_bottom = 312.641
 scale = Vector2(0.93, 0.93)
 
 [node name="player2_text" type="Label" parent="chart_UI/chart_objs/TabContainer/song" unique_id=1031692571]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 292.0
+offset_top = 264.0
 offset_right = 69.0
-offset_bottom = 315.0
+offset_bottom = 287.0
 text = "player 2:"
 
 [node name="player3" type="OptionButton" parent="chart_UI/chart_objs/TabContainer/song" unique_id=739856938]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 374.0
+offset_top = 340.0
 offset_right = 117.0
-offset_bottom = 399.641
+offset_bottom = 365.641
 scale = Vector2(0.93, 0.93)
 disabled = true
 
 [node name="player3_text" type="Label" parent="chart_UI/chart_objs/TabContainer/song" unique_id=1129614674]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 351.0
+offset_top = 317.0
 offset_right = 69.0
-offset_bottom = 374.0
+offset_bottom = 340.0
 text = "player 3:"
 
 [node name="gf" type="OptionButton" parent="chart_UI/chart_objs/TabContainer/song" unique_id=519130875]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 431.0
+offset_top = 395.0
 offset_right = 117.0
-offset_bottom = 456.641
+offset_bottom = 420.641
 scale = Vector2(0.93, 0.93)
 
 [node name="gf_text" type="Label" parent="chart_UI/chart_objs/TabContainer/song" unique_id=1769217919]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 408.0
+offset_top = 372.0
 offset_right = 69.0
-offset_bottom = 431.0
+offset_bottom = 395.0
 text = "Gf:"
 
 [node name="stage" type="OptionButton" parent="chart_UI/chart_objs/TabContainer/song" unique_id=725930630]
 layout_mode = 0
-offset_left = 197.0
-offset_top = 252.0
-offset_right = 312.0
-offset_bottom = 277.641
+offset_left = 1.0
+offset_top = 447.0
+offset_right = 116.0
+offset_bottom = 472.641
 scale = Vector2(0.93, 0.93)
 
 [node name="stage_text" type="Label" parent="chart_UI/chart_objs/TabContainer/song" unique_id=1240084408]
 layout_mode = 0
-offset_left = 198.0
-offset_top = 230.0
-offset_right = 265.0
-offset_bottom = 253.0
+offset_left = 2.0
+offset_top = 425.0
+offset_right = 69.0
+offset_bottom = 448.0
 text = "stage:"
 
 [node name="chart_info" type="Label" parent="chart_UI/chart_objs" unique_id=1099617167]
 layout_mode = 0
 offset_left = -24.0
-offset_top = 708.0
-offset_right = 213.0
-offset_bottom = 757.0
+offset_top = 752.0
+offset_right = 220.0
+offset_bottom = 801.0
 text = "0:00/0:00
 Section: %s - Step: %s - Beat: %s"
 
@@ -611,6 +623,7 @@ position = Vector2(640, 360)
 [connection signal="pressed" from="chart_UI/chart_objs/TabContainer/section/clear_section" to="." method="_on_clear_section_pressed"]
 [connection signal="pressed" from="chart_UI/chart_objs/TabContainer/section/add_section" to="." method="_on_add_section_pressed"]
 [connection signal="value_changed" from="chart_UI/chart_objs/TabContainer/note/note_sustain_lenght" to="." method="_on_note_sustain_lenght_value_changed"]
+[connection signal="toggled" from="chart_UI/chart_objs/TabContainer/song/new_opponent" to="." method="_on_new_opponent_toggled"]
 [connection signal="pressed" from="chart_UI/chart_objs/TabContainer/song/load_json" to="." method="load_song_json"]
 [connection signal="pressed" from="chart_UI/chart_objs/TabContainer/song/save_json" to="." method="save_file"]
 [connection signal="pressed" from="chart_UI/chart_objs/TabContainer/song/save_events_json" to="." method="_on_save_events_json_pressed"]

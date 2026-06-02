@@ -40,9 +40,9 @@ func _ready():
 		
 	set_color();
 	
-func _process(delta):
+func _process(_delta):
 	if itsBuddysPart:
-		game.opponentStrum.position.x = lerp(game.opponentStrum.position.x, -850.0, 0.05);
+		game.opponentStrum.modulate.a = lerp(game.opponentStrum.modulate.a, 0.0, 0.05);
 		
 		call_func("cam_follow_poses", [darnell]);
 		call_func("cam_follow_poses", [nene]);
@@ -81,7 +81,7 @@ func beat_hit(beat) -> void:
 				darnell.show();
 				funny_guy();
 				
-func step_hit(step) -> void:
+func step_hit(_step) -> void:
 	if SongData.isPlaying:
 		if itsBuddysPart && game.curSong == "philly-nice-remix" && game.songDiff == "remix":
 			if game.camera_on_Bf:

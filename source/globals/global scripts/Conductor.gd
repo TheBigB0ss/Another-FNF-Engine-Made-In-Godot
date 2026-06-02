@@ -28,7 +28,7 @@ func _process(_delta):
 	var last_change = [0, 0, 0];
 	for i in bpmChangeMap:
 		if getSongTime >= i[1]:
-			last_change = i
+			last_change = i;
 			
 	curStep = last_change[0] + floor((getSongTime - last_change[1]) / stepCrochet);
 	curBeat = floor(curStep / 4);

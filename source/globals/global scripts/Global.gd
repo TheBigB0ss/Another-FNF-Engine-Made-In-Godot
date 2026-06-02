@@ -1,6 +1,5 @@
 extends Node
 
-var cur_thing = 0;
 var finished_intro = false;
 var can_use_menus = true;
 var is_on_video = false;

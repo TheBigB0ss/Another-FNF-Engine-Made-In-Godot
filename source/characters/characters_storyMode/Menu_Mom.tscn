@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://c1yci13mmr640"]
+
+[ext_resource type="SpriteFrames" uid="uid://kha5yatb8ryq" path="res://assets/images/weekCharacters/Menu_Mom.res" id="1_vyxjf"]
+
+[node name="menu_mom" type="AnimatedSprite2D"]
+scale = Vector2(0.9, 0.9)
+sprite_frames = ExtResource("1_vyxjf")
+animation = &"M Mom Idle"
+autoplay = "M Mom Idle"

@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://8ln1gx0yqr54"]
+
+[ext_resource type="SpriteFrames" uid="uid://cml37cc78h0tb" path="res://assets/images/portraits/characters/senpaiPortrait.res" id="1_gl0q6"]
+
+[node name="senpaiPortrait" type="AnimatedSprite2D"]
+texture_filter = 1
+scale = Vector2(5.4, 5.4)
+sprite_frames = ExtResource("1_gl0q6")
+animation = &"enter"
+autoplay = "enter"

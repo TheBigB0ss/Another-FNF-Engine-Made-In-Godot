@@ -15,11 +15,12 @@ var ghost_tapping = true;
 var low_quality = false;
 var time_bar_alpha = 1.0;
 var health_bar_alpha = 1.0;
-var show_fps = true;
 var full_screen = false;
 var volume = 1;
 var isUsingBot = false;
+var playMissSound = true;
 
+var debugTextMode = "simple";
 var updated_pause_music = "pause song";
 var updated_hud = "new hud";
 var updated_cam = "normal";
@@ -67,7 +68,7 @@ func _ready():
 		for j in keys.keys():
 			keys_list.append(j);
 			
-	if !settingsJson.has("version") or settingsJson["version"] != 4:
+	if !settingsJson.has("version") or settingsJson["version"] != 6:
 		reset_settings();
 		
 	apply_changes();
@@ -96,7 +97,7 @@ func load_settings():
 		
 func reset_settings():
 	settingsJson = {
-		"version": 4,
+		"version": 6,
 		"meta":{
 			"rating_pos": [635, 235],
 			"combo_pos": [695, 285],
@@ -109,13 +110,15 @@ func reset_settings():
 			"vsync": true,
 			"fullscreen": false,
 			"low quality": false,
-			"use shader": true
+			"use shader": true,
+			"debug text mode": "simple"
 		},
 		"gameplay": {
 			"down scroll": false,
 			"middle scroll": false,
 			"ghost tapping": true,
 			"r to restart": false,
+			"play miss sound": true,
 			"pause music": "pause song",
 			"camera mode": "normal"
 		},
@@ -128,7 +131,6 @@ func reset_settings():
 			"screen zoom": true,
 			"show splashes": true,
 			"show song card": true,
-			"show fps": true,
 			"show rating label": false,
 			"health bar alpha": 1.0
 		},
@@ -172,6 +174,10 @@ func reset_settings():
 			"time bar type": {
 				"list": ["default", "time left", "time elapsed", "disable"],
 				"index": 0
+			},
+			'debug text mode':{
+				"list": ["simple", "complex", "disable"],
+				"index": 0
 			}
 		}
 	};
@@ -204,6 +210,7 @@ func apply_changes():
 	middle_scroll = settingsJson["gameplay"]["middle scroll"];
 	ghost_tapping = settingsJson["gameplay"]["ghost tapping"];
 	restart_action = settingsJson["gameplay"]["r to restart"];
+	playMissSound = settingsJson["gameplay"]["play miss sound"];
 	
 	vsync = settingsJson["graphics"]["vsync"];
 	low_quality = settingsJson["graphics"]["low quality"];
@@ -211,12 +218,12 @@ func apply_changes():
 	uncap_fps = settingsJson["graphics"]["uncap fps"];
 	full_screen = settingsJson["graphics"]["fullscreen"];
 	use_shader = settingsJson["graphics"]["use shader"];
+	debugTextMode = settingsJson["graphics"]["debug text mode"];
 	
 	hide_hud = settingsJson["visual"]["hide hud"];
 	#time_bar_alpha = settingsJson["visual"]["time bar alpha"];
 	timeBar_mode = settingsJson["visual"]["time bar type"];
 	health_bar_alpha = settingsJson["visual"]["health bar alpha"];
-	show_fps = settingsJson["visual"]["show fps"];
 	show_splashes = settingsJson["visual"]["show splashes"];
 	show_songCard = settingsJson["visual"]["show song card"];
 	screen_zoom = settingsJson["visual"]["screen zoom"];
@@ -302,13 +309,17 @@ func set_options():
 				"value": settingsJson["graphics"]["uncap fps"],
 				"description": "uncap fps?"
 			},
+			"debug text mode":{
+				"value": settingsJson["options"]["debug text mode"]["list"],
+				"description": "select the debug text mode"
+			},
 			"vsync": {
 				"value": settingsJson["graphics"]["vsync"],
 				"description": "disable vsync?"
 			},
 			"low quality": {
 				"value": settingsJson["graphics"]["low quality"],
-				"description": "it helps... I guess..."
+				"description": "disable some elements for better performance"
 			},
 			"use shader": {
 				"value": settingsJson["graphics"]["use shader"],
@@ -398,10 +409,6 @@ func set_options():
 				"description": "time bar mode",
 				"ID": settingsJson["options"]["time bar type"]["index"]
 			},
-			"show fps":{
-				"value": settingsJson["visual"]["show fps"], 
-				"description": "show fps count"
-			},
 			"show splashes":{
 				"value": settingsJson["visual"]["show splashes"],
 				"description": "show note splashes"
@@ -440,9 +447,13 @@ func set_options():
 				"value": settingsJson["gameplay"]["middle scroll"],
 				"description": "middle scroll mode"
 			},
-			"r to restart":{
+			"r to restart": {
 				"value": settingsJson["gameplay"]["r to restart"],
 				"description": "press R for an instant and painless death"
+			},
+			"play miss sound": {
+				"value": settingsJson["gameplay"]["play miss sound"],
+				"description": "play a sound clue when you missed a note"
 			},
 			"camera mode": {
 				"value": settingsJson["options"]["camera mode"]["list"],

@@ -73,3 +73,4 @@ func _playAnim(anim):
 func bf_loop_anim():
 	if SongData.isOnDeathScreen:
 		_playAnim("dead loop");
+		

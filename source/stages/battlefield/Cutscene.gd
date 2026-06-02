@@ -14,6 +14,12 @@ var song = "";
 
 signal cutsceneEnding;
 
+#FUCK THIS CUTSCENe >:(
+
+func _ready() -> void:
+	if !SongData.isStoryMode:
+		self.hide();
+		
 func _process(_delta: float) -> void:
 	if pico_anim.frame >= 182:
 		pico_anim.frame = 169;
@@ -33,8 +39,12 @@ func ugh_intro():
 	tankmanCutscene.frame = 0;
 	tankmanCutscene.limit = 80;
 	
+	bf_anim.hide();
+	opponent_anim.hide();
 	SongData.is_not_in_cutscene = false;
 	Global.is_on_video = true;
+	
+	#$AnimationPlayer.play("ugh");
 	
 	opponent_anim.hide();
 	camera.zoom = Vector2(0.9, 0.9);
@@ -63,7 +73,7 @@ func ugh_intro():
 	opponent_anim.show();
 	camera.zoom = lerp(camera.zoom, Vector2(0.8, 0.8), 0.2);
 	
-	self.emit_signal("cutsceneEnding");
+	finish_cutscene();
 	
 func guns_intro():
 	tankmanCutscene.show();
@@ -71,8 +81,12 @@ func guns_intro():
 	tankmanCutscene.frame = 227;
 	tankmanCutscene.limit = 506;
 	
+	cutSceneBf.hide();
+	opponent_anim.hide();
 	SongData.is_not_in_cutscene = false;
 	Global.is_on_video = true;
+	
+	#$AnimationPlayer.play("guns");
 	
 	opponent_anim.hide();
 	camera.zoom = Vector2(0.9, 0.9);
@@ -89,7 +103,7 @@ func guns_intro():
 	opponent_anim.show();
 	camera.zoom = lerp(camera.zoom, Vector2(0.8, 0.8), 0.2);
 	
-	self.emit_signal("cutsceneEnding");
+	finish_cutscene();
 	
 func stress_intro():
 	tankmanCutscene.show();
@@ -107,6 +121,8 @@ func stress_intro():
 	bf_anim.hide();
 	gf_anim.hide();
 	opponent_anim.hide();
+	
+	#$AnimationPlayer.play("stress");
 	
 	await get_tree().create_timer(0.1).timeout
 	camera.position = Vector2(280, 698);
@@ -160,11 +176,33 @@ func stress_intro():
 	camera.position_smoothing_enabled = true;
 	camera.zoom = lerp(camera.zoom, Vector2(0.8, 0.8), 0.2);
 	
-	bf_anim.z_index = SongData.stageData["bf Z_Index"];
+	finish_cutscene();
 	
+func finish_cutscene():
+	bf_anim.show();
 	opponent_anim.show();
-	pico_anim.hide();
 	gf_anim.show();
-	
+	if song  == "stress":
+		bf_anim.z_index = SongData.stageData["bf Z_Index"];
+		
 	self.emit_signal("cutsceneEnding");
+	
+func playGFAnim(anim):
+	gf_anim._playAnim(anim);
+	
+func playBFAnim(anim):
+	bf_anim._playAnim(anim);
+	
+func set_bf_visible():
+	bf_anim.show();
+	
+func set_pico_part(toggle):
+	is_pico_part = toggle;
+	if toggle:
+		pico_anim.frame = 0;
+		
+func set_cam_pos(x, y, smooth = true, zoom = Vector2.ONE):
+	camera.position = Vector2(x, y);
+	camera.position_smoothing_enabled = smooth;
+	camera.zoom = lerp(camera.zoom, zoom, 0.10);
 	

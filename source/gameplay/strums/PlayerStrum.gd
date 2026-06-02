@@ -127,8 +127,9 @@ func _process(delta):
 	notesList = notesList.filter(func(note): return note != null);
 	
 	for note in notesList:
-		if note == null or note.missed or !note.isPlayer: continue;
-		
+		if note == null or note.missed or !note.isPlayer:
+			continue;
+			
 		var key = "ui_" + note.custom_note_dir;
 		
 		if GlobalOptions.isUsingBot:
@@ -141,8 +142,9 @@ func _process(delta):
 				if note.sustainLength == 0:
 					notes_to_delete.append(note);
 				else:
-					if !note.is_pressing: continue;
-					
+					if !note.is_pressing:
+						continue;
+						
 					if note.sustainLength <= 0:
 						note.is_pressing = false;
 						notes_to_delete.append(note);
@@ -156,8 +158,9 @@ func _process(delta):
 				emit_signal("canPress", int(note.noteData));
 				delete_note(note.custom_note_dir);
 				
-			if note.sustainLength <= 0 or !note.isSustain: continue;
-			
+			if note.sustainLength <= 0 or !note.isSustain:
+				continue;
+				
 			if Input.is_action_pressed(key) && note.missedLongNote && !note.missed && note.missTimer <= 0:
 				if note.sustainLength <= 0:
 					note.is_pressing = false;
@@ -166,8 +169,9 @@ func _process(delta):
 					note.is_pressing = true;
 					note.missTimer = 0.0;
 					
-		if !note.is_pressing: continue;
-		
+		if !note.is_pressing:
+			continue;
+			
 		if !Input.is_action_pressed(key):
 			note.missedLongNote = true;
 			note.release_time = Conductor.getSongTime;
@@ -212,6 +216,7 @@ func input_Arrow(key_to_press, ass_note):
 			ass_note.play_note_anim("press");
 			
 			if ass_note.tap:
+				ass_note.curNoteAnim = ass_note.NOTES_ANIM[ass_note.noteData];
 				get_tree().current_scene.call("playBfMissAnim", ass_note);
 				GlobalOptions.emit_signal("ghost_tapping_miss", ass_note);
 				
@@ -254,7 +259,6 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer,
 	note.is_hey_note = (type == "Hey!");
 	note.isPlayer = is_a_player_note;
 	note.must_press = note.isPlayer;
-	note.isSustain = note.sustainLength > 0.0;
 	
 	if value1 != null && value2 != null && note.type == "Echo Note":
 		note.manyHits = value1;
@@ -268,6 +272,7 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer,
 	note.modulate.a = strumNode.get_child(note.noteData).modulate.a;
 	note.strum_positions.y = strumNode.position.y + strumNode.get_child(note.noteData).position.y;
 	note.position.x = strumNode.position.x + strumNode.get_child(note.noteData).position.x;
+	
 	if note.note != null:
 		note.note.offset = strumNode.get_child(note.noteData).note.offset;
 		
@@ -308,7 +313,6 @@ func delete_note(note_direction):
 					new_note.miss_note();
 					
 				new_note.queue_free();
-				note.note_pressed = true;
 				notes_to_delete.append(note);
 			else:
 				if new_note.note != null:

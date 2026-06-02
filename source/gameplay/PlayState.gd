@@ -77,13 +77,6 @@ var playlist = [];
 var songDiff = [];
 var isStoryMode = false;
 
-var singAnims = [
-	"singLeft", 
-	"singDown", 
-	"singUp", 
-	"singRight"
-];
-
 @onready var sectionCamera = $"Camera2D";
 
 var camera_position = Vector2();
@@ -303,7 +296,7 @@ func _ready():
 		if !GlobalOptions.middle_scroll:
 			playerStrum.position.x -= 80;
 			
-		newOpponentStrum.position.x -= 35;
+		newOpponentStrum.position.x -= 40;
 		scoreText.text = 'Score: %s'%[int(score)];
 		scoreText.position = Vector2(620, 680);
 		scoreText.scale = Vector2(0.03, 0.03);
@@ -314,7 +307,7 @@ func add_character(position, z_index, path, child_id):
 	if path == "none":
 		return;
 		
-	var new_char = load("res://source/characters/" + path + ".tscn").instantiate();
+	var new_char = load("res://source/characters/characters_scenes/" + path + ".tscn").instantiate();
 	new_char.position = position;
 	new_char.z_index = z_index;
 	add_child(new_char);
@@ -401,7 +394,8 @@ func _process(delta: float) -> void:
 		botplayText.hide();
 		
 	for i in [dad, gf, bf, new_opponent]:
-		if i == null: continue;
+		if i == null:
+			continue;
 		cam_follow_poses(i);
 		
 	var curMinutes = str(int(inst.get_playback_position()) / 60).pad_zeros(1);
@@ -492,8 +486,7 @@ func pressedNote(note):
 		for i in rating_data.keys():
 			if ms <= rating_data[i]["Ms"][0] && !ms <= rating_data[i]["Ms"][1]:
 				notesPlayed += rating_data[i]["Percent"];
-				#newScore += rating_data[i]["Score"];
-				score += rating_data[i]["Score"];
+				score += rating_data[i]["Score"]+randi_range(0, 15);
 				
 				match rating_data[i]["Rating"]:
 					"shits":
@@ -538,9 +531,10 @@ func pressedNote(note):
 		pressed = true;
 		
 func miss_note(_note):
-	Sound.playAudio("miss_sounds/missnote%s"%[int(randi_range(1, 3))], false);
-	Sound.audio.volume_db = -8;
-	
+	if GlobalOptions.playMissSound:
+		Sound.playAudio("miss_sounds/missnote%s"%[randi_range(1, 3)], false);
+		Sound.audio.volume_db = -8;
+		
 	voices.volume_db = -80;
 	misses += 1;
 	health -= 4;
@@ -553,7 +547,7 @@ func miss_note(_note):
 		
 	combo = 0;
 	
-	if curStage == "philly remix" && (curSong == "philly-nice-remix" && songDiff == "remix"):
+	if curStage == "philly remix" && curSong == "philly-nice-remix" && songDiff == "remix":
 		stage.funny_guy();
 		
 	if GlobalOptions.updated_hud != "classic hud":
@@ -564,27 +558,27 @@ func miss_note(_note):
 	await get_tree().create_timer(0.3).timeout;
 	voices.volume_db = 0;
 	
-func playBfMissAnim(curNote):
-	var coolAnims = singAnims[int(curNote.noteData)%4];
-	
+func playBfMissAnim(curNote:Note):
 	if curNote.is_a_bad_note:
 		if bf.animList.has("hit"):
 			bf._playAnim("hit");
 	else:
-		var miss_anim = coolAnims+" MISS";
-		
+		var miss_anim = curNote.curNoteAnim+" MISS";
 		if bf.animList.has(miss_anim):
 			bf._playAnim(miss_anim);
 			
-func playCharacterAnim(curNote, new_char, isBf):
+func playCharacterAnim(curNote:Note, new_char, isBf):
 	if curNote.no_anim:
 		return;
 		
-	var coolAnims = singAnims[int(curNote.noteData)%4];
-	var altAnim = "-alt" if curNote.is_altAnim && new_char.animList.has(coolAnims+"-alt") else "";
+	var altAnim = "-alt" if curNote.is_altAnim && new_char.animList.has(curNote.curNoteAnim+"-alt") else "";
 	
+	if curNote.note_pressed:
+		return;
+		
 	if curNote.isGfNote && gf != null:
-		gf._playAnim(coolAnims, curNote);
+		new_char = gf;
+		new_char._playAnim(curNote.curNoteAnim);
 		return;
 		
 	if curNote.is_hey_note:
@@ -592,14 +586,16 @@ func playCharacterAnim(curNote, new_char, isBf):
 		return;
 		
 	if isBf && !new_char.is_player or bf.curCharacter == "tankman":
-		coolAnims = swap_sing_anims(singAnims[int(curNote.noteData)%4], "singLeft", "singRight");
+		curNote.curNoteAnim = swap_sing_anims(curNote.curNoteAnim, "singLeft", "singRight");
 		
 	if !isBf && new_char.is_player && dad.curCharacter != "tankman" && dad.curCharacter != "pico":
-		coolAnims = swap_sing_anims(singAnims[int(curNote.noteData)%4], "singLeft", "singRight");
+		curNote.curNoteAnim = swap_sing_anims(curNote.curNoteAnim, "singLeft", "singRight");
 		
 	if !curNote.isGfNote && !curNote.is_hey_note:
-		new_char._playAnim(coolAnims+altAnim, curNote);
+		new_char._playAnim(curNote.curNoteAnim+altAnim);
 		
+	curNote.note_pressed = true;
+	
 func swap_sing_anims(cur_anim, pos1, pos2):
 	if cur_anim == pos1: return pos2;
 	if cur_anim == pos2: return pos1;
@@ -857,10 +853,9 @@ func updateScoreText():
 	
 	if GlobalOptions.show_ratingLabel:
 		var base_text = "Total Hits: %s\nSicks: %s\nGoods: %s\nBads: %s\nShits: %s"%[int(totalHits), int(sicks), int(goods), int(bads), int(shits)];
+		ratingText.text = base_text;
 		if GlobalOptions.updated_hud == "classic hud":
-			ratingText.text = base_text + "\nMisses: %s\nRank: %s"%[int(misses), rankName];
-		else:
-			ratingText.text = base_text;
+			ratingText.text += "\nMisses: %s\nRank: %s"%[int(misses), rankName];
 			
 var cam_target = null;
 func step_hit(_step):

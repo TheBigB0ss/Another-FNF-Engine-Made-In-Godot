@@ -196,7 +196,6 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer,
 	note.is_hey_note = (type == "Hey!");
 	note.must_press = note.isPlayer;
 	note.secondOpponentNote = is_second_opponent;
-	note.isSustain = note.sustainLength > 0.0;
 	note.visible = !GlobalOptions.middle_scroll;
 	
 	if value1 != null && value2 != null && note.type == "Echo Note":
@@ -207,6 +206,7 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer,
 	note.modulate.a = strumNode.get_child(note.noteData).modulate.a;
 	note.strum_positions.y = strumNode.position.y + strumNode.get_child(note.noteData).position.y;
 	note.position.x = strumNode.position.x + strumNode.get_child(note.noteData).position.x;
+	
 	if note.note != null:
 		note.note.offset = strumNode.get_child(note.noteData).note.offset;
 		
@@ -221,5 +221,6 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer,
 	noteNode.add_child(note);
 	
 func sort_notes(a, b):
-	return a.strumTime < b.strumTime;
-	
+	if a != null && b != null:
+		return a.strumTime < b.strumTime;
+		

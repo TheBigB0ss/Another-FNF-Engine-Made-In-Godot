@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://pw7pri4offk5"]
+
+[ext_resource type="SpriteFrames" uid="uid://dwaxnwa6uw3vp" path="res://assets/images/weekCharacters/Menu_GF.res" id="1_ydq8u"]
+
+[node name="menu_gf" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_ydq8u")
+animation = &"M GF Idle"
+autoplay = "M GF Idle"

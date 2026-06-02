@@ -59,10 +59,8 @@ func start():
 		match curSong:
 			"roses":
 				dialogue_spr = "dialogueBox-senpaiMad" if !is_joke_dialogue else "dialogueBox-pixel";
-				
 			"thorns":
 				dialogue_spr = "dialogueBox-evil";
-				
 			_:
 				dialogue_spr = "dialogueBox-pixel";
 	else:
@@ -100,7 +98,7 @@ func getTxt():
 	
 	match curSong:
 		"senpai", "roses", "thorns":
-			is_joke_dialogue = is_joke() <= 5;
+			is_joke_dialogue = (randi_range(0, 3000) <= 5);
 			
 	var path_file = ("res://assets/data/songs/%s/%sDialogue.txt"%[curSong, curSong]) if !is_joke_dialogue else ("res://assets/data/songs/%s/%sDialogue-joke.txt"%[curSong, curSong]);
 	var readTxt = FileAccess.open(path_file, FileAccess.READ);
@@ -123,9 +121,6 @@ func get_json_text():
 	jsonFile.close();
 	
 	return dialogue_data;
-	
-func is_joke():
-	return int(randf_range(0, 3000));
 	
 func _process(delta):
 	dialogue_timer += 1*delta;
@@ -208,7 +203,7 @@ func update_text(text, _char, char_spr):
 		
 	match _char:
 		"dad":
-			opponent = load("res://source/characters/dialogue portraits/%s.tscn"%[char_spr]).instantiate();
+			opponent = load("res://source/characters/characters_portraits/%s.tscn"%[char_spr]).instantiate();
 			opponentGrp.add_child(opponent);
 			
 			if char_spr == "spirit":
@@ -225,7 +220,7 @@ func update_text(text, _char, char_spr):
 			bfGrp.hide();
 			
 		"bf":
-			bf = load("res://source/characters/dialogue portraits/%s.tscn"%[char_spr]).instantiate();
+			bf = load("res://source/characters/characters_portraits/%s.tscn"%[char_spr]).instantiate();
 			bfGrp.add_child(bf);
 			
 			gfGrp.hide();
@@ -233,7 +228,7 @@ func update_text(text, _char, char_spr):
 			opponentGrp.hide();
 			
 		"gf":
-			gf = load("res://source/characters/dialogue portraits/%s.tscn"%[char_spr]).instantiate();
+			gf = load("res://source/characters/characters_portraits/%s.tscn"%[char_spr]).instantiate();
 			gfGrp.add_child(gf);
 			
 			gfGrp.show();

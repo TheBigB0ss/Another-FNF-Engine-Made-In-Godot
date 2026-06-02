@@ -142,14 +142,13 @@ offset_top = 6.0
 offset_right = 8593.566
 offset_bottom = 613.0
 scale = Vector2(0.0489982, 0.0487552)
-text = "0:00/0:00"
 label_settings = SubResource("LabelSettings_08ga8")
 horizontal_alignment = 1
 
 [node name="scoreLabel" type="Label" parent="hud/Hud_Layer" unique_id=1862258188]
-offset_left = 291.0
+offset_left = 276.0
 offset_top = 670.0
-offset_right = 16862.0
+offset_right = 16847.0
 offset_bottom = 1114.0
 scale = Vector2(0.045, 0.045)
 text = "Score: ??? / Misses: ??? / Rating: ??? (0.0) / Rank: ???"

@@ -129,7 +129,6 @@ func beat_hit(beat):
 				create_text("present");
 			4:
 				hideText();
-				
 			5:
 				create_text("not association");
 				create_text("with");

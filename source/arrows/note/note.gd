@@ -7,6 +7,8 @@ class_name Note extends Sprite2D
 @onready var noteLine = Line2D.new();
 @onready var noteEnd = Sprite2D.new();
 
+@onready var main_scene = get_tree().current_scene;
+
 var note_dir = "left";
 var custom_note_dir = KEY_LEFT;
 
@@ -83,7 +85,7 @@ func reload_note_type():
 			manyHits = 0;
 			amount = 0;
 			
-const notes_settings = {
+const NOTES_SETTINGS = {
 	0:{
 		"dir": "left",
 		"anim": "purple"
@@ -102,10 +104,19 @@ const notes_settings = {
 	}
 };
 
+const NOTES_ANIM = [
+	"singLeft",
+	"singDown",
+	"singUp",
+	"singRight"
+];
+
+var curNoteAnim = "";
+
 func reload_note_data():
-	note_dir = notes_settings[int(noteData)%4]["dir"];
-	noteAnim = notes_settings[int(noteData)%4]["anim"];
-	custom_note_dir = GlobalOptions.keys[notes_settings[int(noteData)%4]["dir"]][1];
+	note_dir = NOTES_SETTINGS[int(noteData)%4]["dir"];
+	noteAnim = NOTES_SETTINGS[int(noteData)%4]["anim"];
+	custom_note_dir = GlobalOptions.keys[NOTES_SETTINGS[int(noteData)%4]["dir"]][1];
 	
 func reload_note():
 	if SongData.isPixelStage:
@@ -160,8 +171,6 @@ func set_note_scale(parent_scale, pixelNote, newOpponentNote):
 		
 	return new_noteScale;
 	
-@onready var main_scene = get_tree().current_scene;
-
 func _ready():
 	ogSustain = sustainLength;
 	self.scale = Vector2(0.65, 0.65);
@@ -258,7 +267,9 @@ func _process(delta: float) -> void:
 				pressed();
 				if missTimer <= 0:
 					main_scene.health = min(main_scene.health+healthPerHolding*delta, 100.0);
-					
+			else:
+				opponent_pressed();
+				
 			if sustainLength <= 0:
 				missed = false;
 				noteEnd.queue_free();
@@ -281,24 +292,21 @@ func pressed(new_character = null):
 	if missed:
 		return;
 		
+	curNoteAnim = NOTES_ANIM[noteData];
+	new_character = main_scene.bf if !is_instance_valid(new_character) else new_character;
+	
 	if sustainLength <= 0:
-		if !pressed_emit:
-			if is_a_bad_note:
-				miss_note();
-			else:
-				note_pressed = true;
-				emit_signal("notePressed", self);
-				main_scene.health = min(main_scene.health+healthPerHit, 100.0);
-				
-			pressed_emit = true;
+		if is_a_bad_note:
+			miss_note();
+		else:
+			main_scene.health = min(main_scene.health+healthPerHit, 100.0);
 			
+		emitPress();
 		destroy_note();
 	else:
-		if !pressed_emit:
-			emit_signal("notePressed", self);
-			
-			pressed_emit = true;
-			
+		new_character.curNote = self;
+		emitPress();
+		
 		if is_instance_valid(note):
 			note.queue_free();
 			
@@ -306,38 +314,51 @@ func pressed(new_character = null):
 		return;
 		
 	var anim_time = 0.45 if GlobalOptions.isUsingBot else 0.0;
-	main_scene.playCharacterAnim(self, main_scene.bf if !is_instance_valid(new_character) else new_character, true);
+	main_scene.playCharacterAnim(self, new_character, true);
 	main_scene.play_strum_anim(self, false, anim_time, false, true);
 	
 func opponent_pressed(new_character = null):
-	if !isSustain:
-		emit_signal("opponentNotePressed", self);
-		destroy_note();
-		
+	curNoteAnim = NOTES_ANIM[noteData];
 	new_character = (main_scene.dad if !secondOpponentNote else main_scene.new_opponent) if !is_instance_valid(new_character) else new_character;
+	
+	if sustainLength <= 0:
+		if !pressed_emit:
+			emit_signal("opponentNotePressed", self);
+			pressed_emit = true;
+			
+		destroy_note();
+	else:
+		new_character.curNote = self;
+		
 	main_scene.playCharacterAnim(self, new_character, false);
 	main_scene.play_strum_anim(self, !secondOpponentNote, 0.45, secondOpponentNote, true);
+	
+func emitPress():
+	if pressed_emit:
+		return;
+		
+	emit_signal("notePressed", self);
+	pressed_emit = true;
 	
 var emit_miss = false;
 func miss_note():
 	if emit_miss:
 		return;
 		
-	missed = true;
-	
+	curNoteAnim = NOTES_ANIM[noteData];
 	main_scene.health = max(main_scene.health - 4, 0.0);
+	
 	if isSustain:
 		emit_signal("longNoteMissed", self);
 	else:
 		emit_signal("noteMissed", self);
 		
 	main_scene.playBfMissAnim(self);
+	missed = true;
 	emit_miss = true;
 	
 func destroy_note():
 	if manyHits > 0 && type == "Echo Note":
-		pressed_emit = false;
-		
 		var tween = create_tween();
 		tween.tween_property(self, "strumTime", strumTime + (amount * Conductor.crochet), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
 		
@@ -348,6 +369,9 @@ func destroy_note():
 		if manyHits <= 0:
 			queue_free();
 			
+		pressed_emit = false;
+		note_pressed = false;
+		
 		return;
 		
 	queue_free();

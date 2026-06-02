@@ -29,6 +29,7 @@ func _ready():
 			achievements[i]["special achievement"] = false;
 			
 		total_achievements += 1;
+		
 		if check_achievement_status(i):
 			owned_achievements += 1;
 			
@@ -43,6 +44,7 @@ func unlock_achievement(achievement):
 			
 			achievements[achievement]["value"] = true;
 			achievements[achievement]["secret achievement"] = false;
+			
 			save_achievements();
 			
 func unlock_int_achievement(achievement, new_achievement, max_val, min_val):

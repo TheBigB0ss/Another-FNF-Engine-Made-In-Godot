@@ -78,11 +78,11 @@ func _ready() -> void:
 		
 		add_song(new_song, new_icon, new_color, new_weekName, new_weekDifficult);
 		
-	song_stuff.position.y = float(350-coolOffset*Global.cur_thing);
-	icons_stuff.position.y = float(350-coolOffset*Global.cur_thing);
+	song_stuff.position.y = float(350-coolOffset*cur_song);
+	icons_stuff.position.y = float(350-coolOffset*cur_song);
 	$bg.modulate = Color(bg_colors[cur_song][0], bg_colors[cur_song][1], bg_colors[cur_song][2]);
 	
-	change_song(Global.cur_thing);
+	change_song(cur_song);
 	changeDiff(1);
 	
 func add_song(new_song, new_icon, new_color, new_week, diff):
@@ -147,7 +147,6 @@ func _input(ev):
 	if ev is InputEventKey:
 		if ev.pressed && Global.can_use_menus:
 			if ev.keycode in [GlobalOptions.get_key("escape")] && !ev.echo:
-				Global.cur_thing = 0;
 				Global.changeScene("menus/main_menu/MainMenu", true, false);
 				
 			if ev.keycode in [GlobalOptions.get_key("ui_down")] && !ev.echo && !noSpam:
@@ -174,7 +173,6 @@ func _input(ev):
 			if ev.keycode in [KEY_SPACE] && !ev.echo:
 				var inst_shit = songs[cur_song].to_lower() if diffs[cur_diff] != "remix" else str(songs[cur_song].to_lower(),"-remix");
 				MusicManager._play_song(inst_shit + "/Inst", "songs", true);
-				
 				
 func beat_hit(beat):
 	for i in songs.size():
@@ -220,7 +218,6 @@ func change_song(change):
 	
 	Sound.playAudio("scrollMenu", false);
 	cur_song = wrapi(cur_song, 0, len(songs));
-	Global.cur_thing = cur_song;
 	update_song();
 	
 func changeDiff(shit):

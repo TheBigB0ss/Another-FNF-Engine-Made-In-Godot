@@ -177,7 +177,6 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer,
 	note.no_anim = (type == "No Animation");
 	note.is_hey_note = (type == "Hey!");
 	note.must_press = note.isPlayer;
-	note.isSustain = note.sustainLength > 0.0;
 	
 	if value1 != null && value2 != null && note.type == "Echo Note":
 		note.manyHits = value1;
@@ -188,6 +187,7 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer,
 	note.modulate.a = strumNode.get_child(note.noteData).modulate.a;
 	note.strum_positions.y = strumNode.position.y + strumNode.get_child(note.noteData).position.y;
 	note.position.x = strumNode.position.x + strumNode.get_child(note.noteData).position.x;
+	
 	if note.note != null:
 		note.note.offset = strumNode.get_child(note.noteData).note.offset;
 		

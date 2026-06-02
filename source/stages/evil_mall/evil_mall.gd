@@ -22,11 +22,11 @@ func winterHorrorland_cutscene():
 	await get_tree().create_timer(0.8).timeout
 	start_song();
 	
-func set_hud(is_visible):
+func set_hud(_is_visible):
 	var strums = get_tree().current_scene.get("game_strums")
 	var hud = get_tree().current_scene.get("hud");
-	strums.visible = is_visible;
-	hud.visible = is_visible;
+	strums.visible = _is_visible;
+	hud.visible = _is_visible;
 	
 func start_song():
 	set_hud(true);

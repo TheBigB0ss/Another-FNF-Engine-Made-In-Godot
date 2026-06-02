@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dumxwigkk177p"]
+
+[ext_resource type="SpriteFrames" uid="uid://ijjffcu3uo3c" path="res://assets/images/weekCharacters/Menu_Dad.res" id="1_ex1wj"]
+
+[node name="menu_dad" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_ex1wj")
+animation = &"M Dad Idle"
+autoplay = "M Dad Idle"

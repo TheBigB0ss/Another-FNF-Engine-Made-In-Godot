@@ -2,7 +2,431 @@
 
 [ext_resource type="Script" uid="uid://0hsas5igdq6k" path="res://source/stages/battlefield/Cutscene.gd" id="1_xm5ph"]
 [ext_resource type="Script" uid="uid://b34ctedtr57xe" path="res://addons/atlas_sprite/AtlasSprite.gd" id="2_wme06"]
-[ext_resource type="PackedScene" uid="uid://nuno0fp5tpiu" path="res://source/characters/bf.tscn" id="3_cl23b"]
+[ext_resource type="PackedScene" uid="uid://nuno0fp5tpiu" path="res://source/characters/characters_scenes/bf.tscn" id="3_cl23b"]
+[ext_resource type="AudioStream" uid="uid://cscfy4iinnwfi" path="res://assets/sounds/week7_cutscene_voices/wellWellWell.ogg" id="4_bn1sr"]
+[ext_resource type="AudioStream" uid="uid://dlosuvlm6fapd" path="res://assets/sounds/week7_cutscene_voices/tankSong2.ogg" id="4_vmey3"]
+[ext_resource type="AudioStream" uid="uid://nfn62obliqam" path="res://assets/sounds/week7_cutscene_voices/bfBeep.ogg" id="5_vmey3"]
+[ext_resource type="AudioStream" uid="uid://bmoupo323rrb7" path="res://assets/sounds/week7_cutscene_voices/stressCutscene.ogg" id="5_ys5dx"]
+[ext_resource type="AudioStream" uid="uid://bqrc1rradc5i1" path="res://assets/sounds/week7_cutscene_voices/killYou.ogg" id="6_ys5dx"]
+
+[sub_resource type="Animation" id="Animation_bn1sr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Tankman:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [68]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Tankman:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Tankman:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BoyfriendCutscene:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Tankman:speed")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.2200000000000002]
+}
+
+[sub_resource type="Animation" id="Animation_ys5dx"]
+resource_name = "guns"
+length = 11.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Tankman:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [227]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Tankman:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.16666667, 11.333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "audio"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AudioStreamPlayer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("4_vmey3")
+}],
+"times": PackedFloat32Array(0.06666668)
+}
+tracks/2/use_blend = true
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 4.8333335, 11.366667, 11.466666),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": [211.0, 608.0, true, Vector2(1, 1)],
+"method": &"set_cam_pos"
+}, {
+"args": ["sad"],
+"method": &"playGFAnim"
+}, {
+"args": ["idle dance"],
+"method": &"playGFAnim"
+}, {
+"args": [],
+"method": &"finish_cutscene"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Tankman:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 11.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Tankman:speed")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.235]
+}
+
+[sub_resource type="Animation" id="Animation_vmey3"]
+resource_name = "stress"
+length = 35.866665
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Tankman:playing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 16.633333, 20),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+tracks/1/type = "audio"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AudioStreamPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("5_ys5dx")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/1/use_blend = true
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Tankman:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 19.966667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [507, 923]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.1333332, 15.1, 15.166667, 16.633333, 17.5, 17.666666, 19.5, 31.40869, 31.466667, 32.4, 32.9, 35.866665),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"values": [{
+"args": [211.0, 608.0, true, Vector2(1, 1)],
+"method": &"set_cam_pos"
+}, {
+"args": [715.0, 560.0, true, Vector2(1, 1)],
+"method": &"set_cam_pos"
+}, {
+"args": [true],
+"method": &"set_pico_part"
+}, {
+"args": [715.0, 560.0, true, Vector2(1.65, 1.65)],
+"method": &"set_cam_pos"
+}, {
+"args": [715.0, 560.0, true, Vector2(1, 1)],
+"method": &"set_cam_pos"
+}, {
+"args": [],
+"method": &"set_bf_visible"
+}, {
+"args": ["idle dance"],
+"method": &"playBFAnim"
+}, {
+"args": [1090.0, 800.0, false, Vector2(1.25, 1.25)],
+"method": &"set_cam_pos"
+}, {
+"args": ["singUp MISS"],
+"method": &"playBFAnim"
+}, {
+"args": ["idle dance"],
+"method": &"playBFAnim"
+}, {
+"args": [211.0, 608.0, false, Vector2(0.8, 0.8)],
+"method": &"set_cam_pos"
+}, {
+"args": [],
+"method": &"finish_cutscene"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Tankman:speed")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 19.966667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.235, 1.27]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("BoyfriendCutscene:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.1, 17.666666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Tankman:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 35.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AudioStreamSynchronized" id="AudioStreamSynchronized_vbfw4"]
+stream_count = 1
+stream_0/stream = ExtResource("4_bn1sr")
+stream_0/volume = 0.0
+
+[sub_resource type="Animation" id="Animation_uaydf"]
+resource_name = "ugh"
+length = 10.233334
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Tankman:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 4.0333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 85]
+}
+tracks/1/type = "audio"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AudioStreamPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": SubResource("AudioStreamSynchronized_vbfw4")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("5_vmey3")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("6_ys5dx")
+}],
+"times": PackedFloat32Array(0.26666668, 3.5, 4.0666666)
+}
+tracks/1/use_blend = true
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 3.2333333, 4.1, 10.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": [211.0, 608.0, true, Vector2(1, 1)],
+"method": &"set_cam_pos"
+}, {
+"args": [1199.0, 801.0, true, Vector2(1, 1)],
+"method": &"set_cam_pos"
+}, {
+"args": [211.0, 608.0, true, Vector2(1, 1)],
+"method": &"set_cam_pos"
+}, {
+"args": [],
+"method": &"finish_cutscene"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Tankman:playing")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.26666668, 3.3666666, 4.0333333, 9.766666),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [true, false, true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Tankman:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 10.233334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("BoyfriendCutscene")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(3.5, 4.233333),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": ["singUp", null],
+"method": &"_playAnim"
+}, {
+"args": ["idle dance", null],
+"method": &"_playAnim"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("BoyfriendCutscene:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 10.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Tankman:speed")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.235]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_c2vi5"]
+_data = {
+&"RESET": SubResource("Animation_bn1sr"),
+&"guns": SubResource("Animation_ys5dx"),
+&"stress": SubResource("Animation_vmey3"),
+&"ugh": SubResource("Animation_uaydf")
+}
 
 [node name="Cutscene" type="Node2D" unique_id=1181525979]
 script = ExtResource("1_xm5ph")
@@ -12,11 +436,11 @@ visible = false
 position = Vector2(703, 576)
 script = ExtResource("2_wme06")
 path = "res://assets/stages/week7/cutscene/pico"
+speed = 1.2000000000000002
 frame = 182.0
 metadata/_custom_type_script = "uid://b34ctedtr57xe"
 
 [node name="BoyfriendCutscene" parent="." unique_id=1571258161 instance=ExtResource("3_cl23b")]
-visible = false
 z_index = 45
 position = Vector2(1199, 801)
 
@@ -25,7 +449,12 @@ z_index = 30
 position = Vector2(211, -440)
 script = ExtResource("2_wme06")
 path = "res://assets/stages/week7/cutscene/tankman"
-speed = 1.2000000000000002
+speed = 1.2200000000000002
 frame = 68
 playing = false
 metadata/_custom_type_script = "uid://b34ctedtr57xe"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1367897052]
+libraries/ = SubResource("AnimationLibrary_c2vi5")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1688538035]

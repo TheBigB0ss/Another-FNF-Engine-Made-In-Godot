@@ -19,7 +19,6 @@ func _process(_delta: float) -> void:
 	var songPos = get_playback_position();
 	var songTime = stream.get_length();
 	
-	print(floor(songPos), " ", floor(songTime))
 	if floor(songPos) >= floor(songTime):
 		play(0.0);
 		

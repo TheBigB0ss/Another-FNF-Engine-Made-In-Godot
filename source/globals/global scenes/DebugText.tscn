@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bhcuymjm6sl5s"]
+
+[ext_resource type="Script" uid="uid://eqmc6lp87nlh" path="res://source/globals/global scenes/DebugText.gd" id="1_af4iq"]
+[ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="2_ctrrb"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_7m8fr"]
+font_size = 380
+shadow_size = 90
+shadow_color = Color(0, 0, 0, 1)
+
+[node name="DebugText" type="CanvasLayer" unique_id=294763286]
+process_mode = 3
+layer = 7
+script = ExtResource("1_af4iq")
+
+[node name="text" type="Label" parent="." unique_id=1796035034]
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 894.0
+offset_bottom = 335.0
+scale = Vector2(0.045, 0.045)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_ctrrb")
+theme_override_font_sizes/font_size = 410
+text = "FPS:"
+label_settings = SubResource("LabelSettings_7m8fr")

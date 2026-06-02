@@ -9,8 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://dbngsy5xcin77" path="res://assets/stages/week3/remix/buildings_1.png" id="7_gh7r3"]
 [ext_resource type="Texture2D" uid="uid://cxm68qo7tmrxq" path="res://assets/stages/week3/remix/rooftop.png" id="8_4puf3"]
 [ext_resource type="Texture2D" uid="uid://4wd1uaw15ret" path="res://assets/stages/week3/remix/foreground.png" id="9_xwjm6"]
-[ext_resource type="PackedScene" uid="uid://c3bk8nb71v1fe" path="res://source/characters/Nene.tscn" id="10_eptyo"]
-[ext_resource type="PackedScene" uid="uid://dx77iyyt31ep0" path="res://source/characters/Darnell.tscn" id="11_lsgl8"]
+[ext_resource type="PackedScene" uid="uid://c3bk8nb71v1fe" path="res://source/characters/characters_scenes/Nene.tscn" id="10_eptyo"]
+[ext_resource type="PackedScene" uid="uid://dx77iyyt31ep0" path="res://source/characters/characters_scenes/Darnell.tscn" id="11_lsgl8"]
 [ext_resource type="Script" uid="uid://cbvyc7ar58pke" path="res://source/gameplay/strums/strum.gd" id="13_46xqv"]
 
 [node name="philly remix" type="Node2D" unique_id=1409014100]

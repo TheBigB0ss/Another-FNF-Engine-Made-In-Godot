@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bw1awojfqola"]
+
+[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_yivwg"]
+[ext_resource type="SpriteFrames" uid="uid://bma1womt5v7gx" path="res://assets/images/characters/tankmanCaptain.res" id="2_govxb"]
+
+[node name="tankmanCaptain" type="Node2D" unique_id=289424658]
+script = ExtResource("1_yivwg")
+json_path = "res://assets/data/characters/tankman.json"
+healthBar_Color = Color(1, 1, 1, 1)
+is_player = true
+anims_timer = {
+"good anim": [2, 45, true],
+"hey": [2, 5, false],
+"idle dance": [2, 5, false],
+"singDown": [2, 5, false],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false]
+}
+anim_type = 2
+have_death_animation = false
+frame_count = 2.4
+
+[node name="character" type="AnimatedSprite2D" parent="." unique_id=18993768]
+sprite_frames = ExtResource("2_govxb")
+animation = &"Tankman Idle Dance 1"
+frame = 13
+frame_progress = 1.0
+offset = Vector2(7, -9)

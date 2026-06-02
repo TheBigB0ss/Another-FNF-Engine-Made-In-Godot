@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://bg8s3qgkacj5g"]
 
 [ext_resource type="Script" uid="uid://dueskcgvn0l00" path="res://source/menus/editors/stage_editor/stage_editor.gd" id="1_ghdrb"]
-[ext_resource type="PackedScene" uid="uid://nuno0fp5tpiu" path="res://source/characters/bf.tscn" id="2_t2p8t"]
-[ext_resource type="PackedScene" uid="uid://cbxmksm17k2jp" path="res://source/characters/dad.tscn" id="3_ghdrb"]
-[ext_resource type="PackedScene" uid="uid://dhiilas6qf53v" path="res://source/characters/Mom.tscn" id="4_ghdrb"]
-[ext_resource type="PackedScene" uid="uid://b7mrj3l4ngoue" path="res://source/characters/gf.tscn" id="4_qsyfx"]
+[ext_resource type="PackedScene" uid="uid://nuno0fp5tpiu" path="res://source/characters/characters_scenes/bf.tscn" id="2_t2p8t"]
+[ext_resource type="PackedScene" uid="uid://cbxmksm17k2jp" path="res://source/characters/characters_scenes/dad.tscn" id="3_ghdrb"]
+[ext_resource type="PackedScene" uid="uid://dhiilas6qf53v" path="res://source/characters/characters_scenes/Mom.tscn" id="4_ghdrb"]
+[ext_resource type="PackedScene" uid="uid://b7mrj3l4ngoue" path="res://source/characters/characters_scenes/gf.tscn" id="4_qsyfx"]
 
 [node name="stage_editor" type="Node2D" unique_id=1664649525]
 script = ExtResource("1_ghdrb")

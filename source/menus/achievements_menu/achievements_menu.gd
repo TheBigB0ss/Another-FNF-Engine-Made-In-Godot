@@ -60,7 +60,6 @@ func _input(ev):
 	if ev is InputEventKey:
 		if ev.pressed && Global.can_use_menus:
 			if ev.keycode in [GlobalOptions.get_key("escape")] && !ev.echo:
-				Global.cur_thing = 0;
 				Global.changeScene("menus/main_menu/MainMenu", true, false);
 				
 			if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo:
@@ -79,26 +78,28 @@ func _input(ev):
 				change_achievement(1);
 				
 func change_achievement(change):
-	cur_Achievement += change;
-	
 	Sound.playAudio("scrollMenu", false);
 	
-	var cur_col = cur_Achievement - (floor(cur_Achievement / achievements_row) * achievements_row);
-	if cur_Achievement >= len(achievements_list):
+	var cur_col = cur_Achievement - int(floor(float(cur_Achievement) / achievements_row) * achievements_row);
+	
+	cur_Achievement += change;
+	
+	if cur_Achievement < 0:
+		cur_Achievement += ceil(float(achievements_list.size()) / achievements_row) * achievements_row;
+		
+		if cur_Achievement >= achievements_list.size():
+			cur_Achievement -= achievements_row;
+			
+	if cur_Achievement >= achievements_list.size():
 		cur_Achievement = cur_col;
 		
-	if cur_Achievement < 0:
-		cur_Achievement += ceil(achievements_list.size() / achievements_row)*achievements_row;
-		
-	Global.cur_thing = cur_Achievement;
-	
 	update_achievement();
 	
 var achievement_name = "";
 var achievement_value = false;
 
 var seeingAchievementStatus = false;
-func _process(delta):
+func _process(_delta):
 	var cur_col = -floor(cur_Achievement / achievements_row) * 160;
 	achievementsGrp.position.y = lerp(float(achievementsGrp.position.y)+90, float(cur_col), 0.25)
 	
