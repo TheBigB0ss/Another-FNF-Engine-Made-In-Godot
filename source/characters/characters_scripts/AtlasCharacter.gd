@@ -129,6 +129,10 @@ func character_process(delta):
 		var isHolding = !(curNote.sustainLength <= 0 or curNote.missedLongNote) if is_instance_valid(curNote) else false;
 		characterState = (CHARACTER_STATES.HOLDING if isHolding else CHARACTER_STATES.IDLE) if longNote else CHARACTER_STATES.SINGING;
 		
+		if is_instance_valid(curNote):
+			if curAnim != curNote.curNoteAnim && characterState == CHARACTER_STATES.HOLDING:
+				_playAnim(curNote.curNoteAnim);
+				
 	if (curAnim.begins_with("sing") or curAnim.contains("sing") or special_anim) && characterState != CHARACTER_STATES.HOLDING:
 		idleTimer += delta;
 		

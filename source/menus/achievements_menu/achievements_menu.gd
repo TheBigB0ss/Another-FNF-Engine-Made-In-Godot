@@ -54,7 +54,7 @@ func _ready():
 	progressBar.value = Achievements.progress;
 	progressText.text = str(Achievements.progress, "%");
 	
-	change_achievement(0);
+	change_achievement(Global.current_selected["achievements"]);
 	
 func _input(ev):
 	if ev is InputEventKey:
@@ -93,6 +93,7 @@ func change_achievement(change):
 	if cur_Achievement >= achievements_list.size():
 		cur_Achievement = cur_col;
 		
+	Global.currentAchievements = cur_Achievement;
 	update_achievement();
 	
 var achievement_name = "";
@@ -106,12 +107,12 @@ func _process(_delta):
 	for j in achievements_list.size():
 		achievementsGrp.get_child(j).scale = lerp(achievementsGrp.get_child(j).scale, Vector2(1.20, 1.20) if j == cur_Achievement else Vector2(1, 1), 0.60);
 		
-	for i in achievementsGrp.get_children():
-		if mouse_inside(i.achievement_spr):
-			cur_Achievement = i.achievement_ID;
-			update_achievement();
-			if Input.is_action_just_pressed("mouse_click"):
-				seeingAchievementStatus = !seeingAchievementStatus;
+	#for i in achievementsGrp.get_children():
+		#if mouse_inside(i.achievement_spr):
+			#cur_Achievement = i.achievement_ID;
+			#update_achievement();
+			#if Input.is_action_just_pressed("mouse_click"):
+				#seeingAchievementStatus = !seeingAchievementStatus;
 				
 	if seeingAchievementStatus:
 		$description_stuff.position.y = lerp(float($description_stuff.position.y), -35.0, 0.25);

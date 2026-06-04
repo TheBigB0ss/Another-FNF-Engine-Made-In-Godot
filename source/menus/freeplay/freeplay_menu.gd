@@ -82,7 +82,7 @@ func _ready() -> void:
 	icons_stuff.position.y = float(350-coolOffset*cur_song);
 	$bg.modulate = Color(bg_colors[cur_song][0], bg_colors[cur_song][1], bg_colors[cur_song][2]);
 	
-	change_song(cur_song);
+	change_song(Global.current_selected["freeplay"]);
 	changeDiff(1);
 	
 func add_song(new_song, new_icon, new_color, new_week, diff):
@@ -214,10 +214,13 @@ func go_to_song(song, diff_path):
 		Sound.playAudio("cancelMenu", false);
 		
 func change_song(change):
-	cur_song += change;
-	
 	Sound.playAudio("scrollMenu", false);
+	
+	cur_song += change;
 	cur_song = wrapi(cur_song, 0, len(songs));
+	
+	Global.currentFreeplay = cur_song;
+	
 	update_song();
 	
 func changeDiff(shit):

@@ -365,8 +365,6 @@ func _process(delta: float) -> void:
 	var helthLerpValue = lerp(float(healthBar.value), float(health), 0.40);
 	healthBar.value = helthLerpValue;
 	
-	#score = snapped(lerp(float(score), float(newScore), delta*10), 1);
-	
 	if SongData.is_not_in_cutscene && !Global.is_on_video:
 		sectionCamera.zoom = lerp(sectionCamera.zoom, SongData.stageZoom, 0.09);
 		
@@ -468,7 +466,6 @@ func set_icon():
 	if iconP3 != null:
 		iconP3.play_icon_anim(iconP3_Anim);
 		
-#var newScore = 0;
 func pressedNote(note):
 	if note.is_a_bad_note:
 		return;
@@ -540,7 +537,6 @@ func miss_note(_note):
 	health -= 4;
 	notesPlayed = max(notesPlayed-0.8, 0.0);
 	score -= randi_range(50, 80);
-	#newScore -= 70;
 	
 	if combo > 10 && gf != null && SongData.gfPlayer != "none":
 		gf._playAnim("sad");
@@ -654,7 +650,7 @@ func checkPlayerDead():
 	Global.changeScene("/gameplay/death_scene/death_scene", false, false);
 	
 func newRank():
-	if misses >= 10: return "Clear";
+	if misses > 10: return "Clear";
 	elif misses > 0: return "SDCB";
 	elif bads > 0 or shits > 0: return "FC";
 	elif goods > 0: return "GFC";

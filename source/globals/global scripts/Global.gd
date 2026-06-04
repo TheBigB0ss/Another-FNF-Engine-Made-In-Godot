@@ -1,35 +1,58 @@
 extends Node
 
-var finished_intro = false;
-var can_use_menus = true;
-var is_on_video = false;
-
 signal end_dialogue;
 signal end_cutscene;
 signal end_senpai_cutscene;
 signal end_tankman_cutscene;
 
-func getFolderShit(folder):
-	var file = [];
-	var coolFolder = DirAccess.open("res://%s"%[folder]);
-	var nextFolder = coolFolder.get_next();
-	
-	if nextFolder != "":
-		file.append(nextFolder);
-		
-	return file;
-	
-func getTextFromTxt(path):
-	var txt = "res://assets/%s.txt"%[path];
-	var readTxt = FileAccess.open(txt,FileAccess.READ);
-	var file = readTxt.get_as_text();
-	return file;
-	
-func getTextFromJson(path):
-	var json = "res://assets/%s.json"%[path];
-	var file = FileAccess.open(json, FileAccess.READ);
-	var fileData = JSON.parse_string(file.get_as_text());
-	return fileData;
+var finished_intro = false;
+var can_use_menus = true;
+var is_on_video = false;
+
+var currentStoryMode = 0:
+	set(val):
+		if currentStoryMode != val:
+			currentStoryMode = val;
+			save_current_statu();
+			
+var currentFreeplay = 0:
+	set(val):
+		if currentFreeplay != val:
+			currentFreeplay = val;
+			save_current_statu();
+			
+var currentCredits = 0:
+	set(val):
+		if currentCredits != val:
+			currentCredits = val;
+			save_current_statu();
+			
+var currentOptions = 0:
+	set(val):
+		if currentOptions != val:
+			currentOptions = val;
+			save_current_statu();
+			
+var currentAchievements = 0:
+	set(val):
+		if currentAchievements != val:
+			currentAchievements = val;
+			save_current_statu();
+			
+var current_selected = {
+	"storyMode": 0,
+	"freeplay": 0,
+	"credits": 0,
+	"options": 0,
+	"achievements": 0,
+};
+
+func save_current_statu():
+	current_selected["storyMode"] = currentStoryMode;
+	current_selected["freeplay"] = currentFreeplay;
+	current_selected["credits"] = currentCredits;
+	current_selected["options"] = currentOptions;
+	current_selected["achievements"] = currentAchievements;
 	
 func getTime():
 	var time = Time.get_time_dict_from_system();

@@ -91,6 +91,7 @@ position = Vector2(435, 50)
 scale = Vector2(0.398, 0.365)
 
 [node name="icon_second_opponent" type="Sprite2D" parent="grid_objs/icons" unique_id=2063461731]
+visible = false
 position = Vector2(772, 50)
 scale = Vector2(0.398, 0.365)
 
@@ -113,10 +114,11 @@ offset_top = 192.0
 offset_right = 391.0
 offset_bottom = 715.0
 tab_alignment = 1
-current_tab = 0
+current_tab = 5
 all_tabs_in_front = true
 
 [node name="help" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=577019770]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -425,7 +427,6 @@ value 1:
 value 2:"
 
 [node name="song" type="TabBar" parent="chart_UI/chart_objs/TabContainer" unique_id=293273335]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 5
 

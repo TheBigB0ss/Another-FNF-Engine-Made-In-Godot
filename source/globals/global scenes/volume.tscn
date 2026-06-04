@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://d2scvk46riv62"]
+[gd_scene format=3 uid="uid://d2scvk46riv62"]
 
 [ext_resource type="Script" uid="uid://bc3qw668wfisb" path="res://source/globals/global scenes/volume.gd" id="1_ocn1k"]
 [ext_resource type="Texture2D" uid="uid://cgj01cnhq30qg" path="res://assets/images/volume/volume.png" id="2_xxhmw"]
@@ -20,33 +20,33 @@ font_size = 700
 shadow_size = 80
 shadow_color = Color(0, 0, 0, 1)
 
-[node name="Volume" type="CanvasLayer"]
+[node name="Volume" type="CanvasLayer" unique_id=586704223]
 process_mode = 3
 layer = 8
 script = ExtResource("1_ocn1k")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=464641155]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="volume_button" type="Sprite2D" parent="Control"]
+[node name="volume_button" type="Sprite2D" parent="Control" unique_id=1688586367]
 texture_filter = 1
 position = Vector2(612.75, -59.4)
 scale = Vector2(1.062, 1.056)
 texture = ExtResource("2_xxhmw")
 
-[node name="ColorRect" type="ColorRect" parent="Control"]
+[node name="ColorRect" type="ColorRect" parent="Control" unique_id=131143467]
 layout_mode = 0
 offset_left = 556.0
 offset_top = -175.0
 offset_right = 691.0
 offset_bottom = -147.0
-color = Color(0, 0, 0, 0.57254905)
+color = Color(0, 0, 0, 1)
 
-[node name="volume_text" type="Label" parent="Control"]
+[node name="volume_text" type="Label" parent="Control" unique_id=877523316]
 layout_mode = 0
 offset_left = 556.0
 offset_top = -178.0
@@ -56,14 +56,14 @@ scale = Vector2(0.05, 0.05)
 text = "VOLUME:"
 label_settings = SubResource("LabelSettings_hr6tt")
 
-[node name="volume_bar" type="Control" parent="Control"]
+[node name="volume_bar" type="Control" parent="Control" unique_id=691877240]
 anchors_preset = 0
 offset_left = 605.0
 offset_top = -96.4
 offset_right = 645.0
 offset_bottom = -56.4
 
-[node name="piece1" type="TextureProgressBar" parent="Control/volume_bar"]
+[node name="piece1" type="TextureProgressBar" parent="Control/volume_bar" unique_id=175759496]
 texture_filter = 1
 layout_mode = 0
 offset_right = 40.0
@@ -75,7 +75,7 @@ value = 0.1
 texture_under = ExtResource("5_f4wls")
 texture_progress = ExtResource("5_f4wls")
 
-[node name="piece2" type="TextureProgressBar" parent="Control/volume_bar"]
+[node name="piece2" type="TextureProgressBar" parent="Control/volume_bar" unique_id=1143120230]
 texture_filter = 1
 layout_mode = 0
 offset_right = 40.0
@@ -87,7 +87,7 @@ value = 0.2
 texture_under = ExtResource("6_r7uoi")
 texture_progress = ExtResource("6_r7uoi")
 
-[node name="piece3" type="TextureProgressBar" parent="Control/volume_bar"]
+[node name="piece3" type="TextureProgressBar" parent="Control/volume_bar" unique_id=2081697999]
 texture_filter = 1
 layout_mode = 0
 offset_right = 40.0
@@ -99,7 +99,7 @@ value = 0.3
 texture_under = ExtResource("7_kl1ie")
 texture_progress = ExtResource("7_kl1ie")
 
-[node name="piece4" type="TextureProgressBar" parent="Control/volume_bar"]
+[node name="piece4" type="TextureProgressBar" parent="Control/volume_bar" unique_id=378005365]
 texture_filter = 1
 layout_mode = 0
 offset_right = 40.0
@@ -111,7 +111,7 @@ value = 0.4
 texture_under = ExtResource("8_ol1bm")
 texture_progress = ExtResource("8_ol1bm")
 
-[node name="piece5" type="TextureProgressBar" parent="Control/volume_bar"]
+[node name="piece5" type="TextureProgressBar" parent="Control/volume_bar" unique_id=1413975473]
 texture_filter = 1
 layout_mode = 0
 offset_right = 40.0
@@ -123,7 +123,7 @@ value = 0.5
 texture_under = ExtResource("9_kjxw1")
 texture_progress = ExtResource("9_kjxw1")
 
-[node name="piece6" type="TextureProgressBar" parent="Control/volume_bar"]
+[node name="piece6" type="TextureProgressBar" parent="Control/volume_bar" unique_id=1460948302]
 texture_filter = 1
 layout_mode = 0
 offset_right = 40.0
@@ -135,7 +135,7 @@ value = 0.6
 texture_under = ExtResource("10_2drxq")
 texture_progress = ExtResource("10_2drxq")
 
-[node name="piece7" type="TextureProgressBar" parent="Control/volume_bar"]
+[node name="piece7" type="TextureProgressBar" parent="Control/volume_bar" unique_id=391748183]
 texture_filter = 1
 layout_mode = 0
 offset_right = 40.0
@@ -147,7 +147,7 @@ value = 0.7
 texture_under = ExtResource("11_7rapw")
 texture_progress = ExtResource("11_7rapw")
 
-[node name="piece8" type="TextureProgressBar" parent="Control/volume_bar"]
+[node name="piece8" type="TextureProgressBar" parent="Control/volume_bar" unique_id=1881191592]
 texture_filter = 1
 layout_mode = 0
 offset_right = 40.0
@@ -159,7 +159,7 @@ value = 0.8
 texture_under = ExtResource("12_o4au3")
 texture_progress = ExtResource("12_o4au3")
 
-[node name="piece9" type="TextureProgressBar" parent="Control/volume_bar"]
+[node name="piece9" type="TextureProgressBar" parent="Control/volume_bar" unique_id=422061853]
 texture_filter = 1
 layout_mode = 0
 offset_right = 40.0
@@ -170,7 +170,7 @@ value = 0.9
 texture_under = ExtResource("13_bb3wb")
 texture_progress = ExtResource("13_bb3wb")
 
-[node name="piece10" type="TextureProgressBar" parent="Control/volume_bar"]
+[node name="piece10" type="TextureProgressBar" parent="Control/volume_bar" unique_id=1181175129]
 texture_filter = 1
 layout_mode = 0
 offset_right = 40.0

@@ -140,8 +140,6 @@ func _ready():
 	songDiff = SongData.week_diffs;
 	%song_difficulty.text = songDiff;
 	
-	print(songDiff);
-	
 	characterList = addCharToList();
 	stageList = addStagesToList();
 	
@@ -155,9 +153,10 @@ func _ready():
 	events_button.connect("item_selected", change_event_text);
 	note_type_button.connect("item_selected", change_note_edit);
 	
-	add_new_tile = %new_opponent.button_pressed;
-	
 	for i in characterList:
+		if i.contains("dead") or i.contains("Dead") or i.contains("DEAD"):
+			characterList.erase(i);
+			
 		if i.contains(".json"):
 			replaceString = i.replace(".json", "");
 			
@@ -197,8 +196,6 @@ func _ready():
 	black_grid.scale = Vector2(10, 16);
 	black_grid.position.x = grid.position.x;
 	black_grid.position.y = grid.position.y+640;
-	
-	player3Options.disabled = %new_opponent.button_pressed;
 	
 	Conductor.curBeat = 0;
 	Conductor.curStep = 0;
@@ -243,6 +240,8 @@ func _ready():
 		load_section();
 		eventNote_adjustment();
 		
+	add_new_tile = %new_opponent.button_pressed;
+	player3Options.disabled = !%new_opponent.button_pressed;
 	timeBar.max_value = inst.stream.get_length();
 	
 func change_event_text(_item):
@@ -282,13 +281,14 @@ func get_icons(_char):
 		
 	var jsonFile = FileAccess.open("res://assets/data/characters/%s.json"%[replaced],FileAccess.READ);
 	var jsonData = JSON.new();
-	jsonData.parse(jsonFile.get_as_text());
-	icon = jsonData.get_data();
-	jsonFile.close();
 	
 	if jsonFile == null or replaced == "none":
 		return "no_icon";
 		
+	jsonData.parse(jsonFile.get_as_text());
+	icon = jsonData.get_data();
+	jsonFile.close();
+	
 	return icon["HealthIcon"];
 	
 func change_icons(_char):
@@ -296,9 +296,6 @@ func change_icons(_char):
 	update_icon(iconP2, get_icons(characterList[player2Options.selected]));
 	if !player3Options.disabled:
 		update_icon(iconP3, get_icons(characterList[player3Options.selected]));
-		iconP3.show();
-	else:
-		iconP3.hide();
 		
 func update_icon(icon, path):
 	if path == "" or path == null:
@@ -336,7 +333,6 @@ func detect_selectBox(obj):
 	
 func _input(ev):
 	if ev is InputEventMouseMotion:
-		update_cursor(cursor);
 		if isHolding && !grab_notes && !is_playing:
 			selectionRect = Rect2(
 				min(mouseBoxPos.x, to_local(get_global_mouse_position()).x),
@@ -486,7 +482,8 @@ func end_music(value, audio_player):
 	var song_time = value;
 	
 	if song_time >= audio_player.stream.get_length():
-		changeSection(0);
+		curSection = 0;
+		changeSection(curSection);
 		
 		Conductor.curBeat = 0;
 		Conductor.curStep = 0;
@@ -630,8 +627,9 @@ func _process(delta):
 				
 	mouse_inside = true if mouse_pos.x >= gridX+220 && mouse_pos.x <= gridX+grid_scaleX && mouse_pos.y > gridY && mouse_pos.y < gridY + grid_scaleY else false;
 	mouse_inside_ui = get_viewport().gui_get_hovered_control() is TabBar or get_viewport().gui_get_hovered_control() is SpinBox or get_viewport().gui_get_hovered_control() is CheckBox or get_viewport().gui_get_hovered_control() is Button or get_viewport().gui_get_hovered_control() is OptionButton;
-	update_cursor("pointer" if mouse_inside_ui else "default");
-	
+	if !mouse_inside:
+		update_cursor("pointer" if mouse_inside_ui else "default");
+		
 	var curMinute = str(int(inst.get_playback_position()) / 60).pad_zeros(1);
 	var curSeconds = str(int(inst.get_playback_position()) % 60).pad_zeros(2);
 	var maxMinutes = str(int(inst.stream.get_length()) / 60).pad_zeros(1);
@@ -923,10 +921,11 @@ func loadJson(song, difficulty = "", mew_chart = null):
 	for i in character_option_selected.keys():
 		select_option(i, character_option_selected[i]);
 		
-	if new_chartData["song"].has("player3"):
-		if new_chartData["song"]["player3"] != "":
-			select_option(player3Options, new_chartData["song"]["player3"]);
-			
+	if new_chartData["song"].has("player3") && new_chartData["song"]["player3"] != "":
+		select_option(player3Options, new_chartData["song"]["player3"]);
+	else:
+		select_option(player3Options, null);
+		
 	if typeof(new_chartData["song"]["events"]) == TYPE_DICTIONARY:
 		new_chartData["song"]["events"] = [];
 		
@@ -947,9 +946,15 @@ func set_null_var(cool_var, new_value):
 		new_chartData["song"][cool_var] = new_value;
 		
 func select_option(curCharacterOption, curCharacter):
+	if curCharacter.contains("dead") or curCharacter.contains("DEAD") or curCharacter.contains("Dead"):
+		curCharacter = "none";
+		
 	for i in curCharacterOption.get_item_count():
 		if curCharacterOption.get_item_text(i) == curCharacter:
 			curCharacterOption.select(i);
+			
+		if curCharacter == null or curCharacter == "":
+			curCharacterOption.select(characterList.size()-1);
 			
 func eventNote_adjustment():
 	if new_chartData["song"]["events"] != [] && !new_chartData["song"]["events"].is_empty():
@@ -1139,8 +1144,9 @@ func _on_note_sustain_lenght_value_changed(value: float) -> void:
 	load_section();
 	
 func _on_new_opponent_toggled(toggled_on: bool) -> void:
-	player3Options.disabled = !toggled_on
-	add_new_tile = toggled_on
+	iconP3.visible = toggled_on;
+	player3Options.disabled = !toggled_on;
+	add_new_tile = toggled_on;
 	
 func number_to_time(pos_Y = 0.0):
 	return remap(pos_Y, grid.position.y, grid.position.y + (16 * grid_size), 0, 16 * Conductor.stepCrochet);

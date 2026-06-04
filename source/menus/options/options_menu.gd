@@ -31,6 +31,8 @@ func reloadText():
 		options["offset menu"] = {};
 		#options["stage editor"] = {};
 		options["clear data"] = {};
+	else:
+		Global.currentOptions = 0;
 		
 func _ready() -> void:
 	Discord.update_discord_info("options menu", "Is in menus");
@@ -53,7 +55,7 @@ func _ready() -> void:
 	coolKeyText.position = Vector2(30, 290);
 	$keys.add_child(coolKeyText);
 	
-	change_option(0);
+	change_option(Global.current_selected["options"]);
 	
 var cur_array_option = 0;
 var ignore_key = false;
@@ -259,9 +261,11 @@ func _process(_delta):
 	settings.position.y = lerp(float(settings.position.y), float(480-coolOffset*new_cur_option), 0.20);
 	
 func change_option(change):
-	cur_option += change;
 	Sound.playAudio("scrollMenu", false);
+	
+	cur_option += change;
 	cur_option = wrapi(cur_option, 0, len(options));
+	Global.currentOptions = cur_option;
 	
 	for j in options.size():
 		options_stuff.get_child(j).modulate.a = 0.4;
@@ -269,8 +273,9 @@ func change_option(change):
 			options_stuff.get_child(j).modulate.a = 1;
 			
 func change_new_option(change):
-	new_cur_option += change;
 	Sound.playAudio("scrollMenu", false);
+	
+	new_cur_option += change;
 	new_cur_option = wrapi(new_cur_option, 0, len(new_options_array));
 	
 	description_text.text = options[options_array[cur_option]][new_options_array[new_cur_option]]["description"];

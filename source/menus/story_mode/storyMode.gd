@@ -83,7 +83,7 @@ func _ready():
 			
 	changeMenuCharacter();
 	changeDiff(1);
-	changeWeek(curWeek);
+	changeWeek(Global.current_selected["storyMode"]);
 	
 var choiced = false;
 func _input(ev):
@@ -216,9 +216,11 @@ func update_weekScore():
 		week_score += HighScore.get_score(i[0], suffix);
 		
 func changeWeek(shit):
-	curWeek += shit;
 	Sound.playAudio("scrollMenu", false);
+	
+	curWeek += shit;
 	curWeek = wrapi(curWeek, 0, len(new_weeks));
+	Global.currentStoryMode = curWeek;
 	updateWeek();
 	
 	for j in new_weeks.size():
@@ -226,6 +228,7 @@ func changeWeek(shit):
 		
 	update_weekScore();
 	changeMenuCharacter();
+	
 	
 func updateWeek():
 	SongData.weeks_data = weekJson;

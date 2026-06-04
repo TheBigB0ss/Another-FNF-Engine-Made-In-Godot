@@ -12,6 +12,7 @@ func _ready():
 	
 	if GlobalOptions.volume < 0.1 or GlobalOptions.volume == 0:
 		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), true);
+		
 	elif GlobalOptions.volume >= 0.1:
 		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), false);
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), lerp(-20.0, 0.0, GlobalOptions.volume));
@@ -25,7 +26,7 @@ func _input(ev):
 			if ev.keycode in [GlobalOptions.get_key("minus")]:
 				volume_shit(GlobalOptions.volume - 0.1);
 				
-func volume_shit(volume_value, muted = false):
+func volume_shit(volume_value):
 	timer.start();
 	show_volume_button();
 	

@@ -43,7 +43,7 @@ func _ready():
 		opts.get_child(j).modulate.a = lerp(opts.get_child(j).modulate.a, (1.0 if j == creditSelected else 0.5), 0.20);
 		opts.get_child(j).position.x = lerp(float(opts.get_child(j).position.x), float(150 if j == creditSelected else opts.position.x - 120), 0.25);
 		
-	changeDev(0);
+	changeDev(Global.current_selected["credits"])
 	change_social_midia(0);
 	
 func _input(event):
@@ -71,6 +71,8 @@ func _input(event):
 func changeDev(shit):
 	creditSelected += shit;
 	creditSelected = wrapi(creditSelected, 0, len(creditsJson["dev_info"]));
+	Global.currentCredits = creditSelected;
+	
 	Sound.playAudio("scrollMenu", false);
 	
 	change_social_midia(0);
@@ -79,6 +81,7 @@ func changeDev(shit):
 func change_social_midia(shit):
 	socialSelected += shit;
 	socialSelected = wrapi(socialSelected, 0, len(creditsJson["dev_info"][creditSelected]["social midia"].keys()));
+	
 	Sound.playAudio("scrollMenu", false);
 	
 	update_midia();
@@ -108,7 +111,7 @@ func update_midia():
 		else:
 			socialOpts.get_child(i).modulate.a = 0.5;
 			
-func _process(delta):
+func _process(_delta):
 	opts.position.y = lerp(float(opts.position.y), float(480-coolOffset*creditSelected), 0.23);
 	for j in creditsJson["dev_info"].size():
 		opts.get_child(j).modulate.a = lerp(opts.get_child(j).modulate.a, (1.0 if j == creditSelected else 0.5), 0.20);
