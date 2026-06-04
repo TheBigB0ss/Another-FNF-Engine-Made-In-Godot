@@ -235,7 +235,7 @@ func _process(delta: float) -> void:
 	if isChartNote:
 		return;
 		
-	if self != null && !is_pressing:
+	if self != null:
 		var ms = (strumTime - Conductor.getSongTime);
 		can_press = ms <= 175.0 && ms >= -140.0 && isPlayer;
 		

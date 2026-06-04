@@ -291,8 +291,6 @@ func _ready():
 		hud.move_child(newSongCard, 8);
 		
 	if GlobalOptions.updated_hud == "classic hud":
-		timeBar.hide();
-		timeText.hide();
 		if !GlobalOptions.middle_scroll:
 			playerStrum.position.x -= 80;
 			

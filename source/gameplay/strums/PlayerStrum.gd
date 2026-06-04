@@ -320,8 +320,6 @@ func delete_note(note_direction):
 					
 				new_note.is_pressing = true;
 				
-		break;
-		
 func sort_notes(a, b):
 	if a != null && b != null:
 		return a.strumTime < b.strumTime;
