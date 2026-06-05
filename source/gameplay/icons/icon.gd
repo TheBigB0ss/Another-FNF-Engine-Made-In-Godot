@@ -3,7 +3,7 @@ class_name Icon extends Sprite2D
 func _ready() -> void:
 	Conductor.new_beat.connect(beat_hit);
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	self.scale = lerp(self.scale, Vector2(1.0, 1.0), 0.08);
 	
 func play_icon_anim(anim):
@@ -29,7 +29,7 @@ func set_icon_hframes():
 	if self.texture.get_width() <= 150:
 		self.hframes = 1;
 		
-func beat_hit(beat):
+func beat_hit(_beat):
 	if GlobalOptions.updated_icon == "disabled":
 		return;
 		

@@ -58,6 +58,7 @@ var gotHit = false;
 var hitTail = false;
 var chart_player = false;
 var isChartNote = false;
+var ignoreNote = false;
 
 var manyHits = 0;
 var amount = 0;
@@ -239,7 +240,7 @@ func _process(delta: float) -> void:
 		var ms = (strumTime - Conductor.getSongTime);
 		can_press = ms <= 175.0 && ms >= -140.0 && isPlayer;
 		
-	if missed:
+	if missed && !ignoreNote:
 		self.modulate.a = 0.3;
 		
 	if isSustain && is_instance_valid(noteLine):
@@ -342,6 +343,9 @@ func emitPress():
 	
 var emit_miss = false;
 func miss_note():
+	if ignoreNote:
+		return;
+		
 	if emit_miss:
 		return;
 		
@@ -361,8 +365,6 @@ func destroy_note():
 	if manyHits > 0 && type == "Echo Note":
 		var tween = create_tween();
 		tween.tween_property(self, "strumTime", strumTime + (amount * Conductor.crochet), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
-		
-		#strumTime = lerp(strumTime, strumTime + amount*Conductor.crochet, Conductor.crochet/1000);
 		
 		manyHits -= 1;
 		

@@ -120,7 +120,7 @@ func _process(delta):
 	
 	for strums in opponents_strums:
 		for note in strums:
-			if note == null or note.isPlayer or note.is_a_bad_note:
+			if note == null or note.isPlayer or note.is_a_bad_note or note.ignoreNote:
 				continue;
 				
 			if Conductor.getSongTime >= note.strumTime:
@@ -154,7 +154,14 @@ func _process(delta):
 			
 	for i in notes_to_delete:
 		opponentNotes.erase(i);
+		if !new_opponentNotes.is_empty():
+			new_opponentNotes.erase(i);
 		notesList.erase(i);
+		
+		if i == null:
+			continue;
+			
+		i.queue_free();
 		
 func notesAppears():
 	var tw = get_tree().create_tween();

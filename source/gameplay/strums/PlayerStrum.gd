@@ -107,20 +107,23 @@ func _process(delta):
 			
 		if note.missedLongNote or note.missTimer > 0:
 			var releaseDiff = (Conductor.getSongTime - note.release_time);
-			var speed = 0.45 * Conductor.songSpeed;
-			note.position.y = strumY + releaseDiff * speed if GlobalOptions.down_scroll else strumY - releaseDiff * speed;
+			note.position.y = strumY + releaseDiff * 0.45 * Conductor.songSpeed if GlobalOptions.down_scroll else strumY - releaseDiff * 0.45 * Conductor.songSpeed;
 			
 		if !note.isPlayer:
 			continue;
 			
-		if Conductor.getSongTime > 155 + note.strumTime && !note.is_pressing && !note.is_a_bad_note:
+		if Conductor.seekTime >= 0 && note.strumTime < Conductor.seekTime:
+			notes_to_delete.append(note)
+			continue;
+			
+		if Conductor.getSongTime > 155 + note.strumTime && !note.is_pressing && !note.is_a_bad_note && !note.ignoreNote:
 			note.missed = true;
 			note.miss_note();
 			
-		if Conductor.getSongTime > 320 + note.strumTime && !note.isSustain && note.missed:
+		if Conductor.getSongTime > 320 + note.strumTime && !note.isSustain && (note.missed or note.ignoreNote):
 			notes_to_delete.append(note);
 			
-		if Conductor.getSongTime > 335 + (note.strumTime+note.ogSustain) && note.isSustain && !note.is_pressing && note.missed:
+		if Conductor.getSongTime > 335 + (note.strumTime+note.ogSustain) && note.isSustain && !note.is_pressing && (note.missed or note.ignoreNote):
 			notes_to_delete.append(note);
 			
 	playerNotes = playerNotes.filter(func(note): return note != null);
@@ -203,6 +206,10 @@ func _process(delta):
 	for i in notes_to_delete:
 		playerNotes.erase(i);
 		notesList.erase(i);
+		if i == null:
+			continue;
+			
+		i.queue_free();
 		
 func notesAppears():
 	var tw = get_tree().create_tween();

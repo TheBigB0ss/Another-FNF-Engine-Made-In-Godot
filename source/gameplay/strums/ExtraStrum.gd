@@ -114,7 +114,7 @@ func _process(delta):
 			notes_to_delete.append(note);
 			
 	for note in opponentNotes:
-		if note == null or note.isPlayer or note.is_a_bad_note or !note.secondOpponentNote:
+		if note == null or note.isPlayer or note.is_a_bad_note or !note.secondOpponentNote or note.ignoreNote:
 			continue;
 			
 		if Conductor.getSongTime >= note.strumTime:
@@ -140,6 +140,10 @@ func _process(delta):
 	for i in notes_to_delete:
 		opponentNotes.erase(i);
 		notesList.erase(i);
+		if i == null:
+			continue;
+			
+		i.queue_free();
 		
 	for notes in strumNode.get_children():
 		if notes.reset_arrow_anim > 0:

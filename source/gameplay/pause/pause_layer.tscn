@@ -4,6 +4,7 @@
 [ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="2_hyh4q"]
 [ext_resource type="Shader" uid="uid://chi6jamggry1k" path="res://source/shaders/backdrops shaders/backdrop2.gdshader" id="2_nmpxq"]
 [ext_resource type="Texture2D" uid="uid://dsjjxpfhq7j7" path="res://assets/images/backdrop1.png" id="3_aic1x"]
+[ext_resource type="FontFile" uid="uid://clifiya6s5xnf" path="res://assets/fonts/pixel.otf" id="5_aic1x"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5e5d3"]
 shader = ExtResource("2_nmpxq")
@@ -15,6 +16,10 @@ font = ExtResource("2_hyh4q")
 font_size = 570
 shadow_size = 45
 shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_5e5d3"]
+font = ExtResource("5_aic1x")
+font_size = 35
 
 [node name="PauseLayer" type="CanvasLayer" unique_id=455362702]
 script = ExtResource("1_txscq")
@@ -49,6 +54,15 @@ Difficulty:
 Deaths:"
 label_settings = SubResource("LabelSettings_25oa3")
 horizontal_alignment = 2
+
+[node name="timeText" type="Label" parent="panel" unique_id=753113037]
+visible = false
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "0:00/0:00"
+label_settings = SubResource("LabelSettings_5e5d3")
 
 [node name="options_grp" type="Node2D" parent="panel" unique_id=1229755092]
 position = Vector2(70, 479)

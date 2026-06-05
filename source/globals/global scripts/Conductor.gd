@@ -18,6 +18,9 @@ var curStep = 0;
 var lastSection = 0;
 var curSection = floor(curStep/16);
 
+var startTime = 0;
+var seekTime = 0;
+
 var bpmChangeMap = [];
 
 signal new_beat(beat);
@@ -78,6 +81,8 @@ func reset():
 	crochet = (60.0 / bpm) * 1000.0;
 	stepCrochet = crochet / 4.0;
 	getSongTime = 0;
+	
+	seekTime = 0;
 	
 func mapBPMChanges(songJson):
 	bpmChangeMap = [];

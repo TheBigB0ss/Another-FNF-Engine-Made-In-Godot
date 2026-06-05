@@ -709,6 +709,19 @@ func startCoutdown():
 	var countdownPath = "default" if !SongData.isPixelStage else "pixel";
 	var idleCounter = 0;
 	
+	if Conductor.startTime > 0:
+		if SongData.needVoice:
+			voices.play(float(Conductor.startTime));
+		inst.play(float(Conductor.startTime));
+		
+		setTimePos(Conductor.startTime);
+		
+		can_pause = true;
+		
+		Conductor.startTime = 0;
+		
+		return;
+		
 	if skipIntro && is_on_intro:
 		can_pause = true;
 		is_on_intro = false;
@@ -881,5 +894,13 @@ func beat_hit(beat):
 	if beat % 4 == 0 && !is_on_intro:
 		sectionCamera.zoom = SongData.stageZoomBeat;
 		
+func setTimePos(time):
+	time = max(0, time);
+	for i in [inst, voices]:
+		i.seek(time/1000);
+		
+	Conductor.seekTime = time;
+	Conductor.getSongTime = time;
+	
 func move_cam(smoothing, pos):
-	sectionCamera.global_position = (pos if !smoothing else lerp(sectionCamera.global_position, pos, Conductor.crochet/1000));
+	sectionCamera.global_position = (pos if !smoothing else lerp(sectionCamera.global_position, pos, 1.0));

@@ -119,6 +119,9 @@ func getFolderShit(folder):
 func addCharToList():
 	var charList = [];
 	for i in getFolderShit("assets/data/characters/"):
+		if i.to_lower().contains("dead"):
+			continue;
+			
 		if i.ends_with(".json"):
 			charList.append(i);
 			
@@ -154,9 +157,6 @@ func _ready():
 	note_type_button.connect("item_selected", change_note_edit);
 	
 	for i in characterList:
-		if i.contains("dead") or i.contains("Dead") or i.contains("DEAD"):
-			characterList.erase(i);
-			
 		if i.contains(".json"):
 			replaceString = i.replace(".json", "");
 			
