@@ -27,6 +27,7 @@ anims_timer = {
 }
 anim_type = 3
 have_death_animation = true
+idle_type = 2
 death_scene = "uid://de51xg7o8kadi"
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=352195109]

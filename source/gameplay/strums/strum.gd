@@ -91,10 +91,11 @@ func _process(delta):
 	for i in array_notes:
 		var data = int(i[1])%(8 if !SongData.haveTwoOpponents else 12);
 		var distance = (i[0] - Conductor.getSongTime)*Conductor.songSpeed;
+		var distance_offset = 4000 if GlobalOptions.down_scroll else 2200;
 		var noteVal1 = i[8] if i.size() > 8 else null;
 		var noteVal2 = i[9] if i.size() > 9 else null;
 		
-		if distance <= 2150 && !i[7]:
+		if distance <= distance_offset && !i[7]:
 			spawnNote(i[0], data, i[2], i[3], i[4], i[5], i[6], noteVal1, noteVal2);
 			array_notes.erase(i);
 		else:
@@ -168,18 +169,6 @@ func _process(delta):
 func sort_notes(a, b):
 	return a.strumTime < b.strumTime;
 	
-func clear_notes(time):
-	for i in notesList:
-		if i == null:
-			continue;
-			
-		if i.strumTime - 500 < time:
-			i.visible = false;
-			i.ignoreNote = true;
-			
-			notesList.erase(i);
-			i.queue_free();
-			
 func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer, value1 = null, value2 = null):
 	var note_data = int(noteData)%4;
 	var note = Note.new();

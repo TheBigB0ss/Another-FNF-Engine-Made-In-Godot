@@ -25,7 +25,7 @@ func _ready():
 		coolOptions.add_child(menu_opts);
 		offSetShit += coolOffset;
 		
-	changeItem(0);
+	changeItem(Global.current_selected["mainmenu"]);
 	
 	coolOptions.position.y = float((720/2.0)-(coolOffset*curOption));
 	
@@ -68,24 +68,23 @@ var can_show_magenta = true;
 var magenta_time = 0.095;
 func _process(delta):
 	coolOptions.position.y = lerp(coolOptions.position.y, (720/2.0)-(coolOffset*curOption), 0.040);
-	if choiced:
-		$magentaBg.show();
-		magenta_time -= delta;
-		if magenta_time <= 0:
-			if can_show_magenta:
-				$magentaBg.modulate.a = 1;
-				can_show_magenta = false;
-			else:
-				$magentaBg.modulate.a = 0;
-				can_show_magenta = true;
-				
-			magenta_time = 0.095;
-			
+	if !choiced:
+		return;
+		
+	$magentaBg.show();
+	magenta_time -= delta;
+	if magenta_time <= 0:
+		$magentaBg.modulate.a = 1.0 - $magentaBg.modulate.a;
+		magenta_time = 0.095;
+		
 func changeItem(change):
+	Sound.playAudio("scrollMenu", false);
+	
 	curOption += change;
 	curOption = wrapi(curOption, 0, len(options));
+	
+	Global.currentMainMenu = curOption;
 	
 	for j in options.size():
 		coolOptions.get_child(j).play(options[curOption] + " selected" if j == curOption else options[j] + " idle");
 		
-	Sound.playAudio("scrollMenu", false);

@@ -27,6 +27,7 @@ var updated_cam = "normal";
 var updated_icon = "default";
 var rating_mode = "hud element";
 var timeBar_mode = "default";
+var idleMode = "beat";
 
 var use_shader = true;
 var show_splashes = true;
@@ -68,7 +69,7 @@ func _ready():
 		for j in keys.keys():
 			keys_list.append(j);
 			
-	if !settingsJson.has("version") or settingsJson["version"] != 6:
+	if !settingsJson.has("version") or settingsJson["version"] != 7:
 		reset_settings();
 		
 	apply_changes();
@@ -97,7 +98,7 @@ func load_settings():
 		
 func reset_settings():
 	settingsJson = {
-		"version": 6,
+		"version": 7,
 		"meta":{
 			"rating_pos": [635, 235],
 			"combo_pos": [695, 285],
@@ -120,7 +121,8 @@ func reset_settings():
 			"r to restart": false,
 			"play miss sound": true,
 			"pause music": "pause song",
-			"camera mode": "normal"
+			"camera mode": "normal",
+			"idle mode": "step"
 		},
 		"visual": {
 			"hud mode": "new hud",
@@ -178,6 +180,10 @@ func reset_settings():
 			'debug text mode':{
 				"list": ["simple", "complex", "disable"],
 				"index": 0
+			},
+			'idle mode':{
+				"list": ["beat", "step"],
+				"index": 0
 			}
 		}
 	};
@@ -211,6 +217,7 @@ func apply_changes():
 	ghost_tapping = settingsJson["gameplay"]["ghost tapping"];
 	restart_action = settingsJson["gameplay"]["r to restart"];
 	playMissSound = settingsJson["gameplay"]["play miss sound"];
+	idleMode = settingsJson["gameplay"]["idle mode"];
 	
 	vsync = settingsJson["graphics"]["vsync"];
 	low_quality = settingsJson["graphics"]["low quality"];
@@ -454,6 +461,11 @@ func set_options():
 			"play miss sound": {
 				"value": settingsJson["gameplay"]["play miss sound"],
 				"description": "play a sound clue when you missed a note"
+			},
+			"idle mode": {
+				"value": settingsJson["options"]["idle mode"]["list"],
+				"description": "select how you want the character to return to idle",
+				"ID": settingsJson["options"]["idle mode"]["index"]
 			},
 			"camera mode": {
 				"value": settingsJson["options"]["camera mode"]["list"],

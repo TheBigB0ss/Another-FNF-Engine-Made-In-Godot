@@ -1,7 +1,5 @@
 extends Node
 
-var stage = 'Stage'
-
 @onready var spotLightsGrp = $'ParallaxBackground/ParallaxLayer/spotLights';
 
 func _ready():

@@ -59,9 +59,12 @@ func unlock_int_achievement(achievement, new_achievement, max_val, min_val):
 func check_achievement_status(achievement):
 	if achievement != "version":
 		match typeof(achievements[achievement]["value"]):
-			TYPE_BOOL: return achievements[achievement]["value"];
-			TYPE_ARRAY: return achievements[achievement]["value"][2] or achievements[achievement]["value"][0] == achievements[achievement]["value"][1];
-			
+			TYPE_BOOL: 
+				return achievements[achievement]["value"];
+				
+			TYPE_ARRAY: 
+				return achievements[achievement]["value"][2] or achievements[achievement]["value"][0] == achievements[achievement]["value"][1];
+				
 	return false;
 	
 func get_achievement(achievement_name):

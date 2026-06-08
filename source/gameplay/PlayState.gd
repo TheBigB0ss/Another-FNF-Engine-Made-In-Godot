@@ -296,7 +296,7 @@ func _ready():
 			
 		newOpponentStrum.position.x -= 40;
 		scoreText.text = 'Score: %s'%[int(score)];
-		scoreText.position = Vector2(620, 680);
+		scoreText.position = Vector2(620, 680 if !GlobalOptions.down_scroll else 90);
 		scoreText.scale = Vector2(0.03, 0.03);
 		
 	updateScoreText();
@@ -364,7 +364,7 @@ func _process(delta: float) -> void:
 	healthBar.value = helthLerpValue;
 	
 	if SongData.is_not_in_cutscene && !Global.is_on_video:
-		sectionCamera.zoom = lerp(sectionCamera.zoom, SongData.stageZoom, 0.09);
+		sectionCamera.zoom = lerp(sectionCamera.zoom, SongData.stageZoom, 0.10);
 		
 	if !is_on_intro && Conductor.getSongTime >= 0 && !playlist.is_empty():
 		discord_songName = "Playing: %s (%s)"%[playlist[0], songDiff];
@@ -735,10 +735,10 @@ func startCoutdown():
 		
 	for i in [bf, dad, gf]:
 		if is_instance_valid(i):
-			i.beat_dance(idleCounter);
+			i.back_to_idle(idleCounter);
 			
 	if SongData.haveTwoOpponents && is_instance_valid(new_opponent):
-		new_opponent.beat_dance(idleCounter);
+		new_opponent.back_to_idle(idleCounter);
 		
 	for i in 5:
 		await get_tree().create_timer(Conductor.crochet/1000).timeout;

@@ -78,10 +78,11 @@ func _process(delta):
 	for i in array_notes:
 		var data = int(i[1])%(8 if !SongData.haveTwoOpponents else 12);
 		var distance = (i[0] - Conductor.getSongTime)*Conductor.songSpeed;
+		var distance_offset = 4000 if GlobalOptions.down_scroll else 2200;
 		var noteVal1 = i[8] if i.size() > 8 else null;
 		var noteVal2 = i[9] if i.size() > 9 else null;
 		
-		if distance <= 2150 && !i[7]:
+		if distance <= distance_offset && !i[7]:
 			spawnNote(i[0], data, i[2], i[3], i[4], i[5], i[6], noteVal1, noteVal2);
 			array_notes.erase(i);
 		else:

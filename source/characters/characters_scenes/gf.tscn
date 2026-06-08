@@ -22,6 +22,7 @@ anims_timer = {
 }
 anim_type = 3
 have_death_animation = false
+idle_type = 2
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=2101626731]
 sprite_frames = ExtResource("1_s78p8")

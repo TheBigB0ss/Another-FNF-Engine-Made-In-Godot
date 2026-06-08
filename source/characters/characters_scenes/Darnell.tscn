@@ -746,7 +746,7 @@ animations = [{
 [node name="Darnell" type="Node2D" unique_id=1031076507]
 script = ExtResource("1_f1jyy")
 json_path = "res://assets/data/characters/Darnell.json"
-healthBar_Color = Color(0.53741115, 0.37321895, 0.64468336, 1)
+healthBar_Color = Color(0.38431373, 0.09019608, 0.5764706, 1)
 anims_timer = {
 "idle dance": [2, 5, false],
 "singDown": [2, 5, false],
@@ -760,5 +760,7 @@ have_death_animation = false
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=908624715]
 sprite_frames = SubResource("SpriteFrames_h3gbs")
-animation = &"Darnell Pose Down"
+animation = &"DarnellIDLE"
+frame = 27
+frame_progress = 1.0
 offset = Vector2(35, 3)

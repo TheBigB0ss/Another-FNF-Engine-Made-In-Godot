@@ -39,12 +39,19 @@ var currentAchievements = 0:
 			currentAchievements = val;
 			save_current_statu();
 			
+var currentMainMenu = 0:
+	set(val):
+		if currentMainMenu != val:
+			currentMainMenu = val;
+			save_current_statu();
+			
 var current_selected = {
 	"storyMode": 0,
 	"freeplay": 0,
 	"credits": 0,
 	"options": 0,
 	"achievements": 0,
+	"mainmenu": 0
 };
 
 func save_current_statu():
@@ -53,6 +60,7 @@ func save_current_statu():
 	current_selected["credits"] = currentCredits;
 	current_selected["options"] = currentOptions;
 	current_selected["achievements"] = currentAchievements;
+	current_selected["mainmenu"] = currentMainMenu;
 	
 func getTime():
 	var time = Time.get_time_dict_from_system();

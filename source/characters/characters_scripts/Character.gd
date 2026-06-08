@@ -14,6 +14,12 @@ enum CHARACTER_ANIM_TYPE{
 	NONE = 3
 };
 
+enum IDLE_MODE{
+	DEFAULT = 1,
+	BEAT = 2,
+	STEP = 3
+};
+
 @onready var character = $"Character_Sprite" if has_node("Character_Sprite") else $character;
 @onready var character_anim = get_node_or_null("Character_Animation");
 
@@ -38,12 +44,18 @@ var have_death_animation = false:
 	set(value):
 		have_death_animation = value;
 		notify_property_list_changed();
-var death_scene = "";
-
+		
 var anim_type:CHARACTER_ANIM_TYPE = CHARACTER_ANIM_TYPE.FREEZE:
 	set(val):
 		anim_type = val;
 		notify_property_list_changed();
+		
+var idle_type:IDLE_MODE = IDLE_MODE.DEFAULT:
+	set(val):
+		idle_type = val;
+		notify_property_list_changed();
+		
+var death_scene = "";
 var frame_count = 2.4;
 
 @export_group("character settings", "")
@@ -97,6 +109,13 @@ func _ready():
 		
 	base_position = (self.position if character_anim == null else character.position);
 	
+	if idle_type == IDLE_MODE.DEFAULT && !Engine.is_editor_hint():
+		match GlobalOptions.idleMode:
+			"beat":
+				idle_type = IDLE_MODE.BEAT;
+			"step":
+				idle_type = IDLE_MODE.STEP;
+				
 	dance();
 	
 var prevState = null;
@@ -146,11 +165,8 @@ func dance():
 var current_anim = character.animation if character is AnimatedSprite2D else "";
 func _playAnim(anim = ""):
 	for i in animList.size():
-		if characterState == CHARACTER_STATES.HOLDING:
-			if !is_instance_valid(curNote):
-				return;
-				
-			if anim.begins_with("sing") && curNote.curNoteAnim != anim:
+		if is_instance_valid(curNote):
+			if characterState == CHARACTER_STATES.HOLDING && anim.begins_with("sing") && curNote.curNoteAnim != anim:
 				anim = curNote.curNoteAnim;
 				
 		if animList[i] != anim:
@@ -237,6 +253,14 @@ func _get_property_list():
 		"usage": PROPERTY_USAGE_DEFAULT
 	});
 	
+	properties.append({
+		"name": "idle_type",
+		"type": TYPE_INT,
+		"hint": PROPERTY_HINT_ENUM,
+		"hint_string": "DEFAULT:1,BEAT:2,STEP:3",
+		"usage": PROPERTY_USAGE_DEFAULT
+	});
+	
 	if anim_type == CHARACTER_ANIM_TYPE.REPEAT:
 		properties.append({
 			"name": "frame_count",
@@ -256,10 +280,19 @@ func _get_property_list():
 	return properties;
 	
 func beat_hit(beat) -> void:
-	beat_dance(beat);
+	if idle_type != IDLE_MODE.BEAT:
+		return;
+		
+	back_to_idle(beat);
 	
-func beat_dance(beat):
-	if (beat % int(anim_beat) == 0) && !curAnim.begins_with("sing") && !special_anim:
+func step_hit(step) -> void:
+	if idle_type != IDLE_MODE.STEP:
+		return;
+		
+	back_to_idle(step);
+	
+func back_to_idle(idle_timer):
+	if (idle_timer % int(anim_beat) == 0) && !curAnim.begins_with("sing") && !special_anim:
 		dance();
 		
 func reset_anim():

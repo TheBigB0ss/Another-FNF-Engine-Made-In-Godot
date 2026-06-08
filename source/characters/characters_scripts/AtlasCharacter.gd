@@ -19,6 +19,12 @@ enum CHARACTER_ANIM_TYPE{
 	NONE = 3
 };
 
+enum IDLE_MODE{
+	DEFAULT = 1,
+	BEAT = 2,
+	STEP = 3
+};
+
 var curCharacter = "";
 
 var curIcon = '';
@@ -40,12 +46,18 @@ var have_death_animation = false:
 	set(value):
 		have_death_animation = value;
 		notify_property_list_changed();
-var death_scene = "";
-
+		
 var anim_type:CHARACTER_ANIM_TYPE = CHARACTER_ANIM_TYPE.FREEZE:
 	set(val):
 		anim_type = val;
 		notify_property_list_changed();
+		
+var idle_type:IDLE_MODE = IDLE_MODE.DEFAULT:
+	set(val):
+		idle_type = val;
+		notify_property_list_changed();
+		
+var death_scene = "";
 var frame_count = 2.4;
 
 @export_group("character settings", "")
@@ -67,11 +79,17 @@ func _init() -> void:
 	Conductor.new_beat.connect(beat_hit);
 	Conductor.new_step.connect(step_hit);
 	
-func step_hit(_step) -> void:
-	pass
+func beat_hit(beat) -> void:
+	if idle_type != IDLE_MODE.BEAT:
+		return;
+		
+	back_to_idle(beat);
 	
-func beat_hit(_beat) -> void:
-	beat_dance(_beat);
+func step_hit(step) -> void:
+	if idle_type != IDLE_MODE.STEP:
+		return;
+		
+	back_to_idle(step);
 	
 func init_json(char_json_path):
 	var jsonFile = FileAccess.open(char_json_path, FileAccess.READ);
@@ -109,6 +127,13 @@ func _ready():
 			charData["Poses"][i].get("special anim", false)
 		];
 		
+	if idle_type == IDLE_MODE.DEFAULT && !Engine.is_editor_hint():
+		match GlobalOptions.idleMode:
+			"beat":
+				idle_type = IDLE_MODE.BEAT;
+			"step":
+				idle_type = IDLE_MODE.STEP;
+				
 	dance();
 	
 func _process(delta):
@@ -161,12 +186,10 @@ func _playAnim(anim = ""):
 	playing = true;
 	for i in animList.size():
 		if characterState == CHARACTER_STATES.HOLDING:
-			if !is_instance_valid(curNote):
-				return;
-				
-			if anim.begins_with("sing") && curNote.curNoteAnim != anim:
-				anim = curNote.curNoteAnim;
-				
+			if is_instance_valid(curNote):
+				if anim.begins_with("sing") && curNote.curNoteAnim != anim:
+					anim = curNote.curNoteAnim;
+					
 		if animList[i] != anim:
 			continue;
 			
@@ -237,6 +260,14 @@ func _get_property_list():
 		"usage": PROPERTY_USAGE_DEFAULT
 	});
 	
+	properties.append({
+		"name": "idle_type",
+		"type": TYPE_INT,
+		"hint": PROPERTY_HINT_ENUM,
+		"hint_string": "DEFAULT:1,BEAT:2,STEP:3",
+		"usage": PROPERTY_USAGE_DEFAULT
+	});
+	
 	if anim_type == CHARACTER_ANIM_TYPE.REPEAT:
 		properties.append({
 			"name": "frame_count",
@@ -255,6 +286,6 @@ func _get_property_list():
 		
 	return properties;
 	
-func beat_dance(beat):
-	if (beat % int(anim_beat) == 0) && !curAnim.begins_with("sing") && !special_anim:
+func back_to_idle(idle_timer):
+	if (idle_timer % int(anim_beat) == 0) && !curAnim.begins_with("sing") && !special_anim:
 		dance();

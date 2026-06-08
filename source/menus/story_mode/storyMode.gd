@@ -119,22 +119,17 @@ func _input(ev):
 				rightArrow.play("arrow right");
 				
 var confirm_timer = 0.075;
-var can_change_color = false;
 func _process(delta):
 	weeksSpr.position.y = lerp(float(weeksSpr.position.y), float(480-coolOffset*curWeek), 0.23);
 	
-	if choiced:
-		confirm_timer -= delta;
-		if confirm_timer <= 0:
-			if can_change_color:
-				weeksSpr.get_child(curWeek).modulate = Color.CYAN;
-				can_change_color = false;
-			else:
-				weeksSpr.get_child(curWeek).modulate = Color.WHITE;
-				can_change_color = true;
-				
-			confirm_timer = 0.075;
-			
+	if !choiced:
+		return;
+		
+	confirm_timer -= delta;
+	if confirm_timer <= 0:
+		weeksSpr.get_child(curWeek).modulate = (Color.WHITE if weeksSpr.get_child(curWeek).modulate == Color.CYAN else Color.CYAN);
+		confirm_timer = 0.075;
+		
 	scoreText.text = "Week Score: %s"%[week_score];
 	
 func go_to_week():
