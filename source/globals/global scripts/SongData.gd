@@ -217,3 +217,4 @@ func set_null_var(cool_var, new_value):
 func set_stage_null_var(cool_var, new_value):
 	if !stageData.has(cool_var):
 		stageData[cool_var] = new_value;
+		

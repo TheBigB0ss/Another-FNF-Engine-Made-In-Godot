@@ -5,7 +5,7 @@ var audio = AudioStreamPlayer.new();
 func _ready():
 	add_child(audio)
 	
-func playAudio(sound, isPixelAudio, volume = 0.0):
+func playAudio(sound, isPixelAudio = false, volume = 0.0):
 	audio.stream = load("res://assets/sounds/%s.ogg"%[sound + "-pixel" if isPixelAudio else sound]);
 	audio.volume_db = volume;
 	audio.play(0.0);

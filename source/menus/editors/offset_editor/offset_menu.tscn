@@ -13,6 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://c4iv46257vg3j" path="res://assets/images/editors/offset_ui/UI_LEFT.png" id="6_wtymh"]
 [ext_resource type="Texture2D" uid="uid://ckkrwrljw3sjd" path="res://assets/images/editors/offset_ui/UI_LEFT_WALL.png" id="7_o6sf4"]
 [ext_resource type="Texture2D" uid="uid://cj2xlr6n2atcu" path="res://assets/images/editors/offset_ui/UI_RIGHT_WALL.png" id="8_125xj"]
+[ext_resource type="Script" uid="uid://l08oojy4jhie" path="res://source/gameplay/icons/icon.gd" id="10_npw2b"]
+[ext_resource type="Texture2D" uid="uid://butl2egj5i38n" path="res://assets/images/hud/timeBar.png" id="10_r5tmy"]
 
 [node name="OffsetMenu" type="Node2D" unique_id=720753676]
 script = ExtResource("1_vft5f")
@@ -24,12 +26,13 @@ position = Vector2(475, 348)
 
 [node name="offset_layer" type="CanvasLayer" parent="." unique_id=407402591]
 layer = 3
+visible = false
 
 [node name="TabContainer" type="TabContainer" parent="offset_layer" unique_id=1159964180]
 offset_left = 807.0
 offset_top = 23.0
-offset_right = 1231.0
-offset_bottom = 462.0
+offset_right = 1234.0
+offset_bottom = 467.0
 current_tab = 0
 tab_focus_mode = 0
 
@@ -87,28 +90,28 @@ text = "flip X?"
 [node name="flipY" type="CheckBox" parent="offset_layer/TabContainer/main settings" unique_id=1741130952]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 95.0
+offset_left = 86.0
 offset_top = 44.0
-offset_right = 170.0
+offset_right = 161.0
 offset_bottom = 75.0
 text = "flip Y?"
 
 [node name="is_player" type="CheckBox" parent="offset_layer/TabContainer/main settings" unique_id=203794158]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 6.0
+offset_left = -2.0
 offset_top = 152.0
-offset_right = 120.0
+offset_right = 112.0
 offset_bottom = 183.0
 text = "is a player?"
 
 [node name="animated_icon" type="CheckBox" parent="offset_layer/TabContainer/main settings" unique_id=788532414]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 6.0
-offset_top = 229.0
-offset_right = 152.0
-offset_bottom = 260.0
+offset_left = 278.0
+offset_top = 152.0
+offset_right = 424.0
+offset_bottom = 183.0
 text = "animated icon?
 "
 
@@ -119,13 +122,14 @@ offset_left = 49.0
 offset_top = 80.0
 offset_right = 199.0
 offset_bottom = 111.0
+scale = Vector2(0.82, 0.82)
 
 [node name="color_text" type="ColorPickerButton" parent="offset_layer/TabContainer/main settings" unique_id=139626662]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 139.0
 offset_top = 120.0
-offset_right = 299.0
+offset_right = 236.0
 offset_bottom = 151.0
 color = Color(1, 1, 1, 1)
 
@@ -148,64 +152,97 @@ text = "health bar color:"
 [node name="cam_follow_poses" type="CheckBox" parent="offset_layer/TabContainer/main settings" unique_id=21460981]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 6.0
-offset_top = 190.0
-offset_right = 175.0
-offset_bottom = 221.0
+offset_left = 112.0
+offset_top = 152.0
+offset_right = 281.0
+offset_bottom = 183.0
 text = "cam follow poses?"
 
 [node name="save_json" type="Button" parent="offset_layer/TabContainer/main settings" unique_id=191823835]
 layout_mode = 0
 offset_left = 139.0
-offset_top = 321.0
+offset_top = 356.0
 offset_right = 263.0
-offset_bottom = 355.0
+offset_bottom = 390.0
 text = "save json"
 
 [node name="characters" type="OptionButton" parent="offset_layer/TabContainer/main settings" unique_id=1852977677]
 layout_mode = 0
 offset_left = 92.0
-offset_top = 16.0
+offset_top = 12.0
 offset_right = 240.0
-offset_bottom = 36.0
+offset_bottom = 32.0
+scale = Vector2(0.835, 0.835)
 
 [node name="camera_X_label" type="Label" parent="offset_layer/TabContainer/main settings" unique_id=1841803511]
 layout_mode = 0
 offset_left = 11.0
-offset_top = 270.0
+offset_top = 191.0
 offset_right = 139.0
-offset_bottom = 293.0
+offset_bottom = 214.0
 text = "camera X:"
 
 [node name="camera_X" type="SpinBox" parent="offset_layer/TabContainer/main settings" unique_id=1144866384]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 89.0
-offset_top = 267.0
+offset_top = 188.0
 offset_right = 175.56299
-offset_bottom = 298.0
+offset_bottom = 219.0
 min_value = -9000.0
 max_value = 9000.0
 step = 10.0
 
 [node name="camera_Y_label" type="Label" parent="offset_layer/TabContainer/main settings" unique_id=1320364431]
 layout_mode = 0
-offset_left = 190.0
-offset_top = 273.0
-offset_right = 318.0
-offset_bottom = 296.0
+offset_left = 11.0
+offset_top = 232.0
+offset_right = 139.0
+offset_bottom = 255.0
 text = "camera Y:"
 
 [node name="camera_Y" type="SpinBox" parent="offset_layer/TabContainer/main settings" unique_id=2023917226]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 268.0
-offset_top = 267.0
-offset_right = 354.56006
-offset_bottom = 298.0
+offset_left = 89.0
+offset_top = 229.0
+offset_right = 175.56006
+offset_bottom = 260.0
 min_value = -9000.0
 max_value = 9000.0
 step = 10.0
+
+[node name="animType" type="OptionButton" parent="offset_layer/TabContainer/main settings" unique_id=182415888]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 96.0
+offset_top = 281.0
+offset_right = 186.0
+offset_bottom = 312.0
+selected = 0
+item_count = 3
+popup/item_0/text = "FREEZE"
+popup/item_0/id = 0
+popup/item_1/text = "REPEAT"
+popup/item_1/id = 1
+popup/item_2/text = "NONE"
+popup/item_2/id = 2
+
+[node name="animType_text" type="Label" parent="offset_layer/TabContainer/main settings" unique_id=459291262]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 284.0
+offset_right = 139.0
+offset_bottom = 307.0
+text = "anim type:"
+
+[node name="color_button" type="Button" parent="offset_layer/TabContainer/main settings" unique_id=1961011986]
+layout_mode = 0
+offset_left = 239.0
+offset_top = 120.0
+offset_right = 354.0
+offset_bottom = 151.0
+text = "use icon color"
 
 [node name="anim settings" type="TabBar" parent="offset_layer/TabContainer" unique_id=1814175706]
 visible = false
@@ -402,6 +439,18 @@ offset_right = 162.0
 offset_bottom = 225.0
 text = "is a special anim?"
 
+[node name="colorBar" type="TextureProgressBar" parent="offset_layer" unique_id=1228282244]
+offset_left = 416.0
+offset_top = 571.0
+offset_right = 816.0
+offset_bottom = 590.0
+texture_under = ExtResource("10_r5tmy")
+
+[node name="Icon" type="Sprite2D" parent="offset_layer" unique_id=307581425]
+position = Vector2(426, 581)
+script = ExtResource("10_npw2b")
+metadata/_custom_type_script = "uid://l08oojy4jhie"
+
 [node name="rating_node" type="Control" parent="." unique_id=1025969622]
 visible = false
 layout_mode = 3
@@ -409,7 +458,6 @@ anchors_preset = 0
 
 [node name="rating_layer" type="CanvasLayer" parent="." unique_id=664715140]
 layer = 3
-visible = false
 
 [node name="combo" type="Sprite2D" parent="rating_layer" unique_id=1428902524]
 scale = Vector2(0.489796, 0.478261)
@@ -427,7 +475,7 @@ script = ExtResource("4_qyjxo")
 offset_left = 813.0
 offset_top = 18.0
 offset_right = 1203.0
-offset_bottom = 197.0
+offset_bottom = 281.0
 
 [node name="rating_x_text" type="Label" parent="rating_layer" unique_id=828443475]
 offset_left = 832.0
@@ -525,6 +573,33 @@ offset_bottom = 174.0
 min_value = -9000.0
 max_value = 9000.0
 
+[node name="visible_rating" type="CheckBox" parent="rating_layer" unique_id=198282099]
+unique_name_in_owner = true
+offset_left = 827.0
+offset_top = 192.0
+offset_right = 902.0
+offset_bottom = 223.0
+button_pressed = true
+text = "show rating?"
+
+[node name="visible_combo" type="CheckBox" parent="rating_layer" unique_id=706232228]
+unique_name_in_owner = true
+offset_left = 827.0
+offset_top = 218.0
+offset_right = 902.0
+offset_bottom = 249.0
+button_pressed = true
+text = "show combo?"
+
+[node name="visible_nums" type="CheckBox" parent="rating_layer" unique_id=1803242442]
+unique_name_in_owner = true
+offset_left = 827.0
+offset_top = 244.0
+offset_right = 902.0
+offset_bottom = 275.0
+button_pressed = true
+text = "show nums?"
+
 [node name="text_layer" type="CanvasLayer" parent="." unique_id=867981418]
 layer = 3
 
@@ -548,6 +623,7 @@ position = Vector2(641, 360)
 zoom = Vector2(0.585, 0.585)
 
 [node name="FileDialog" type="FileDialog" parent="." unique_id=977282063]
+unique_name_in_owner = true
 
 [node name="cross" type="Sprite2D" parent="." unique_id=697817716]
 texture_filter = 1
@@ -561,6 +637,7 @@ texture = ExtResource("4_i0ff4")
 [connection signal="pressed" from="offset_layer/TabContainer/main settings/save_json" to="." method="save_file"]
 [connection signal="value_changed" from="offset_layer/TabContainer/main settings/camera_X" to="." method="_on_camera_x_value_changed"]
 [connection signal="value_changed" from="offset_layer/TabContainer/main settings/camera_Y" to="." method="_on_camera_y_value_changed"]
+[connection signal="pressed" from="offset_layer/TabContainer/main settings/color_button" to="." method="_on_color_button_pressed"]
 [connection signal="value_changed" from="offset_layer/TabContainer/anim settings/x_scale" to="." method="_on_x_scale_value_changed"]
 [connection signal="value_changed" from="offset_layer/TabContainer/anim settings/y_scale" to="." method="_on_y_scale_value_changed"]
 [connection signal="value_changed" from="offset_layer/TabContainer/anim settings/anim_time" to="." method="_on_anim_time_value_changed"]

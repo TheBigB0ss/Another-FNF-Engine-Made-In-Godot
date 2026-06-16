@@ -259,7 +259,8 @@ func _process(delta: float) -> void:
 		sustainLength = max(sustainLength, 0.0);
 		
 		if isSustain && noteLine != null && noteEnd != null:
-			noteEnd.scale.y = abs(min(sustainLength*Conductor.songSpeed / noteEnd.texture.get_size().y, noteEnd.scale.y));
+			if sustainLength <= 100.0:
+				noteEnd.scale.y = abs(min(sustainLength*Conductor.songSpeed / noteEnd.texture.get_size().y, noteEnd.scale.y));
 			noteEnd.position.y = sustainLength + noteEnd.texture.get_size().y * noteEnd.scale.y / 2.0;
 			
 			noteLine.set_point_position(1, Vector2(0, sustainLength));
@@ -289,24 +290,26 @@ func play_note_anim(anim):
 	strumNote.play(str(note_dir, " ", anim));
 	
 var pressed_emit = false;
-func pressed(new_character = null):
+func pressed(new_character:Character = null):
 	if missed:
 		return;
 		
 	curNoteAnim = NOTES_ANIM[noteData];
 	new_character = main_scene.bf if !is_instance_valid(new_character) else new_character;
+	new_character.curNote = self;
 	
 	if sustainLength <= 0:
+		new_character.animNote = self;
+		
 		if is_a_bad_note:
 			miss_note();
 		else:
 			main_scene.health = min(main_scene.health+healthPerHit, 100.0);
 			
-		emitPress();
+		emitPress(false);
 		destroy_note();
 	else:
-		new_character.curNote = self;
-		emitPress();
+		emitPress(false);
 		
 		if is_instance_valid(note):
 			note.queue_free();
@@ -318,27 +321,29 @@ func pressed(new_character = null):
 	main_scene.playCharacterAnim(self, new_character, true);
 	main_scene.play_strum_anim(self, false, anim_time, false, true);
 	
-func opponent_pressed(new_character = null):
+func opponent_pressed(new_character:Character = null):
 	curNoteAnim = NOTES_ANIM[noteData];
 	new_character = (main_scene.dad if !secondOpponentNote else main_scene.new_opponent) if !is_instance_valid(new_character) else new_character;
+	new_character.curNote = self;
 	
 	if sustainLength <= 0:
-		if !pressed_emit:
-			emit_signal("opponentNotePressed", self);
-			pressed_emit = true;
-			
+		new_character.animNote = self;
+		
+		emitPress(true);
 		destroy_note();
-	else:
-		new_character.curNote = self;
 		
 	main_scene.playCharacterAnim(self, new_character, false);
 	main_scene.play_strum_anim(self, !secondOpponentNote, 0.45, secondOpponentNote, true);
 	
-func emitPress():
+func emitPress(is_opponent):
 	if pressed_emit:
 		return;
 		
-	emit_signal("notePressed", self);
+	if !is_opponent:
+		emit_signal("notePressed", self);
+	else:
+		emit_signal("opponentNotePressed", self);
+		
 	pressed_emit = true;
 	
 var emit_miss = false;

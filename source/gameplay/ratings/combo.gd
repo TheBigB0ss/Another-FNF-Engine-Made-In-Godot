@@ -21,7 +21,6 @@ func _ready() -> void:
 		folderPart = "default";
 		
 	texture = load("res://assets/images/hud/rating/%s/combo%s.png"%[folderPart, ratingPart]);
-	
 	coolComboPos = Vector2(GlobalOptions.ratings_positions["combo"][0], GlobalOptions.ratings_positions["combo"][1]);
 	hide();
 	
@@ -31,6 +30,8 @@ func _process(delta):
 	position += velocity * delta;
 	
 func pop_up_rating():
+	if !GlobalOptions.ratings_positions["combo"][2]:
+		return;
 	acceleration = Vector2(0, 550);
 	velocity = Vector2(-randi_range(0, 10),-randi_range(140, 175));
 	

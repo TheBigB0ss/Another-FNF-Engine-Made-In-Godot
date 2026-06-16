@@ -4,8 +4,7 @@ var stickersTimer = Timer.new();
 
 @onready var fade_anim = $'Control/Fade_anim';
 @onready var stickersGrp = $'Control/stickers';
-
-var transition_speed = 0.65
+@onready var transition_anim = $Control/transition;
 
 var stickersArray = [];
 var jsonStickers = {};
@@ -16,8 +15,8 @@ var can_show_stickers = true;
 var deleteStickers = false;
 
 func _ready():
-	$Control.hide();
-	fade_anim.speed_scale = transition_speed;
+	process_mode = Node.PROCESS_MODE_ALWAYS;
+	
 	add_child(stickersTimer);
 	
 	if !deleteStickers && stickersGrp.get_child_count() <= 75:
@@ -41,7 +40,6 @@ func _ready():
 	#print(stickersArray)
 	
 func _process(_delta: float) -> void:
-	process_mode = 2 if get_tree().paused else 0;
 	for i in stickersGrp.get_children():
 		i.scale = lerp(i.scale, Vector2(1.0, 1.0), 0.90);
 		
@@ -69,7 +67,7 @@ func spawnStickers():
 func removeStickers():
 	if deleteStickers && stickersGrp.get_child_count() > 0:
 		if can_show_stickers:
-			Sound.add_new_sound("stickerSounds/keyClick%s"%[int(randi_range(1, 8))], false);
+			Sound.add_new_sound("stickerSounds/keyClick%s"%[randi_range(1, 8)], false);
 			
 		var removed_child = stickersGrp.get_child(0);
 		stickersGrp.remove_child(removed_child);
@@ -78,17 +76,12 @@ func removeStickers():
 	Global.can_use_menus = stickersGrp.get_child_count() <= 0;
 	
 func _is_in_transition(use_stickers):
-	process_mode = 2 if get_tree().paused else 0;
-	
-	$Control.show();
-	$Control/TransMaksDown.show();
-	$Control/TransMaksUp.show();
+	transition_anim.show();
+	fade_anim.play("fade_in");
 	
 	can_show_stickers = use_stickers;
 	deleteStickers = false;
 	stickersTimer.wait_time = 0.01;
-	
-	fade_anim.play("fade_in");
 	
 	if can_show_stickers:
 		stickersGrp.show();
@@ -101,16 +94,11 @@ func _on_fade_anim_animation_finished(anim_name):
 	match anim_name:
 		"fade_in":
 			fade_anim.play("fade_out");
-			if get_tree().paused:
-				get_tree().paused = false;
-				process_mode = 0;
-				
 		"fade_out":
-			await get_tree().create_timer(0.1).timeout
-			$Control/TransMaksDown.hide();
-			$Control/TransMaksUp.hide();
+			await get_tree().create_timer(0.1).timeout;
 			
 			if !can_show_stickers:
 				Global.can_use_menus = true;
 				
 			deleteStickers = true;
+			transition_anim.hide();

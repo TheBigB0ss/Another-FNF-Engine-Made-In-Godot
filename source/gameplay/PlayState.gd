@@ -13,9 +13,9 @@ var health = 50.0;
 @onready var voices = $'voices';
 @onready var inst = $'inst';
 
-var iconP1 = null;
-var iconP2 = null
-var iconP3 = null;
+var iconP1 = Icon.new();
+var iconP2 = Icon.new();
+var iconP3 = Icon.new();
 @onready var iconGrp = $'hud/Hud_Layer/icons';
 
 var ratingPart = "";
@@ -50,10 +50,10 @@ var percent = 0;
 
 var isDead = false;
 
-var bf = null;
-var gf = null;
-var dad = null;
-var new_opponent = null;
+var bf = Character.new();
+var gf = Character.new();
+var dad = Character.new();
+var new_opponent = Character.new();
 
 @onready var stageGrp = $'stage';
 var stage = null;
@@ -141,8 +141,6 @@ func _ready():
 	SongData.isOnDeathScreen = false;
 	SongData.isPlaying = true;
 	
-	ratingText.visible = GlobalOptions.show_ratingLabel;
-	
 	GlobalOptions.connect("ghost_tapping_miss", miss_note);
 	Achievements.connect("end_achievement", finishSong);
 	
@@ -159,15 +157,12 @@ func _ready():
 	curSong = SongData.song;
 	curStage = SongData.stage;
 	
-	var bf_position = SongData.player1StagePosition;
-	var gf_position = SongData.gfStagePosition;
-	var opponent_position = SongData.gfStagePosition if SongData.player2 == "gf" else SongData.player2StagePosition;
+	bf = bf.init_character(self, SongData.player1StagePosition, SongData.player1Zindex, SongData.player1, 4);
+	dad = dad.init_character(self, SongData.gfStagePosition if SongData.player2 == "gf" else SongData.player2StagePosition, SongData.player2Zindex, SongData.player2, 3);
+	gf = gf.init_character(self, SongData.gfStagePosition, SongData.gfZindex, SongData.gfPlayer, 1);
 	
-	bf = add_character(bf_position, SongData.player1Zindex, SongData.player1, 4);
-	dad = add_character(opponent_position, SongData.player2Zindex, SongData.player2, 3);
-	gf = add_character(gf_position, SongData.gfZindex, SongData.gfPlayer, 1);
 	if SongData.player3 != "" && SongData.haveTwoOpponents:
-		new_opponent = add_character(SongData.player3StagePosition, SongData.player3Zindex, SongData.player3, 2);
+		new_opponent = new_opponent.init_character(self, SongData.player3StagePosition, SongData.player3Zindex, SongData.player3, 2);
 		
 	stageGrp.add_child(stage);
 	
@@ -194,10 +189,11 @@ func _ready():
 	healthBar.tint_under = Color("#ff000f") if GlobalOptions.updated_hud == "classic hud" else dad.healthBar_Color;
 	healthBar.tint_progress = Color("#00ff06") if GlobalOptions.updated_hud == "classic hud" else bf.healthBar_Color;
 	
-	iconP1 = add_icon(bf.curIcon, false, bf.animatedIcon, Vector2(710, 645));
-	iconP2 = add_icon(dad.curIcon, true, dad.animatedIcon, Vector2(610, 645));
+	
+	iconP1 = iconP1.init_icon(iconGrp, bf.curIcon, false, bf.animatedIcon, Vector2(710, 645));
+	iconP2 = iconP2.init_icon(iconGrp, dad.curIcon, true, dad.animatedIcon, Vector2(610, 645));
 	if SongData.player3 != "" && SongData.haveTwoOpponents:
-		iconP3 = add_icon(new_opponent.curIcon, true, new_opponent.animatedIcon, Vector2(550, 585));
+		iconP3 = iconP3.init_icon(iconGrp, new_opponent.curIcon, true, new_opponent.animatedIcon, Vector2(550, 585));
 		
 	SongData.updated_chart = SongData.chartData;
 	
@@ -239,6 +235,8 @@ func _ready():
 		playerStrum.position.x = 478;
 		opponentStrum.visible = false;
 		
+	ratingText.visible = GlobalOptions.show_ratingLabel;
+	
 	if SongData.haveTwoOpponents:
 		newOpponentStrum.show();
 		newOpponentStrum.position = Vector2(550, 100) if !GlobalOptions.down_scroll else Vector2(550, 600);
@@ -300,34 +298,6 @@ func _ready():
 		scoreText.scale = Vector2(0.03, 0.03);
 		
 	updateScoreText();
-	
-func add_character(position, z_index, path, child_id):
-	if path == "none":
-		return;
-		
-	var new_char = load("res://source/characters/characters_scenes/" + path + ".tscn").instantiate();
-	new_char.position = position;
-	new_char.z_index = z_index;
-	add_child(new_char);
-	move_child(new_char, child_id);
-	
-	return new_char;
-	
-func add_icon(path, is_opponent, is_animated, icon_position):
-	var new_icon = null;
-	if is_animated:
-		new_icon = AnimatedIcon.new();
-		new_icon.icon_frames = "assets/images/icons/animated/%s/%s.res"%[path, path];
-		new_icon.icon_char = path;
-	else:
-		new_icon = Icon.new();
-		new_icon.reload_icon(path);
-		
-	new_icon.position = icon_position;
-	new_icon.flip_h = !is_opponent;
-	iconGrp.add_child(new_icon);
-	
-	return new_icon;
 	
 func start_dialogue():
 	SongData.is_not_in_cutscene = false;
@@ -561,7 +531,7 @@ func playBfMissAnim(curNote:Note):
 		if bf.animList.has(miss_anim):
 			bf._playAnim(miss_anim);
 			
-func playCharacterAnim(curNote:Note, new_char, isBf):
+func playCharacterAnim(curNote:Note, new_char:Character, isBf):
 	if curNote.no_anim:
 		return;
 		
@@ -621,12 +591,12 @@ var cam_offset_values = {
 	"singUp": Vector2.UP,
 	"singRight": Vector2.RIGHT
 };
-func cam_follow_poses(new_char):
+func cam_follow_poses(new_char:Character):
 	if !new_char.cam_follow_pos:
 		return;
 		
 	var camOffset = cam_offset_values.get(new_char.curAnim, Vector2.ZERO)*20;
-	sectionCamera.offset = lerp(sectionCamera.offset, camOffset, 0.07);
+	sectionCamera.offset = lerp(sectionCamera.offset, camOffset, 0.10);
 	
 func checkPlayerDead():
 	if health > 0:
@@ -710,10 +680,6 @@ func startCoutdown():
 	var idleCounter = 0;
 	
 	if Conductor.startTime > 0:
-		if SongData.needVoice:
-			voices.play(float(Conductor.startTime));
-		inst.play(float(Conductor.startTime));
-		
 		setTimePos(Conductor.startTime);
 		
 		can_pause = true;
@@ -789,7 +755,7 @@ func finishSong():
 	
 	var diffSet = "" if songDiff == "" else str('-', songDiff);
 	
-	if !GlobalOptions.isUsingBot:
+	if !GlobalOptions.isUsingBot or !SongData.isOnChartMode:
 		if score > HighScore.get_score(playlist[0], diffSet):
 			HighScore.get_song_score(playlist[0], diffSet, score);
 			
@@ -866,14 +832,11 @@ func updateScoreText():
 			
 var cam_target = null;
 func step_hit(_step):
-	if Conductor.curSection >= SongData.songNotes.size():
-		return;
+	if SongData.chartData["song"]["notes"][int(Conductor.curSection)]["changeBPM"]:
+		Conductor.changeBpm(SongData.chartData["song"]["notes"][int(Conductor.curSection)]["bpm"]);
 		
-	if SongData.chartData["song"]["notes"][Conductor.curSection]["changeBPM"]:
-		Conductor.changeBpm(SongData.chartData["song"]["notes"][Conductor.curSection]["bpm"]);
-		
-	camera_on_Bf = SongData.chartData["song"]["notes"][Conductor.curSection]["mustHitSection"];
-	gf_is_singing = SongData.chartData["song"]["notes"][Conductor.curSection]["gfSection"];
+	camera_on_Bf = SongData.chartData["song"]["notes"][int(Conductor.curSection)]["mustHitSection"];
+	gf_is_singing = SongData.chartData["song"]["notes"][int(Conductor.curSection)]["gfSection"];
 	
 	if camera_focus:
 		return;
@@ -896,11 +859,15 @@ func beat_hit(beat):
 		
 func setTimePos(time):
 	time = max(0, time);
-	for i in [inst, voices]:
-		i.seek(time/1000);
-		
+	
+	if SongData.needVoice:
+		voices.play(time/1000);
+	inst.play(time/1000);
+	
 	Conductor.seekTime = time;
 	Conductor.getSongTime = time;
+	
+	timeBar.value = Conductor.getSongTime/1000;
 	
 func move_cam(smoothing, pos):
 	sectionCamera.global_position = (pos if !smoothing else lerp(sectionCamera.global_position, pos, 1.0));

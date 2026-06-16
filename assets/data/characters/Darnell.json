@@ -2,7 +2,7 @@
 	"AnimatedIcon": false,
 	"FlipX": false,
 	"FlipY": false,
-	"HealthBarColor": "#621793ff",
+	"HealthBarColor": "#6c547fff",
 	"HealthIcon": "darnell",
 	"Poses": [
 		{
@@ -62,16 +62,17 @@
 		},
 		{
 			"Anim": "singLaugh",
-			"Anim Time": 15.0,
+			"Anim Time": 5.0,
 			"Name": "DarnellMISSPOSE",
 			"Offset": [
 				34.0,
 				2.0
 			],
-			"anim beat": 4.0,
-			"special anim": true
+			"anim beat": 2.0,
+			"special anim": false
 		}
 	],
+	"anim type": 3.0,
 	"camera follow pos": true,
 	"cameraPos": [
 		210.0,

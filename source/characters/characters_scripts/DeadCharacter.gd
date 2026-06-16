@@ -20,6 +20,8 @@ var cam_follow_pos = false;
 
 var is_animated_sprite = false;
 
+var anim_type = 1;
+
 var base_position = Vector2.ZERO;
 
 func _ready():

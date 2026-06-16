@@ -69,7 +69,7 @@ func _ready():
 		for j in keys.keys():
 			keys_list.append(j);
 			
-	if !settingsJson.has("version") or settingsJson["version"] != 7:
+	if !settingsJson.has("version") or settingsJson["version"] != 8:
 		reset_settings();
 		
 	apply_changes();
@@ -98,11 +98,11 @@ func load_settings():
 		
 func reset_settings():
 	settingsJson = {
-		"version": 7,
+		"version": 8,
 		"meta":{
-			"rating_pos": [635, 235],
-			"combo_pos": [695, 285],
-			"nums_pos": [464, 293],
+			"rating_pos": [635, 235, true],
+			"combo_pos": [695, 285, true],
+			"nums_pos": [464, 293, true],
 			"volume": 1
 		},
 		"graphics": {

@@ -145,7 +145,6 @@ func beat_hit(beat):
 			11:
 				hideText();
 				newGroundsLogo.hide();
-				$ameigos_bg.hide();
 			12:
 				create_text("another");
 			13:

@@ -35,6 +35,7 @@ offset_right = 918.0
 offset_bottom = 43.09642
 scale = Vector2(10.0542, 2.57562)
 color = Color(0.21, 0.21, 0.21, 0.454902)
+metadata/_edit_use_anchors_ = true
 
 [node name="difficultyText" type="Label" parent="." unique_id=291280583]
 offset_left = 905.00006
@@ -45,6 +46,7 @@ scale = Vector2(0.6, 0.646)
 text = "<  >"
 label_settings = SubResource("LabelSettings_i3c0a")
 horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="scoreText" type="Label" parent="." unique_id=157073158]
 offset_left = 880.0
@@ -56,12 +58,14 @@ text = "SCORE:
 RANK:
 ACCURACY:"
 label_settings = SubResource("LabelSettings_i3c0a")
+metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="." unique_id=1875437788]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
 
 [node name="ColorRect" type="ColorRect" parent="Control" unique_id=45730292]
 layout_mode = 0

@@ -18,6 +18,7 @@ var spriteStuff = {};
 @export var playing = true;
 @export var loop = false;
 @export var limit = 0;
+@export var animate_symbols = false;
 
 var frames = [];
 var sprite_name = [];
@@ -50,12 +51,15 @@ func reload():
 	
 	for i in spriteData["ATLAS"]["SPRITES"]:
 		var frameData = i["SPRITE"];
-		atlas[i["SPRITE"]["name"]] = Rect2(
-			frameData["x"],
-			frameData["y"],
-			frameData["w"],
-			frameData["h"]
-		);
+		atlas[i["SPRITE"]["name"]] = {
+			"sprite_rect": Rect2(
+				frameData["x"],
+				frameData["y"],
+				frameData["w"],
+				frameData["h"]
+			),
+			"sprite_rotated": frameData["rotated"]
+		};
 		
 	for i in animationData["AN"]["TL"]["L"]:
 		for fr in i.get("FR", []):
@@ -78,6 +82,14 @@ func draw_symbol(element, layer, index, elementTransform, key = "atlas"):
 			Vector2(m[12], m[13])
 		);
 		
+	elif elementData.has("MX"):
+		var m = elementData["MX"];
+		trans = Transform2D(
+			Vector2(m[0], m[1]),
+			Vector2(m[2], m[3]),
+			Vector2(m[4], m[5])
+		);
+		
 	var finalTrans = elementTransform*trans;
 	
 	#if elementData.has("TRP"):
@@ -85,7 +97,17 @@ func draw_symbol(element, layer, index, elementTransform, key = "atlas"):
 	#	finalTrans.origin += Vector2(m2["x"], m2["y"]);
 		
 	var symbol_frame = int(elementData.get("FF", 0));
+	var symbol_total_frames = 0;
 	
+	for l in symbolID["TL"].get("L", []):
+		for fr in l.get("FR", []):
+			symbol_total_frames = (fr["I"] + fr["DU"]);
+			
+	if animate_symbols && elementData.get("LP", "") == "LP":
+		symbol_frame = wrapi(symbol_frame+frame, 0, symbol_total_frames);
+	else:
+		symbol_frame = int(elementData.get("FF", 0));
+		
 	var symbolLayers = symbolID["TL"].get("L", []).duplicate();
 	symbolLayers.reverse();
 	
@@ -93,11 +115,10 @@ func draw_symbol(element, layer, index, elementTransform, key = "atlas"):
 		for fr in i.get("FR", []):
 			if symbol_frame >= fr["I"] && symbol_frame < fr["I"] + fr["DU"]:
 				var newId = 0;
+				
 				for e in fr.get("E", []):
-					
 					var data = e.get("SI", e.get("ASI"));
 					if data.has("N"):
-						#total_elements += 1;
 						create_sprite(data, keyID, newId, finalTrans);
 						
 					elif data.has("SN"):
@@ -108,6 +129,10 @@ func draw_symbol(element, layer, index, elementTransform, key = "atlas"):
 func create_sprite(data, keyID, index, spriteTransform):
 	var id = str("--", keyID, "--SPRITE--", index, "--INDEX--", spriteZIndex);
 	
+	var imgId = data["N"];
+	var rect = atlas[imgId]["sprite_rect"];
+	var rotated = atlas[imgId]["sprite_rotated"];
+	
 	if !symbols_elements.has(id):
 		var symbolSprite = Sprite2D.new();
 		symbolSprite.centered = false;
@@ -117,9 +142,6 @@ func create_sprite(data, keyID, index, spriteTransform):
 		
 	var spr = symbols_elements[id];
 	spr.visible = true;
-	
-	var imgId = data["N"];
-	var rect = atlas[imgId];
 	
 	var textureFrame = AtlasTexture.new();
 	textureFrame.atlas = load(spriteStuff["sprite"]);
@@ -135,13 +157,25 @@ func create_sprite(data, keyID, index, spriteTransform):
 			Vector2(m[12], m[13])
 		);
 		
+	elif data.has("MX"):
+		var m = data["MX"];
+		trans = Transform2D(
+			Vector2(m[0], m[1]),
+			Vector2(m[2], m[3]),
+			Vector2(m[4], m[5])
+		);
+		
 	var finalTrans = spriteTransform*trans;
 	
 	#if data.has("TRP"):
-	#	var m2 = data["TRP"];
-	#	finalTrans.origin += Vector2(m2["x"], m2["y"]);
+		#var m2 = data["TRP"];
+		#finalTrans.origin += Vector2(m2["x"], m2["y"]);
 		
 	spr.transform = finalTrans;
+	if rotated:
+		spr.rotation_degrees -= 90;
+		spr.position.y += rect.size.x;
+		
 	spr.z_index = spriteZIndex;
 	spriteZIndex += 1;
 	

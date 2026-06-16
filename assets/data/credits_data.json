@@ -215,16 +215,6 @@
 			"bg_color": "#b900ff"
 		},
 		{
-			"team": "Another FNF Engine made in Godot",
-			"name": "Purple Dog",
-			"role": "pixel artist",
-			"icon": "Purple_dog",
-			"social midia": {
-				"twitter": "https://x.com/Cachororoxo"
-			},
-			"bg_color": "#640bff"
-		},
-		{
 			"team": "FNF Crew",
 			"name": "Ninja Muffin",
 			"role": "Friday Night Funkin' coder",

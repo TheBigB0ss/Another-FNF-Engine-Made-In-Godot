@@ -9,14 +9,13 @@ var song_mult = 1;
 var crochet = (60.0 / bpm) * 1000.0;
 var stepCrochet = crochet / 4;
 
-var lastBeat = 0;
-var lastStep = 0;
+var lastBeat = -1;
+var lastStep = -1;
+var lastSection = -1;
 
 var curBeat = 0;
 var curStep = 0;
-
-var lastSection = 0;
-var curSection = floor(curStep/16);
+var curSection = 0;
 
 var startTime = 0;
 var seekTime = 0;
@@ -37,6 +36,9 @@ func _process(_delta):
 	curBeat = floor(curStep / 4);
 	curSection = floor(curStep/16);
 	
+	if curSection > SongData.songNotes.size() && !SongData.songNotes.is_empty():
+		return;
+		
 	if lastSection != curSection:
 		lastSection = curSection;
 		changeSection();
@@ -71,12 +73,13 @@ func reset():
 	if bpm <= 0:
 		bpm = 100;
 		
+	lastStep = -1;
+	lastBeat = -1;
+	lastSection = -1;
+	
 	curBeat = 0;
 	curStep = 0;
 	curSection = 0;
-	lastStep = 0;
-	lastBeat = 0;
-	lastSection = 0;
 	
 	crochet = (60.0 / bpm) * 1000.0;
 	stepCrochet = crochet / 4.0;
@@ -87,7 +90,7 @@ func reset():
 func mapBPMChanges(songJson):
 	bpmChangeMap = [];
 	
-	var curBPM = songJson["song"]["bpm"];
+	var curBPM = SongData.songBpm;
 	var totalSteps = 0;
 	var totalPos = 0;
 	

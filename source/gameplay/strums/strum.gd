@@ -16,7 +16,7 @@ var offSetShit = 0;
 @export_file_path("*.json") var chart_path = "";
 @export var enable = false;
 @onready var main_scene = get_tree().current_scene;
-@export var strum_char = Node2D;
+@export var strum_char:Character;
 
 var strumNode = null;
 var noteNode = null;
@@ -120,6 +120,10 @@ func _process(delta):
 			note.position.y = strumY;
 			
 		if note.isPlayer:
+			continue;
+			
+		if Conductor.seekTime >= 0 && note.strumTime < Conductor.seekTime:
+			notes_to_delete.append(note);
 			continue;
 			
 		if Conductor.getSongTime > 320 + note.strumTime && note.sustainLength <= 0:

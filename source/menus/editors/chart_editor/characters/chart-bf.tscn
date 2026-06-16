@@ -1,7 +1,14 @@
 [gd_scene format=3 uid="uid://bs3bmha3d0luc"]
 
 [ext_resource type="Script" uid="uid://cithgl1w0skdv" path="res://source/menus/editors/chart_editor/characters/chart-bf.gd" id="1_1nc30"]
+[ext_resource type="Shader" uid="uid://b66dleiip18im" path="res://source/shaders/flashColor.gdshader" id="2_6f1c0"]
 [ext_resource type="Texture2D" uid="uid://ta4oaw7lkwmx" path="res://assets/images/editors/chart preview/bf/chart-bf.png" id="2_wqw6q"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6f1fn"]
+shader = ExtResource("2_6f1c0")
+shader_parameter/flash_color = Color(18.892157, 18.892157, 18.892157, 1)
+shader_parameter/flash_strength = 1.0
+shader_parameter/speed = 0.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ag647"]
 atlas = ExtResource("2_wqw6q")
@@ -579,6 +586,7 @@ animations = [{
 script = ExtResource("1_1nc30")
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=518251865]
+material = SubResource("ShaderMaterial_6f1fn")
 sprite_frames = SubResource("SpriteFrames_r8kc0")
 animation = &"idle"
 autoplay = "idle"

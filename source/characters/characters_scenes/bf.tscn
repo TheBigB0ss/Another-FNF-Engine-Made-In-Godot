@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://nuno0fp5tpiu"]
 
 [ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_crp0m"]
-[ext_resource type="SpriteFrames" uid="uid://dwhnjmnku87du" path="res://assets/images/characters/BOYFRIEND.res" id="1_vhb3j"]
+[ext_resource type="SpriteFrames" uid="uid://omykghqkon63" path="res://assets/images/characters/BOYFRIEND.res" id="1_vhb3j"]
 
 [node name="Boyfriend" type="Node2D" unique_id=1571258161]
 script = ExtResource("1_crp0m")
 json_path = "res://assets/data/characters/bf.json"
-healthBar_Color = Color(0, 0.8117647, 1, 1)
+healthBar_Color = Color(0.19215687, 0.6901961, 0.81960785, 1)
 is_player = true
 anims_timer = {
 "attack": [2, 5, false],
@@ -35,3 +35,4 @@ sprite_frames = ExtResource("1_vhb3j")
 animation = &"BF idle dance"
 frame = 13
 frame_progress = 1.0
+offset = Vector2(-2, 1)

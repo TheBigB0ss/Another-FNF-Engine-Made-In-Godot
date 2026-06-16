@@ -22,8 +22,6 @@ var new_chartData = {};
 @onready var notes = $'grid_objs/notes';
 @onready var sustain_notes = $'grid_objs/sustain_notes';
 
-@onready var chart_info = $'chart_UI/chart_objs/chart_info';
-
 @onready var player1Options = $'chart_UI/chart_objs/TabContainer/song/player1';
 @onready var player2Options = $'chart_UI/chart_objs/TabContainer/song/player2';
 @onready var player3Options = $'chart_UI/chart_objs/TabContainer/song/player3';
@@ -38,7 +36,10 @@ var new_chartData = {};
 
 @onready var chartBf = $"chart_UI/chart_objs/TabContainer/help/preview/chart-bf";
 @onready var chartEnemy = $chart_UI/chart_objs/TabContainer/help/preview/enemy_chart;
-@onready var timeBar = $chart_UI/chart_objs/TabContainer/help/timeBar;
+
+@onready var chart_info = $chart_UI/chart_objs/infos/chart_info;
+@onready var timeBar = $chart_UI/chart_objs/infos/timeBar;
+@onready var songPointer = $chart_UI/chart_objs/infos/songPointer;
 
 var events_readjustment = {};
 var curselected_note = [];
@@ -104,6 +105,8 @@ var songDiff = "";
 
 var add_new_tile = false;
 
+var pointer_starter = Vector2.ZERO;
+
 func getFolderShit(folder):
 	var file = [];
 	var coolFolder = DirAccess.open("res://%s"%[folder]);
@@ -142,6 +145,8 @@ func _ready():
 	%song_name.text = SongData.week_songs[0];
 	songDiff = SongData.week_diffs;
 	%song_difficulty.text = songDiff;
+	
+	pointer_starter = songPointer.position;
 	
 	characterList = addCharToList();
 	stageList = addStagesToList();
@@ -298,12 +303,9 @@ func change_icons(_char):
 		update_icon(iconP3, get_icons(characterList[player3Options.selected]));
 		
 func update_icon(icon, path):
-	if path == "" or path == null:
-		path = "no_icon";
-		
 	icon.texture = load("res://assets/images/icons/icon-%s.png"%[path]);
 	
-	if icon != null:
+	if icon.texture != null:
 		if icon.texture.get_width() <= 300:
 			icon.hframes = 2;
 		if icon.texture.get_width() >= 450:
@@ -546,6 +548,9 @@ func _process(delta):
 	
 	timeBar.value = Conductor.getSongTime/1000;
 	
+	var songPosition = (timeBar.value / timeBar.max_value);
+	songPointer.position.x = lerp(pointer_starter.x, pointer_starter.x + 330, songPosition);
+	
 	if !mouse_inside_ui && !$FileDialog.visible && !$FileDialogEvents.visible:
 		for i in arrayNotes:
 			if i == null:
@@ -568,9 +573,9 @@ func _process(delta):
 			
 			if note_pos != -1:
 				if note_pos < note_data:
-					add_note(selection.position.y, note_pos, 0, note_types[note_type_button.selected]);
+					add_note(selection.position.y-20, note_pos, 0, note_types[note_type_button.selected]);
 				elif note_pos >= note_data:
-					add_event_note(selection.position.y, note_pos, event_text_array[events_button.selected], %"value 1".text, %"value 2".text);
+					add_event_note(selection.position.y-20, note_pos, event_text_array[events_button.selected], %"value 1".text, %"value 2".text);
 					
 	if !selected_notes.is_empty():
 		if Input.is_action_just_pressed("copy"):
@@ -650,10 +655,18 @@ func _process(delta):
 		else:
 			if note.strumTime <= Conductor.getSongTime-section_start_time():
 				note.gotHit = true;
+				
 				if note.chart_player:
 					chartBf.play_cool_anim(note.noteData);
+					if %player_sound_hit.button_pressed:
+						Sound.add_new_sound("hitNotePlayer", Node.PROCESS_MODE_ALWAYS);
 				else:
 					chartEnemy.play_cool_anim(note.noteData);
+					if %opponent_sound_hit.button_pressed:
+						Sound.add_new_sound("hitNoteOpponent", Node.PROCESS_MODE_ALWAYS);
+						
+				if note.noteData > 7 && %new_opponent.button_pressed && %opponent_sound_hit.button_pressed:
+					Sound.add_new_sound("hitNoteOpponent", Node.PROCESS_MODE_ALWAYS);
 					
 		for i in [chartBf, chartEnemy]:
 			i.goToIdle = (note.strumTime+note.sustainLength <= Conductor.getSongTime-section_start_time()) if note.sustainLength > 0.0 else true;
@@ -662,8 +675,8 @@ func _process(delta):
 		
 	if mouse_pos.x >= gridX+250 && mouse_pos.x <= gridX+grid_scaleX && mouse_pos.y > gridY && mouse_pos.y < gridY + grid_size+585:
 		selection.show();
-		selection.position.x = floor(mouse_pos.x/grid_size)*grid_size-240;
-		selection.position.y = mouse_pos.y if free_Mouse else floor(mouse_pos.y/grid_size)*grid_size;
+		selection.position.x = floor(mouse_pos.x/grid_size)*grid_size-220;
+		selection.position.y = mouse_pos.y if free_Mouse else floor(mouse_pos.y/grid_size)*grid_size+20;
 		update_cursor("cell");
 	else:
 		selection.hide();
@@ -741,7 +754,7 @@ func creat_note(event_note = false, strumtime = 0.0, noteData = 0, sustain = 0, 
 	newNote.chart_player = is_a_player_note;
 	newNote.position = Vector2(
 		floor(noteData * grid_size) + 380, 
-		grid_size + cool_y - 20 if cool_y != null else selection.position.y + 20
+		grid_size + cool_y - 20 if cool_y != null else selection.position.y
 	);
 	notes.add_child(newNote);
 	arrayNotes.append(newNote);

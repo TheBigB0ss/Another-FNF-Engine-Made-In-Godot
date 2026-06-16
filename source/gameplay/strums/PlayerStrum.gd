@@ -114,7 +114,7 @@ func _process(delta):
 			continue;
 			
 		if Conductor.seekTime >= 0 && note.strumTime < Conductor.seekTime:
-			notes_to_delete.append(note)
+			notes_to_delete.append(note);
 			continue;
 			
 		if Conductor.getSongTime > 155 + note.strumTime && !note.is_pressing && !note.is_a_bad_note && !note.ignoreNote:

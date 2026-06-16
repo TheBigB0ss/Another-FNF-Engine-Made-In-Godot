@@ -14,8 +14,6 @@ var is_paused = false;
 var offSetShit = 0;
 var coolOffset = 125;
 
-#var cool_arrow = Alphabet.new();
-
 @onready var main_scene = get_tree().current_scene;
 
 func _ready():
@@ -119,7 +117,7 @@ func _choice_pause_opts():
 			
 			SongData.restartSong = true;
 			SongData.isPlaying = false;
-			Global.reloadScene(true, false, 3.5);
+			Global.reloadScene(true, false);
 			
 		"OPTIONS":
 			GlobalOptions.pause_options = true;
@@ -134,7 +132,7 @@ func _choice_pause_opts():
 		"SKIP TIME":
 			if curTime < main_scene.inst.get_playback_position()*1000:
 				Conductor.startTime = curTime;
-				Global.reloadScene(true, false, 3.5);
+				Global.reloadScene(true, false);
 			else:
 				_resume();
 				can_use = false;
@@ -159,9 +157,9 @@ func _choice_pause_opts():
 			SongData.isOnChartMode = false;
 			SongData.death_count = 0;
 			
+			get_tree().paused = false;
 			MusicManager._play_song("freakyMenu", "music", true);
-			
-			Global.changeScene("menus/story_mode/storyMode" if SongData.isStoryMode else "menus/freeplay/freeplay_menu");
+			Global.changeScene("/menus/story_mode/storyMode" if SongData.isStoryMode else "/menus/freeplay/freeplay_menu");
 			
 		"EXIT CHART MODE":
 			paused = false;
@@ -173,7 +171,7 @@ func _choice_pause_opts():
 			SongData.isOnChartMode = false;
 			
 			SongData.loadJson(SongData.week_songs[0], SongData.week_diffs, null);
-			Global.reloadScene(true, false, 3.5);
+			Global.reloadScene(true, false);
 			
 func stop_shit():
 	paused = false;
@@ -186,7 +184,7 @@ func stop_shit():
 	
 func _paused():
 	if curTime != main_scene.inst.get_playback_position():
-		curTime = main_scene.inst.get_playback_position()*1000
+		curTime = main_scene.inst.get_playback_position()*1000;
 		
 	MusicManager._play_song(GlobalOptions.updated_pause_music, "music", true, -80.0);
 	paused = true;

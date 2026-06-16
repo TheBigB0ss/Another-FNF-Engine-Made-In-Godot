@@ -29,9 +29,7 @@ func _ready() -> void:
 		TYPE_ARRAY:
 			min_value = Achievements.get_achievement_info(cool_name)["achievement_value"][0];
 			max_value = Achievements.get_achievement_info(cool_name)["achievement_value"][1];
-			cool_description = str(
-				Achievements.get_achievement_info(cool_name)["achievement_description"], ": ", Achievements.get_achievement_info(cool_name)["achievement_value"][0], " / ", Achievements.get_achievement_info(cool_name)["achievement_value"][1]
-			);
+			cool_description = str(Achievements.get_achievement_info(cool_name)["achievement_description"], ": ", Achievements.get_achievement_info(cool_name)["achievement_value"][0], " / ", Achievements.get_achievement_info(cool_name)["achievement_value"][1]);
 			
 			cool_value = (min_value == max_value);
 			
@@ -48,9 +46,9 @@ func _ready() -> void:
 		if ResourceLoader.exists(coolPath, "Texture2D"):
 			achievement_spr.texture = load(coolPath);
 		else:
-			achievement_spr.texture = load("res://assets/images/achievements/icons/placeholder.png");
+			achievement_spr.texture = preload("res://assets/images/achievements/icons/placeholder.png");
 	else:
-		achievement_spr.texture = load("res://assets/images/achievements/AchievementBgLocked.png");
+		achievement_spr.texture = preload("res://assets/images/achievements/AchievementBgLocked.png");
 	achievement_spr.position.x = suffix_x;
 	achievement_spr.position.y = suffix_y;
 	achievement_grp.add_child(achievement_spr);

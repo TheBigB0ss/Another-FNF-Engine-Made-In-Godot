@@ -98,6 +98,18 @@ func init_json(char_json_path):
 	charData = jsonData.get_data();
 	jsonFile.close();
 	
+func init_character(parent, char_position, char_zIndex, char_path, child_id):
+	if char_path == "none":
+		return;
+		
+	var new_char = load("res://source/characters/characters_scenes/" + char_path + ".tscn").instantiate();
+	new_char.position = char_position;
+	new_char.z_index = char_zIndex;
+	parent.add_child(new_char);
+	parent.move_child(new_char, child_id);
+	
+	return new_char;
+	
 func _ready():
 	reload();
 	notify_property_list_changed();
@@ -114,6 +126,7 @@ func _ready():
 	cam_follow_pos = charData.get("camera follow pos", cam_follow_pos);
 	curIcon = charData.get("HealthIcon", "no_icon");
 	camera_pos = charData.get("cameraPos", [0,0]);
+	anim_type = charData.get("anim type", anim_type);
 	
 	for i in charData["Poses"].size():
 		animList.append(charData["Poses"][i]["Anim"]);
@@ -143,21 +156,36 @@ func _process(delta):
 		
 var prevState = null;
 var curNote:Note = null;
+var animNote:Note = null;
+func update_character_state():
+	prevState = characterState
+	
+	if !curAnim.contains("sing"):
+		return;
+		
+	if !is_instance_valid(curNote):
+		characterState = CHARACTER_STATES.IDLE;
+		return;
+		
+	if curNote.isSustain:
+		characterState = CHARACTER_STATES.HOLDING if (curNote.is_pressing && curNote.sustainLength > 0) else CHARACTER_STATES.IDLE;
+		
+		if characterState == CHARACTER_STATES.HOLDING && curAnim != curNote.curNoteAnim:
+			_playAnim(curNote.curNoteAnim);
+			
+		if is_instance_valid(animNote):
+			if animNote.curNoteAnim != curNote.curNoteAnim && !animNote.isSustain:
+				characterState = CHARACTER_STATES.SINGING;
+				_playAnim(animNote.curNoteAnim);
+				
 func character_process(delta):
+	if Engine.is_editor_hint():
+		return;
+		
 	loop_anim();
 	
-	var oldState = characterState;
-	prevState = oldState;
+	update_character_state();
 	
-	if curAnim.contains("sing"):
-		var longNote = curNote.sustainLength > 0 if is_instance_valid(curNote) else false;
-		var isHolding = !(curNote.sustainLength <= 0 or curNote.missedLongNote) if is_instance_valid(curNote) else false;
-		characterState = (CHARACTER_STATES.HOLDING if isHolding else CHARACTER_STATES.IDLE) if longNote else CHARACTER_STATES.SINGING;
-		
-		if is_instance_valid(curNote):
-			if curAnim != curNote.curNoteAnim && characterState == CHARACTER_STATES.HOLDING:
-				_playAnim(curNote.curNoteAnim);
-				
 	if (curAnim.begins_with("sing") or curAnim.contains("sing") or special_anim) && characterState != CHARACTER_STATES.HOLDING:
 		idleTimer += delta;
 		
@@ -182,14 +210,9 @@ func dance():
 var current_anim = "";
 var newLimit = 0;
 var newFrame = 0;
-func _playAnim(anim = ""):
+func _playAnim(anim = "", special = false):
 	playing = true;
 	for i in animList.size():
-		if characterState == CHARACTER_STATES.HOLDING:
-			if is_instance_valid(curNote):
-				if anim.begins_with("sing") && curNote.curNoteAnim != anim:
-					anim = curNote.curNoteAnim;
-					
 		if animList[i] != anim:
 			continue;
 			
@@ -203,23 +226,26 @@ func _playAnim(anim = ""):
 		anim_time = anims_timer[anim][1];
 		special_anim = anims_timer[anim][2];
 		
-		if special_anim:
+		if special_anim or special:
 			characterState = CHARACTER_STATES.SPECIAL;
-			
-		elif curAnim == "idle dance":
+		if curAnim == "idle dance":
 			characterState = CHARACTER_STATES.IDLE;
 			frame = newFrame;
-			
+		if animList[i].begins_with("sing") && is_instance_valid(curNote):
+			if !curNote.isSustain:
+				characterState = CHARACTER_STATES.SINGING;
+				
 		if characterState != CHARACTER_STATES.IDLE:
 			match characterState:
 				CHARACTER_STATES.HOLDING:
-					if prevState != CHARACTER_STATES.HOLDING:
+					if prevState == CHARACTER_STATES.HOLDING:
 						frame = newFrame;
-						
-				CHARACTER_STATES.SINGING:
 					frame = newFrame;
 					
-		if animList[i].begins_with("sing") or charData["Poses"][i].has("Anim Time"):
+				CHARACTER_STATES.SINGING, CHARACTER_STATES.SPECIAL:
+					frame = newFrame;
+					
+		if animList[i].begins_with("sing") or charData["Poses"][i].has("Anim Time") or characterState == CHARACTER_STATES.SPECIAL:
 			idleTimer = 0;
 			
 		if current_anim == posesList[i] && animList[i].begins_with("sing") && characterState != CHARACTER_STATES.SINGING:

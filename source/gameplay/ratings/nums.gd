@@ -39,6 +39,9 @@ func _process(delta):
 var nums = [];
 var scale_factor = 0.3 if SongData.isPixelStage else 1.0;
 func pop_up_rating():
+	if !GlobalOptions.ratings_positions["nums"][2]:
+		return;
+		
 	global_position = coolNumsPos;
 	nums = [];
 	var coolCombo = get_tree().current_scene.get("combo");

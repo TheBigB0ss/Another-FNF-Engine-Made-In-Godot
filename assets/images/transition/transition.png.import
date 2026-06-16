@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dvmsbkv2vvja6"
-path="res://.godot/imported/Purple_dog.png-8b6d81b4e6b491fc12399ef9030de7dc.ctex"
+uid="uid://c5q4bnwgb1mql"
+path="res://.godot/imported/transition.png-1faedafa1b8c62a1c719ee0878b185c5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/credits/icons/Purple_dog.png"
-dest_files=["res://.godot/imported/Purple_dog.png-8b6d81b4e6b491fc12399ef9030de7dc.ctex"]
+source_file="res://assets/images/transition/transition.png"
+dest_files=["res://.godot/imported/transition.png-1faedafa1b8c62a1c719ee0878b185c5.ctex"]
 
 [params]
 

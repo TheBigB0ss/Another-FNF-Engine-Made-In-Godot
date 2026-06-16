@@ -54,6 +54,9 @@ var current_selected = {
 	"mainmenu": 0
 };
 
+func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS;
+	
 func save_current_statu():
 	current_selected["storyMode"] = currentStoryMode;
 	current_selected["freeplay"] = currentFreeplay;
@@ -74,8 +77,6 @@ func closeGame():
 	get_tree().quit();
 	
 func changeScene(scene, useTransition = true, use_stickers = true):
-	process_mode = 2 if get_tree().paused else 0;
-	
 	if useTransition:
 		Transition._is_in_transition(use_stickers);
 		await get_tree().create_timer(1.0).timeout
@@ -83,13 +84,9 @@ func changeScene(scene, useTransition = true, use_stickers = true):
 	else:
 		get_tree().change_scene_to_file("res://source/%s.tscn"%[scene]);
 		
-func reloadScene(useTrasition = true, use_stickers = false, speed = 0.65):
-	process_mode = 2 if get_tree().paused else 0;
-	
+func reloadScene(useTrasition = true, use_stickers = false):
 	if useTrasition:
-		Transition.transition_speed = speed;
 		Transition._is_in_transition(use_stickers);
-		
 		await get_tree().create_timer(1.0).timeout
 		get_tree().reload_current_scene();
 	else:

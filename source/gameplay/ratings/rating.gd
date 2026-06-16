@@ -30,6 +30,9 @@ func _process(delta):
 	position += velocity * delta;
 	
 func pop_up_rating(rating):
+	if !GlobalOptions.ratings_positions["rating"][2]:
+		return;
+		
 	acceleration = Vector2(0, 550);
 	velocity = Vector2(-randi_range(0, 10),-randi_range(140, 175));
 	

@@ -54,10 +54,21 @@ texture = ExtResource("9_xwjm6")
 [node name="Nene" parent="characters" unique_id=1025747770 instance=ExtResource("10_eptyo")]
 z_index = 1
 position = Vector2(325, 702)
+idle_type = 1
 
 [node name="Darnell" parent="characters" unique_id=2039568579 instance=ExtResource("11_lsgl8")]
 z_index = 1
 position = Vector2(830, 703)
+healthBar_Color = Color(0.42352942, 0.32941177, 0.49803922, 1)
+anims_timer = {
+"idle dance": [2, 5, false],
+"singDown": [2, 5, false],
+"singLaugh": [2, 5, false],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false]
+}
+idle_type = 1
 
 [node name="strums" type="Node2D" parent="." unique_id=1221599510]
 visible = false

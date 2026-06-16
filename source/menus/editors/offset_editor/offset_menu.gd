@@ -17,6 +17,9 @@ extends Node2D
 @onready var comboSpr = $rating_layer/combo;
 @onready var numsSpr = $rating_layer/nums;
 
+@onready var charIcon = $offset_layer/Icon;
+@onready var charBarColor = $offset_layer/colorBar;
+
 var cur_pose = 0;
 var character_list = [];
 var offset_array = [];
@@ -103,13 +106,13 @@ func change_character(_char):
 		%is_player.button_pressed = i.charData["isPlayer"];
 		%anim_time.value = i.anim_time;
 		%cam_follow_poses.button_pressed = i.cam_follow_pos;
+		%animType.selected = i.anim_type-1;
 		
 		update_cross(i.charData["cameraPos"][0], i.charData["cameraPos"][1]);
 		update_scale_value(i.charData["scale"][0], i.charData["scale"][1]);
 		flip_char(i.charData["FlipX"], i.charData["FlipY"]);
 		
-		change_anim(0);
-		
+	change_anim(0);
 	set_rating_pos();
 	
 func update_offset_value(x = 0, y = 0):
@@ -323,7 +326,17 @@ var specialAnims = [];
 
 var last_mouse_x = 0;
 
+var last_icon = "";
+var new_icon = "";
 func _process(_delta: float) -> void:
+	last_icon = new_icon;
+	
+	if last_icon != %icon_text.text:
+		new_icon = %icon_text.text;
+		charIcon.reload_icon(new_icon);
+		
+	charBarColor.tint_under = %color_text.color;
+	
 	update_scale_value(charScale.x, charScale.y);
 	pos_change_value = 1 if !Input.is_action_pressed("ui_shift") else 10;
 	
@@ -366,9 +379,10 @@ func _process(_delta: float) -> void:
 			frame_pointer.position.x += direction * 5;
 			frame_pointer.position.x = clamp(frame_pointer.position.x, pointer_starter.x, pointer_starter.x + 250);
 			change_character_frame(direction);
+			
 			return;
 			
-	if !adjusting_rating:
+	if !adjusting_rating && !%FileDialog.visible:
 		if Input.is_action_pressed("mouse_click"):
 			block_grab = false;
 			if Input.is_action_pressed("ui_shift"):
@@ -384,6 +398,7 @@ func _process(_delta: float) -> void:
 	if dragging_character:
 		%x_offset.value = characterGrp.to_local(get_global_mouse_position()).x/char_scale.x;
 		%y_offset.value = characterGrp.to_local(get_global_mouse_position()).y/char_scale.y;
+		
 		return;
 		
 	if adjusting_rating:
@@ -416,9 +431,13 @@ func _process(_delta: float) -> void:
 		comboSpr.position = Vector2(%combo_x.value, %combo_y.value);
 		numsSpr.position = Vector2(%nums_x.value, %nums_y.value);
 		
-		GlobalOptions.set_setting("rating_pos", "meta", [%rating_x.value, %rating_y.value]);
-		GlobalOptions.set_setting("combo_pos", "meta", [%combo_x.value, %combo_y.value]);
-		GlobalOptions.set_setting("nums_pos", "meta", [%nums_x.value, %nums_y.value]);
+		ratingSpr.visible = %visible_rating.button_pressed;
+		comboSpr.visible = %visible_combo.button_pressed;
+		numsSpr.visible = %visible_nums.button_pressed;
+		
+		GlobalOptions.set_setting("rating_pos", "meta", [%rating_x.value, %rating_y.value, %visible_rating.button_pressed]);
+		GlobalOptions.set_setting("combo_pos", "meta", [%combo_x.value, %combo_y.value, %visible_combo.button_pressed]);
+		GlobalOptions.set_setting("nums_pos", "meta", [%nums_x.value, %nums_y.value, %visible_nums.button_pressed]);
 		
 	if !$FileDialog.visible:
 		if Input.is_action_just_released("mouse_wheel_down"):
@@ -490,7 +509,8 @@ func _process(_delta: float) -> void:
 			"AnimatedIcon": %animated_icon.button_pressed,
 			"scale": [%x_scale.value, %y_scale.value],
 			"cameraPos": [%camera_X.value, %camera_Y.value],
-			"camera follow pos": %cam_follow_poses.button_pressed
+			"camera follow pos": %cam_follow_poses.button_pressed,
+			"anim type": [1, 2, 3][%animType.selected]
 		};
 		
 	%x_offset.value = offset_array[cur_pose][0];
@@ -576,3 +596,6 @@ func _on_beat_time_value_changed(value: float) -> void:
 		
 	animBeats[cur_pose] = value;
 	
+func _on_color_button_pressed() -> void:
+	%color_text.color = charIcon.get_icon_color();
+	charBarColor.tint_under = %color_text.color;

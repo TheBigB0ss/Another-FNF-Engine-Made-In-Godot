@@ -186,14 +186,14 @@ func changeBg(newBg):
 func characterPlayAnim(id, anim):
 	match id:
 		"0", "bf":
-			main_scene.bf._playAnim(anim);
+			main_scene.bf._playAnim(anim, true);
 			
 		"1", "dad":
-			main_scene.dad._playAnim(anim);
+			main_scene.dad._playAnim(anim, true);
 			
 		"2", "gf":
 			if SongData.gfPlayer != "" && main_scene.gf != null:
-				main_scene.gf._playAnim(anim);
+				main_scene.gf._playAnim(anim, true);
 				
 #func set_new_camPos(pos, just_for_one_section):
 	#var splitedPos = pos.split(",");

@@ -157,12 +157,12 @@ horizontal_alignment = 1
 
 [node name="botplayLabel" type="Label" parent="hud/Hud_Layer" unique_id=1540411430]
 modulate = Color(1, 1, 1, 0)
-offset_left = 559.0
+offset_left = 504.0
 offset_top = 171.0
-offset_right = 3758.0
+offset_right = 5531.0
 offset_bottom = 857.0
 scale = Vector2(0.05, 0.05)
-text = "BOTPLAY"
+text = "-[BOTPLAY]-"
 label_settings = SubResource("LabelSettings_3ypwt")
 horizontal_alignment = 1
 

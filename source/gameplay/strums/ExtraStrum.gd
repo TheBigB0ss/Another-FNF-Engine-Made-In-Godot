@@ -108,6 +108,10 @@ func _process(delta):
 		if note.isPlayer:
 			continue;
 			
+		if Conductor.seekTime >= 0 && note.strumTime < Conductor.seekTime:
+			notes_to_delete.append(note);
+			continue;
+			
 		if Conductor.getSongTime > 320 + note.strumTime && note.sustainLength <= 0:
 			notes_to_delete.append(note);
 			

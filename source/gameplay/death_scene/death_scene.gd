@@ -34,6 +34,7 @@ func choice_voice_line():
 	return randi_range(1, 25);
 	
 var dead_confirmed = false;
+var confirm = false;
 func _process(_delta: float) -> void:
 	if confirm:
 		if death_anim.curAnim == "dead confirm" && death_anim.confirmTimer >= 2.5 && death_anim.confirmTimer < 2.6:
@@ -53,7 +54,6 @@ func _process(_delta: float) -> void:
 			
 			dead_confirmed = true;
 			
-var confirm = false;
 func _input(ev):
 	if ev is InputEventKey && SongData.isOnDeathScreen:
 		if ev.pressed && !ev.echo && !confirm:
