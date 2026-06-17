@@ -134,7 +134,8 @@ func _ready():
 var prevState = null;
 var curNote:Note = null;
 var animNote:Note = null;
-func update_character_state():
+var sing_timer = 0;
+func update_character_state(delta):
 	prevState = characterState
 	
 	if !curAnim.contains("sing"):
@@ -147,21 +148,25 @@ func update_character_state():
 	if curNote.isSustain:
 		characterState = CHARACTER_STATES.HOLDING if (curNote.is_pressing && curNote.sustainLength > 0) else CHARACTER_STATES.IDLE;
 		
-		if characterState == CHARACTER_STATES.HOLDING && curAnim != curNote.curNoteAnim:
-			_playAnim(curNote.curNoteAnim);
-			
-		if is_instance_valid(animNote):
-			if animNote.curNoteAnim != curNote.curNoteAnim && !animNote.isSustain:
+		if sing_timer > 0:
+			if is_instance_valid(animNote) && animNote.curNoteAnim != curNote.curNoteAnim && !animNote.isSustain:
 				characterState = CHARACTER_STATES.SINGING;
 				_playAnim(animNote.curNoteAnim);
 				
+			sing_timer -= delta;
+			
+			return;
+			
+		if characterState == CHARACTER_STATES.HOLDING && curAnim != curNote.curNoteAnim:
+			_playAnim(curNote.curNoteAnim);
+			
 func _process(delta):
 	if Engine.is_editor_hint():
 		return;
 		
 	loop_anim();
 	
-	update_character_state();
+	update_character_state(delta);
 	
 	if (curAnim.begins_with("sing") or curAnim.contains("sing") or special_anim) && characterState != CHARACTER_STATES.HOLDING:
 		idleTimer += delta;
@@ -209,9 +214,13 @@ func _playAnim(anim = "", special = false):
 				CHARACTER_STATES.HOLDING:
 					if prevState == CHARACTER_STATES.HOLDING:
 						reset_anim();
+						sing_timer = 0;
+						
 					reset_anim();
+					sing_timer = 0;
 					
 				CHARACTER_STATES.SINGING, CHARACTER_STATES.SPECIAL:
+					sing_timer = 0.2;
 					reset_anim();
 					
 		if animList[i].begins_with("sing") or charData["Poses"][i].has("Anim Time") or characterState == CHARACTER_STATES.SPECIAL:

@@ -531,24 +531,19 @@ func playBfMissAnim(curNote:Note):
 		if bf.animList.has(miss_anim):
 			bf._playAnim(miss_anim);
 			
-func playCharacterAnim(curNote:Note, new_char:Character, isBf):
+func playCharacterAnim(curNote:Note, new_char:Character):
 	if curNote.no_anim:
 		return;
 		
-	var altAnim = "-alt" if curNote.is_altAnim && new_char.animList.has(curNote.curNoteAnim+"-alt") else "";
+	var noteAnim = curNote.curNoteAnim;
 	
-	if isBf && !new_char.is_player or bf.curCharacter == "tankman":
-		curNote.curNoteAnim = swap_sing_anims(curNote.curNoteAnim, "singLeft", "singRight");
-		
-	if !isBf && new_char.is_player && dad.curCharacter != "tankman" && dad.curCharacter != "pico":
-		curNote.curNoteAnim = swap_sing_anims(curNote.curNoteAnim, "singLeft", "singRight");
-		
+	var altAnim = "-alt" if curNote.is_altAnim && new_char.animList.has(noteAnim + "-alt") else "";
+	
 	if curNote.note_pressed:
 		return;
 		
 	if curNote.isGfNote && gf != null:
-		new_char = gf;
-		new_char._playAnim(curNote.curNoteAnim);
+		gf._playAnim(noteAnim);
 		return;
 		
 	if curNote.is_hey_note:
@@ -556,14 +551,9 @@ func playCharacterAnim(curNote:Note, new_char:Character, isBf):
 		return;
 		
 	if !curNote.isGfNote && !curNote.is_hey_note:
-		new_char._playAnim(curNote.curNoteAnim+altAnim);
+		new_char._playAnim(noteAnim+altAnim);
 		
 	curNote.note_pressed = true;
-	
-func swap_sing_anims(cur_anim, pos1, pos2):
-	if cur_anim == pos1: return pos2;
-	if cur_anim == pos2: return pos1;
-	return cur_anim;
 	
 func play_strum_anim(note = null, is_opponent = false, timer = 0.0, is_second_opponent = false, isCPU = false):
 	var taget_key = "player";

@@ -126,6 +126,7 @@ func _choice_pause_opts():
 			main_scene.inst.stop();
 			main_scene.voices.stop();
 			
+			get_tree().paused = false;
 			Global.changeScene("/menus/options/options_menu", true, false);
 			SongData.isPlaying = false;
 			

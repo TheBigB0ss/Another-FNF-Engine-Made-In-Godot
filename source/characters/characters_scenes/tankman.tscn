@@ -19,6 +19,7 @@ anims_timer = {
 }
 anim_type = 2
 have_death_animation = false
+idle_type = 2
 frame_count = 2.4
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=18993768]

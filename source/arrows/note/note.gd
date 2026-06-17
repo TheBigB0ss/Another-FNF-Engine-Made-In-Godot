@@ -259,8 +259,7 @@ func _process(delta: float) -> void:
 		sustainLength = max(sustainLength, 0.0);
 		
 		if isSustain && noteLine != null && noteEnd != null:
-			if sustainLength <= 100.0:
-				noteEnd.scale.y = abs(min(sustainLength*Conductor.songSpeed / noteEnd.texture.get_size().y, noteEnd.scale.y));
+			noteEnd.scale.y = abs(min(sustainLength*Conductor.songSpeed / noteEnd.texture.get_size().y, noteEnd.scale.y));
 			noteEnd.position.y = sustainLength + noteEnd.texture.get_size().y * noteEnd.scale.y / 2.0;
 			
 			noteLine.set_point_position(1, Vector2(0, sustainLength));
@@ -296,6 +295,9 @@ func pressed(new_character:Character = null):
 		
 	curNoteAnim = NOTES_ANIM[noteData];
 	new_character = main_scene.bf if !is_instance_valid(new_character) else new_character;
+	if !new_character.is_player:
+		curNoteAnim = swap_sing_anims("singLeft", "singRight");
+		
 	new_character.curNote = self;
 	
 	if sustainLength <= 0:
@@ -318,12 +320,15 @@ func pressed(new_character:Character = null):
 		return;
 		
 	var anim_time = 0.45 if GlobalOptions.isUsingBot else 0.0;
-	main_scene.playCharacterAnim(self, new_character, true);
+	main_scene.playCharacterAnim(self, new_character);
 	main_scene.play_strum_anim(self, false, anim_time, false, true);
 	
 func opponent_pressed(new_character:Character = null):
 	curNoteAnim = NOTES_ANIM[noteData];
 	new_character = (main_scene.dad if !secondOpponentNote else main_scene.new_opponent) if !is_instance_valid(new_character) else new_character;
+	if new_character.is_player:
+		curNoteAnim = swap_sing_anims("singLeft", "singRight");
+		
 	new_character.curNote = self;
 	
 	if sustainLength <= 0:
@@ -332,7 +337,7 @@ func opponent_pressed(new_character:Character = null):
 		emitPress(true);
 		destroy_note();
 		
-	main_scene.playCharacterAnim(self, new_character, false);
+	main_scene.playCharacterAnim(self, new_character);
 	main_scene.play_strum_anim(self, !secondOpponentNote, 0.45, secondOpponentNote, true);
 	
 func emitPress(is_opponent):
@@ -382,3 +387,8 @@ func destroy_note():
 		return;
 		
 	queue_free();
+	
+func swap_sing_anims(pos1, pos2):
+	if curNoteAnim == pos1: return pos2;
+	if curNoteAnim == pos2: return pos1;
+	return curNoteAnim;
