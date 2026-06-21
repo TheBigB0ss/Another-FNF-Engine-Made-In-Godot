@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://f0c72kmnsor3"]
 
-[ext_resource type="Script" uid="uid://dkywaw07upwi1" path="res://source/menus/editors/chart_editor/characters/enemy_chart.gd" id="1_w145o"]
+[ext_resource type="Script" uid="uid://cithgl1w0skdv" path="res://source/menus/editors/chart_editor/characters/editor_character.gd" id="1_nj2ef"]
 [ext_resource type="Shader" uid="uid://b66dleiip18im" path="res://source/shaders/flashColor.gdshader" id="2_nj2ef"]
 [ext_resource type="Texture2D" uid="uid://0guh04poosg6" path="res://assets/images/editors/chart preview/enemy/enemy_chart.png" id="2_vqf0j"]
 
@@ -583,7 +583,8 @@ animations = [{
 }]
 
 [node name="enemy_chart" type="Node2D" unique_id=2145960487]
-script = ExtResource("1_w145o")
+script = ExtResource("1_nj2ef")
+path = "enemy_chart"
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=736081421]
 material = SubResource("ShaderMaterial_fn1ta")

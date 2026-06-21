@@ -295,7 +295,7 @@ func pressed(new_character:Character = null):
 		
 	curNoteAnim = NOTES_ANIM[noteData];
 	new_character = main_scene.bf if !is_instance_valid(new_character) else new_character;
-	if !new_character.is_player:
+	if !new_character.is_player or new_character.curCharacter == "tankman":
 		curNoteAnim = swap_sing_anims("singLeft", "singRight");
 		
 	new_character.curNote = self;
@@ -326,7 +326,7 @@ func pressed(new_character:Character = null):
 func opponent_pressed(new_character:Character = null):
 	curNoteAnim = NOTES_ANIM[noteData];
 	new_character = (main_scene.dad if !secondOpponentNote else main_scene.new_opponent) if !is_instance_valid(new_character) else new_character;
-	if new_character.is_player:
+	if new_character.is_player && new_character.curCharacter != "tankman" && new_character.curCharacter != "pico":
 		curNoteAnim = swap_sing_anims("singLeft", "singRight");
 		
 	new_character.curNote = self;
@@ -345,6 +345,9 @@ func emitPress(is_opponent):
 		return;
 		
 	if !is_opponent:
+		if GlobalOptions.playNoteHitSound:
+			Sound.add_new_sound("chart_hit");
+			
 		emit_signal("notePressed", self);
 	else:
 		emit_signal("opponentNotePressed", self);
@@ -389,6 +392,9 @@ func destroy_note():
 	queue_free();
 	
 func swap_sing_anims(pos1, pos2):
-	if curNoteAnim == pos1: return pos2;
-	if curNoteAnim == pos2: return pos1;
+	if curNoteAnim == pos1:
+		return pos2;
+	if curNoteAnim == pos2:
+		return pos1;
+		
 	return curNoteAnim;

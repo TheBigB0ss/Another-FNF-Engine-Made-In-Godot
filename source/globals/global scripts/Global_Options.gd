@@ -19,6 +19,7 @@ var full_screen = false;
 var volume = 1;
 var isUsingBot = false;
 var playMissSound = true;
+var playNoteHitSound = false;
 
 var debugTextMode = "simple";
 var updated_pause_music = "pause song";
@@ -69,7 +70,7 @@ func _ready():
 		for j in keys.keys():
 			keys_list.append(j);
 			
-	if !settingsJson.has("version") or settingsJson["version"] != 8:
+	if !settingsJson.has("version") or settingsJson["version"] != 9:
 		reset_settings();
 		
 	apply_changes();
@@ -98,7 +99,7 @@ func load_settings():
 		
 func reset_settings():
 	settingsJson = {
-		"version": 8,
+		"version": 9,
 		"meta":{
 			"rating_pos": [635, 235, true],
 			"combo_pos": [695, 285, true],
@@ -122,7 +123,8 @@ func reset_settings():
 			"play miss sound": true,
 			"pause music": "pause song",
 			"camera mode": "normal",
-			"idle mode": "step"
+			"idle mode": "step",
+			"play note hit sound": false
 		},
 		"visual": {
 			"hud mode": "new hud",
@@ -218,6 +220,7 @@ func apply_changes():
 	restart_action = settingsJson["gameplay"]["r to restart"];
 	playMissSound = settingsJson["gameplay"]["play miss sound"];
 	idleMode = settingsJson["gameplay"]["idle mode"];
+	playNoteHitSound = settingsJson["gameplay"]["play note hit sound"];
 	
 	vsync = settingsJson["graphics"]["vsync"];
 	low_quality = settingsJson["graphics"]["low quality"];
@@ -416,6 +419,10 @@ func set_options():
 				"description": "time bar mode",
 				"ID": settingsJson["options"]["time bar type"]["index"]
 			},
+			"health bar alpha": {
+				"value": settingsJson["visual"]["health bar alpha"],
+				"description": "health bar opacity"
+			},
 			"show splashes":{
 				"value": settingsJson["visual"]["show splashes"],
 				"description": "show note splashes"
@@ -435,10 +442,6 @@ func set_options():
 			"screen zoom":{
 				"value": settingsJson["visual"]["screen zoom"],
 				"description": "disable camera zoom"
-			},
-			"health bar alpha": {
-				"value": settingsJson["visual"]["health bar alpha"],
-				"description": "health bar opacity"
 			}
 		},
 		"gameplay": {
@@ -461,6 +464,10 @@ func set_options():
 			"play miss sound": {
 				"value": settingsJson["gameplay"]["play miss sound"],
 				"description": "play a sound clue when you missed a note"
+			},
+			"play note hit sound": {
+				"value": settingsJson["gameplay"]["play note hit sound"],
+				"description": "play a sound clue when you press a note"
 			},
 			"idle mode": {
 				"value": settingsJson["options"]["idle mode"]["list"],

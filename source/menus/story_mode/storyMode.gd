@@ -154,12 +154,8 @@ func go_to_week():
 	SongData.week_diffs = diffsList;
 	SongData.isStoryMode = storyMode;
 	SongData.weekName = new_weeks[curWeek];
+	SongData.week = new_weeks[curWeek] if !curWeek > new_weeks.size()-1 else "";
 	
-	if !curWeek > new_weeks.size()-1:
-		SongData.week = new_weeks[curWeek];
-	else:
-		SongData.week = "";
-		
 	songPath = songsList[0];
 	SongData.loadJson(songPath, diffsList);
 	

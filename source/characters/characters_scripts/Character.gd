@@ -148,16 +148,18 @@ func update_character_state(delta):
 	if curNote.isSustain:
 		characterState = CHARACTER_STATES.HOLDING if (curNote.is_pressing && curNote.sustainLength > 0) else CHARACTER_STATES.IDLE;
 		
-		if sing_timer > 0:
-			if is_instance_valid(animNote) && animNote.curNoteAnim != curNote.curNoteAnim && !animNote.isSustain:
-				characterState = CHARACTER_STATES.SINGING;
-				_playAnim(animNote.curNoteAnim);
-				
-			sing_timer -= delta;
+		if is_instance_valid(animNote) && animNote.curNoteAnim != curNote.curNoteAnim && !animNote.isSustain:
+			sing_timer = 0.075;
+			characterState = CHARACTER_STATES.SINGING;
+			_playAnim(animNote.curNoteAnim);
 			
+		if sing_timer > 0:
+			sing_timer -= delta;
+			sing_timer = max(sing_timer, 0.0);
 			return;
 			
 		if characterState == CHARACTER_STATES.HOLDING && curAnim != curNote.curNoteAnim:
+			sing_timer = 0;
 			_playAnim(curNote.curNoteAnim);
 			
 func _process(delta):
@@ -195,6 +197,9 @@ func dance():
 var current_anim = character.animation if character is AnimatedSprite2D else "";
 func _playAnim(anim = "", special = false):
 	for i in animList.size():
+		#if is_instance_valid(curNote) && characterState == CHARACTER_STATES.HOLDING && anim.begins_with("sing") && curNote.curNoteAnim != anim:
+		#	anim = curNote.curNoteAnim;
+			
 		if animList[i] != anim:
 			continue;
 			
@@ -212,15 +217,13 @@ func _playAnim(anim = "", special = false):
 		if characterState != CHARACTER_STATES.IDLE:
 			match characterState:
 				CHARACTER_STATES.HOLDING:
+					sing_timer = 0;
 					if prevState == CHARACTER_STATES.HOLDING:
 						reset_anim();
-						sing_timer = 0;
 						
 					reset_anim();
-					sing_timer = 0;
 					
 				CHARACTER_STATES.SINGING, CHARACTER_STATES.SPECIAL:
-					sing_timer = 0.2;
 					reset_anim();
 					
 		if animList[i].begins_with("sing") or charData["Poses"][i].has("Anim Time") or characterState == CHARACTER_STATES.SPECIAL:

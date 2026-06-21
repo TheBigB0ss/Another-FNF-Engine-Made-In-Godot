@@ -10,7 +10,7 @@ func playAudio(sound, isPixelAudio = false, volume = 0.0):
 	audio.volume_db = volume;
 	audio.play(0.0);
 	
-func add_new_sound(sound, mode, volume = 0.0):
+func add_new_sound(sound, mode = Node.PROCESS_MODE_INHERIT, volume = 0.0):
 	var new_audio = AudioStreamPlayer.new();
 	new_audio.stream = load("res://assets/sounds/%s.ogg"%[sound]);
 	new_audio.volume_db = volume;

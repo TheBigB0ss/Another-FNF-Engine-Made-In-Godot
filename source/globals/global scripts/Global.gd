@@ -92,15 +92,5 @@ func reloadScene(useTrasition = true, use_stickers = false):
 	else:
 		get_tree().reload_current_scene();
 		
-func global_get_week_files():
-	var file = [];
-	var coolFolder = DirAccess.open("res://assets/data/weeks data/%s"%[SongData.week_folder_path]);
-	if coolFolder:
-		coolFolder.list_dir_begin();
-		var nameShit = coolFolder.get_next();
-		while nameShit != "":
-			file.append(nameShit.replace(".json", ""));
-			nameShit = coolFolder.get_next();
-			
-	return file;
-	
+func update_cursor(cursor):
+	Input.set_custom_mouse_cursor(load("res://assets/images/cursors/cursor-%s.png"%[cursor]), Input.CURSOR_ARROW, Vector2.ZERO);

@@ -1,5 +1,7 @@
 class_name Icon extends Sprite2D
 
+@export var enable = true;
+
 func init_icon(parent, path, is_opponent, is_animated, icon_position):
 	var new_icon = AnimatedIcon.new() if is_animated else Icon.new();
 	
@@ -19,6 +21,9 @@ func _ready() -> void:
 	Conductor.new_beat.connect(beat_hit);
 	
 func _process(_delta: float) -> void:
+	if !enable:
+		return;
+		
 	scale = lerp(scale, Vector2(1.0, 1.0), 0.10);
 	
 func play_icon_anim(anim):
@@ -51,12 +56,19 @@ func set_icon_hframes():
 		hframes = 3;
 		
 func beat_hit(_beat):
+	if !enable:
+		return;
+		
 	if GlobalOptions.updated_icon != "disabled":
 		scale = Vector2(1.25, 1.25);
 		
-func reload_icon(icon):
+func reload_icon(icon, playIconAnim = ""):
 	texture = load("res://assets/images/icons/icon-%s.png"%[icon]);
 	set_icon_hframes();
+	if playIconAnim == "":
+		return;
+		
+	play_icon_anim(playIconAnim);
 	
 func get_icon_color():
 	if !texture:

@@ -46,7 +46,7 @@ func _input(ev):
 func change_opt(change):
 	cur_opt += change;
 	cur_opt = clamp(cur_opt, 0, len(opt)-1);
-	Sound.add_new_sound("scrollMenu", PROCESS_MODE_INHERIT);
+	Sound.add_new_sound("scrollMenu");
 	
 	for i in opt.size():
 		alphabetGroup.get_child(i).modulate.a = 1 if i == cur_opt else 0.5;

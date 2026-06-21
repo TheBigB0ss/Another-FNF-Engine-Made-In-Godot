@@ -52,7 +52,8 @@
 			"Offset": [
 				9.0,
 				-3.0
-			]
+			],
+			"Anim Time": 30,
 		},
 		{
 			"Anim": "good anim",

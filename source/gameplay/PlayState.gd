@@ -339,7 +339,7 @@ func _process(delta: float) -> void:
 	if !is_on_intro && Conductor.getSongTime >= 0 && !playlist.is_empty():
 		discord_songName = "Playing: %s (%s)"%[playlist[0], songDiff];
 		
-	if Conductor.getSongTime >= 0 && !is_on_intro:
+	if !Conductor.getSongTime < 0 && !is_on_intro:
 		timeBar.value = Conductor.getSongTime/1000;
 		
 	timeBar.max_value = inst.stream.get_length();
@@ -670,9 +670,10 @@ func startCoutdown():
 	var idleCounter = 0;
 	
 	if Conductor.startTime > 0:
-		setTimePos(Conductor.startTime);
-		
 		can_pause = true;
+		is_on_intro = false;
+		
+		setTimePos(Conductor.startTime);
 		
 		Conductor.startTime = 0;
 		

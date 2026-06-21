@@ -171,18 +171,19 @@ func update_character_state(delta):
 	if curNote.isSustain:
 		characterState = CHARACTER_STATES.HOLDING if (curNote.is_pressing && curNote.sustainLength > 0) else CHARACTER_STATES.IDLE;
 		
-		if sing_timer > 0:
-			if is_instance_valid(animNote) && animNote.curNoteAnim != curNote.curNoteAnim && !animNote.isSustain:
-				characterState = CHARACTER_STATES.SINGING;
-				_playAnim(animNote.curNoteAnim);
-				
-			sing_timer -= delta;
+		if is_instance_valid(animNote) && animNote.curNoteAnim != curNote.curNoteAnim && !animNote.isSustain:
+			sing_timer = 0.075;
+			characterState = CHARACTER_STATES.SINGING;
+			_playAnim(animNote.curNoteAnim);
 			
+		if sing_timer > 0:
+			sing_timer -= delta;
+			sing_timer = max(sing_timer, 0.0);
 			return;
 			
-			if characterState == CHARACTER_STATES.HOLDING && curAnim != curNote.curNoteAnim:
-				_playAnim(curNote.curNoteAnim);
-				
+		if characterState == CHARACTER_STATES.HOLDING && curAnim != curNote.curNoteAnim:
+			_playAnim(curNote.curNoteAnim);
+			
 func character_process(delta):
 	if Engine.is_editor_hint():
 		return;
@@ -218,6 +219,9 @@ var newFrame = 0;
 func _playAnim(anim = "", special = false):
 	playing = true;
 	for i in animList.size():
+		#if is_instance_valid(curNote) && characterState == CHARACTER_STATES.HOLDING && anim.begins_with("sing") && curNote.curNoteAnim != anim:
+		#	anim = curNote.curNoteAnim;
+			
 		if animList[i] != anim:
 			continue;
 			
@@ -237,22 +241,18 @@ func _playAnim(anim = "", special = false):
 			characterState = CHARACTER_STATES.IDLE;
 			frame = newFrame;
 		if animList[i].begins_with("sing") && is_instance_valid(curNote):
-			if !curNote.isSustain:
-				characterState = CHARACTER_STATES.SINGING;
-				sing_timer = 0.2;
-				
+			characterState = CHARACTER_STATES.SINGING;
+			
 		if characterState != CHARACTER_STATES.IDLE:
 			match characterState:
 				CHARACTER_STATES.HOLDING:
+					sing_timer = 0;
 					if prevState == CHARACTER_STATES.HOLDING:
 						frame = newFrame;
-						sing_timer = 0;
 						
 					frame = newFrame;
-					sing_timer = 0;
 					
 				CHARACTER_STATES.SINGING, CHARACTER_STATES.SPECIAL:
-					sing_timer = 0.2;
 					frame = newFrame;
 					
 		if animList[i].begins_with("sing") or charData["Poses"][i].has("Anim Time") or characterState == CHARACTER_STATES.SPECIAL:

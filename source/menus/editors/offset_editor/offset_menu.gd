@@ -154,11 +154,6 @@ func play_anim():
 		elif i.character is AnimatedSprite2D:
 			i.character.play(i.posesList[cur_pose]);
 			
-var cursor = "";
-func update_cursor(new_cursor):
-	var path = "res://assets/images/cursors/cursor-%s.png"%[new_cursor];
-	Input.set_custom_mouse_cursor(load(path), Input.CURSOR_ARROW, Vector2.ZERO);
-	
 func set_rating_pos():
 	if adjusting_rating:
 		$rating_layer.show();
@@ -215,9 +210,6 @@ var block_grab = false;
 var pos_change_value = 0;
 
 func _input(ev):
-	if ev is InputEventMouseMotion:
-		update_cursor(cursor);
-		
 	if ev is InputEventKey:
 		if ev.pressed:
 			if ev.echo:
@@ -240,6 +232,7 @@ func _input(ev):
 				set_rating_pos();
 				
 			if ev.keycode in [KEY_ESCAPE]:
+				Global.update_cursor("default");
 				MusicManager._play_song("freakyMenu", "music", true);
 				Global.changeScene("menus/main_menu/MainMenu", true, false);
 				
@@ -461,7 +454,7 @@ func _process(_delta: float) -> void:
 			var curPos = get_global_mouse_position();
 			camera.position += lastPos - curPos;
 			
-	cursor = "pointer" if get_viewport().gui_get_hovered_control() is TabBar or get_viewport().gui_get_hovered_control() is SpinBox or get_viewport().gui_get_hovered_control() is CheckBox or get_viewport().gui_get_hovered_control() is Button or get_viewport().gui_get_hovered_control() is OptionButton else "default";
+	Global.update_cursor("pointer" if get_viewport().gui_get_hovered_control() is TabBar or get_viewport().gui_get_hovered_control() is SpinBox or get_viewport().gui_get_hovered_control() is CheckBox or get_viewport().gui_get_hovered_control() is Button or get_viewport().gui_get_hovered_control() is OptionButton else "default");
 	
 	for i in characterGrp.get_children():
 		if !offset_count > i.animList.size()-1:

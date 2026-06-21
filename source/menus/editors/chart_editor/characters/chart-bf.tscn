@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bs3bmha3d0luc"]
 
-[ext_resource type="Script" uid="uid://cithgl1w0skdv" path="res://source/menus/editors/chart_editor/characters/chart-bf.gd" id="1_1nc30"]
+[ext_resource type="Script" uid="uid://cithgl1w0skdv" path="res://source/menus/editors/chart_editor/characters/editor_character.gd" id="1_1nc30"]
 [ext_resource type="Shader" uid="uid://b66dleiip18im" path="res://source/shaders/flashColor.gdshader" id="2_6f1c0"]
 [ext_resource type="Texture2D" uid="uid://ta4oaw7lkwmx" path="res://assets/images/editors/chart preview/bf/chart-bf.png" id="2_wqw6q"]
 
@@ -584,6 +584,7 @@ animations = [{
 
 [node name="chart-bf" type="Node2D" unique_id=1087730310]
 script = ExtResource("1_1nc30")
+path = "bf-chart"
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=518251865]
 material = SubResource("ShaderMaterial_6f1fn")

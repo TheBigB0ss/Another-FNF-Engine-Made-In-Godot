@@ -1,7 +1,5 @@
 extends CanvasLayer
 
-var stickersTimer = Timer.new();
-
 @onready var fade_anim = $'Control/Fade_anim';
 @onready var stickersGrp = $'Control/stickers';
 @onready var transition_anim = $Control/transition;
@@ -14,14 +12,11 @@ var stickerPack = "pack1";
 var can_show_stickers = true;
 var deleteStickers = false;
 
+const max_amount = 80;
+
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS;
 	
-	add_child(stickersTimer);
-	
-	if !deleteStickers && stickersGrp.get_child_count() <= 75:
-		stickersTimer.connect("timeout", spawnStickers);
-		
 	var jsonFile = FileAccess.open("res://assets/data/jsonSticker.json",FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
@@ -37,35 +32,43 @@ func _ready():
 		var path = "res://assets/images/stickers/%s/%s.png"%[stickerPack, i];
 		sticker_textures[i] = load(path);
 		
-	#print(stickersArray)
-	
 func _process(_delta: float) -> void:
 	for i in stickersGrp.get_children():
-		i.scale = lerp(i.scale, Vector2(1.0, 1.0), 0.90);
+		i.scale = lerp(i.scale, Vector2(1.0, 1.0), 0.40);
 		
 func spawnStickers():
-	var count = stickersGrp.get_child_count();
-	
-	if deleteStickers or count > 75:
+	if deleteStickers:
 		removeStickers();
 		return;
 		
-	if can_show_stickers:
-		Sound.add_new_sound("stickerSounds/keyClick%s"%[int(randi_range(1, 8))], false);
+	while stickersGrp.get_child_count() < max_amount:
+		await get_tree().create_timer(0.015).timeout;
+		if can_show_stickers:
+			Sound.add_new_sound("stickerSounds/keyClick%s"%[randi_range(1, 8)]);
+			
+		var random_sticker = stickersArray.pick_random();
 		
-	var random_sticker = stickersArray.pick_random();
-	
-	var sticker = Sprite2D.new();
-	sticker.texture = sticker_textures[random_sticker];
-	sticker.position = Vector2(randi_range(0, 1380), randi_range(0, 810));
-	sticker.rotation = deg_to_rad(randi_range(-20, 20));
-	sticker.scale = Vector2(1.2, 1.2);
-	stickersGrp.add_child(sticker);
-	
+		var sticker = Sprite2D.new();
+		sticker.texture = sticker_textures[random_sticker];
+		sticker.position = Vector2(randi_range(0, 1280), randi_range(0, 720));
+		sticker.rotation = deg_to_rad(randi_range(-20, 20));
+		sticker.scale = Vector2(1.5, 1.5);
+		stickersGrp.add_child(sticker);
+		
+		if stickersGrp.get_child_count() >= max_amount:
+			deleteStickers = true;
+			removeStickers();
+			
 	Global.can_use_menus = stickersGrp.get_child_count() > 0;
 	
 func removeStickers():
-	if deleteStickers && stickersGrp.get_child_count() > 0:
+	if !deleteStickers:
+		return;
+		
+	await get_tree().create_timer(0.30).timeout;
+	
+	while stickersGrp.get_child_count() > 0:
+		await get_tree().create_timer(0.01).timeout;
 		if can_show_stickers:
 			Sound.add_new_sound("stickerSounds/keyClick%s"%[randi_range(1, 8)], false);
 			
@@ -81,18 +84,17 @@ func _is_in_transition(use_stickers):
 	
 	can_show_stickers = use_stickers;
 	deleteStickers = false;
-	stickersTimer.wait_time = 0.01;
 	
 	if can_show_stickers:
 		stickersGrp.show();
-		stickersTimer.start();
+		spawnStickers();
 	else:
 		stickersGrp.hide();
-		stickersTimer.stop();
 		
 func _on_fade_anim_animation_finished(anim_name):
 	match anim_name:
 		"fade_in":
+			Global.update_cursor("default");
 			fade_anim.play("fade_out");
 		"fade_out":
 			await get_tree().create_timer(0.1).timeout;

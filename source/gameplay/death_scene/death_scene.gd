@@ -24,7 +24,7 @@ func _ready():
 	
 	if SongData.isOnDeathScreen:
 		if song == "ugh" or song == "guns" or song == "stress":
-			Sound.add_new_sound("game over/tankman gameover voice lines/jeffGameover-%s"%[choice_voice_line()], PROCESS_MODE_INHERIT, 0.0);
+			Sound.add_new_sound("game over/tankman gameover voice lines/jeffGameover-%s"%[choice_voice_line()]);
 			
 		Sound.playAudio("game over/fnf_loss_sfx", false);
 		if death_anim.charPath == "Bf Pixel dead":
