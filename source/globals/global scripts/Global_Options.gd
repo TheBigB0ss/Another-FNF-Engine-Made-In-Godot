@@ -20,6 +20,7 @@ var volume = 1;
 var isUsingBot = false;
 var playMissSound = true;
 var playNoteHitSound = false;
+var showMsText = false;
 
 var debugTextMode = "simple";
 var updated_pause_music = "pause song";
@@ -70,7 +71,7 @@ func _ready():
 		for j in keys.keys():
 			keys_list.append(j);
 			
-	if !settingsJson.has("version") or settingsJson["version"] != 9:
+	if !settingsJson.has("version") or settingsJson["version"] != 10:
 		reset_settings();
 		
 	apply_changes();
@@ -99,7 +100,7 @@ func load_settings():
 		
 func reset_settings():
 	settingsJson = {
-		"version": 9,
+		"version": 10,
 		"meta":{
 			"rating_pos": [635, 235, true],
 			"combo_pos": [695, 285, true],
@@ -124,7 +125,8 @@ func reset_settings():
 			"pause music": "pause song",
 			"camera mode": "normal",
 			"idle mode": "step",
-			"play note hit sound": false
+			"play note hit sound": false,
+			"show ms text": false
 		},
 		"visual": {
 			"hud mode": "new hud",
@@ -221,6 +223,7 @@ func apply_changes():
 	playMissSound = settingsJson["gameplay"]["play miss sound"];
 	idleMode = settingsJson["gameplay"]["idle mode"];
 	playNoteHitSound = settingsJson["gameplay"]["play note hit sound"];
+	showMsText = settingsJson["gameplay"]["show ms text"];
 	
 	vsync = settingsJson["graphics"]["vsync"];
 	low_quality = settingsJson["graphics"]["low quality"];
@@ -483,6 +486,10 @@ func set_options():
 				"value": settingsJson["options"]["pause music"]["list"],
 				"description": "pause music",
 				"ID": settingsJson["options"]["pause music"]["index"]
+			},
+			"show ms text": {
+				"value": settingsJson["gameplay"]["show ms text"],
+				"description": "show the ms when you hit a note"
 			}
 		}
 	};

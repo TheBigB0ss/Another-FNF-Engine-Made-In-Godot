@@ -13,10 +13,11 @@ var offSetShit = 0;
 	"Strum Texture": "StrumlineNotes",
 	"Note Line Texture": "NOTE_hold_assets"
 };
-@export_file_path("*.json") var chart_path = "";
-@export var enable = false;
 @onready var main_scene = get_tree().current_scene;
+
+@export_file_path("*.json") var chart_path = "";
 @export var strum_char:Character;
+@export var enable = false;
 
 var strumNode = null;
 var noteNode = null;
@@ -78,10 +79,12 @@ func _ready() -> void:
 	array_notes.sort_custom(func(a,b): return a[0]<b[0]);
 	
 func notesAppears():
-	var tw = get_tree().create_tween();
 	for i in strumNode.get_child_count():
 		var strumNote = strumNode.get_child(i);
-		tw.tween_property(strumNote, "modulate:a", 1, 0.25+(0.1*i)).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT);
+		strumNote.modulate.a = 0.0;
+		
+		var tw = get_tree().create_tween();
+		tw.tween_property(strumNote, "modulate:a", 1.0, 1.0).set_delay(0.5 + (0.2 * i)).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT);
 		
 var notes_to_delete = [];
 func _process(delta):

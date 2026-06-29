@@ -159,7 +159,7 @@ var curNote:Note = null;
 var animNote:Note = null;
 var sing_timer = 0;
 func update_character_state(delta):
-	prevState = characterState
+	prevState = characterState;
 	
 	if !curAnim.contains("sing"):
 		return;
@@ -172,7 +172,7 @@ func update_character_state(delta):
 		characterState = CHARACTER_STATES.HOLDING if (curNote.is_pressing && curNote.sustainLength > 0) else CHARACTER_STATES.IDLE;
 		
 		if is_instance_valid(animNote) && animNote.curNoteAnim != curNote.curNoteAnim && !animNote.isSustain:
-			sing_timer = 0.075;
+			sing_timer = 0.055;
 			characterState = CHARACTER_STATES.SINGING;
 			_playAnim(animNote.curNoteAnim);
 			
@@ -228,6 +228,8 @@ func _playAnim(anim = "", special = false):
 		for j in animationData["AN"]["TL"]["L"]:
 			for k in j["FR"]:
 				if k.get("N", "") == posesList[i]:
+					start_frame = int(k["I"]);
+					timer = float(k["I"]);
 					newFrame = k["I"];
 					newLimit = (k["I"] + k["DU"])-1;
 					

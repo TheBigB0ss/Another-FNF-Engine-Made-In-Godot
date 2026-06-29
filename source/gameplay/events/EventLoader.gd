@@ -51,19 +51,27 @@ func trigger_event(event_name, value1, value2):
 	emit_signal("event_emit", event_name);
 	match event_name:
 		"change song speed":
-			var songTween = create_tween();
-			songTween.tween_property(Conductor, "songSpeed", value1.to_float(), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
-			
+			if value2 == "true":
+				var songTween = create_tween();
+				songTween.tween_property(Conductor, "songSpeed", value1.to_float(), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
+			else:
+				Conductor.songSpeed = value1.to_float();
+				
 		"change song pitch":
-			var instTween = create_tween();
-			instTween.tween_property(main_scene.inst, "pitch_scale", value1.to_float(), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
-			
-			var voicesTween = create_tween();
-			voicesTween.tween_property(main_scene.voices, "pitch_scale", value1.to_float(), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
-			
-			var songTween = create_tween();
-			songTween.tween_property(Conductor, "songSpeed", value1.to_float(), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
-			
+			if value2 == "true":
+				var instTween = create_tween();
+				instTween.tween_property(main_scene.inst, "pitch_scale", value1.to_float(), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
+				
+				var voicesTween = create_tween();
+				voicesTween.tween_property(main_scene.voices, "pitch_scale", value1.to_float(), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
+				
+				var songTween = create_tween();
+				songTween.tween_property(Conductor, "songSpeed", value1.to_float(), Conductor.crochet / 1000.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT);
+			else:
+				main_scene.inst.pitch_scale = value1.to_float();
+				main_scene.voices.pitch_scale = value1.to_float();
+				Conductor.songSpeed = value1.to_float();
+				
 		"change character":
 			changeChar(value1, value2);
 			

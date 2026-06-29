@@ -484,7 +484,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_6lhf8")
 }],
-"loop": false,
+"loop": 0,
 "name": &"HEY",
 "speed": 18.0
 }, {
@@ -534,7 +534,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xmen4")
 }],
-"loop": false,
+"loop": 0,
 "name": &"down",
 "speed": 18.0
 }, {
@@ -563,7 +563,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_fkb1j")
 }],
-"loop": false,
+"loop": 0,
 "name": &"idle-left",
 "speed": 18.0
 }, {
@@ -592,7 +592,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_7woa1")
 }],
-"loop": false,
+"loop": 0,
 "name": &"idle-right",
 "speed": 18.0
 }, {
@@ -642,7 +642,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_735h1")
 }],
-"loop": false,
+"loop": 0,
 "name": &"left",
 "speed": 18.0
 }, {
@@ -692,7 +692,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_aqes1")
 }],
-"loop": false,
+"loop": 0,
 "name": &"right",
 "speed": 18.0
 }, {
@@ -742,7 +742,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_7seit")
 }],
-"loop": false,
+"loop": 0,
 "name": &"up",
 "speed": 18.0
 }]
@@ -754,7 +754,7 @@ healthBar_Color = Color(0.9490196, 0.69803923, 0.11372549, 1)
 anims_timer = {
 "danceLeft": [2, 5, false],
 "danceRight": [2, 5, false],
-"hey": [2, 10, true],
+"hey": [2, 7, false],
 "singDown": [2, 5, false],
 "singLeft": [2, 5, false],
 "singRight": [2, 5, false],
@@ -762,6 +762,7 @@ anims_timer = {
 }
 anim_type = 2
 have_death_animation = false
+idle_type = 2
 frame_count = 2.4
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=1871576473]

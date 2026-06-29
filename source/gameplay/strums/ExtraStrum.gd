@@ -158,10 +158,12 @@ func _process(delta):
 			notes.play_note_anim("static");
 			
 func notesAppears():
-	var tw = get_tree().create_tween();
 	for i in strumNode.get_child_count():
 		var strumNote = strumNode.get_child(i);
-		tw.tween_property(strumNote, "modulate:a", 1, 0.25+(0.1*i)).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT);
+		strumNote.modulate.a = 0.0;
+		
+		var tw = get_tree().create_tween();
+		tw.tween_property(strumNote, "modulate:a", 1.0, 1.0).set_delay(0.5 + (0.2 * i)).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT);
 		
 func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer, value1 = null, value2 = null):
 	var data = int(noteData)%4;

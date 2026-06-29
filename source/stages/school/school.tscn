@@ -1,13 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://b0iyndk5ikcxf"]
+[gd_scene format=3 uid="uid://b0iyndk5ikcxf"]
 
 [ext_resource type="Texture2D" uid="uid://b7e6h73av0g1y" path="res://assets/stages/week6/weebSky.png" id="1_2xde1"]
 [ext_resource type="Script" uid="uid://d2fqsfgj1d38r" path="res://source/stages/school/school.gd" id="1_6jqn7"]
 [ext_resource type="Shader" uid="uid://dho05u5a40fe" path="res://source/shaders/vhs.gdshader" id="2_g616d"]
 [ext_resource type="Texture2D" uid="uid://bjjo2wglgcwco" path="res://assets/stages/week6/weebSchool.png" id="2_m7lkw"]
 [ext_resource type="Texture2D" uid="uid://douw77cs571uv" path="res://assets/stages/week6/weebStreet.png" id="3_458b4"]
-[ext_resource type="PackedScene" uid="uid://bsvgftxd7osis" path="res://assets/stages/week6/bgFreaks.tscn" id="5_35kuy"]
 [ext_resource type="Texture2D" uid="uid://d3mimqhh2tqdn" path="res://assets/stages/week6/weebTreesBack.png" id="5_ouota"]
-[ext_resource type="PackedScene" uid="uid://da8ll785j0idv" path="res://assets/stages/week6/petals.tscn" id="9_v60a3"]
+[ext_resource type="Script" uid="uid://dk0iqkss82o73" path="res://addons/sparrow_sprite/SparrowSprite.gd" id="7_560b6"]
+[ext_resource type="Texture2D" uid="uid://ddh8apx6eq3k1" path="res://assets/stages/week6/bgFreaks.png" id="8_y0ysj"]
+[ext_resource type="Texture2D" uid="uid://b5i3x2htu61mw" path="res://assets/stages/week6/petals.png" id="9_v7pgg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v60a3"]
 shader = ExtResource("2_g616d")
@@ -16,50 +17,64 @@ shader_parameter/wiggle_speed = 25.0
 shader_parameter/smear = 1.0
 shader_parameter/blur_samples = 15
 
-[node name="School" type="Node2D"]
+[node name="School" type="Node2D" unique_id=1465558247]
 script = ExtResource("1_6jqn7")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=383033806]
 layer = 3
 visible = false
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1644074180]
 material = SubResource("ShaderMaterial_v60a3")
 offset_right = 1280.0
 offset_bottom = 720.0
 
-[node name="bg" type="Sprite2D" parent="."]
+[node name="bg" type="Sprite2D" parent="." unique_id=398494781]
 texture_filter = 1
 position = Vector2(571.5, 449.5)
 scale = Vector2(6.1, 6.1)
 texture = ExtResource("1_2xde1")
 
-[node name="school_bg" type="Sprite2D" parent="."]
+[node name="school_bg" type="Sprite2D" parent="." unique_id=1808410740]
 texture_filter = 1
 position = Vector2(571.4, 400)
 scale = Vector2(6.097, 6.1)
 texture = ExtResource("2_m7lkw")
 
-[node name="street_bg" type="Sprite2D" parent="."]
+[node name="street_bg" type="Sprite2D" parent="." unique_id=401070403]
 texture_filter = 1
 position = Vector2(571.025, 372.5)
 scale = Vector2(6.143, 7.1)
 texture = ExtResource("3_458b4")
 
-[node name="bg_back_trees" type="Sprite2D" parent="."]
+[node name="bg_back_trees" type="Sprite2D" parent="." unique_id=1953281821]
 texture_filter = 1
 position = Vector2(534, 441)
 scale = Vector2(6.1, 6.1)
 texture = ExtResource("5_ouota")
 
-[node name="bg_trees" type="Node2D" parent="."]
+[node name="bg_trees" type="Node2D" parent="." unique_id=850769512]
 texture_filter = 1
 
-[node name="bgFreaks" parent="." instance=ExtResource("5_35kuy")]
-position = Vector2(655, 382)
+[node name="bgFreaks" type="Node2D" parent="." unique_id=805372219]
+texture_filter = 1
+position = Vector2(-643, 171)
 scale = Vector2(5.6, 5.6)
+script = ExtResource("7_560b6")
+texture = ExtResource("8_y0ysj")
+xmlPath = "res://assets/stages/week6/bgFreaks.xml"
+frame = 27
+animation = 0
+metadata/_custom_type_script = "uid://dk0iqkss82o73"
 
-[node name="petals" parent="." instance=ExtResource("9_v60a3")]
+[node name="petals" type="Node2D" parent="." unique_id=1627104228]
 z_index = 3
-position = Vector2(635, 246)
+texture_filter = 1
+position = Vector2(1.1920929e-07, 0)
 scale = Vector2(3.5, 3.5)
+script = ExtResource("7_560b6")
+texture = ExtResource("9_v7pgg")
+xmlPath = "res://assets/stages/week6/petals.xml"
+frame = 18
+animation = 0
+metadata/_custom_type_script = "uid://dk0iqkss82o73"

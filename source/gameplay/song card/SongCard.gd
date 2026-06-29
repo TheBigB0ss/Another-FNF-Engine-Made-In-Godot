@@ -43,13 +43,15 @@ func create_songBar(song:String):
 		
 	add_child(song_name);
 	
+var end = false;
 func beat_hit(beat):
-	match beat:
-		1:
-			var tw = get_tree().create_tween();
-			tw.tween_property(self, "position:x", 280, 1.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT);
-		9:
-			var tw = get_tree().create_tween();
-			tw.tween_property(self, "position:x", -1200, 1.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN);
-			tw.tween_callback(self.queue_free);
-			
+	if beat == 1:
+		var tw = get_tree().create_tween();
+		tw.tween_property(self, "position:x", 280, 1.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT);
+		
+	if beat >= 9 && !end:
+		var tw = get_tree().create_tween();
+		tw.tween_property(self, "position:x", -1200, 1.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN);
+		tw.tween_callback(self.queue_free);
+		
+		end = true;

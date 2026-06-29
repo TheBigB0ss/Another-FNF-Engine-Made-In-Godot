@@ -21,6 +21,8 @@ var iconP3 = Icon.new();
 var ratingPart = "";
 var ratings = ["sick", "good", "bad", "shit", "miss"];
 
+@onready var msText = $rating/Rating_Layer/ms_text;
+
 @onready var rating_spr = $'rating/Rating_Layer/rating';
 @onready var combo_spr = $'rating/Rating_Layer/combo';
 @onready var nums_spr = $'rating/Rating_Layer/nums';
@@ -236,6 +238,7 @@ func _ready():
 		opponentStrum.visible = false;
 		
 	ratingText.visible = GlobalOptions.show_ratingLabel;
+	msText.visible = GlobalOptions.showMsText;
 	
 	if SongData.haveTwoOpponents:
 		newOpponentStrum.show();
@@ -310,6 +313,8 @@ var discord_songName = "";
 var last_song_seek = 0.0;
 
 func _process(delta: float) -> void:
+	msText.modulate.a = lerp(msText.modulate.a, 0.0, 0.11);
+	
 	if !start_song:
 		return;
 		
@@ -447,6 +452,9 @@ func pressedNote(note):
 	if GlobalOptions.isUsingBot:
 		return;
 		
+	msText.text = str(snapped(ms, 0.01), "Ms");
+	msText.modulate.a = 1.0;
+	
 	if !pressed:
 		for i in rating_data.keys():
 			if ms <= rating_data[i]["Ms"][0] && !ms <= rating_data[i]["Ms"][1]:
@@ -456,12 +464,16 @@ func pressedNote(note):
 				match rating_data[i]["Rating"]:
 					"shits":
 						shits += 1;
+						msText.modulate = Color.RED;
 					"bads":
 						bads += 1;
+						msText.modulate = Color.RED;
 					"goods":
 						goods += 1;
+						msText.modulate = Color.DARK_GREEN;
 					"sicks":
 						sicks += 1;
+						msText.modulate = Color.CYAN;
 						
 				rating_spr.pop_up_rating(rating_data[i]["RatingID"]);
 				

@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://ov1a7ymw3c5l" path="res://source/gameplay/ratings/combo.gd" id="3_vbhv8"]
 [ext_resource type="Script" uid="uid://c1w1j8th2unar" path="res://source/gameplay/ratings/rating.gd" id="4_ujn4o"]
 [ext_resource type="Script" uid="uid://dl7m3sfamfd6h" path="res://source/gameplay/strums/PlayerStrum.gd" id="5_hjbjt"]
+[ext_resource type="FontFile" uid="uid://clifiya6s5xnf" path="res://assets/fonts/pixel.otf" id="5_pxn5x"]
 [ext_resource type="Script" uid="uid://dihavia4gx2aq" path="res://source/gameplay/ratings/nums.gd" id="5_rvgcf"]
 [ext_resource type="Script" uid="uid://lyuq1eefi8od" path="res://source/gameplay/strums/OpponentStrum.gd" id="6_o40cs"]
 [ext_resource type="PackedScene" uid="uid://c2lkjdn511dpc" path="res://source/gameplay/pause/pause_layer.tscn" id="13_7gusd"]
@@ -13,6 +14,11 @@
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_2bi1b"]
 load_path = "res://.godot/imported/combo.png-ebb8e79407eb0da2dc0b63f708fa4e61.ctex"
+
+[sub_resource type="LabelSettings" id="LabelSettings_g4v7s"]
+font = ExtResource("5_pxn5x")
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4fsh2"]
 load_path = "res://.godot/imported/healthBar.png-3bca16c4189998705b48c3052804afa0.ctex"
@@ -74,6 +80,17 @@ script = ExtResource("4_ujn4o")
 modulate = Color(1, 1, 1, 0)
 scale = Vector2(0.478723, 0.483193)
 script = ExtResource("5_rvgcf")
+
+[node name="ms_text" type="Label" parent="rating/Rating_Layer" unique_id=113329104]
+visible = false
+modulate = Color(1, 1, 1, 0)
+offset_left = 628.0
+offset_top = 326.99997
+offset_right = 692.0
+offset_bottom = 349.99997
+scale = Vector2(1.1, 1.1)
+text = "1.0ms"
+label_settings = SubResource("LabelSettings_g4v7s")
 
 [node name="strums" type="Control" parent="." unique_id=1616783029]
 layout_mode = 3

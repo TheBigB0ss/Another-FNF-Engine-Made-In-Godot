@@ -69,8 +69,8 @@ var events = {
 	"flash": "Value1 = flash speed\nValue2 = flash color (in hexa code)",
 	#"set camera position": "Value1 = new camera position\n(example: 20(x), 20(y))\nValue2 = just for one section? (true or false)",
 	#"spawn popUp": "nothing special",
-	"change song pitch": "Value 1 = new song pitch",
-	"change song speed": "Value 1 = new song speed",
+	"change song pitch": "Value 1 = new song pitch\nValue2 = instant change? (true or false)",
+	"change song speed": "Value 1 = new song speed\nValue2 = instant change? (true or false)",
 	"set lyric": "Value 1 = Your Lyric Text \n(use :: if you want to split the text)\nValue 2 = steps (example: 10, 20, 30, 40...)"
 };
 

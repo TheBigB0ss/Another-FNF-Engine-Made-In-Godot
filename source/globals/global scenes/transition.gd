@@ -65,7 +65,7 @@ func removeStickers():
 	if !deleteStickers:
 		return;
 		
-	await get_tree().create_timer(0.30).timeout;
+	await get_tree().create_timer(0.19).timeout;
 	
 	while stickersGrp.get_child_count() > 0:
 		await get_tree().create_timer(0.01).timeout;

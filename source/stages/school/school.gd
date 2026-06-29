@@ -1,4 +1,4 @@
-extends Node2D
+extends Stage
 
 func _ready():
 	var tress = AnimatedBgElements.new();
@@ -13,3 +13,4 @@ func _ready():
 	else:
 		$CanvasLayer.hide();
 		
+	$bgFreaks.play("BG girls group" if game.curSong != "roses" else "BG fangirls dissuaded");

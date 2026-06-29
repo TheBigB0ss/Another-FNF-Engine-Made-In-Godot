@@ -33,6 +33,7 @@ func reloadText():
 		options["clear data"] = {};
 	else:
 		Global.currentOptions = 0;
+		get_tree().paused = false;
 		
 func _ready() -> void:
 	Discord.update_discord_info("options menu", "Is in menus");

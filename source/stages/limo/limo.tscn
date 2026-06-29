@@ -5,7 +5,6 @@
 [ext_resource type="SpriteFrames" uid="uid://d350an5h7jc6x" path="res://assets/stages/week4/limo.res" id="3_qmx48"]
 [ext_resource type="SpriteFrames" uid="uid://mdm0hsh0vur5" path="res://assets/stages/week4/driver.res" id="4_oh4h2"]
 [ext_resource type="Texture2D" uid="uid://cpua24lk0wgdb" path="res://assets/stages/week4/fastCarLol.png" id="5_eao4d"]
-[ext_resource type="SpriteFrames" uid="uid://c0gs308td12a5" path="res://assets/stages/week4/limoDancer.res" id="7_gvjsy"]
 
 [node name="Limo" type="Node2D" unique_id=129957132]
 script = ExtResource("1_acbwd")
@@ -38,28 +37,3 @@ texture = ExtResource("5_eao4d")
 
 [node name="dancers" type="Node2D" parent="." unique_id=409273302]
 position = Vector2(-0.1038208, 45.40001)
-
-[node name="Dancer1" type="AnimatedSprite2D" parent="dancers" unique_id=1473138247]
-position = Vector2(347, -270)
-scale = Vector2(1.2, 1.2)
-sprite_frames = ExtResource("7_gvjsy")
-animation = &"bg dancer sketch PINK"
-
-[node name="Dancer2" type="AnimatedSprite2D" parent="dancers" unique_id=154638024]
-position = Vector2(848, -270)
-scale = Vector2(1.2, 1.2)
-sprite_frames = ExtResource("7_gvjsy")
-animation = &"bg dancer sketch PINK"
-autoplay = "bg dancer sketch PINK"
-
-[node name="Dancer3" type="AnimatedSprite2D" parent="dancers" unique_id=136800148]
-position = Vector2(1369, -270)
-scale = Vector2(1.2, 1.2)
-sprite_frames = ExtResource("7_gvjsy")
-animation = &"bg dancer sketch PINK"
-
-[node name="Dancer4" type="AnimatedSprite2D" parent="dancers" unique_id=37407592]
-position = Vector2(1896, -270)
-scale = Vector2(1.2, 1.2)
-sprite_frames = ExtResource("7_gvjsy")
-animation = &"bg dancer sketch PINK"

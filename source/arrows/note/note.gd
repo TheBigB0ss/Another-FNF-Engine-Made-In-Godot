@@ -300,13 +300,14 @@ func pressed(new_character:Character = null):
 		
 	new_character.curNote = self;
 	
+	if !is_a_bad_note && !pressed_emit:
+		main_scene.health = min(main_scene.health+healthPerHit, 100.0);
+		
 	if sustainLength <= 0:
 		new_character.animNote = self;
 		
 		if is_a_bad_note:
 			miss_note();
-		else:
-			main_scene.health = min(main_scene.health+healthPerHit, 100.0);
 			
 		emitPress(false);
 		destroy_note();

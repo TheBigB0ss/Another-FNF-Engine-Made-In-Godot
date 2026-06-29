@@ -18,6 +18,7 @@ var spriteStuff = {};
 @export var playing = true;
 @export var loop = false;
 @export var limit = 0;
+@export var start_frame = 0;
 @export var animate_symbols = false;
 
 var frames = [];
@@ -33,6 +34,14 @@ var symbols_elements = {};
 var total_frames = 0;
 var spriteZIndex = 0;
 
+var animation = 0:
+	set(value):
+		animation = value;
+		if !animationList.is_empty():
+			play(animationList[animation]);
+			
+var animationList = [];
+
 func reload():
 	total_frames = 0;
 	spriteZIndex = 0;
@@ -41,6 +50,8 @@ func reload():
 	animationData.clear();
 	spriteData.clear();
 	atlas.clear();
+	animationList.clear();
+	animationList.append("NONE");
 	
 	for i in self.get_children():
 		i.queue_free();
@@ -65,9 +76,15 @@ func reload():
 		for fr in i.get("FR", []):
 			total_frames = max(total_frames, fr["I"] + fr["DU"]);
 			
+			var animName = fr.get("N", "");
+			if !animationList.has(animName) && animName != "":
+				animationList.append(animName);
+				
 	for i in animationData["SD"]["S"]:
 		symbol_data[i["SN"]] = i;
 		
+	notify_property_list_changed();
+	
 func draw_symbol(element, layer, index, elementTransform, key = "atlas"):
 	var elementData = element.get("SI", element.get("ASI"));
 	var symbolID = symbol_data[elementData["SN"]];
@@ -96,15 +113,15 @@ func draw_symbol(element, layer, index, elementTransform, key = "atlas"):
 	#	var m2 = elementData["TRP"];
 	#	finalTrans.origin += Vector2(m2["x"], m2["y"]);
 		
-	var symbol_frame = int(elementData.get("FF", 0));
+	var symbol_frame = 0;
 	var symbol_total_frames = 0;
 	
 	for l in symbolID["TL"].get("L", []):
 		for fr in l.get("FR", []):
-			symbol_total_frames = (fr["I"] + fr["DU"]);
+			symbol_total_frames = max(symbol_total_frames, fr["I"] + fr["DU"]);
 			
 	if animate_symbols && elementData.get("LP", "") == "LP":
-		symbol_frame = wrapi(symbol_frame+frame, 0, symbol_total_frames);
+		symbol_frame = wrapi(elementData.get("FF", 0) + (frame - start_frame), 0, symbol_total_frames);
 	else:
 		symbol_frame = int(elementData.get("FF", 0));
 		
@@ -188,17 +205,16 @@ func atlas_process(delta: float) -> void:
 		return;
 		
 	if playing:
-		timer += delta * (speed if speed != null else 1.0);
+		timer += delta * animationData["MD"]["FRT"] * (speed if speed != null else 1.0);
 		
-		if timer >= 1.0 / animationData["MD"]["FRT"]:
-			timer = 0;
-			frame += 1;
+		var loopLimit = limit if limit > 0 else total_frames;
+		if timer > loopLimit:
+			timer = start_frame if loop else loopLimit;
 			
+		frame = int(timer);
+		
 	frame = (
-		wrapi(frame, 0, total_frames - 1) if loop else clamp(frame, 0, total_frames - 1) if 
-		(limit == null or limit == 0) 
-		else 
-		wrapi(frame, 0, limit) if loop else clamp(frame, 0, limit)
+		wrapi(frame, 0, total_frames - 1) if loop else clamp(frame, 0, total_frames - 1) if (limit == null or limit == 0) else wrapi(frame, 0, limit) if loop else clamp(frame, 0, limit)
 	);
 	
 	spriteZIndex = 0;
@@ -229,3 +245,34 @@ func getJsonData(data):
 	new_animationFile.close();
 	
 	return jsonData.get_data();
+	
+func play(anim):
+	if anim == " " or anim == "" or anim == "NONE":
+		start_frame = 0;
+		timer = 0;
+		frame = 0;
+		limit = 0;
+		
+		return;
+		
+	playing = true;
+	for j in animationData["AN"]["TL"]["L"]:
+		for k in j["FR"]:
+			if k.get("N", "") == anim:
+				start_frame = int(k["I"]);
+				timer = float(k["I"]);
+				frame = k["I"];
+				limit = (k["I"] + k["DU"])-1;
+				
+func _get_property_list():
+	var properties: Array[Dictionary] = [];
+	
+	properties.append({
+		"name": "animation",
+		"type": TYPE_INT,
+		"hint": PROPERTY_HINT_ENUM,
+		"hint_string": ",".join(animationList),
+		"usage": PROPERTY_USAGE_DEFAULT
+	});
+	
+	return properties;
