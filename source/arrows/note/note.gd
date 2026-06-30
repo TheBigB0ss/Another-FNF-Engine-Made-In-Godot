@@ -255,8 +255,9 @@ func _process(delta: float) -> void:
 			noteEnd.position.y = sustainLength + noteEnd.texture.get_size().y * noteEnd.scale.y / 2.0;
 			
 	if is_pressing:
-		sustainLength -= (delta * 1000);
-		sustainLength = max(sustainLength, 0.0);
+		#sustainLength -= (delta * 1000);
+		#sustainLength = max(sustainLength, 0.0);
+		sustainLength = max(ogSustain - max(Conductor.getSongTime - strumTime, 0.0), 0.0);
 		
 		if isSustain && noteLine != null && noteEnd != null:
 			noteEnd.scale.y = abs(min(sustainLength*Conductor.songSpeed / noteEnd.texture.get_size().y, noteEnd.scale.y));
@@ -289,7 +290,7 @@ func play_note_anim(anim):
 	strumNote.play(str(note_dir, " ", anim));
 	
 var pressed_emit = false;
-func pressed(new_character:Character = null):
+func pressed(new_character = null):
 	if missed:
 		return;
 		
@@ -324,7 +325,7 @@ func pressed(new_character:Character = null):
 	main_scene.playCharacterAnim(self, new_character);
 	main_scene.play_strum_anim(self, false, anim_time, false, true);
 	
-func opponent_pressed(new_character:Character = null):
+func opponent_pressed(new_character = null):
 	curNoteAnim = NOTES_ANIM[noteData];
 	new_character = (main_scene.dad if !secondOpponentNote else main_scene.new_opponent) if !is_instance_valid(new_character) else new_character;
 	if new_character.is_player && new_character.curCharacter != "tankman" && new_character.curCharacter != "pico":

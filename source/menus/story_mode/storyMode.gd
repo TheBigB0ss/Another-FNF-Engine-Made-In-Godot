@@ -220,7 +220,6 @@ func changeWeek(shit):
 	update_weekScore();
 	changeMenuCharacter();
 	
-	
 func updateWeek():
 	SongData.weeks_data = weekJson;
 	

@@ -149,7 +149,7 @@ func update_character_state(delta):
 		characterState = CHARACTER_STATES.HOLDING if (curNote.is_pressing && curNote.sustainLength > 0) else CHARACTER_STATES.IDLE;
 		
 		if is_instance_valid(animNote) && animNote.curNoteAnim != curNote.curNoteAnim && !animNote.isSustain:
-			sing_timer = 0.055;
+			sing_timer = 0.060;
 			characterState = CHARACTER_STATES.SINGING;
 			_playAnim(animNote.curNoteAnim);
 			

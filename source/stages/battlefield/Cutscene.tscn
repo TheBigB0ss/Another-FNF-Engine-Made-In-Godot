@@ -438,6 +438,7 @@ script = ExtResource("2_wme06")
 path = "res://assets/stages/week7/cutscene/pico"
 speed = 1.2000000000000002
 frame = 182.0
+animation = 0
 metadata/_custom_type_script = "uid://b34ctedtr57xe"
 
 [node name="BoyfriendCutscene" parent="." unique_id=1571258161 instance=ExtResource("3_cl23b")]
@@ -452,6 +453,7 @@ path = "res://assets/stages/week7/cutscene/tankman"
 speed = 1.2200000000000002
 frame = 68
 playing = false
+animation = 0
 metadata/_custom_type_script = "uid://b34ctedtr57xe"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1367897052]

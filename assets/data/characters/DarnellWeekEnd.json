@@ -1,0 +1,60 @@
+{
+	"AnimatedIcon": false,
+	"FlipX": false,
+	"FlipY": false,
+	"HealthBarColor": "#6c547fff",
+	"HealthIcon": "darnell",
+	"Poses": [
+		{
+			"Anim": "idle dance",
+			"Name": "Idle"
+		},
+		{
+			"Anim": "singLeft",
+			"Name": "Pose Left"
+		},
+		{
+			"Anim": "singDown",
+			"Name": "Pose Down"
+		},
+		{
+			"Anim": "singUp",
+			"Name": "Pose Up"
+		},
+		{
+			"Anim": "singRight",
+			"Name": "Pose Right",
+		},
+		{
+			"Anim": "singLeft-alt",
+			"Name": "Left Flame Loop"
+		},
+		{
+			"Anim": "singDown-alt",
+			"Name": "Down Flame Loop"
+		},
+		{
+			"Anim": "singUp-alt",
+			"Name": "Up Flame Loop"
+		},
+		{
+			"Anim": "singRight-alt",
+			"Name": "Right Flame Loop"
+		},
+		{
+			"Anim": "singLaugh",
+			"Name": "Laugh"
+		}
+	],
+	"anim type": 3.0,
+	"camera follow pos": true,
+	"cameraPos": [
+		210.0,
+		-20.0
+	],
+	"isPlayer": false,
+	"scale": [
+		1.0,
+		1.0
+	]
+}

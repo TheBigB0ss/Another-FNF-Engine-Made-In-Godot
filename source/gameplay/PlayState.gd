@@ -168,9 +168,9 @@ func _ready():
 		
 	stageGrp.add_child(stage);
 	
-	if bf.character != null:
+	if bf is Character && bf.character != null:
 		bf.character.flip_h = !bf.is_player;
-	if dad.character != null:
+	if dad is Character && dad.character != null:
 		dad.character.flip_h = dad.is_player;
 		
 	if dad.is_player:
@@ -313,7 +313,7 @@ var discord_songName = "";
 var last_song_seek = 0.0;
 
 func _process(delta: float) -> void:
-	msText.modulate.a = lerp(msText.modulate.a, 0.0, 0.11);
+	msText.modulate.a = max(msText.modulate.a - 1.95 * delta, 0.0);
 	
 	if !start_song:
 		return;
@@ -543,7 +543,7 @@ func playBfMissAnim(curNote:Note):
 		if bf.animList.has(miss_anim):
 			bf._playAnim(miss_anim);
 			
-func playCharacterAnim(curNote:Note, new_char:Character):
+func playCharacterAnim(curNote:Note, new_char):
 	if curNote.no_anim:
 		return;
 		
@@ -593,7 +593,7 @@ var cam_offset_values = {
 	"singUp": Vector2.UP,
 	"singRight": Vector2.RIGHT
 };
-func cam_follow_poses(new_char:Character):
+func cam_follow_poses(new_char):
 	if !new_char.cam_follow_pos:
 		return;
 		

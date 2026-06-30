@@ -379,6 +379,8 @@ func _input(ev):
 				
 			if ev.keycode in [KEY_SPACE]:
 				selectionRect = Rect2();
+				queue_redraw();
+				
 				play_song();
 				
 			if (ev.keycode in [KEY_ESCAPE] || ev.keycode in [KEY_ENTER] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo:
@@ -435,6 +437,8 @@ func update_song(scroll):
 		return;
 		
 	selectionRect = Rect2();
+	queue_redraw();
+	
 	Conductor.getSongTime += 60*scroll;
 	
 	voices.play(Conductor.getSongTime/1000);
@@ -781,8 +785,9 @@ func add_event_note(strumtime, noteData, event, value1, value2):
 	var exists = false;
 	
 	for i in new_chartData["song"]["events"]:
-		exists = i[0] == note_strumtime && int(i[1]) == int(note_data);
-		
+		if i[0] == note_strumtime && int(i[1]) == int(note_data):
+			exists = true;
+			
 	if exists:
 		delete_event_note(note_strumtime, int(note_data));
 		
@@ -809,8 +814,9 @@ func add_note(strumtime, noteData, _sustain, type):
 	var exists = false;
 	
 	for i in new_chartData["song"]["notes"][curSection]["sectionNotes"]:
-		exists = i[0] == note_strumtime && int(i[1]) == int(note_data);
-		
+		if i[0] == note_strumtime && int(i[1]) == int(note_data):
+			exists = true;
+			
 	if exists:
 		delete_note(note_strumtime, int(note_data));
 	else:

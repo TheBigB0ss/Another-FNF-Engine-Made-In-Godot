@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bqtw7vg5nld0k"]
+
+[ext_resource type="Script" uid="uid://cdngmavk6ytjx" path="res://source/characters/characters_scripts/AtlasCharacter.gd" id="1_xmy4x"]
+
+[node name="DarnellWeekEnd" type="Node2D" unique_id=319761095]
+script = ExtResource("1_xmy4x")
+json_path = "res://assets/data/characters/DarnellWeekEnd.json"
+anim_type = 2
+have_death_animation = false
+idle_type = 2
+frame_count = 2.4
+path = "res://assets/images/characters/darnell"
+frame = 13
+limit = 13.0
+animate_symbols = true
+animation = 5
+metadata/_custom_type_script = "uid://cdngmavk6ytjx"

@@ -16,7 +16,7 @@ var offSetShit = 0;
 @onready var main_scene = get_tree().current_scene;
 
 @export_file_path("*.json") var chart_path = "";
-@export var strum_char:Character;
+@export var strum_char = Node2D;
 @export var enable = false;
 
 var strumNode = null;
