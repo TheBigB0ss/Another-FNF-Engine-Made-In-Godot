@@ -15,7 +15,7 @@ func _ready():
 			dancers.texture = preload("res://assets/stages/week4/limoDancer.png");
 			dancers.xmlPath = "res://assets/stages/week4/limoDancer.xml";
 			dancers.position.x = 245+(370*i);
-			dancers.position.y = -560;
+			dancers.position.y = -540;
 			dancers.loop = false;
 			dancers.fps = 25;
 			dancers.scale = Vector2(1.25, 1.25);

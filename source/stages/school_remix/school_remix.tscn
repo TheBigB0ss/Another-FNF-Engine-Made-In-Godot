@@ -9,7 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://daeyf3c4werug" path="res://assets/stages/week6/remix/bg_trunks.png" id="7_q04ht"]
 [ext_resource type="Texture2D" uid="uid://dftoqocwdgcwm" path="res://assets/stages/week6/remix/bg_trees.png" id="8_t1itc"]
 [ext_resource type="Texture2D" uid="uid://cs2rx1lixrygq" path="res://assets/stages/week6/remix/bg_wall.png" id="9_tvoso"]
-[ext_resource type="PackedScene" uid="uid://bsvgftxd7osis" path="res://assets/stages/week6/bgFreaks.tscn" id="10_n0p6p"]
+[ext_resource type="Script" uid="uid://dk0iqkss82o73" path="res://addons/sparrow_sprite/SparrowSprite.gd" id="10_qlemi"]
+[ext_resource type="Texture2D" uid="uid://ddh8apx6eq3k1" path="res://assets/stages/week6/bgFreaks.png" id="11_tdfyr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w1wfj"]
 shader = ExtResource("2_6qc3i")
@@ -18,61 +19,68 @@ shader_parameter/wiggle_speed = 22.0
 shader_parameter/smear = 1.285
 shader_parameter/blur_samples = 15
 
-[node name="school remake" type="Node2D"]
+[node name="school remake" type="Node2D" unique_id=762072097]
 script = ExtResource("1_n0p6p")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1525219651]
 layer = 4
 visible = false
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=139686590]
 material = SubResource("ShaderMaterial_w1wfj")
 offset_right = 1280.0
 offset_bottom = 720.0
 
-[node name="sky" type="Sprite2D" parent="."]
+[node name="sky" type="Sprite2D" parent="." unique_id=621767390]
 texture_filter = 1
 position = Vector2(839.99994, 111)
 scale = Vector2(8.3, 8.3)
 texture = ExtResource("1_q2iu0")
 
-[node name="school" type="Sprite2D" parent="."]
+[node name="school" type="Sprite2D" parent="." unique_id=1921028316]
 texture_filter = 1
 position = Vector2(806.0001, 225.00012)
 scale = Vector2(8.3, 8.3)
 texture = ExtResource("2_506oe")
 
-[node name="ground" type="Sprite2D" parent="."]
+[node name="ground" type="Sprite2D" parent="." unique_id=2085093151]
 texture_filter = 1
 position = Vector2(832, 596)
 scale = Vector2(8.3, 8.3)
 texture = ExtResource("3_dp0gx")
 
-[node name="grass" type="Sprite2D" parent="."]
+[node name="grass" type="Sprite2D" parent="." unique_id=280534326]
 texture_filter = 1
 position = Vector2(839.99994, 552)
 scale = Vector2(8.3, 8.3)
 texture = ExtResource("4_n0p6p")
 
-[node name="trunks" type="Sprite2D" parent="."]
+[node name="trunks" type="Sprite2D" parent="." unique_id=1023050476]
 texture_filter = 1
 position = Vector2(846.0001, 306.00003)
 scale = Vector2(8.3, 8.3)
 texture = ExtResource("7_q04ht")
 
-[node name="trees" type="Sprite2D" parent="."]
+[node name="trees" type="Sprite2D" parent="." unique_id=1952331916]
 texture_filter = 1
 position = Vector2(839.99994, -45.999992)
 scale = Vector2(8.3, 8.3)
 texture = ExtResource("8_t1itc")
 
-[node name="walls" type="Sprite2D" parent="."]
+[node name="walls" type="Sprite2D" parent="." unique_id=641314501]
 z_index = 2
 texture_filter = 1
 position = Vector2(839.99994, 782.99994)
 scale = Vector2(8.3, 8.3)
 texture = ExtResource("9_tvoso")
 
-[node name="bgFreaks" parent="." instance=ExtResource("10_n0p6p")]
-position = Vector2(851.00006, 446)
+[node name="bgFreaks" type="Node2D" parent="." unique_id=992538463]
+texture_filter = 1
+position = Vector2(-643, 171)
 scale = Vector2(5.6, 5.6)
+script = ExtResource("10_qlemi")
+texture = ExtResource("11_tdfyr")
+xmlPath = "res://assets/stages/week6/bgFreaks.xml"
+frame = 10
+animation = 0
+metadata/_custom_type_script = "uid://dk0iqkss82o73"

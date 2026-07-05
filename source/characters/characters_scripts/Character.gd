@@ -241,8 +241,6 @@ func _playAnim(anim = "", special = false):
 		else:
 			character_anim.play(current_anim);
 			
-		break;
-		
 	curAnim = anim;
 	
 func set_offset(animID):

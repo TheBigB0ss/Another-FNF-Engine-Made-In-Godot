@@ -2,55 +2,81 @@
 	"AnimatedIcon": false,
 	"FlipX": false,
 	"FlipY": false,
-	"HealthBarColor": "#6c547fff",
-	"HealthIcon": "darnell",
+	"HealthBarColor": "#735eb0ff",
+	"HealthIcon": "DarnellWeekEnd",
 	"Poses": [
 		{
 			"Anim": "idle dance",
-			"Name": "Idle"
+			"Anim Time": 5,
+			"Name": "Idle",
+			"Offset": [
+				238.0,
+				82.0
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singLeft",
-			"Name": "Pose Left"
+			"Anim Time": 5,
+			"Name": "Pose Left",
+			"Offset": [
+				240.0,
+				81.0
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singDown",
-			"Name": "Pose Down"
+			"Anim Time": 5,
+			"Name": "Pose Down",
+			"Offset": [
+				241.0,
+				99.0
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singUp",
-			"Name": "Pose Up"
+			"Anim Time": 5,
+			"Name": "Pose Up",
+			"Offset": [
+				227.0,
+				79.0
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singRight",
+			"Anim Time": 5,
 			"Name": "Pose Right",
-		},
-		{
-			"Anim": "singLeft-alt",
-			"Name": "Left Flame Loop"
-		},
-		{
-			"Anim": "singDown-alt",
-			"Name": "Down Flame Loop"
-		},
-		{
-			"Anim": "singUp-alt",
-			"Name": "Up Flame Loop"
-		},
-		{
-			"Anim": "singRight-alt",
-			"Name": "Right Flame Loop"
+			"Offset": [
+				240.0,
+				80.0
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singLaugh",
-			"Name": "Laugh"
+			"Anim Time": 5,
+			"Name": "Laugh",
+			"Offset": [
+				234.0,
+				82.0
+			],
+			"anim beat": 2,
+			"special anim": false
 		}
 	],
-	"anim type": 3.0,
-	"camera follow pos": true,
+	"anim type": 2,
+	"camera follow pos": false,
 	"cameraPos": [
-		210.0,
-		-20.0
+		-50.0,
+		-110.0
 	],
 	"isPlayer": false,
 	"scale": [

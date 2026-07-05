@@ -5,6 +5,19 @@
 [node name="DarnellWeekEnd" type="Node2D" unique_id=319761095]
 script = ExtResource("1_xmy4x")
 json_path = "res://assets/data/characters/DarnellWeekEnd.json"
+healthBar_Color = Color(0.4509804, 0.36862746, 0.6901961, 1)
+anims_timer = {
+"idle dance": [2, 5, false],
+"singDown": [2, 5, false],
+"singDown-alt": [2, 5, false],
+"singLaugh": [2, 5, false],
+"singLeft": [2, 5, false],
+"singLeft-alt": [2, 5, false],
+"singRight": [2, 5, false],
+"singRight-alt": [2, 5, false],
+"singUp": [2, 5, false],
+"singUp-alt": [2, 5, false]
+}
 anim_type = 2
 have_death_animation = false
 idle_type = 2

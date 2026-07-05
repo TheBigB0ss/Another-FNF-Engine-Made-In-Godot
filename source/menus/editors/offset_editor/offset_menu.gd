@@ -121,7 +121,7 @@ func update_offset_value(x = 0, y = 0):
 			i.character.offset = Vector2.ZERO;
 			i.character.offset = Vector2(x, y);
 			
-		if i.character is Sprite2D:
+		if i.character is Sprite2D or i.character is AtlasCharacter:
 			i.character.position = i.base_position + Vector2(x, y);
 			
 func update_cross(x, y):
@@ -151,7 +151,7 @@ func play_anim():
 		if i.character is Sprite2D:
 			i.character_anim.play(i.posesList[cur_pose]);
 			
-		elif i.character is AnimatedSprite2D:
+		elif i.character is AnimatedSprite2D or i.character is AtlasCharacter:
 			i.character.play(i.posesList[cur_pose]);
 			
 func set_rating_pos():
@@ -190,6 +190,9 @@ func mouse_inside_character(spr, offset):
 	var mouse = get_global_mouse_position();
 	var size = null;
 	
+	if spr is AtlasCharacter:
+		return false;
+		
 	if spr is AnimatedSprite2D:
 		size = spr.sprite_frames.get_frame_texture(spr.animation, spr.frame).get_size() * spr.scale;
 		char_scale = spr.scale;
@@ -298,7 +301,7 @@ func change_character_frame(frame = 1, instant = false):
 			character.seek(clamp(val, 0.0, max_frames), true);
 			
 		elif i.character is AnimatedSprite2D:
-			character = i.character
+			character = i.character;
 			max_frames = character.sprite_frames.get_frame_count(i.posesList[cur_pose]);
 			
 			var val = (max_frames if frame > 0 else 0.0) if instant else character.frame+frame;
@@ -340,6 +343,10 @@ func _process(_delta: float) -> void:
 		if i.character is AnimatedSprite2D:
 			frame = i.character.frame;
 			total_frames = i.character.sprite_frames.get_frame_count(i.posesList[cur_pose]);
+			
+		elif i.character is AtlasCharacter:
+			frame = int(i.character.frame-i.character.start_frame)-1;
+			total_frames = int(abs(i.character.start_frame-i.character.limit));
 			
 		elif i.character is Sprite2D:
 			frame = int(round(i.character_anim.current_animation_position / i.character_anim.get_animation(i.posesList[cur_pose]).step));

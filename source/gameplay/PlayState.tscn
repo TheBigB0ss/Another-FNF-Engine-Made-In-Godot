@@ -84,6 +84,7 @@ script = ExtResource("5_rvgcf")
 [node name="ms_text" type="Label" parent="rating/Rating_Layer" unique_id=113329104]
 visible = false
 modulate = Color(1, 1, 1, 0)
+texture_filter = 1
 offset_left = 628.0
 offset_top = 326.99997
 offset_right = 692.0

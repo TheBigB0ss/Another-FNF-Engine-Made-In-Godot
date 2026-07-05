@@ -18,9 +18,9 @@ config/name="Another FNF engine made in Godot"
 run/main_scene="res://source/menus/title_menu/titleMenu.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Another FNF engine made in Godot"
-config/features=PackedStringArray("4.6", "Forward Plus")
+config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-boot_splash/image="uid://br7hchcect3k7"
+boot_splash/image="uid://b4qpppwqxh1d5"
 config/icon="res://engine_icon.png"
 run/vsync/vsync_mode=0
 
@@ -56,7 +56,7 @@ mouse_cursor/custom_image_hotspot=Vector2(1.8, 1.8)
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/atlas_sprite/plugin.cfg", "res://addons/discord-rpc-gd/plugin.cfg", "res://addons/xml_converter/plugin.cfg")
+enabled=PackedStringArray("res://addons/atlas_sprite/plugin.cfg", "res://addons/discord-rpc-gd/plugin.cfg", "res://addons/sparrow_sprite/plugin.cfg", "res://addons/xml_converter/plugin.cfg")
 
 [file_customization]
 

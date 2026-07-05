@@ -168,9 +168,9 @@ func _ready():
 		
 	stageGrp.add_child(stage);
 	
-	if bf is Character && bf.character != null:
+	if bf.character != null:
 		bf.character.flip_h = !bf.is_player;
-	if dad is Character && dad.character != null:
+	if dad.character != null:
 		dad.character.flip_h = dad.is_player;
 		
 	if dad.is_player:

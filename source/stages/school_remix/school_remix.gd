@@ -6,3 +6,4 @@ func _ready():
 	else:
 		$CanvasLayer.hide();
 		
+	$bgFreaks.play("BG girls group" if game.curSong != "roses" else "BG fangirls dissuaded");

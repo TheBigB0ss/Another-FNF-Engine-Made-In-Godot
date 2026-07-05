@@ -40,8 +40,6 @@ var idleTimer = 0;
 
 var characterState = CHARACTER_STATES.IDLE;
 
-var base_position = Vector2.ZERO;
-
 var have_death_animation = false:
 	set(value):
 		have_death_animation = value;
@@ -71,6 +69,13 @@ var frame_count = 2.4;
 
 var anim_time = 5;
 var anim_beat = 2;
+
+var character = self;
+@export var flip_h = false;
+@export var flip_v = false;
+
+var base_position = Vector2.ZERO;
+var offset = Vector2.ZERO;
 
 func _init() -> void:
 	if Engine.is_editor_hint():
@@ -120,7 +125,9 @@ func _ready():
 	
 	healthBar_Color = Color(charData.get("HealthBarColor", healthBar_Color));
 	
-	self.scale = Vector2(charData["scale"][0], charData["scale"][1]);
+	character.scale = Vector2(charData["scale"][0], charData["scale"][1]);
+	character.flip_h = charData["FlipX"];
+	character.flip_v = charData["FlipY"];
 	
 	is_player = charData.get("isPlayer", is_player);
 	cam_follow_pos = charData.get("camera follow pos", cam_follow_pos);
@@ -147,10 +154,16 @@ func _ready():
 			"step":
 				idle_type = IDLE_MODE.STEP;
 				
+	base_position = character.position;
+	
 	dance();
 	
 func _process(delta):
 	super(delta);
+	
+	character.scale.x = abs(character.scale.x) * (-1 if flip_h else 1);
+	character.scale.y = abs(character.scale.y) * (-1 if flip_v else 1);
+	
 	if !Engine.is_editor_hint():
 		character_process(delta);
 		
@@ -263,23 +276,33 @@ func _playAnim(anim = "", special = false):
 		if current_anim == posesList[i] && animList[i].begins_with("sing") && characterState != CHARACTER_STATES.SINGING:
 			return;
 			
+		set_offset(i);
+		
 		current_anim = posesList[i];
 		limit = newLimit;
 		
-		break;
-		
 	curAnim = anim;
 	
+func set_offset(animID):
+	if charData["Poses"][animID].has("Offset"):
+		var pose_offset = Vector2(charData["Poses"][animID]["Offset"][0], charData["Poses"][animID]["Offset"][1]);
+		
+		if !Engine.is_editor_hint():
+			character.position = (base_position + pose_offset);
+			
 func loop_anim():
 	if characterState != CHARACTER_STATES.HOLDING:
 		return;
 		
 	match anim_type:
-		1:
+		CHARACTER_ANIM_TYPE.FREEZE:
 			frame = newFrame;
-		2:
+			timer = newFrame;
+			
+		CHARACTER_ANIM_TYPE.REPEAT:
 			if frame > (newFrame + frame_count):
 				frame = newFrame;
+				timer = newFrame;
 				
 func _get_property_list():
 	var properties: Array[Dictionary] = [];
