@@ -27,16 +27,21 @@ signal new_step(step);
 signal change_section(section);
 
 func _process(_delta):
-	var last_change = [0, 0, 0];
+	var last_change = [0, 0.0, bpm];
 	for i in bpmChangeMap:
 		if getSongTime >= i[1]:
 			last_change = i;
+		else:
+			break;
 			
+	crochet = (60.0 / last_change[2]) * 1000.0;
+	stepCrochet = crochet / 4;
+	
 	curStep = last_change[0] + floor((getSongTime - last_change[1]) / stepCrochet);
 	curBeat = floor(curStep / 4);
-	curSection = floor(curStep/16);
+	curSection = int(floor(curStep/16));
 	
-	if curSection > SongData.songNotes.size() && !SongData.songNotes.is_empty():
+	if curSection >= SongData.songSections.size() && !SongData.songSections.is_empty():
 		return;
 		
 	if lastSection != curSection:
@@ -87,20 +92,44 @@ func reset():
 	
 	seekTime = 0;
 	
-func mapBPMChanges(songJson):
-	bpmChangeMap = [];
+func mapBPMChanges():
+	bpmChangeMap.clear();
 	
 	var curBPM = SongData.songBpm;
 	var totalSteps = 0;
-	var totalPos = 0;
+	var totalPos = 0.0;
 	
-	var cur_shit = 0;
-	for i in songJson["song"]["notes"]:
-		if i["changeBPM"] == true:
-			curBPM = i["bpm"];
-			bpmChangeMap.insert(cur_shit, [totalSteps, totalPos, i["bpm"]]);
-			cur_shit += 1;
+	#bpmChangeMap.append([0, 0.0, curBPM]);
+	
+	for section in SongData.songSections:
+		if section["changeBPM"]:
+			curBPM = section["bpm"];
+			bpmChangeMap.append([totalSteps, totalPos, curBPM]);
 			
-		var sectionLenght = i["lengthInSteps"];
-		totalSteps += sectionLenght;
-		totalPos += ((60 / curBPM) * 1000 / 4) * sectionLenght;
+		var sectionLength = section["lengthInSteps"];
+		totalSteps += sectionLength;
+		totalPos += ((60.0 / curBPM) * 1000.0 / 4.0) * sectionLength;
+		
+func update_position(time):
+	getSongTime = time;
+	var last_change = [0, 0.0, bpm];
+	for i in bpmChangeMap:
+		if time >= i[1]:
+			last_change = i;
+		else:
+			break;
+			
+	crochet = (60.0 / last_change[2]) * 1000.0;
+	stepCrochet = crochet / 4;
+	
+	curStep = last_change[0] + floor((time - last_change[1]) / stepCrochet);
+	curBeat = floor(curStep / 4);
+	
+	if curSection >= SongData.songSections.size() && !SongData.songSections.is_empty():
+		return;
+		
+	curSection = int(floor(curStep / 16));
+	
+	lastStep = curStep;
+	lastBeat = curBeat;
+	lastSection = curSection;

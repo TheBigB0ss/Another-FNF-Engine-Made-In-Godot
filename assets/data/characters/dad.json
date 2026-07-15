@@ -2,56 +2,70 @@
 	"AnimatedIcon": false,
 	"FlipX": false,
 	"FlipY": false,
-	"HealthBarColor": "#75369eff",
+	"HealthBarColor": "#af66ceff",
 	"HealthIcon": "dad",
-	"camera follow pos": false,
-	"LoopAnim": false,
 	"Poses": [
 		{
 			"Anim": "idle dance",
-			"Name": "Dad idle dance",
+			"Anim Time": 5,
+			"Name": "idle",
 			"Offset": [
 				-75.0,
 				-110.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singLeft",
-			"Name": "Dad Sing Note LEFT",
+			"Anim Time": 5,
+			"Name": "singLEFT",
 			"Offset": [
 				-91.0,
 				-115.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singDown",
-			"Name": "Dad Sing Note DOWN",
+			"Anim Time": 5,
+			"Name": "singDOWN",
 			"Offset": [
 				-57.0,
 				-94.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singUp",
-			"Name": "Dad Sing Note UP",
+			"Anim Time": 5,
+			"Name": "singUP",
 			"Offset": [
 				-73.0,
 				-134.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singRight",
-			"Name": "Dad Sing Note RIGHT",
+			"Anim Time": 5,
+			"Name": "singRIGHT",
 			"Offset": [
 				-50.0,
 				-122.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		}
 	],
-	"anim time": 5.0,
+	"anim type": 3,
+	"camera follow pos": false,
 	"cameraPos": [
-		20.0,
-		-80.0
+		160.0,
+		-170.0
 	],
 	"isPlayer": false,
 	"scale": [

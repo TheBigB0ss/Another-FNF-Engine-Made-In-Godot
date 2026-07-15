@@ -14,7 +14,7 @@ var iconP2;
 var stageGrp;
 var stage;
 
-signal event_emit(event_name);
+signal event_emit(event_name, args);
 
 func _ready() -> void:
 	main_scene = scene;
@@ -22,17 +22,6 @@ func _ready() -> void:
 		for i in SongData.songEvents:
 			array_events_notes.insert(0, [i[0], i[1], i[2], i[3], i[4]]);
 			
-func load_():
-	bf = scene.bf;
-	dad = scene.dad;
-	gf = scene.gf;
-	
-	iconP1 = scene.iconP1;
-	iconP2 = scene.iconP2;
-	
-	stageGrp = scene.stageGrp;
-	stage = scene.stage;
-	
 func _process(_delta: float) -> void:
 	if array_events_notes != [] or array_events_notes != null:
 		for i in array_events_notes:
@@ -48,7 +37,8 @@ func set_event(new_event, new_value1, new_value2):
 	trigger_event(event, value1, value2);
 	
 func trigger_event(event_name, value1, value2):
-	emit_signal("event_emit", event_name);
+	emit_signal("event_emit", event_name, [value1, value2]);
+	
 	match event_name:
 		"change song speed":
 			if value2 == "true":
@@ -90,10 +80,6 @@ func trigger_event(event_name, value1, value2):
 		"add cam zoom":
 			main_scene.sectionCamera.zoom = Vector2(value1.to_float(), value1.to_float());
 			
-		#"spawn popUp":
-		#	var new_popUp = preload("res://source/gameplay/events/pop ups/popUps.tscn").instantiate();
-		#	main_scene.hud.add_child(new_popUp);
-			
 		"set lyric":
 			var string_steps = value2.split(",");
 			var steps = [];
@@ -115,57 +101,71 @@ func remove_character(char_to_remove):
 	char_to_remove.queue_free();
 	
 func changeChar(id, newCharacter):
+	var character = null;
+	var position = Vector2.ZERO;
+	var z_index = 0;
+	var layer = 1;
+	
 	match id:
 		"0", "bf":
-			remove_character(main_scene.bf);
-			var newCharacterPosition = SongData.gfStagePosition if newCharacter == "gf" else SongData.player1StagePosition;
-			var newChar = main_scene.add_character(newCharacterPosition, SongData.player1Zindex, newCharacter, 4);
-			
-			main_scene.bf = newChar;
-			bf = newChar;
-			
-			if main_scene.iconP1 is Icon:
-				main_scene.iconP1.reload_icon(main_scene.bf.curIcon);
-			elif main_scene.iconP1 is AnimatedIcon:
-				main_scene.iconP1.icon_frames = "assets/images/icons/animated/%s/%s.res"%[main_scene.bf.curIcon, main_scene.bf.curIcon];
-				main_scene.iconP1.icon_char = main_scene.bf.curIcon;
-				
-			main_scene.bf.character.flip_h = !main_scene.bf.is_player;
-			if !main_scene.bf.is_player:
-				for i in main_scene.bf.camera_pos.size():
-					main_scene.bf.camera_pos[i] *= -1;
-					
-			main_scene.healthBar.tint_progress = Color("#ff000f") if GlobalOptions.updated_hud == "classic hud" else bf.healthBar_Color;
+			character = main_scene.bf;
+			position = SongData.gfStagePosition if newCharacter == "gf" else SongData.player1StagePosition;
+			z_index = SongData.player1Zindex;
+			layer = 4;
 			
 		"1", "dad":
-			remove_character(main_scene.dad);
-			var newCharacterPosition = SongData.gfStagePosition if SongData.player2 == "gf" else SongData.player2StagePosition;
-			var newChar = main_scene.add_character(newCharacterPosition, SongData.player2Zindex, newCharacter, 3);
-			
-			main_scene.dad = newChar;
-			dad = newChar;
-			
-			if main_scene.iconP2 is Icon:
-				main_scene.iconP2.reload_icon(main_scene.dad.curIcon);
-			elif main_scene.iconP2 is AnimatedIcon:
-				main_scene.iconP2.icon_frames = "assets/images/icons/animated/%s/%s.res"%[main_scene.dad.curIcon, main_scene.dad.curIcon];
-				main_scene.iconP2.icon_char = main_scene.dad.curIcon;
-				
-			main_scene.dad.character.flip_h = dad.is_player;
-			if main_scene.dad.is_player:
-				for i in main_scene.dad.camera_pos.size():
-					main_scene.dad.camera_pos[i] *= -1;
-					
-			main_scene.healthBar.tint_under = Color("#ff000f") if GlobalOptions.updated_hud == "classic hud" else dad.healthBar_Color;
+			character = main_scene.dad;
+			position = SongData.gfStagePosition if newCharacter == "gf" else SongData.player2StagePosition;
+			z_index = SongData.player2Zindex;
+			layer = 3;
 			
 		"2", "gf":
-			remove_character(main_scene.gf);
-			var newCharacterPosition = SongData.gfStagePosition;
-			var newChar = main_scene.add_character(newCharacterPosition, SongData.gfZindex, newCharacter, 1);
+			character = main_scene.gf;
+			position = SongData.gfStagePosition;
+			z_index = SongData.gfZindex;
+			layer = 1;
 			
+	remove_character(character);
+	
+	var newChar = character.init_character(main_scene, position, z_index, newCharacter, layer);
+	
+	match id:
+		"0", "bf":
+			main_scene.bf = newChar
+			bf = newChar;
+			main_scene.bf.character.flip_h = !main_scene.bf.is_player;
+			
+			if !main_scene.bf.is_player:
+				for i in main_scene.bf.camera_pos.size()-1:
+					main_scene.bf.camera_pos[i] *= -1;
+					
+			update_icon(main_scene.iconP1, newChar);
+			main_scene.healthBar.tint_progress = Color("#ff000f") if GlobalOptions.updated_hud == "classic hud" else newChar.healthBar_Color;
+			
+		"1", "dad":
+			main_scene.dad = newChar;
+			dad = newChar;
+			main_scene.dad.character.flip_h = main_scene.dad.is_player;
+			
+			if main_scene.dad.is_player:
+				for i in main_scene.dad.camera_pos.size()-1:
+					main_scene.dad.camera_pos[i] *= -1;
+					
+			update_icon(main_scene.iconP2, newChar);
+			main_scene.healthBar.tint_under = Color("#ff000f") if GlobalOptions.updated_hud == "classic hud" else newChar.healthBar_Color;
+			
+		"2", "gf":
 			main_scene.gf = newChar;
 			gf = newChar;
 			
+func update_icon(icon, character):
+	if icon is Icon:
+		icon.reload_icon(character.curIcon);
+		
+	elif icon is AnimatedIcon:
+		icon.icon_frames = "assets/images/icons/animated/%s/%s.res" % [character.curIcon, character.curIcon];
+		icon.icon_char = character.curIcon;
+		
 func changeBg(newBg):
 	for i in main_scene.stageGrp.get_children():
 		main_scene.stageGrp.remove_child(i);
@@ -178,7 +178,6 @@ func changeBg(newBg):
 	SongData.loadStageJson(newBg);
 	
 	main_scene.curStage = newBg.to_lower();
-	
 	main_scene.stageGrp.add_child(main_scene.stage);
 	
 	main_scene.bf.position = SongData.player1StagePosition;

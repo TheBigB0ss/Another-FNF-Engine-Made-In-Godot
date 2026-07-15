@@ -1,6 +1,6 @@
-extends Node2D
+@tool
+class_name ChartCharacter extends SparrowSprite
 
-@onready var chart_character_anim = $character;
 var curAnim = "";
 var idleTimer = 0.0;
 
@@ -25,21 +25,14 @@ func _ready():
 		animList.append(charData["Poses"][i]["Anim"]);
 		posesList.append(charData["Poses"][i]["Name"]);
 		
-	base_position = self.position;
 	_playAnim("idle dance");
 	
-func play_cool_anim(anim_id):
-	match anim_id:
-		0, 4:
-			_playAnim('singLeft');
-		1, 5:
-			_playAnim('singDown');
-		2, 6:
-			_playAnim('singUp');
-		3, 7:
-			_playAnim('singRight');
-			
 func _process(delta):
+	super(delta);
+	
+	if Engine.is_editor_hint():
+		return;
+		
 	if !goToIdle:
 		return;
 		
@@ -61,13 +54,13 @@ func _playAnim(anim=""):
 			charData["Poses"][i]["Offset"][1]
 		);
 		
-		chart_character_anim.offset = pose_offset;
-		
-		chart_character_anim.frame = 0;
-		chart_character_anim.play(posesList[i]);
+		offset = pose_offset;
+		play(posesList[i]);
 		
 		if animList[i].begins_with("sing"):
 			idleTimer = 0;
 			
+		break;
+		
 	curAnim = anim;
 	

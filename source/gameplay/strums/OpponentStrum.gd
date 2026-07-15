@@ -1,5 +1,6 @@
 extends Node2D
 
+@onready var main_scene = get_tree().current_scene;
 var notes = ["left", "down", "up", "right"];
 var strumArray = [];
 var offSetShit = 0;
@@ -19,12 +20,12 @@ var chart = {};
 var notesList = [];
 var array_notes = [];
 var opponentNotes = [];
-var opponents_strums = [];
-var new_opponentNotes = [];
 
 var appearNOW = false;
 
 func _ready() -> void:
+	appearNOW = main_scene.skipIntro if !is_secondary_strum else (main_scene.skipIntro && SongData.haveTwoOpponents);
+	
 	strumNode = Node2D.new();
 	add_child(strumNode);
 	
@@ -63,30 +64,21 @@ func _ready() -> void:
 		for i in strumNode.get_children():
 			i.modulate.a = 1;
 			
-	for i in SongData.songNotes:
-		for j in i["sectionNotes"]:
-			var noteData = [j[0], j[1], j[2], j[3], i["gfSection"], i["altAnim"], i["mustHitSection"], false];
-			if j.size() > 4 && j[4] != null:
-				noteData.append(j[4]);
-				
-			if j.size() > 5 && j[5] != null:
-				noteData.append(j[5]);
-				
-			array_notes.insert(0, noteData);
-			
+	var notesArray = SongData.opponentNotes if !is_secondary_strum else SongData.extraOpponentNotes;
+	for i in notesArray:
+		var noteData = [i[0], i[1], i[2], i[3], i[4], i[5], false];
+		array_notes.insert(0, noteData);
+		
 	array_notes.sort_custom(func(a,b): return a[0]<b[0]);
 	
 var notes_to_delete = [];
 func _process(delta):
 	for i in array_notes:
-		var data = int(i[1])%(8 if !SongData.haveTwoOpponents else 12);
 		var distance = (i[0] - Conductor.getSongTime)*Conductor.songSpeed;
 		var distance_offset = 4000 if GlobalOptions.down_scroll else 2200;
-		var noteVal1 = i[8] if i.size() > 8 else null;
-		var noteVal2 = i[9] if i.size() > 9 else null;
 		
-		if distance <= distance_offset && !i[7]:
-			spawnNote(i[0], data, i[2], i[3], i[4], i[5], i[6], noteVal1, noteVal2);
+		if distance <= distance_offset && !i[6]:
+			spawnNote(i[0], i[1], i[2], i[3], i[4], i[5]);
 			array_notes.erase(i);
 		else:
 			break;
@@ -121,33 +113,29 @@ func _process(delta):
 		if Conductor.getSongTime > 335+(note.strumTime+note.ogSustain) && note.sustainLength > 0 && !note.is_pressing:
 			notes_to_delete.append(note);
 			
-	opponents_strums = [opponentNotes] if !SongData.haveTwoOpponents else [opponentNotes, new_opponentNotes];
-	
-	for strums in opponents_strums:
-		for note in strums:
-			if note == null or note.isPlayer or note.is_a_bad_note or note.ignoreNote:
+	for note in opponentNotes:
+		if note == null or note.isPlayer or note.is_a_bad_note or note.ignoreNote:
+			continue;
+			
+		if Conductor.getSongTime >= note.strumTime:
+			note.opponent_pressed();
+			
+			if note.manyHits > 0:
 				continue;
 				
-			if Conductor.getSongTime >= note.strumTime:
-				note.opponent_pressed();
-				
-				if note.manyHits > 0:
-					continue;
+			if note.sustainLength == 0:
+				opponentNotes.erase(note);
+				notesList.erase(note);
+			else:
+				if note.note != null:
+					note.note.queue_free();
 					
-				if note.sustainLength == 0:
-					strums.erase(note);
+				note.is_pressing = true;
+				if note.sustainLength <= 0:
+					note.is_pressing = false;
+					opponentNotes.erase(note);
 					notesList.erase(note);
-				else:
-					if note.note != null:
-						note.note.queue_free();
-						
-					note.is_pressing = true;
-					if note.sustainLength <= 0:
-						note.is_pressing = false;
-						strums.erase(note);
-						notesList.erase(note);
-						
-	opponents_strums = opponents_strums.filter(func(note): return note != null);
+					
 	notesList = notesList.filter(func(note): return note != null);
 	
 	for notes in strumNode.get_children():
@@ -159,8 +147,6 @@ func _process(delta):
 			
 	for i in notes_to_delete:
 		opponentNotes.erase(i);
-		if !new_opponentNotes.is_empty():
-			new_opponentNotes.erase(i);
 		notesList.erase(i);
 		
 		if i == null:
@@ -176,41 +162,25 @@ func notesAppears():
 		var tw = get_tree().create_tween();
 		tw.tween_property(strumNote, "modulate:a", 1.0, 1.0).set_delay(0.5 + (0.2 * i)).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT);
 		
-func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer, value1 = null, value2 = null):
+func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
 	var data = int(noteData)%4;
-	var is_a_player_note = isPlayer;
-	var is_second_opponent = false;
 	
-	if noteData > 3 && noteData < 8:
-		is_a_player_note = !isPlayer;
-		
-	if noteData >= 8 && SongData.haveTwoOpponents:
-		isPlayer = false;
-		is_a_player_note = false;
-		is_second_opponent = true;
-		
-	if is_a_player_note:
-		return;
-		
-	if is_secondary_strum && !is_second_opponent:
-		return;
-		
-	if !is_secondary_strum && is_second_opponent:
-		return;
-		
 	var note = Note.new();
-	note.is_altAnim = isAltAnim;
 	note.strumTime = strumTime;
 	note.noteData = data;
 	note.sustainLength = lenght;
 	note.type = type;
-	note.isGfNote = isGfNote or (type == "gf sing");
-	note.is_altAnim = isAltAnim or (type == "alt anim");
+	note.isGfNote = (type == "gf sing");
+	note.is_altAnim = (type == "alt anim");
 	note.no_anim = (type == "No Animation");
 	note.is_hey_note = (type == "Hey!");
 	note.must_press = note.isPlayer;
-	note.secondOpponentNote = is_second_opponent;
+	note.secondOpponentNote = is_secondary_strum;
 	note.visible = !GlobalOptions.middle_scroll;
+	
+	note.opponentNotePressed.connect(main_scene.opponentNotePressed);
+	note.noteCreated.connect(main_scene.noteCreated);
+	note.emit_signal("noteCreated", note);
 	
 	if value1 != null && value2 != null && note.type == "Echo Note":
 		note.manyHits = value1;
@@ -224,11 +194,7 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer,
 	if note.note != null:
 		note.note.offset = strumNode.get_child(note.noteData).note.offset;
 		
-	if is_second_opponent:
-		new_opponentNotes.append(note);
-	else:
-		opponentNotes.append(note);
-		
+	opponentNotes.append(note);
 	notesList.append(note);
 	notesList.sort_custom(Callable(self, "sort_notes"));
 	

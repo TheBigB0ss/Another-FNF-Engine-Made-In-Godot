@@ -10,6 +10,8 @@ var song = "";
 
 const tankmanPreload = preload("res://source/stages/battlefield/TankmanSoldier.tscn");
 
+signal end_tankman_cutscene;
+
 func _ready() -> void:
 	cutsceneLoader.connect("cutsceneEnding", start_song);
 	
@@ -108,7 +110,7 @@ func start_song():
 	MusicManager._stop_music();
 	SongData.is_not_in_cutscene = true;
 	Global.is_on_video = false;
-	Global.emit_signal("end_tankman_cutscene");
+	self.emit_signal("end_tankman_cutscene");
 	
 func set_hud(_is_visible):
 	var strums = get_tree().current_scene.get("game_strums");

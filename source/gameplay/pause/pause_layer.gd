@@ -136,6 +136,17 @@ func _choice_pause_opts():
 			else:
 				_resume();
 				can_use = false;
+				for i in main_scene.game_strums.get_children():
+					if i.name == "Splashes":
+						continue;
+						
+					for j in i.noteNode.get_children():
+						j.queue_free();
+						
+				main_scene.playerStrum.playerNotes.clear();
+				main_scene.opponentStrum.opponentNotes.clear();
+				main_scene.newOpponentStrum.opponentNotes.clear();
+				
 				main_scene.setTimePos(curTime);
 				
 		"BOTPLAY":

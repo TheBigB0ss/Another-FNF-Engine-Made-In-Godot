@@ -72,6 +72,8 @@ signal notePressed(note);
 signal noteMissed(note);
 signal longNoteMissed(note);
 
+signal noteCreated(note);
+
 func reload_note_type():
 	match type:
 		"Hurt Note":
@@ -304,17 +306,15 @@ func pressed(new_character = null):
 	if !is_a_bad_note && !pressed_emit:
 		main_scene.health = min(main_scene.health+healthPerHit, 100.0);
 		
+	emitPress(false);
 	if sustainLength <= 0:
 		new_character.animNote = self;
 		
 		if is_a_bad_note:
 			miss_note();
 			
-		emitPress(false);
 		destroy_note();
 	else:
-		emitPress(false);
-		
 		if is_instance_valid(note):
 			note.queue_free();
 			
@@ -333,10 +333,10 @@ func opponent_pressed(new_character = null):
 		
 	new_character.curNote = self;
 	
+	emitPress(true);
+	
 	if sustainLength <= 0:
 		new_character.animNote = self;
-		
-		emitPress(true);
 		destroy_note();
 		
 	main_scene.playCharacterAnim(self, new_character);
@@ -346,10 +346,10 @@ func emitPress(is_opponent):
 	if pressed_emit:
 		return;
 		
+	if GlobalOptions.playNoteHitSound:
+		Sound.add_new_sound("hitNotePlayer" if !is_opponent else "hitNoteOpponent");
+		
 	if !is_opponent:
-		if GlobalOptions.playNoteHitSound:
-			Sound.add_new_sound("chart_hit");
-			
 		emit_signal("notePressed", self);
 	else:
 		emit_signal("opponentNotePressed", self);

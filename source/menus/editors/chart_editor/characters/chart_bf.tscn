@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cw7psh2l04k68"]
+
+[ext_resource type="Script" uid="uid://cithgl1w0skdv" path="res://source/menus/editors/chart_editor/characters/editor_character.gd" id="1_h3sli"]
+[ext_resource type="Shader" uid="uid://b66dleiip18im" path="res://source/shaders/flashColor.gdshader" id="1_ngg7s"]
+[ext_resource type="Texture2D" uid="uid://ta4oaw7lkwmx" path="res://assets/images/editors/chart preview/bf/chart-bf.png" id="2_ly5gl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h3sli"]
+shader = ExtResource("1_ngg7s")
+shader_parameter/flash_color = Color(18.892157, 18.892157, 18.892157, 1)
+shader_parameter/flash_strength = 1.0
+shader_parameter/speed = 0.0
+
+[node name="ChartBf" type="Node2D" unique_id=145860512]
+material = SubResource("ShaderMaterial_h3sli")
+script = ExtResource("1_h3sli")
+path = "bf-chart"
+texture = ExtResource("2_ly5gl")
+xmlPath = "res://assets/images/editors/chart preview/bf/chart-bf.xml"
+frame = 5
+animation = 1
+metadata/_custom_type_script = "uid://cithgl1w0skdv"

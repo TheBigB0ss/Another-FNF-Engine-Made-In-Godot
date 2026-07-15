@@ -62,7 +62,7 @@ func check_achievement_status(achievement):
 			TYPE_BOOL: 
 				return achievements[achievement]["value"];
 				
-			TYPE_ARRAY: 
+			TYPE_ARRAY:
 				return achievements[achievement]["value"][2] or achievements[achievement]["value"][0] == achievements[achievement]["value"][1];
 				
 	return false;

@@ -117,7 +117,7 @@ func change_character(_char):
 	
 func update_offset_value(x = 0, y = 0):
 	for i in characterGrp.get_children():
-		if i.character is AnimatedSprite2D:
+		if i.character is AnimatedSprite2D or i.character is SparrowCharacter:
 			i.character.offset = Vector2.ZERO;
 			i.character.offset = Vector2(x, y);
 			
@@ -151,7 +151,7 @@ func play_anim():
 		if i.character is Sprite2D:
 			i.character_anim.play(i.posesList[cur_pose]);
 			
-		elif i.character is AnimatedSprite2D or i.character is AtlasCharacter:
+		elif i.character is AnimatedSprite2D or i.character is AtlasCharacter or i.character is SparrowCharacter:
 			i.character.play(i.posesList[cur_pose]);
 			
 func set_rating_pos():
@@ -190,7 +190,7 @@ func mouse_inside_character(spr, offset):
 	var mouse = get_global_mouse_position();
 	var size = null;
 	
-	if spr is AtlasCharacter:
+	if spr is AtlasCharacter or spr is SparrowCharacter:
 		return false;
 		
 	if spr is AnimatedSprite2D:
@@ -305,7 +305,27 @@ func change_character_frame(frame = 1, instant = false):
 			max_frames = character.sprite_frames.get_frame_count(i.posesList[cur_pose]);
 			
 			var val = (max_frames if frame > 0 else 0.0) if instant else character.frame+frame;
-			i.character.frame = clamp(val, 0.0, max_frames);
+			character.frame = clamp(val, 0.0, max_frames);
+			
+		elif i.character is SparrowCharacter:
+			character = i.character;
+			max_frames = character.get_anim_length(i.posesList[cur_pose])-1;
+			character.playing = false;
+			
+			var val = (max_frames if frame > 0 else 0.0) if instant else character.frame+frame;
+			character.timer = clamp(val, 0.0, max_frames);
+			character.frame = int(character.timer);
+			character.queue_redraw();
+			
+		elif i.character is AtlasSprite:
+			character = i.character;
+			max_frames = int(abs(character.start_frame-character.limit));
+			character.playing = false;
+			
+			var val = (max_frames if frame > 0 else 0.0) if instant else (character.frame-character.start_frame)+frame;
+			val = clamp(val, 0.0, max_frames);
+			character.timer = character.start_frame + val;
+			character.frame = int(character.timer);
 			
 var rating_status = null;
 enum RatingState {
@@ -345,8 +365,12 @@ func _process(_delta: float) -> void:
 			total_frames = i.character.sprite_frames.get_frame_count(i.posesList[cur_pose]);
 			
 		elif i.character is AtlasCharacter:
-			frame = int(i.character.frame-i.character.start_frame)-1;
-			total_frames = int(abs(i.character.start_frame-i.character.limit));
+			frame = int(i.character.frame-i.character.start_frame);
+			total_frames = int(abs(i.character.start_frame-i.character.limit))+1;
+			
+		elif i.character is SparrowCharacter:
+			frame = int(i.character.timer);
+			total_frames = int(i.character.get_anim_length(i.posesList[cur_pose]));
 			
 		elif i.character is Sprite2D:
 			frame = int(round(i.character_anim.current_animation_position / i.character_anim.get_animation(i.posesList[cur_pose]).step));
@@ -361,11 +385,15 @@ func _process(_delta: float) -> void:
 		frame_bar.max_value = total_frames-1;
 		
 	if Input.is_action_just_pressed("mouse_click"):
-		if mouse_inside(frame_arrow_left, frame_arrow_left.texture): change_character_frame(-1); return;
-		elif mouse_inside(frame_arrow_right, frame_arrow_right.texture): change_character_frame(1); return;
-		elif mouse_inside(frame_arrow_leftWall, frame_arrow_leftWall.texture): change_character_frame(-1, true); return;
-		elif mouse_inside(frame_arrow_rightWall, frame_arrow_rightWall.texture): change_character_frame(1, true); return;
-		
+		if mouse_inside(frame_arrow_left, frame_arrow_left.texture):
+			change_character_frame(-1); return;
+		elif mouse_inside(frame_arrow_right, frame_arrow_right.texture): 
+			change_character_frame(1); return;
+		elif mouse_inside(frame_arrow_leftWall, frame_arrow_leftWall.texture): 
+			change_character_frame(-1, true); return;
+		elif mouse_inside(frame_arrow_rightWall, frame_arrow_rightWall.texture): 
+			change_character_frame(1, true); return;
+			
 	var direction = 0;
 	if get_viewport().get_mouse_position().x > last_mouse_x: direction = 1;
 	elif get_viewport().get_mouse_position().x < last_mouse_x: direction = -1;

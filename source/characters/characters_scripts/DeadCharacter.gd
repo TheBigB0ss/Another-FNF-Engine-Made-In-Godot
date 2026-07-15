@@ -1,4 +1,9 @@
-extends CharacterData
+extends Node2D
+
+var charData = {};
+var charPath = '';
+var animList = [];
+var posesList = [];
 
 @export_group("death screen settings", "")
 @export_file_path("*.json") var json_path = "";
@@ -24,6 +29,13 @@ var anim_type = 1;
 
 var base_position = Vector2.ZERO;
 
+func init_json(char_json_path):
+	var jsonFile = FileAccess.open(char_json_path, FileAccess.READ);
+	var jsonData = JSON.new();
+	jsonData.parse(jsonFile.get_as_text());
+	charData = jsonData.get_data();
+	jsonFile.close();
+	
 func _ready():
 	is_animated_sprite = character is AnimatedSprite2D;
 	

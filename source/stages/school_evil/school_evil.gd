@@ -7,6 +7,8 @@ var is_in_cutscene = false;
 @onready var senpai_timer = $"senpai cutscene/senpai fade timer";
 @onready var senpai = $"senpai cutscene/senpaiCrazy";
 
+signal end_senpai_cutscene;
+
 func _ready():
 	if GlobalOptions.use_shader:
 		$CanvasLayer.show();
@@ -39,7 +41,7 @@ func start_cutscene():
 func end_cutscene():
 	Global.is_on_video = false;
 	is_in_cutscene = false;
-	Global.emit_signal("end_senpai_cutscene");
+	self.emit_signal("end_senpai_cutscene");
 	$"senpai cutscene".hide();
 	
 func _on_senpai_fade_timer_timeout() -> void:

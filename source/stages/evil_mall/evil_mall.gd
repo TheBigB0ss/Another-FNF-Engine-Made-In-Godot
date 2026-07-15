@@ -33,7 +33,7 @@ func start_song():
 	MusicManager._stop_music();
 	SongData.is_not_in_cutscene = true;
 	Global.is_on_video = false;
-	Global.emit_signal("end_tankman_cutscene");
+	Global.emit_signal("end_cutscene");
 	
 var ghost_timer = 0.0;
 func _process(delta: float) -> void:

@@ -13,10 +13,13 @@ var offSetShit = 0;
 	"Strum Texture": "StrumlineNotes",
 	"Note Line Texture": "NOTE_hold_assets"
 };
-@onready var main_scene = get_tree().current_scene;
 
 @export_file_path("*.json") var chart_path = "";
-@export var strum_char = Node2D;
+@export var strum_char:Node2D:
+	set(value):
+		if value is Character or value is AtlasCharacter or value is SparrowCharacter:
+			strum_char = value;
+			
 @export var enable = false;
 
 var strumNode = null;
@@ -25,6 +28,7 @@ var noteNode = null;
 var chart = {}
 var notesList = [];
 var array_notes = [];
+var songNotes = [];
 
 signal pressed_note(char);
 
@@ -65,17 +69,32 @@ func _ready() -> void:
 	chart = jsonData.get_data();
 	jsonFile.close();
 	
-	for i in chart["song"]["notes"]:
-		for j in i["sectionNotes"]:
-			var noteData = [j[0], j[1], j[2], j[3], i["gfSection"], i["altAnim"], i["mustHitSection"], false];
-			if j.size() > 4 && j[4] != null:
-				noteData.append(j[4]);
+	if chart.has("song"):
+		for i in chart["song"]["notes"]:
+			for j in i["sectionNotes"]:
+				var note = {
+					"noteTime": j[0],
+					"noteData": int(j[1])%4,
+					"noteLength": j[2],
+					"noteType": j[3] if j.size() > 3 else "",
+					"noteValue1": j[4] if j.size() > 4 else null,
+					"noteValue2": j[5] if j.size() > 4 else null
+				};
+				songNotes.append([note["noteTime"], note["noteData"], note["noteLength"], note["noteType"], note["noteValue1"], note["noteValue2"]]);
 				
-			if j.size() > 5 && j[5] != null:
-				noteData.append(j[5]);
-				
-			array_notes.insert(0, noteData);
+	elif chart.has("codenameChart"):
+		for strum in chart["strumLines"]:
+			for note in strum["notes"]:
+				var newNote = [note["time"], note["id"], note["sLen"], chart["noteTypes"][note["type"]-1] if note["type"] > 0 else "", null, null];
+				songNotes.append(newNote);
+	else:
+		for i in chart["strums"][0]["opponent"]:
+			songNotes.append([i[0], i[1], i[2], i[3], i[4], i[5]]);
 			
+	for i in songNotes:
+		var noteData = [i[0], i[1], i[2], i[3], i[4], i[5], false];
+		array_notes.insert(0, noteData);
+		
 	array_notes.sort_custom(func(a,b): return a[0]<b[0]);
 	
 func notesAppears():
@@ -92,14 +111,11 @@ func _process(delta):
 		return;
 		
 	for i in array_notes:
-		var data = int(i[1])%(8 if !SongData.haveTwoOpponents else 12);
 		var distance = (i[0] - Conductor.getSongTime)*Conductor.songSpeed;
 		var distance_offset = 4000 if GlobalOptions.down_scroll else 2200;
-		var noteVal1 = i[8] if i.size() > 8 else null;
-		var noteVal2 = i[9] if i.size() > 9 else null;
 		
-		if distance <= distance_offset && !i[7]:
-			spawnNote(i[0], data, i[2], i[3], i[4], i[5], i[6], noteVal1, noteVal2);
+		if distance <= distance_offset && !i[6]:
+			spawnNote(i[0], i[1], i[2], i[3], i[4], i[5]);
 			array_notes.erase(i);
 		else:
 			break;
@@ -139,6 +155,7 @@ func _process(delta):
 			continue;
 			
 		if Conductor.getSongTime >= note.strumTime && notesList.size() > 0:
+			print(strum_char)
 			note.opponent_pressed(strum_char);
 			play_strum_anim(note, 0.40);
 			self.emit_signal("pressed_note", strum_char);
@@ -176,16 +193,15 @@ func _process(delta):
 func sort_notes(a, b):
 	return a.strumTime < b.strumTime;
 	
-func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer, value1 = null, value2 = null):
+func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
 	var note_data = int(noteData)%4;
 	var note = Note.new();
-	note.is_altAnim = isAltAnim;
 	note.strumTime = strumTime;
 	note.noteData = note_data;
 	note.sustainLength = lenght;
 	note.type = type;
-	note.isGfNote = isGfNote or (type == "gf sing");
-	note.is_altAnim = isAltAnim or (type == "alt anim");
+	note.isGfNote = (type == "gf sing");
+	note.is_altAnim = (type == "alt anim");
 	note.no_anim = (type == "No Animation");
 	note.is_hey_note = (type == "Hey!");
 	note.must_press = note.isPlayer;
@@ -194,6 +210,8 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer,
 		note.manyHits = value1;
 		note.amount = value2;
 		
+	note.emit_signal("noteCreated", note);
+	
 	note.scale = strumNode.get_child(note.noteData).scale;
 	note.rotation = strumNode.get_child(note.noteData).rotation;
 	note.modulate.a = strumNode.get_child(note.noteData).modulate.a;

@@ -11,8 +11,6 @@ var noSpam = false;
 var coolOffset = 145;
 var offSetShit = 0;
 
-var you_delete_kenny = false;
-
 func _ready():
 	Discord.update_discord_info("main menu", "Is in menus");
 	

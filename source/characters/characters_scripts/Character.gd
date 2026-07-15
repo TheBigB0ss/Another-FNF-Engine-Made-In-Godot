@@ -1,5 +1,10 @@
 @tool
-class_name Character extends CharacterData
+class_name Character extends Node2D
+
+var charData = {};
+var charPath = '';
+var animList = [];
+var posesList = [];
 
 enum CHARACTER_STATES{
 	IDLE = 1,
@@ -72,8 +77,34 @@ var anim_beat = 2;
 
 var is_animated_sprite = false;
 
+func _init() -> void:
+	if Engine.is_editor_hint():
+		return;
+		
+	Conductor.new_beat.connect(beat_hit);
+	Conductor.new_step.connect(step_hit);
+	
+func beat_hit(beat) -> void:
+	if idle_type != IDLE_MODE.BEAT:
+		return;
+		
+	back_to_idle(beat);
+	
+func step_hit(step) -> void:
+	if idle_type != IDLE_MODE.STEP:
+		return;
+		
+	back_to_idle(step);
+	
+func init_json(char_json_path):
+	var jsonFile = FileAccess.open(char_json_path, FileAccess.READ);
+	var jsonData = JSON.new();
+	jsonData.parse(jsonFile.get_as_text());
+	charData = jsonData.get_data();
+	jsonFile.close();
+	
 func init_character(parent, char_position, char_zIndex, char_scene, child_id):
-	if char_scene == "none":
+	if char_scene == "none" or char_scene == "":
 		return;
 		
 	var new_char = load("res://source/characters/characters_scenes/" + char_scene + ".tscn").instantiate();
@@ -312,18 +343,6 @@ func _get_property_list():
 		});
 		
 	return properties;
-	
-func beat_hit(beat) -> void:
-	if idle_type != IDLE_MODE.BEAT:
-		return;
-		
-	back_to_idle(beat);
-	
-func step_hit(step) -> void:
-	if idle_type != IDLE_MODE.STEP:
-		return;
-		
-	back_to_idle(step);
 	
 func back_to_idle(idle_timer):
 	if (idle_timer % int(anim_beat) == 0) && !curAnim.begins_with("sing") && !special_anim:

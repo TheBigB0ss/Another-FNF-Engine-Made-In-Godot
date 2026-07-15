@@ -1,5 +1,5 @@
 @tool
-class_name AtlasCharacter extends AtlasSprite
+class_name SparrowCharacter extends SparrowSprite
 
 var charData = {};
 var charPath = '';
@@ -71,11 +71,9 @@ var anim_time = 5;
 var anim_beat = 2;
 
 var character = self;
+
 @export var flip_h = false;
 @export var flip_v = false;
-
-var base_position = Vector2.ZERO;
-var offset = Vector2.ZERO;
 
 func _init() -> void:
 	if Engine.is_editor_hint():
@@ -154,15 +152,13 @@ func _ready():
 			"step":
 				idle_type = IDLE_MODE.STEP;
 				
-	base_position = character.position;
-	
 	dance();
 	
 func _process(delta):
 	super(delta);
 	
-	character.scale.x = abs(character.scale.x) * (-1 if flip_h else 1);
-	character.scale.y = abs(character.scale.y) * (-1 if flip_v else 1);
+	scale.x = abs(scale.x) * (-1 if flip_h else 1);
+	scale.y = abs(scale.y) * (-1 if flip_v else 1);
 	
 	if !Engine.is_editor_hint():
 		character_process(delta);
@@ -227,25 +223,11 @@ func dance():
 		_playAnim("idle dance");
 		
 var current_anim = "";
-var newLimit = 0;
-var newFrame = 0;
 func _playAnim(anim = "", special = false):
-	playing = true;
 	for i in animList.size():
-		#if is_instance_valid(curNote) && characterState == CHARACTER_STATES.HOLDING && anim.begins_with("sing") && curNote.curNoteAnim != anim:
-		#	anim = curNote.curNoteAnim;
-			
 		if animList[i] != anim:
 			continue;
 			
-		for j in animationData["AN"]["TL"]["L"]:
-			for k in j["FR"]:
-				if k.get("N", "") == posesList[i]:
-					start_frame = int(k["I"]);
-					timer = float(k["I"]);
-					newFrame = k["I"];
-					newLimit = (k["I"] + k["DU"])-1;
-					
 		anim_beat = anims_timer[anim][0];
 		anim_time = anims_timer[anim][1];
 		special_anim = anims_timer[anim][2];
@@ -254,7 +236,6 @@ func _playAnim(anim = "", special = false):
 			characterState = CHARACTER_STATES.SPECIAL;
 		if curAnim == "idle dance":
 			characterState = CHARACTER_STATES.IDLE;
-			frame = newFrame;
 		if animList[i].begins_with("sing") && is_instance_valid(curNote):
 			characterState = CHARACTER_STATES.SINGING;
 			
@@ -263,12 +244,12 @@ func _playAnim(anim = "", special = false):
 				CHARACTER_STATES.HOLDING:
 					sing_timer = 0;
 					if prevState == CHARACTER_STATES.HOLDING:
-						frame = newFrame;
+						frame = 0;
 						
-					frame = newFrame;
+					frame = 0;
 					
 				CHARACTER_STATES.SINGING, CHARACTER_STATES.SPECIAL:
-					frame = newFrame;
+					frame = 0;
 					
 		if animList[i].begins_with("sing") or charData["Poses"][i].has("Anim Time") or characterState == CHARACTER_STATES.SPECIAL:
 			idleTimer = 0;
@@ -276,32 +257,23 @@ func _playAnim(anim = "", special = false):
 		if current_anim == posesList[i] && animList[i].begins_with("sing") && characterState != CHARACTER_STATES.SINGING:
 			return;
 			
-		set_offset(i);
-		
+		character.offset = Vector2(charData["Poses"][i]["Offset"][0], charData["Poses"][i]["Offset"][1]);
 		current_anim = posesList[i];
-		limit = newLimit;
+		play(current_anim);
 		
 	curAnim = anim;
 	
-func set_offset(animID):
-	var pose_offset = Vector2(charData["Poses"][animID]["Offset"][0], charData["Poses"][animID]["Offset"][1]) if charData["Poses"][animID].has("Offset") else Vector2.ZERO;
-	
-	if !Engine.is_editor_hint():
-		character.position = (base_position + pose_offset);
-		
 func loop_anim():
 	if characterState != CHARACTER_STATES.HOLDING:
 		return;
 		
 	match anim_type:
 		CHARACTER_ANIM_TYPE.FREEZE:
-			frame = newFrame;
-			timer = newFrame;
+			frame = 0;
 			
 		CHARACTER_ANIM_TYPE.REPEAT:
-			if frame > (newFrame + frame_count):
-				frame = newFrame;
-				timer = newFrame;
+			if timer >= frame_count:
+				timer = 0
 				
 func _get_property_list():
 	var properties: Array[Dictionary] = [];

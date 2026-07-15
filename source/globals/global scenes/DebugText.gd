@@ -12,15 +12,14 @@ func _process(_delta: float) -> void:
 	
 	var fps = int(Engine.get_frames_per_second());
 	if GlobalOptions.debugTextMode == "complex":
-		var total_nodes = get_tree().get_node_count();
-		var total_objects = Performance.get_monitor(Performance.Monitor.OBJECT_COUNT);
-		debugText.text = "FPS: %s\nNODES: %s\nOBJECTS: %s"%[fps, total_nodes, total_objects];
+		debugText.text = "FPS: %s\nVRAM: %s MB"%[fps, round((Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 104857.6)) / 10];
 	else:
 		debugText.text = "FPS: %s"%[fps];
 		
-	curr_mem = OS.get_static_memory_usage();
-	if curr_mem > 0:
-		mem_usage = curr_mem / 1048576.0;
-		mem_peak = max(mem_peak, mem_usage);
-		debugText.text += str("\nMEMORY: ", snapped(mem_usage, 0.01), " MB / ", snapped(mem_peak, 0.01), " MB");
-		
+	if OS.is_debug_build():
+		curr_mem = OS.get_static_memory_usage();
+		if curr_mem > 0:
+			mem_usage = curr_mem / 1048576.0;
+			mem_peak = max(mem_peak, mem_usage);
+			debugText.text += str("\nMEMORY: ", snapped(mem_usage, 0.01), " MB / ", snapped(mem_peak, 0.01), " MB");
+			

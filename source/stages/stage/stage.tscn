@@ -1,30 +1,30 @@
-[gd_scene load_steps=5 format=3 uid="uid://ci7s7lxw8p2bl"]
+[gd_scene format=3 uid="uid://ci7s7lxw8p2bl"]
 
 [ext_resource type="Script" uid="uid://bfnv7t3726ige" path="res://source/stages/stage/stage.gd" id="1_8dppk"]
 [ext_resource type="Texture2D" uid="uid://bywujqtugw6pu" path="res://assets/stages/week1/stageback.png" id="2_3r0u7"]
 [ext_resource type="Texture2D" uid="uid://cet8uuevkibug" path="res://assets/stages/week1/stagefront.png" id="3_6ad8m"]
 [ext_resource type="Texture2D" uid="uid://byn4vnt7yj3eh" path="res://assets/stages/week1/stagecurtains.png" id="4_aaojt"]
 
-[node name="Stage" type="Node2D"]
+[node name="Stage" type="Node2D" unique_id=538357256]
 script = ExtResource("1_8dppk")
 
-[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+[node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=1890801879]
 layer = 1
 scroll_offset = Vector2(0.7, 0.5)
 scroll_base_scale = Vector2(1.2, 1.2)
 
-[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground" unique_id=2141317274]
 
-[node name="spotLights" type="Node2D" parent="ParallaxBackground/ParallaxLayer"]
+[node name="spotLights" type="Node2D" parent="ParallaxBackground/ParallaxLayer" unique_id=3046135]
 
-[node name="curtain" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+[node name="curtain" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer" unique_id=1995934632]
 position = Vector2(594, 316)
 texture = ExtResource("4_aaojt")
 
-[node name="BackGround" type="Sprite2D" parent="."]
+[node name="BackGround" type="Sprite2D" parent="." unique_id=819712507]
 position = Vector2(595, 337)
 texture = ExtResource("2_3r0u7")
 
-[node name="Ground" type="Sprite2D" parent="."]
+[node name="Ground" type="Sprite2D" parent="." unique_id=1599663476]
 position = Vector2(600, 743)
 texture = ExtResource("3_6ad8m")

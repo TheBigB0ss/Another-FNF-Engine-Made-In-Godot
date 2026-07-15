@@ -76,11 +76,11 @@ texture = ExtResource("9_tvoso")
 
 [node name="bgFreaks" type="Node2D" parent="." unique_id=992538463]
 texture_filter = 1
-position = Vector2(-643, 171)
+position = Vector2(797.9999, 411)
 scale = Vector2(5.6, 5.6)
 script = ExtResource("10_qlemi")
 texture = ExtResource("11_tdfyr")
 xmlPath = "res://assets/stages/week6/bgFreaks.xml"
-frame = 10
+frame = 18
 animation = 0
 metadata/_custom_type_script = "uid://dk0iqkss82o73"

@@ -58,12 +58,12 @@ texture_filter = 1
 
 [node name="bgFreaks" type="Node2D" parent="." unique_id=805372219]
 texture_filter = 1
-position = Vector2(-643, 171)
+position = Vector2(696.9999, 436.99997)
 scale = Vector2(5.6, 5.6)
 script = ExtResource("7_560b6")
 texture = ExtResource("8_y0ysj")
 xmlPath = "res://assets/stages/week6/bgFreaks.xml"
-frame = 27
+frame = 21
 animation = 0
 metadata/_custom_type_script = "uid://dk0iqkss82o73"
 
@@ -75,6 +75,6 @@ scale = Vector2(3.5, 3.5)
 script = ExtResource("7_560b6")
 texture = ExtResource("9_v7pgg")
 xmlPath = "res://assets/stages/week6/petals.xml"
-frame = 18
+frame = 10
 animation = 0
 metadata/_custom_type_script = "uid://dk0iqkss82o73"

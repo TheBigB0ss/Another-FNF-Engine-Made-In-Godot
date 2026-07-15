@@ -22,12 +22,8 @@ var notes_to_delete = [];
 
 var appearNOW = false;
 
-signal canPress(data)
-signal releaseNote(data)
-
 func _ready() -> void:
-	connect("canPress", pressed);
-	connect("releaseNote", release);
+	appearNOW = main_scene.skipIntro;
 	
 	strumNode = Node2D.new();
 	add_child(strumNode);
@@ -62,29 +58,19 @@ func _ready() -> void:
 		for i in strumNode.get_children():
 			i.modulate.a = 1;
 			
-	for i in SongData.songNotes:
-		for j in i["sectionNotes"]:
-			var noteData = [j[0], j[1], j[2], j[3], i["gfSection"], i["altAnim"], i["mustHitSection"], false];
-			if j.size() > 4 && j[4] != null:
-				noteData.append(j[4]);
-				
-			if j.size() > 5 && j[5] != null:
-				noteData.append(j[5]);
-				
-			array_notes.insert(0, noteData);
-			
+	for i in SongData.playerNotes:
+		var noteData = [i[0], i[1], i[2], i[3], i[4], i[5], false];
+		array_notes.insert(0, noteData);
+		
 	array_notes.sort_custom(func(a,b): return a[0]<b[0]);
 	
 func _process(delta):
 	for i in array_notes:
-		var data = int(i[1])%(8 if !SongData.haveTwoOpponents else 12);
 		var distance = (i[0] - Conductor.getSongTime)*Conductor.songSpeed;
 		var distance_offset = 4000 if GlobalOptions.down_scroll else 2200;
-		var noteVal1 = i[8] if i.size() > 8 else null;
-		var noteVal2 = i[9] if i.size() > 9 else null;
 		
-		if distance <= distance_offset && !i[7]:
-			spawnNote(i[0], data, i[2], i[3], i[4], i[5], i[6], noteVal1, noteVal2);
+		if distance <= distance_offset && !i[6]:
+			spawnNote(i[0], i[1], i[2], i[3], i[4], i[5]);
 			array_notes.erase(i);
 		else:
 			break;
@@ -130,36 +116,52 @@ func _process(delta):
 	playerNotes = playerNotes.filter(func(note): return note != null);
 	notesList = notesList.filter(func(note): return note != null);
 	
+	if GlobalOptions.isUsingBot:
+		botInput();
+	else:
+		playerInput();
+		
+	var key_id = 0;
+	for notes in strumNode.get_children():
+		if notes.reset_arrow_anim > 0 && GlobalOptions.isUsingBot:
+			notes.reset_arrow_anim = max(notes.reset_arrow_anim - 4 * delta, 0);
+			
+		if notes.reset_arrow_anim <= 0 && GlobalOptions.isUsingBot:
+			notes.play_note_anim("static");
+			
+		if key_id > strumNode.get_child_count():
+			break;
+			
+		var note = strumNode.get_child(key_id);
+		var key = "ui_%s"%GlobalOptions.keys[GlobalOptions.keys_list[key_id]][1];
+		press_note(key, note);
+		
+		key_id += 1;
+		
+	for i in notes_to_delete:
+		playerNotes.erase(i);
+		notesList.erase(i);
+		if i == null:
+			continue;
+			
+		i.queue_free();
+		
+func notesAppears():
+	for i in strumNode.get_child_count():
+		var strumNote = strumNode.get_child(i);
+		strumNote.modulate.a = 0.0;
+		
+		var tw = get_tree().create_tween();
+		tw.tween_property(strumNote, "modulate:a", 1.0, 1.0).set_delay(0.5 + (0.2 * i)).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT);
+		
+func playerInput():
 	for note in notesList:
 		if note == null or note.missed or !note.isPlayer:
 			continue;
 			
 		var key = "ui_" + note.custom_note_dir;
-		
-		if GlobalOptions.isUsingBot:
-			if Conductor.getSongTime >= note.strumTime && note.can_press && playerNotes.size() > 0 && note.must_press && !note.is_a_bad_note:
-				delete_note(note.custom_note_dir);
-				
-				if note.manyHits > 0:
-					continue;
-					
-				if note.sustainLength == 0:
-					notes_to_delete.append(note);
-				else:
-					if !note.is_pressing:
-						continue;
-						
-					if note.sustainLength <= 0:
-						note.is_pressing = false;
-						notes_to_delete.append(note);
-					else:
-						note.is_pressing = true;
-						note.missTimer = 0.0;
-			continue;
-			
 		if note.can_press && playerNotes.size() > 0 && note.must_press:
 			if Input.is_action_just_pressed(key):
-				emit_signal("canPress", int(note.noteData));
 				delete_note(note.custom_note_dir);
 				
 			if note.sustainLength <= 0 or !note.isSustain:
@@ -181,46 +183,38 @@ func _process(delta):
 			note.release_time = Conductor.getSongTime;
 		else:
 			if note.missTimer <= 0.13 && note.missedLongNote:
+				strumNode.get_child(int(note.noteData)).tap = false;
 				note.release_time = 0.0;
 				note.is_pressing = true;
 				note.missedLongNote = false;
 				note.missed = false;
 				note.missTimer = 0.0;
 				
-	var key_id = 0;
-	for notes in strumNode.get_children():
-		if notes.reset_arrow_anim > 0 && GlobalOptions.isUsingBot:
-			notes.reset_arrow_anim = max(notes.reset_arrow_anim - 4 * delta, 0);
-			
-		if notes.reset_arrow_anim <= 0 && GlobalOptions.isUsingBot:
-			notes.play_note_anim("static");
-			
-		if key_id > strumNode.get_child_count():
-			break;
-			
-		var note = strumNode.get_child(key_id);
-		var key = "ui_%s"%GlobalOptions.keys[GlobalOptions.keys_list[key_id]][1];
-		input_Arrow(key, note);
-		
-		key_id += 1;
-		
-	for i in notes_to_delete:
-		playerNotes.erase(i);
-		notesList.erase(i);
-		if i == null:
+func botInput():
+	for note in notesList:
+		if note == null or note.missed or !note.isPlayer:
 			continue;
 			
-		i.queue_free();
-		
-func notesAppears():
-	for i in strumNode.get_child_count():
-		var strumNote = strumNode.get_child(i);
-		strumNote.modulate.a = 0.0;
-		
-		var tw = get_tree().create_tween();
-		tw.tween_property(strumNote, "modulate:a", 1.0, 1.0).set_delay(0.5 + (0.2 * i)).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT);
-		
-func input_Arrow(key_to_press, ass_note):
+		if Conductor.getSongTime >= note.strumTime && note.can_press && playerNotes.size() > 0 && note.must_press && !note.is_a_bad_note:
+			delete_note(note.custom_note_dir);
+			
+			if note.manyHits > 0:
+				continue;
+				
+			if note.sustainLength == 0:
+				notes_to_delete.append(note);
+			else:
+				if !note.is_pressing:
+					continue;
+					
+				if note.sustainLength <= 0:
+					note.is_pressing = false;
+					notes_to_delete.append(note);
+				else:
+					note.is_pressing = true;
+					note.missTimer = 0.0;
+					
+func press_note(key_to_press, ass_note):
 	if Input.is_action_just_pressed(key_to_press) && !GlobalOptions.isUsingBot && SongData.is_not_in_cutscene:
 		if !ass_note.strumPressed:
 			ass_note.play_note_anim("press");
@@ -235,39 +229,19 @@ func input_Arrow(key_to_press, ass_note):
 		ass_note.play_note_anim("static");
 		ass_note.tap = !GlobalOptions.ghost_tapping;
 		
-func pressed(data):
-	strumNode.get_child(data).tap = false;
-	
-func release(data):
-	strumNode.get_child(data).tap = !GlobalOptions.ghost_tapping;
-	
-func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer, value1 = null, value2 = null):
+func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
 	var data = int(noteData)%4;
-	var is_a_player_note = isPlayer;
-	var is_second_opponent = false;
 	
-	if noteData > 3 && noteData < 8:
-		is_a_player_note = !isPlayer;
-		
-	if noteData >= 8 && SongData.haveTwoOpponents:
-		isPlayer = false;
-		is_a_player_note = false;
-		is_second_opponent = true;
-		
-	if !is_a_player_note or is_second_opponent:
-		return;
-		
 	var note = Note.new();
-	note.is_altAnim = isAltAnim;
 	note.strumTime = strumTime;
 	note.noteData = data;
 	note.sustainLength = lenght;
 	note.type = type;
-	note.isGfNote = isGfNote or (type == "gf sing");
-	note.is_altAnim = isAltAnim or (type == "alt anim");
+	note.isGfNote = (type == "gf sing");
+	note.is_altAnim = (type == "alt anim");
 	note.no_anim = (type == "No Animation");
 	note.is_hey_note = (type == "Hey!");
-	note.isPlayer = is_a_player_note;
+	note.isPlayer = true;
 	note.must_press = note.isPlayer;
 	
 	if value1 != null && value2 != null && note.type == "Echo Note":
@@ -277,6 +251,8 @@ func spawnNote(strumTime, noteData, lenght, type, isGfNote, isAltAnim, isPlayer,
 	note.notePressed.connect(main_scene.pressedNote);
 	note.noteMissed.connect(main_scene.miss_note);
 	note.longNoteMissed.connect(main_scene.miss_note);
+	note.noteCreated.connect(main_scene.noteCreated);
+	note.emit_signal("noteCreated", note);
 	
 	note.rotation = strumNode.get_child(note.noteData).rotation;
 	note.modulate.a = strumNode.get_child(note.noteData).modulate.a;

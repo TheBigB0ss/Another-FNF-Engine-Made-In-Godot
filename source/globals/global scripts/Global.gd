@@ -2,8 +2,6 @@ extends Node
 
 signal end_dialogue;
 signal end_cutscene;
-signal end_senpai_cutscene;
-signal end_tankman_cutscene;
 
 var finished_intro = false;
 var can_use_menus = true;
@@ -94,3 +92,15 @@ func reloadScene(useTrasition = true, use_stickers = false):
 		
 func update_cursor(cursor):
 	Input.set_custom_mouse_cursor(load("res://assets/images/cursors/cursor-%s.png"%[cursor]), Input.CURSOR_ARROW, Vector2.ZERO);
+	
+func has_dialogue():
+	var base = "res://assets/data/songs/%s/%sDialogue"%[SongData.song, SongData.song];
+	return (FileAccess.file_exists(base + ".txt") || FileAccess.file_exists(base + ".json"));
+	
+func load_json(path = ""):
+	var jsonFile = FileAccess.open("res://"+path+".json", FileAccess.READ);
+	var json = JSON.new();
+	json.parse(jsonFile.get_as_text());
+	jsonFile.close();
+	return json.get_data();
+	

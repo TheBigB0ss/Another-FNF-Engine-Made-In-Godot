@@ -36,3 +36,7 @@ func _draw():
 	for y in range(grid_Y_size / 16):
 		var pos_y = y * GRID_SIZE * 16;
 		draw_line(Vector2(0, pos_y), Vector2(GRID_SIZE * tiles, pos_y), Color.DARK_TURQUOISE, 3);
+		
+func mouse_inside_grid():
+	var mouse = get_local_mouse_position();
+	return mouse.x >= 0 && mouse.y >= 0 && mouse.x < GRID_SIZE * tiles && mouse.y < GRID_SIZE * grid_Y_size;

@@ -106,7 +106,6 @@ metadata/_edit_use_anchors_ = true
 layer = 2
 
 [node name="Second Opponent Note" type="Node2D" parent="strums/Strum_Layer" unique_id=576651245]
-visible = false
 script = ExtResource("6_o40cs")
 is_secondary_strum = true
 noteOffset = 50
