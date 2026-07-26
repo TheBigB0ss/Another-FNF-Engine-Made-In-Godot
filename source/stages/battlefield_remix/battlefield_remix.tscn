@@ -16,6 +16,8 @@
 [ext_resource type="Texture2D" uid="uid://brl1s1q8nvxdc" path="res://assets/stages/week7/remix/box1.png" id="14_7b4go"]
 [ext_resource type="Texture2D" uid="uid://btl2v7ucwnbio" path="res://assets/stages/week7/remix/box2.png" id="15_bokef"]
 [ext_resource type="SpriteFrames" uid="uid://blfjisqcokofe" path="res://assets/stages/week7/remix/soldiers.res" id="16_f7sni"]
+[ext_resource type="PackedScene" uid="uid://chfwtkdhmc256" path="res://source/characters/characters_scenes/steve.tscn" id="17_oo0gn"]
+[ext_resource type="Script" uid="uid://cbvyc7ar58pke" path="res://source/gameplay/strums/strum.gd" id="18_kswpy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ddiij"]
 shader = ExtResource("3_le3xy")
@@ -104,6 +106,20 @@ position = Vector2(659, 1191)
 scale = Vector2(1.1, 1.1)
 texture = ExtResource("13_a112n")
 
+[node name="steve" parent="." unique_id=1825381303 instance=ExtResource("17_oo0gn")]
+z_index = 2
+position = Vector2(-1113, 655)
+healthBar_Color = Color(1, 1, 1, 1)
+anims_timer = {
+"idle dance": [2, 5, false],
+"running": [2, 50, true],
+"singDown": [2, 5, false],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false]
+}
+idle_type = 1
+
 [node name="box1" type="Sprite2D" parent="." unique_id=2102943729]
 z_index = 2
 position = Vector2(-122, 1119)
@@ -150,3 +166,14 @@ position = Vector2(1807.2728, 1284.8485)
 sprite_frames = ExtResource("16_f7sni")
 animation = &"FG_Tankmen6"
 flip_h = true
+
+[node name="steveStrum" type="Node2D" parent="." unique_id=1237308505 node_paths=PackedStringArray("strum_char")]
+modulate = Color(1, 1, 1, 0)
+z_index = 5
+position = Vector2(511, 308)
+script = ExtResource("18_kswpy")
+noteOffset = 82
+strumScale = Vector2(0.5, 0.5)
+chart_path = "res://assets/data/songs/stress/steve.json"
+strum_char = NodePath("../steve")
+metadata/_custom_type_script = "uid://cbvyc7ar58pke"

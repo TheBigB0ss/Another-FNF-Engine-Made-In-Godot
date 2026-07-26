@@ -24,7 +24,7 @@ var opponentNotes = [];
 var appearNOW = false;
 
 func _ready() -> void:
-	appearNOW = main_scene.skipIntro if !is_secondary_strum else (main_scene.skipIntro && SongData.haveTwoOpponents);
+	appearNOW = main_scene.skipIntro;
 	
 	strumNode = Node2D.new();
 	add_child(strumNode);
@@ -175,7 +175,7 @@ func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
 	note.no_anim = (type == "No Animation");
 	note.is_hey_note = (type == "Hey!");
 	note.must_press = note.isPlayer;
-	note.secondOpponentNote = is_secondary_strum;
+	note.secondary_opponent_note = is_secondary_strum;
 	note.visible = !GlobalOptions.middle_scroll;
 	
 	note.opponentNotePressed.connect(main_scene.opponentNotePressed);

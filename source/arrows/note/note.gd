@@ -25,7 +25,7 @@ var note_strum = "StrumlineNotes";
 var note_lines = "NOTE_hold_assets";
 
 var isPlayer = false;
-var secondOpponentNote = false;
+var secondary_opponent_note = false;
 
 var must_press = false;
 var is_pressing = false;
@@ -152,7 +152,7 @@ func reload_note():
 	line.sprite_frames = set_note_texture("res://assets/images/arrows/%s/%s.%s"%[note_type, note_lines, fileType]);
 	
 	var newSustainSpr = SustainNote.new();
-	noteLine.texture = newSustainSpr.draw_lien(line.sprite_frames.get_frame_texture("%s hold piece"%[noteAnim], 0));
+	noteLine.texture = newSustainSpr.draw_sustain_line(line.sprite_frames.get_frame_texture("%s hold piece"%[noteAnim], 0));
 	noteEnd.texture = line.sprite_frames.get_frame_texture("%s hold end"%[noteAnim], 0);
 	
 	noteLine.texture_mode = Line2D.LINE_TEXTURE_TILE;
@@ -163,12 +163,12 @@ func set_note_texture(path):
 		spriteFrames[path] = load(path);
 	return spriteFrames[path];
 	
-func set_note_scale(parent_scale, pixelNote, newOpponentNote):
+func set_note_scale(parent_scale, pixelNote):
 	var new_noteScale = parent_scale;
-	new_noteScale = Vector2(0.5/parent_scale.x, 0.5/parent_scale.y) if newOpponentNote else Vector2(1/parent_scale.x, 1/parent_scale.y);
+	new_noteScale = Vector2(1/parent_scale.x, 1/parent_scale.y);
 	
 	if pixelNote:
-		new_noteScale *= 7 if !newOpponentNote else 1;
+		new_noteScale *= 7;
 	if GlobalOptions.down_scroll:
 		new_noteScale.y *= -1;
 		
@@ -215,25 +215,16 @@ func _ready():
 		strumNote.scale = Vector2(9,9);
 		noteLine.scale = Vector2(1.20, 1.20);
 		
-		if secondOpponentNote:
-			note.scale = Vector2(4, 4);
-			noteLine.scale = Vector2(0.5, 0.5);
-			strumNote.modulate.a = 0.60;
-			note.modulate.a = 0.60;
-	else:
-		if secondOpponentNote:
-			note.scale = Vector2(0.5, 0.5);
-			noteLine.scale = Vector2(0.5, 0.5);
-			noteEnd.scale = Vector2(0.5, 0.5);
-			strumNote.modulate.a = 0.60;
-			note.modulate.a = 0.60;
-			
 	if isChartNote:
 		self.scale = Vector2(0.25, 0.25);
 		
-	noteLine.modulate.a = 0.5 if GlobalOptions.updated_hud != "classic hud" else 1;
-	noteEnd.modulate.a = 0.9 if GlobalOptions.updated_hud != "classic hud" else 1;
-	
+	if !isChartNote:
+		noteLine.modulate.a = 0.5 if GlobalOptions.updated_hud != "classic hud" else 1;
+		noteEnd.modulate.a = 0.9 if GlobalOptions.updated_hud != "classic hud" else 1;
+	else:
+		noteLine.modulate.a = 1;
+		noteEnd.modulate.a = 1;
+		
 func _process(delta: float) -> void:
 	if isChartNote:
 		return;
@@ -253,12 +244,10 @@ func _process(delta: float) -> void:
 			noteLine.scale.y *= -1;
 			
 		if noteEnd != null:
-			noteEnd.scale = set_note_scale(noteEnd.get_parent().scale, SongData.isPixelStage, secondOpponentNote);
+			noteEnd.scale = set_note_scale(noteEnd.get_parent().scale, SongData.isPixelStage);
 			noteEnd.position.y = sustainLength + noteEnd.texture.get_size().y * noteEnd.scale.y / 2.0;
 			
 	if is_pressing:
-		#sustainLength -= (delta * 1000);
-		#sustainLength = max(sustainLength, 0.0);
 		sustainLength = max(ogSustain - max(Conductor.getSongTime - strumTime, 0.0), 0.0);
 		
 		if isSustain && noteLine != null && noteEnd != null:
@@ -323,11 +312,11 @@ func pressed(new_character = null):
 		
 	var anim_time = 0.45 if GlobalOptions.isUsingBot else 0.0;
 	main_scene.playCharacterAnim(self, new_character);
-	main_scene.play_strum_anim(self, false, anim_time, false, true);
+	main_scene.play_strum_anim(self, false, anim_time, true);
 	
 func opponent_pressed(new_character = null):
 	curNoteAnim = NOTES_ANIM[noteData];
-	new_character = (main_scene.dad if !secondOpponentNote else main_scene.new_opponent) if !is_instance_valid(new_character) else new_character;
+	new_character = main_scene.dad if !is_instance_valid(new_character) else new_character;
 	if new_character.is_player && new_character.curCharacter != "tankman" && new_character.curCharacter != "pico":
 		curNoteAnim = swap_sing_anims("singLeft", "singRight");
 		
@@ -340,8 +329,9 @@ func opponent_pressed(new_character = null):
 		destroy_note();
 		
 	main_scene.playCharacterAnim(self, new_character);
-	main_scene.play_strum_anim(self, !secondOpponentNote, 0.45, secondOpponentNote, true);
-	
+	if !secondary_opponent_note:
+		main_scene.play_strum_anim(self, true, 0.45, true);
+		
 func emitPress(is_opponent):
 	if pressed_emit:
 		return;

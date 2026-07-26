@@ -155,7 +155,6 @@ func _process(delta):
 			continue;
 			
 		if Conductor.getSongTime >= note.strumTime && notesList.size() > 0:
-			print(strum_char)
 			note.opponent_pressed(strum_char);
 			play_strum_anim(note, 0.40);
 			self.emit_signal("pressed_note", strum_char);
@@ -191,8 +190,9 @@ func _process(delta):
 		i.queue_free();
 		
 func sort_notes(a, b):
-	return a.strumTime < b.strumTime;
-	
+	if a != null && b != null:
+		return a.strumTime < b.strumTime;
+		
 func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
 	var note_data = int(noteData)%4;
 	var note = Note.new();
@@ -205,6 +205,7 @@ func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
 	note.no_anim = (type == "No Animation");
 	note.is_hey_note = (type == "Hey!");
 	note.must_press = note.isPlayer;
+	note.secondary_opponent_note = true;
 	
 	if value1 != null && value2 != null && note.type == "Echo Note":
 		note.manyHits = value1;

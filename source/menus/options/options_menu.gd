@@ -29,6 +29,7 @@ func reloadText():
 	
 	if !GlobalOptions.pause_options:
 		options["offset menu"] = {};
+		options["cam editor menu"] = {};
 		#options["stage editor"] = {};
 		options["clear data"] = {};
 	else:
@@ -203,6 +204,8 @@ func choice_shit_opt(opt):
 			Global.changeScene("/menus/editors/offset_editor/offset_menu", true, false);
 		"stage editor":
 			Global.changeScene("/menus/editors/stage_editor/stage_editor", true, false);
+		"cam editor menu":
+			Global.changeScene("/menus/editors/cam_editor/cam_editor", true, false);
 		"clear data":
 			reset_menu.visible = true;
 		_:

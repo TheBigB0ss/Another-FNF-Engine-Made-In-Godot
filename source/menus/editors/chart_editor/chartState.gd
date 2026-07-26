@@ -1,20 +1,17 @@
 extends Node2D
 
-var new_chartData = {};
-
 @onready var voices = $'chart_voices';
 @onready var inst = $'chart_inst';
 
 @onready var iconP1 = $'grid_objs/icons/icon_player';
 @onready var iconP2 = $'grid_objs/icons/icon_opponent';
-@onready var iconP3 = $'grid_objs/icons/icon_second_opponent';
 
 @onready var chart_cam = $'Camera2D';
+@onready var chart_bg = $bg;
 
 @onready var event_text = $chart_UI/chart_objs/TabContainer/events/events_description;
 
 @onready var grid = $'grid_objs/grid';
-@onready var black_grid = $'grid_objs/black_grid';
 
 @onready var song_line = $'grid_objs/song_line';
 @onready var selection = $'grid_objs/selection_box';
@@ -24,7 +21,6 @@ var new_chartData = {};
 
 @onready var player1Options = $'chart_UI/chart_objs/TabContainer/song/player1';
 @onready var player2Options = $'chart_UI/chart_objs/TabContainer/song/player2';
-@onready var player3Options = $'chart_UI/chart_objs/TabContainer/song/player3';
 @onready var gfOptions = $'chart_UI/chart_objs/TabContainer/song/gf';
 @onready var stageOptions = $'chart_UI/chart_objs/TabContainer/song/stage';
 
@@ -34,14 +30,13 @@ var new_chartData = {};
 @onready var cool_file_save = $"FileDialog";
 @onready var cool_events_save = $'FileDialogEvents';
 
-@onready var chartBf = $chart_UI/chart_objs/TabContainer/help/preview/ChartBf;
-@onready var chartEnemy = $chart_UI/chart_objs/TabContainer/help/preview/EnemyChart;
+@onready var chartBf = $chart_UI/chart_objs/infos/preview/ChartBf;
+@onready var chartEnemy = $chart_UI/chart_objs/infos/preview/ChartEnemy;
 
 @onready var chart_info = $chart_UI/chart_objs/infos/chart_info;
 @onready var timeBar = $chart_UI/chart_objs/infos/timeBar;
 @onready var songPointer = $chart_UI/chart_objs/infos/songPointer;
 
-var events_readjustment = {};
 var curselected_note = [];
 var curselected_event = []:
 	set(val):
@@ -49,12 +44,12 @@ var curselected_event = []:
 			curselected_event = val;
 			
 			notesEvents.clear();
-			for i in new_chartData["song"]["events"].size():
-				if new_chartData["song"]["events"][i].size() <= 2 or curselected_event.is_empty():
+			for i in SongData.songEvents.size():
+				if SongData.songEvents[i].size() <= 2 or curselected_event.is_empty():
 					continue;
 					
-				if new_chartData["song"]["events"][i][0] == curselected_event[0] && int(new_chartData["song"]["events"][i][1]) == int(curselected_event[1]):
-					notesEvents.add_item(new_chartData["song"]["events"][i][2]);
+				if SongData.songEvents[i][0] == curselected_event[0] && int(SongData.songEvents[i][1]) == int(curselected_event[1]):
+					notesEvents.add_item(SongData.songEvents[i][2]);
 					notesEvents.set_item_metadata(notesEvents.item_count - 1, i);
 					
 var event_text_array = [];
@@ -94,13 +89,7 @@ var singAnims = [
 	"singRight"
 ];
 
-var cursor = "";
 var mouse_inside_ui = false;
-
-var gridX = null;
-var gridY = null;
-var grid_scaleX = null;
-var grid_scaleY = null;
 
 var grid_size = 40;
 
@@ -112,17 +101,11 @@ var is_playing = true;
 
 var curSong = "";
 var curStage = "stage";
-var curDiff = "";
-
-var is_next_section = false;
+var songDiff = "";
 
 var replaceString = "";
 var characterList = [];
 var stageList = [];
-
-var songDiff = "";
-
-var add_new_tile = false;
 
 var pointer_starter = Vector2.ZERO;
 
@@ -162,6 +145,12 @@ func addStagesToList():
 	return newStageList;
 	
 func _ready():
+	song_line.position.y = grid.position.y;
+	iconP1.position.y = grid.position.y-50;
+	iconP2.position.y = grid.position.y-50;
+	chart_cam.position.y = grid.position.y;
+	chart_bg.position.y = grid.position.y;
+	
 	SongData.isOnChartMode = true;
 	Discord.update_discord_info("chart menu", "Is in menus");
 	
@@ -189,10 +178,10 @@ func _ready():
 		if i.contains(".json"):
 			replaceString = i.replace(".json", "");
 			
-		for j in [player1Options, player2Options, player3Options, gfOptions]:
+		for j in [player1Options, player2Options, gfOptions]:
 			j.add_item(replaceString);
 			
-	for i in [player1Options, player2Options, player3Options, gfOptions]:
+	for i in [player1Options, player2Options, gfOptions]:
 		i.add_item("none");
 		
 	characterList.append("none.text");
@@ -222,11 +211,8 @@ func _ready():
 	load_section();
 	
 	grid.GRID_SIZE = grid_size;
-	grid.grid_Y_size = len(new_chartData["song"]["notes"]);
-	
-	black_grid.scale = Vector2(10, 16);
-	black_grid.position.x = grid.position.x;
-	black_grid.position.y = grid.position.y+640;
+	grid.grid_Y_size = SongData.songSections.size();
+	try_redraw(10, 50);
 	
 	Conductor.curBeat = 0;
 	Conductor.curStep = 0;
@@ -234,47 +220,20 @@ func _ready():
 	Conductor.lastStep = 0;
 	Conductor.getSongTime = 0.0;
 	
-	Conductor.changeBpm(new_chartData["song"]["bpm"]);
-	Conductor.bpm = new_chartData["song"]["bpm"];
+	Conductor.changeBpm(SongData.songBpm);
+	Conductor.bpm = SongData.songBpm;
 	
-	chartBpm = new_chartData["song"]["bpm"]; 
+	chartBpm = SongData.songBpm;
 	
-	%Bpm.value = Conductor.bpm;
-	%song_speed.value = new_chartData["song"]["speed"];
-	%is_pixel_stage.button_pressed = new_chartData["song"]["isPixelStage"];
-	%new_opponent.button_pressed = new_chartData["song"]["two opponents"];
+	%Bpm.value = SongData.songBpm;
+	%song_speed.value = SongData.songSpeed;
+	%is_pixel_stage.button_pressed = SongData.isPixelStage;
 	
-	for i in [player1Options, player2Options, gfOptions, player3Options]:
+	for i in [player1Options, player2Options, gfOptions]:
 		i.connect("item_selected", change_icons);
 		
 	play_song();
 	update_chart_status();
-	
-	if new_chartData["song"]["two opponents"]:
-		try_redraw(14, 70, 14);
-		events_readjustment = {
-			8: 12,
-			9: 13,
-		};
-		load_section();
-		eventNote_adjustment();
-	else:
-		try_redraw(10, 50, 10);
-		events_readjustment = {
-			12: 8,
-			13: 9
-		};
-		for i in new_chartData["song"]["notes"].size():
-			var notesToDelete = new_chartData["song"]["notes"][i]["sectionNotes"];
-			for j in range(notesToDelete.size()-1, -1, -1):
-				if notesToDelete[j][1] >= 8:
-					new_chartData["song"]["notes"][i]["sectionNotes"].remove_at(j);
-					
-		load_section();
-		eventNote_adjustment();
-		
-	add_new_tile = %new_opponent.button_pressed;
-	player3Options.disabled = !%new_opponent.button_pressed;
 	
 func change_event_text(_item):
 	event_text.text = "Event: %s\n\n%s"%[event_text_array[events_button.selected], events[event_text_array[events_button.selected]]];
@@ -327,9 +286,6 @@ func change_icons(_char):
 	iconP1.reload_icon(get_icons(characterList[player1Options.selected]), "idle");
 	iconP2.reload_icon(get_icons(characterList[player2Options.selected]), "idle");
 	
-	if !player3Options.disabled:
-		iconP3.reload_icon(get_icons(characterList[player3Options.selected]), "idle");
-		
 var selectionRect = Rect2();
 var mouseBoxPos = Vector2.ZERO;
 var isHolding = false;
@@ -374,11 +330,12 @@ func _input(ev):
 				return;
 				
 			if ev.keycode in [KEY_DELETE]:
-				for i in new_chartData["song"]["notes"][curSection]["sectionNotes"].size():
+				for i in SongData.get_section_notes(curSection).size():
 					for j in selected_notes:
 						if j == null:
 							continue;
-						delete_note(j.strumTime+section_start_time(), j.noteData);
+							
+						delete_note(j.strumTime + section_start_time(), j.noteData);
 						selected_notes.erase(j);
 						
 				load_section();
@@ -413,11 +370,29 @@ func _input(ev):
 				SongData.week_songs = %song_name.text;
 				SongData.week_diffs = %song_difficulty.text;
 				
-				var new_chart = new_chartData;
 				var new_diff = %song_difficulty.text;
 				var new_name = %song_name.text;
 				
-				SongData.loadJson(new_name, new_diff, new_chart);
+				var chart = {
+					"strums": [{
+						"player": SongData.playerNotes.duplicate(true),
+						"opponent": SongData.opponentNotes.duplicate(true)
+					}],
+					"sections": SongData.songSections.duplicate(true),
+					"events": SongData.songEvents.duplicate(true),
+					"meta": {
+						"song": SongData.song,
+						"stage": SongData.stage,
+						"player1": SongData.player1,
+						"player2": SongData.player2,
+						"gfVersion": SongData.gfPlayer,
+						"needsVoices": SongData.needVoice,
+						"speed": SongData.songSpeed,
+						"bpm": SongData.songBpm,
+						"isPixelStage": SongData.isPixelStage
+					}
+				};
+				SongData.loadJson(new_name, new_diff, chart);
 				Global.changeScene("gameplay/PlayState", true, false);
 				SongData.isOnChartMode = true;
 		else:
@@ -445,12 +420,11 @@ func obj_inside_block(obj, offset):
 		
 	return false;
 	
-func try_redraw(tileShit, songLineSize, blackGrid):
+func try_redraw(tileShit, songLineSize):
 	grid._redraw_grid(tileShit);
 	grid.queue_redraw();
 	
 	song_line.size.x = songLineSize;
-	black_grid.scale.x = blackGrid;
 	
 func update_song(scroll):
 	if scroll == 0:
@@ -461,6 +435,9 @@ func update_song(scroll):
 	
 	Conductor.getSongTime += 60*scroll;
 	
+	if curSection == 0:
+		Conductor.getSongTime = max(0, Conductor.getSongTime)
+		
 	voices.play(Conductor.getSongTime/1000);
 	inst.play(Conductor.getSongTime/1000);
 	
@@ -468,7 +445,7 @@ func update_song(scroll):
 	inst.stream_paused = true;
 	voices.stream_paused = true;
 	
-	var section_length = chartStepCrochet * new_chartData["song"]["notes"][curSection]["lengthInSteps"];
+	var section_length = chartStepCrochet * SongData.songSections[curSection]["lengthInSteps"];
 	match scroll:
 		1:
 			if number_to_time(song_line.position.y) >= section_length:
@@ -483,25 +460,25 @@ func update_song(scroll):
 				changeSection(-1);
 				
 	check_song_progress();
+	
 	song_line.position.y = time_to_number(Conductor.getSongTime - section_start_time());
+	iconP1.position.y = song_line.position.y-50;
+	iconP2.position.y = song_line.position.y-50;
 	chart_cam.position.y = song_line.position.y;
-	$bg.position.y = song_line.position.y;
+	chart_bg.position.y = song_line.position.y;
 	
 func check_song_progress():
 	if floor(Conductor.getSongTime/1000) >= floor(inst.stream.get_length()):
 		changeSection(0);
 		
 		Conductor.reset();
-		Conductor.changeBpm(new_chartData["song"]["bpm"]);
-		Conductor.bpm = new_chartData["song"]["bpm"];
+		Conductor.changeBpm(SongData.songBpm);
+		Conductor.bpm = SongData.songBpm;
 		
 		inst.play(0.0);
 		voices.play(0.0);
 		
-var load_cool_section = false;
-var last_tile = false;
 var last_song_seek = 0.0;
-
 var selected_notes = [];
 var grab_notes = false;
 var arrayNotes = [];
@@ -513,46 +490,7 @@ func _process(delta):
 	inst.volume_db = 0.0 if !%mute_inst.button_pressed else -80.0;
 	voices.volume_db = 0.0 if !%mute_vocals.button_pressed else -80.0;
 	
-	for note_data in new_chartData["song"]["notes"][curSection]["sectionNotes"]:
-		if note_data[0] - section_start_time() >= (chartStepCrochet * new_chartData["song"]["notes"][curSection]["lengthInSteps"]):
-			if new_chartData["song"]["notes"][curSection]["mustHitSection"] != new_chartData["song"]["notes"][curSection + 1]["mustHitSection"]:
-				note_data[1] = int(note_data[1] + 4) % 8;
-				
-			new_chartData["song"]["notes"][curSection]["sectionNotes"].erase(note_data);
-			new_chartData["song"]["notes"][curSection+1]["sectionNotes"].append(note_data);
-			
-	if add_new_tile && !load_cool_section:
-		try_redraw(14, 70, 14);
-		events_readjustment = {
-			8: 12,
-			9: 13,
-		};
-		eventNote_adjustment();
-		load_section();
-		load_cool_section = true;
-		
-	elif !add_new_tile && !load_cool_section:
-		try_redraw(10, 50, 10);
-		events_readjustment = {
-			12: 8,
-			13: 9
-		};
-		
-		for i in new_chartData["song"]["notes"].size():
-			var notesToDelete = new_chartData["song"]["notes"][i]["sectionNotes"];
-			for j in range(notesToDelete.size()-1, -1, -1):
-				if notesToDelete[j][1] >= 8:
-					new_chartData["song"]["notes"][i]["sectionNotes"].remove_at(j);
-					
-		eventNote_adjustment();
-		load_section();
-		
-		load_cool_section = true;
-		
-	if add_new_tile != last_tile:
-		load_cool_section = false;
-		
-	last_tile = add_new_tile;
+	selection.visible = grid.mouse_inside_grid();
 	
 	if !mouse_inside_ui && !$FileDialog.visible && !$FileDialogEvents.visible:
 		for i in arrayNotes:
@@ -582,7 +520,7 @@ func _process(delta):
 				i.modulate = Color(1.0, 1.0, 1.0, 1.0);
 				
 		if Input.is_action_just_pressed("mouse_click") && grid.mouse_inside_grid() && !grab_notes:
-			var note_data = 8 if !add_new_tile else 12;
+			var note_data = 8;
 			var note_pos = floor(grid.get_local_mouse_position().x / grid_size);
 			
 			if note_pos > -1:
@@ -600,13 +538,8 @@ func _process(delta):
 			
 	if !copyNotes.is_empty():
 		if Input.is_action_just_pressed("paste"):
-			paste_section(mouse_pos);
+			paste_section();
 			
-	gridX = grid.position.x;
-	gridY = grid.position.y;
-	grid_scaleX = 630 if !add_new_tile else 790;
-	grid_scaleY = grid_size*16;
-	
 	if is_playing:
 		Conductor.getSongTime += (delta*1000);
 		
@@ -615,15 +548,17 @@ func _process(delta):
 				i.seek(Conductor.getSongTime/1000);
 			last_song_seek = Time.get_ticks_msec();
 			
-		var section_length = chartStepCrochet * new_chartData["song"]["notes"][curSection]["lengthInSteps"];
+		var section_length = chartStepCrochet * SongData.songSections[curSection]["lengthInSteps"];
 		if Conductor.getSongTime >= section_start_time() + section_length:
 			changeSection(1);
 			
 		check_song_progress();
 		
 		song_line.position.y = time_to_number(Conductor.getSongTime - section_start_time());
+		iconP1.position.y = song_line.position.y-50;
+		iconP2.position.y = song_line.position.y-50;
 		chart_cam.position.y = song_line.position.y;
-		$bg.position.y = song_line.position.y;
+		chart_bg.position.y = song_line.position.y;
 	else:
 		if %song_name.has_focus() or %song_difficulty.has_focus() or %"value 1".has_focus() or %"value 2".has_focus():
 			return;
@@ -641,13 +576,15 @@ func _process(delta):
 		if !$FileDialog.visible && !$FileDialogEvents.visible:
 			if Input.is_action_pressed("input_S"):
 				update_song(1);
-				
 			if Input.is_action_pressed("input_W"):
 				update_song(-1);
 				
 	mouse_inside_ui = get_viewport().gui_get_hovered_control() is TabBar or get_viewport().gui_get_hovered_control() is SpinBox or get_viewport().gui_get_hovered_control() is CheckBox or get_viewport().gui_get_hovered_control() is Button or get_viewport().gui_get_hovered_control() is OptionButton;
-	if !grid.mouse_inside_grid():
-		Global.update_cursor("pointer" if mouse_inside_ui else "default");
+	if selectionRect == Rect2():
+		if !grid.mouse_inside_grid():
+			Global.update_cursor("pointer" if mouse_inside_ui else "default");
+	else:
+		Global.update_cursor("crosshair");
 		
 	var curMinute = str(int(inst.get_playback_position()) / 60).pad_zeros(1);
 	var curSeconds = str(int(inst.get_playback_position()) % 60).pad_zeros(2);
@@ -660,52 +597,47 @@ func _process(delta):
 	chart_info.text = str(curMinute, ":", curSeconds, " / ", maxMinutes, ":", maxSeconds) + "\nSection: %s - Step: %s - Beat: %s"%[curSection, int(chartCurStep), int(chartCurBeat)];
 	
 	if grid.mouse_inside_grid():
-		selection.show();
 		selection.global_position.x = grid.global_position.x + floor(grid.get_local_mouse_position().x / grid_size) * grid_size+20;
 		selection.position.y = mouse_pos.y if free_Mouse else floor(mouse_pos.y/grid_size) * grid_size + 20;
-		Global.update_cursor("cell");
-	else:
-		selection.hide();
-		
+		if selectionRect == Rect2():
+			Global.update_cursor("cell");
+			
 	timeBar.value = Conductor.getSongTime/1000;
 	songPointer.position.x = lerp(pointer_starter.x, pointer_starter.x + 330, (timeBar.value / timeBar.max_value));
-	
-	chartBf.goToIdle = true;
-	chartEnemy.goToIdle = true;
 	
 	if !is_playing:
 		return;
 		
+	var songTime = (Conductor.getSongTime - section_start_time());
 	for note in arrayNotes:
 		if note == null:
 			continue;
 			
+		var force_play = false;
 		if note.sustainLength > 0.0:
-			if note.chart_player:
-				chartBf.goToIdle = (Conductor.getSongTime - section_start_time()) >= note.strumTime + note.sustainLength;
-			else:
-				chartEnemy.goToIdle = (Conductor.getSongTime - section_start_time()) >= note.strumTime + note.sustainLength;
-				
-		if note.gotHit:
-			if (Conductor.getSongTime - section_start_time()) < note.strumTime:
-				note.gotHit = false;
+			force_play = songTime >= note.strumTime && songTime < note.strumTime + note.sustainLength;
 		else:
-			if (Conductor.getSongTime - section_start_time()) >= note.strumTime:
-				note.gotHit = true;
-				if note.chart_player:
-					chartBf._playAnim(singAnims[int(note.noteData)%4]);
+			force_play = abs(songTime - note.strumTime) <= 10;
+			
+		if force_play:
+			var character = chartBf if note.chart_player else chartEnemy;
+			character._playAnim(singAnims[note.noteData % 4]);
+			
+		if note.gotHit:
+			if songTime < note.strumTime:
+				note.gotHit = false;
+				
+		elif songTime >= note.strumTime:
+			note.gotHit = true;
+			
+		if abs(songTime - note.strumTime) <= 10:
+			if note.chart_player:
+				if %player_sound_hit.button_pressed:
+					Sound.add_new_sound("hitNotePlayer", Node.PROCESS_MODE_ALWAYS);
 					
-					if %player_sound_hit.button_pressed:
-						Sound.add_new_sound("hitNotePlayer", Node.PROCESS_MODE_ALWAYS);
-				else:
-					chartEnemy._playAnim(singAnims[int(note.noteData)%4]);
-					
-					if %opponent_sound_hit.button_pressed:
-						Sound.add_new_sound("hitNoteOpponent", Node.PROCESS_MODE_ALWAYS);
-						
-				if note.noteData >= 8 && %new_opponent.button_pressed && %opponent_sound_hit.button_pressed:
-					Sound.add_new_sound("hitNoteOpponent", Node.PROCESS_MODE_ALWAYS);
-					
+			elif %opponent_sound_hit.button_pressed:
+				Sound.add_new_sound("hitNoteOpponent", Node.PROCESS_MODE_ALWAYS);
+				
 		note.modulate.a = 0.5 if note.gotHit else 1.0;
 		
 func changeSection(sec):
@@ -714,10 +646,10 @@ func changeSection(sec):
 	else:
 		curSection += sec;
 		
-	if floor(Conductor.getSongTime/1000) < floor(inst.stream.get_length()) && curSection+1 == len(new_chartData["song"]["notes"]):
+	if floor(Conductor.getSongTime / 1000) < floor(inst.stream.get_length()) && curSection + 1 == SongData.songSections.size():
 		add_null_section();
 		
-	curSection = wrapi(curSection, 0, len(new_chartData["song"]["notes"]));
+	curSection = wrapi(curSection, 0, SongData.songSections.size());
 	
 	load_section();
 	update_chart_status();
@@ -728,72 +660,92 @@ func play_song():
 	voices.stream_paused = !is_playing;
 	
 func load_section():
-	for i in notes.get_children():
-		i.queue_free();
-		
-	for i in sustain_notes.get_children():
-		i.queue_free();
-		
-	var coolBpm = new_chartData["song"]["bpm"];
-	
-	for i in range(curSection + 1):
-		if new_chartData["song"]["notes"][i]["changeBPM"]:
-			coolBpm = new_chartData["song"]["notes"][i]["bpm"];
-			
-	chartBpm = coolBpm;
+	chartBpm = get_section_bpm(curSection);
 	chartCrochet = (60.0 / chartBpm) * 1000.0;
 	chartStepCrochet = chartCrochet / 4.0;
 	
-	iconP1.flip_h = !new_chartData["song"]["notes"][curSection]["mustHitSection"];
-	iconP2.flip_h = new_chartData["song"]["notes"][curSection]["mustHitSection"];
-	
-	iconP1.position.x = 430 if new_chartData["song"]["notes"][curSection]["mustHitSection"] else 610;
-	iconP2.position.x = 610 if new_chartData["song"]["notes"][curSection]["mustHitSection"] else 430;
-	
-	if new_chartData["song"]["notes"][curSection]["gfSection"]:
-		if new_chartData["song"]["notes"][curSection]["mustHitSection"]:
+	if SongData.songSections[curSection]["gfSection"]:
+		if SongData.songSections[curSection]["mustHitSection"]:
 			iconP1.reload_icon("gf", "idle");
 		else:
 			iconP2.reload_icon("gf", "idle");
 			
 	change_icons(0);
 	
-	for note_data in new_chartData["song"]["notes"][curSection]["sectionNotes"]:
+	for sec in loadSec.keys():
+		unload_section(sec);
+		
+	for sec in range(max(curSection - 2, 0), min(curSection + 2, SongData.songSections.size() - 1) + 1):
+		load_new_section(sec);
+		
+var loadSec = {};
+func load_new_section(sec):
+	if loadSec.has(sec):
+		return;
+		
+	loadSec[sec] = {
+		"notes": [],
+		"event": []
+	};
+	
+	for note_data in SongData.get_character_section_notes(sec, SongData.playerNotes):
 		var strumTime = note_data[0];
 		var noteTime = strumTime - section_start_time();
 		
-		if noteTime >= chartStepCrochet * new_chartData["song"]["notes"][curSection]["lengthInSteps"]:
-			continue;
+		var lane = int(note_data[1]);
+		if lane < 4:
+			lane += 4;
 			
-		var new_note = spawn_note(noteTime, note_data[1], note_data[2], floor(time_to_number(noteTime)), note_data[3], new_chartData["song"]["notes"][curSection]["mustHitSection"]);
-		new_note.noteLine.hide();
-		new_note.noteEnd.hide();
-		spawn_sustain(new_note);
+		var new_note = spawn_note(noteTime, lane, note_data[2], floor(time_to_number(noteTime)), note_data[3]);
+		loadSec[sec]["notes"].append(new_note);
 		
-	for note_data in new_chartData["song"]["events"]:
+	for note_data in SongData.get_character_section_notes(sec, SongData.opponentNotes):
 		var strumTime = note_data[0];
 		var noteTime = strumTime - section_start_time();
-		spawn_event_note(noteTime, note_data[1], floor(time_to_number(noteTime)));
 		
-func spawn_note(strumtime = 0.0, noteData = 0, sustain = 0, cool_y = null, note_type = "", isPlayeNote = false):
-	return creat_note(false, strumtime, int(noteData), sustain, cool_y, note_type, isPlayeNote);
+		var lane = int(note_data[1]);
+		if lane > 3:
+			lane -= 4;
+			
+		var new_note = spawn_note(noteTime, lane, note_data[2], floor(time_to_number(noteTime)), note_data[3]);
+		loadSec[sec]["notes"].append(new_note);
+		
+	for note_data in SongData.get_character_section_notes(sec, SongData.songEvents):
+		var strumTime = note_data[0];
+		var noteTime = strumTime - section_start_time();
+		
+		var new_event_note = spawn_event_note(noteTime, note_data[1], floor(time_to_number(noteTime)));
+		loadSec[sec]["event"].append(new_event_note);
+		
+func unload_section(sec):
+	if !loadSec.has(sec):
+		return;
+		
+	for note in loadSec[sec]["notes"]:
+		arrayNotes.erase(note);
+		note.queue_free();
+		
+	for note in loadSec[sec]["event"]:
+		arrayEventNotes.erase(note);
+		note.queue_free();
+		
+	loadSec.erase(sec);
+	
+func spawn_note(strumtime = 0.0, noteData = 0, sustain = 0, cool_y = null, note_type = ""):
+	return creat_note(false, strumtime, int(noteData), sustain, cool_y, note_type);
 	
 func spawn_event_note(strumtime = 0.0, noteData = 0, cool_y = null):
 	return creat_note(true, strumtime, int(noteData), 0, cool_y, "");
 	
 var notesArray = [];
-func creat_note(event_note = false, strumtime = 0.0, noteData = 0, sustain = 0, cool_y = null, note_type = "", isPlayeNote = false):
-	var is_a_player_note = isPlayeNote;
-	if noteData > 3 && noteData < 8:
-		is_a_player_note = !isPlayeNote;
-		
+func creat_note(event_note = false, strumtime = 0.0, noteData = 0, sustain = 0, cool_y = null, note_type = ""):
 	var newNote = Note.new() if !event_note else EventNote.new();
 	newNote.strumTime = strumtime;
 	newNote.noteData = noteData;
 	newNote.sustainLength = sustain;
 	newNote.isChartNote = true;
 	newNote.type = note_type;
-	newNote.chart_player = is_a_player_note;
+	newNote.chart_player = noteData > 3 && noteData < 8;
 	newNote.position = Vector2(
 		floor(noteData * grid_size) + 380, 
 		grid_size + cool_y - 20 if cool_y != null else selection.position.y
@@ -804,40 +756,38 @@ func creat_note(event_note = false, strumtime = 0.0, noteData = 0, sustain = 0, 
 	else:
 		arrayEventNotes.append(newNote);
 		
+	spawn_sustain(newNote);
 	return newNote;
 	
 func spawn_sustain(note):
-	var sustain_line = $"grid_objs/note_sustain".duplicate();
-	sustain_line.position = Vector2(
-		note.position.x -5,
-		note.position.y + grid_size / 2
-	);
-	sustain_line.size.y = floor(remap(note.sustainLength, 0, chartStepCrochet * 16, 0, (16 * grid_size)));
-	sustain_line.show();
-	sustain_notes.add_child(sustain_line);
-	
-	return sustain_line;
-	
+	if note.noteLine != null:
+		if note.noteLine.get_point_count() == 0:
+			note.noteLine.add_point(Vector2.ZERO);
+			note.noteLine.add_point(Vector2.ZERO);
+			
+		note.noteLine.set_point_position(0, Vector2.ZERO);
+		note.noteLine.set_point_position(1, Vector2(0, note.sustainLength));
+		note.noteEnd.position.y = note.sustainLength;
+		
 func add_event_note(strumtime, noteData):
 	var note_strumtime = number_to_time(strumtime) + section_start_time();
 	var note_data = noteData;
 	
 	var new_note = [note_strumtime, note_data];
+	
 	var exists = false;
 	
-	for i in new_chartData["song"]["events"]:
-		if i[0] == note_strumtime && int(i[1]) == int(note_data):
+	for i in SongData.songEvents:
+		if is_equal_approx(i[0], note_strumtime) && int(i[1]) == int(note_data):
 			exists = true;
 			
 	if exists:
 		delete_event_note(note_strumtime, int(note_data));
-		
 	else:
-		new_chartData["song"]["events"].append(new_note);
+		SongData.songEvents.append(new_note);
 		curselected_event = new_note;
 		
-		spawn_event_note(note_strumtime, int(note_data), null);
-		
+	SongData.reload_section();
 	load_section();
 	print(curselected_event);
 	
@@ -847,56 +797,66 @@ func add_note(strumtime, noteData, _sustain, type):
 	var note_sustain = 0;
 	var note_type = type;
 	
-	var new_note = [note_strumtime, note_data, note_sustain, note_type]; 
+	var new_note = [note_strumtime, int(note_data)%4, note_sustain, note_type]; 
 	if note_types[currentNoteSelected.selected] == "Echo Note":
 		new_note.append(%noteVal1.value);
 		new_note.append(%noteVal2.value);
+	else:
+		new_note.append(null);
+		new_note.append(null);
 		
 	var exists = false;
 	
-	for i in new_chartData["song"]["notes"][curSection]["sectionNotes"]:
-		if i[0] == note_strumtime && int(i[1]) == int(note_data):
+	for i in SongData.get_note_array(noteData):
+		var compare_note = noteData;
+		if compare_note > 3:
+			compare_note -= 4;
+			
+		if is_equal_approx(i[0], note_strumtime) && int(i[1]) == int(compare_note):
 			exists = true;
+			break;
 			
 	if exists:
 		delete_note(note_strumtime, int(note_data));
 	else:
-		new_chartData["song"]["notes"][curSection]["sectionNotes"].append(new_note);
+		SongData.get_note_array(noteData).append(new_note);
 		if duet_notes:
-			new_chartData["song"]["notes"][curSection]["sectionNotes"].append([note_strumtime, int(noteData + 4)%8, note_sustain, note_type]);
-			if note_types[currentNoteSelected.selected] == "Echo Note":
-				new_chartData["song"]["notes"][curSection]["sectionNotes"].append(%noteVal1.value);
-				new_chartData["song"]["notes"][curSection]["sectionNotes"].append(%noteVal2.value);
-				
+			var duet = new_note.duplicate(true);
+			duet[1] = int(duet[1] + 4)%8;
+			SongData.get_note_array(duet[1]).append(new_note);
+			
 		curselected_note = new_note;
 		%note_sustain_lenght.value = curselected_note[2];
 		
-		spawn_note(note_strumtime, int(note_data), note_sustain, null, note_type);
-		
+	SongData.reload_section();
 	load_section();
 	print(curselected_note);
 	
 func delete_note(strumtime, noteData):
 	var notes_deleted = [];
-	for i in new_chartData["song"]["notes"][curSection]["sectionNotes"]:
-		if int(i[0]) == int(strumtime) && i[1] == int(noteData):
+	for i in SongData.get_note_array(noteData):
+		var compare_note = noteData;
+		if compare_note > 3:
+			compare_note -= 4;
+			
+		if int(i[0]) == int(strumtime) && i[1] == int(compare_note):
 			notes_deleted.append(i);
 			if i == curselected_note:
 				curselected_note = [];
 				
 	for i in notes_deleted:
-		new_chartData["song"]["notes"][curSection]["sectionNotes"].erase(i);
+		SongData.get_note_array(noteData).erase(i);
 		
 func delete_event_note(strumtime, noteData):
 	var notes_deleted = [];
-	for i in new_chartData["song"]["events"]:
+	for i in SongData.songEvents:
 		if int(i[0]) == int(strumtime) && i[1] == int(noteData):
 			notes_deleted.append(i);
 			if i == curselected_event:
 				curselected_event = [];
 				
 	for i in notes_deleted:
-		new_chartData["song"]["events"].erase(i);
+		SongData.songEvents.erase(i);
 		
 func loadJson(song, difficulty = "", new_chart = null):
 	var difficultyPath = ("res://assets/data/songs/%s/%s.json"%[song, song] if difficulty == "" or difficulty == "normal" else "res://assets/data/songs/%s/%s-%s.json"%[song, song, difficulty]);
@@ -911,57 +871,29 @@ func loadJson(song, difficulty = "", new_chart = null):
 	jsonFile.close();
 	
 	if data.has("song"):
-		new_chartData = data;
+		SongData.convert_pyschChart(data, difficultyPath.replace(".json", "-events.json"));
 	elif data.has("codenameChart"):
 		SongData.convert_codenameChart(data, song, difficultyPath.replace(".json", "-events.json"));
-		new_chartData = SongData.toPsychChart();
 	else:
 		SongData.set_chart(data, difficultyPath.replace(".json", "-events.json"));
-		new_chartData = SongData.toPsychChart();
 		
-	var null_vars = {"events": [], "speed": 1.0, "bpm": 100, "two opponents": false, "player3": "none", "stage": "stage", "song": "bopeebo", "isPixelStage": false,};
-	var sections_null_vars = {"altAnim": false, "bpm": 0.0, "changeBPM": false, "gfSection": false, "lengthInSteps": 16.0, "mustHitSection": true, "sectionNotes": []};
+	SongData.reload_section();
 	
-	for i in null_vars.keys():
-		set_null_var(i, null_vars[i]);
-		
-	for i in sections_null_vars.keys():
-		set_section_null_var(i, sections_null_vars[i]);
-		
-	if new_chartData["song"]["stage"].contains(" "):
-		new_chartData["song"]["stage"] = new_chartData["song"]["stage"].replace(" ", "_");
+	if SongData.stage.contains(" "):
+		SongData.stage = SongData.stage.replace(" ", "_");
 		
 	var character_option_selected = {
-		player1Options: new_chartData["song"]["player1"],
-		player2Options: new_chartData["song"]["player2"],
-		gfOptions: new_chartData["song"]["gfVersion"],
-		stageOptions: new_chartData["song"]["stage"]
+		player1Options: SongData.player1,
+		player2Options: SongData.player2,
+		gfOptions: SongData.gfPlayer,
+		stageOptions: SongData.stage
 	};
 	
-	for i in character_option_selected.keys():
-		select_option(i, character_option_selected[i]);
+	for opt in character_option_selected.keys():
+		select_option(opt, character_option_selected[opt]);
 		
-	select_option(player3Options, new_chartData["song"]["player3"] if new_chartData["song"].has("player3") && new_chartData["song"]["player3"] != "" else null);
-	
-	if typeof(new_chartData["song"]["events"]) == TYPE_DICTIONARY:
-		new_chartData["song"]["events"] = [];
-		
-	for i in new_chartData["song"]["notes"].size():
-		for j in new_chartData["song"]["notes"][i]["sectionNotes"].size():
-			if new_chartData["song"]["notes"][i]["sectionNotes"][j].size() < 4:
-				new_chartData["song"]["notes"][i]["sectionNotes"][j].append("");
-				
 	change_icons(0);
 	
-func set_section_null_var(cool_var, new_value):
-	for i in new_chartData["song"]["notes"]:
-		if !i.has(cool_var):
-			i[cool_var] = new_value;
-			
-func set_null_var(cool_var, new_value):
-	if !new_chartData["song"].has(cool_var):
-		new_chartData["song"][cool_var] = new_value;
-		
 func select_option(curCharacterOption, curCharacter):
 	if curCharacter.contains("dead") or curCharacter.contains("DEAD") or curCharacter.contains("Dead"):
 		curCharacter = "none";
@@ -973,77 +905,67 @@ func select_option(curCharacterOption, curCharacter):
 		if curCharacter == null or curCharacter == "":
 			curCharacterOption.select(characterList.size()-1);
 			
-func eventNote_adjustment():
-	if new_chartData["song"]["events"] != [] && !new_chartData["song"]["events"].is_empty():
-		for i in new_chartData["song"]["events"].size():
-			var note = new_chartData["song"]["events"][i];
-			if int(note[1]) in events_readjustment:
-				note[1] = events_readjustment[int(note[1])];
-				new_chartData["song"]["events"][i] = note;
-				
-func section_start_time():
-	var coolBpm = %Bpm.value;
-	var coolPos = 0;
+func section_start_time(sec = curSection):
+	var newPos = 0.0;
+	var bpm = SongData.songBpm;
 	
-	for i in curSection:
-		if new_chartData["song"]["notes"][i]["changeBPM"]:
-			coolBpm = new_chartData["song"]["notes"][i]["bpm"];
+	for i in sec:
+		if SongData.songSections[i]["changeBPM"]:
+			bpm = SongData.songSections[i]["bpm"];
 			
-		coolPos += 4 * (1000 * 60 / coolBpm);
+		var crochet = (60.0 / bpm) * 1000.0;
+		var stepCrochet = crochet / 4.0;
 		
-	return coolPos;
+		newPos += SongData.songSections[i]["lengthInSteps"] * stepCrochet;
+		
+	return newPos;
+	
+func get_section_bpm(sec):
+	var newBpm = SongData.songBpm;
+	for i in range(sec):
+		if SongData.songSections[i]["changeBPM"]:
+			newBpm = SongData.songSections[i]["bpm"];
+			
+	return newBpm;
 	
 func save_json(json):
 	load_chart_stuff();
-	for i in new_chartData["song"]["events"].size():
-		if new_chartData["song"]["events"][i] == [] or new_chartData["song"]["events"][i] == null:
-			new_chartData["song"]["events"] = [];
+	for i in SongData.songEvents.size():
+		if SongData.songEvents[i] == [] or SongData.songEvents[i] == null:
+			SongData.songEvents = [];
 			
-	SongData.convert_pyschChart(new_chartData);
 	var chartPath = json.replace(".json", "");
 	var file = FileAccess.open(chartPath + ".json", FileAccess.WRITE);
-	file.store_string(JSON.stringify(
-		{
-			"strums":[
-				{
-					"player":SongData.playerNotes,
-					"opponent": SongData.opponentNotes,
-					"extra":SongData.extraOpponentNotes
-				}
-			],
-			"sections": SongData.songSections,
-			"events": new_chartData["song"]["events"],
-			"meta":{
-				"song": new_chartData["song"]["song"],
-				"stage": new_chartData["song"]["stage"],
-				"player1": new_chartData["song"]["player1"],
-				"player2": new_chartData["song"]["player2"],
-				"player3": new_chartData["song"]["player3"],
-				"gfVersion": new_chartData["song"]["gfVersion"],
-				"needsVoices": new_chartData["song"]["needsVoices"],
-				"speed": new_chartData["song"]["speed"],
-				"bpm": new_chartData["song"]["bpm"],
-				"isPixelStage": new_chartData["song"]["isPixelStage"],
-				"two opponents": new_chartData["song"]["two opponents"],
-				"psychChart": false,
-				"codenameChart": false
-			}
-		}, "\t"));
+	file.store_string(JSON.stringify({
+		"strums": [{
+			"player": SongData.playerNotes,
+			"opponent": SongData.opponentNotes
+		}],
+		"sections": SongData.songSections,
+		"events": SongData.songEvents,
+		"meta": {
+			"song": SongData.song,
+			"stage": SongData.stage,
+			"player1": SongData.player1,
+			"player2": SongData.player2,
+			"gfVersion": SongData.gfPlayer,
+			"needsVoices": SongData.needVoice,
+			"speed": SongData.songSpeed,
+			"bpm": SongData.songBpm,
+			"isPixelStage": SongData.isPixelStage
+		}
+	}, "\t"));
 	file.close();
 	
-	print('save: ', json);
-	
 func _on_file_dialog_events_file_selected(path):
-	if new_chartData["song"]["events"] != [] or !new_chartData["song"]["events"].is_empty():
-		var new_eventsFile = FileAccess.open(path, FileAccess.WRITE);
-		new_eventsFile.store_string(JSON.stringify(
-		{
+	if !SongData.songEvents.is_empty():
+		var file = FileAccess.open(path, FileAccess.WRITE);
+		file.store_string(JSON.stringify({
 			"song": {
-				"events": new_chartData["song"]["events"]
+				"events": SongData.songEvents
 			}
 		}, "\t"));
-		new_eventsFile.close();
-		print('save: ', path);
+		file.close();
 		
 func save_file():
 	cool_file_save.popup_centered();
@@ -1054,22 +976,21 @@ func _on_save_events_json_pressed():
 func load_song_json():
 	loadJson(%song_name.text, %song_difficulty.text);
 	
-	%Bpm.value = Conductor.bpm;
-	%new_opponent.button_pressed = new_chartData["song"]["two opponents"];
-	%is_pixel_stage.button_pressed = new_chartData["song"]["isPixelStage"];
-	%song_speed.value = new_chartData["song"]["speed"];
+	%Bpm.value = SongData.songBpm;
+	%is_pixel_stage.button_pressed = SongData.isPixelStage;
+	%song_speed.value = SongData.songSpeed;
 	
 	changeSection(0);
 	Conductor.reset();
-	Conductor.changeBpm(new_chartData["song"]["bpm"]);
+	Conductor.changeBpm(SongData.songBpm);
 	
 	load_section();
 	
 	is_playing = false;
 	
 	var music_path = str(%song_name.text.to_lower(), "-"+%song_difficulty.text.to_lower() if %song_difficulty.text.to_lower() == "-remix" or %song_difficulty.text.to_lower() == "remix" else "");
-	var music_inst = load("res://assets/songs/" +  music_path + "/Inst.ogg");
-	var music_voices = load("res://assets/songs/" +  music_path + "/Voices.ogg");
+	var music_inst = load("res://assets/songs/" + music_path + "/Inst.ogg");
+	var music_voices = load("res://assets/songs/" + music_path + "/Voices.ogg");
 	
 	inst.stream = music_inst;
 	voices.stream = music_voices;
@@ -1086,26 +1007,33 @@ func load_chart_stuff():
 	load_selected_option(player1Options, characterList, "player1");
 	load_selected_option(player2Options, characterList, "player2");
 	load_selected_option(gfOptions, characterList, "gfVersion");
-	load_selected_option(player3Options, characterList, "player3");
 	load_selected_option(stageOptions, stageList, "stage");
 	
-	new_chartData["song"]["needsVoices"] = %have_voice_track.button_pressed;
-	new_chartData["song"]["isPixelStage"] = %is_pixel_stage.button_pressed;
-	new_chartData["song"]["speed"] = %song_speed.value;
-	new_chartData["song"]["bpm"] = %Bpm.value;
-	new_chartData["song"]["two opponents"] = %new_opponent.button_pressed;
+	SongData.needVoice = %have_voice_track.button_pressed;
+	SongData.isPixelStage = %is_pixel_stage.button_pressed;
+	SongData.songSpeed = %song_speed.value;
+	SongData.songBpm = %Bpm.value;
 	
 func update_chart_status():
-	%must_hit.button_pressed = new_chartData["song"]["notes"][curSection]["mustHitSection"];
-	%gf_section.button_pressed = new_chartData["song"]["notes"][curSection]["gfSection"];
-	%alt_section.button_pressed = new_chartData["song"]["notes"][curSection]["altAnim"];
-	%bpm_change.button_pressed = new_chartData["song"]["notes"][curSection]["changeBPM"];
-	if new_chartData["song"]["notes"][curSection]["changeBPM"]:
-		%new_bpm.value = new_chartData["song"]["notes"][curSection]["bpm"];
+	%must_hit.button_pressed = SongData.songSections[curSection]["mustHitSection"];
+	%gf_section.button_pressed = SongData.songSections[curSection]["gfSection"];
+	%alt_section.button_pressed = SongData.songSections[curSection]["altAnim"];
+	%bpm_change.button_pressed = SongData.songSections[curSection]["changeBPM"];
+	if SongData.songSections[curSection]["changeBPM"]:
+		%new_bpm.value = SongData.songSections[curSection]["bpm"];
 		
-func load_selected_option(opt, list, player):
-	new_chartData["song"][player] = list[opt.selected].substr(0, list[opt.selected].length()-5);
-	
+func load_selected_option(opt, list, variable):
+	var value = list[opt.selected].substr(0, list[opt.selected].length() - 5);
+	match variable:
+		"player1":
+			SongData.player1 = value;
+		"player2":
+			SongData.player2 = value;
+		"gfVersion":
+			SongData.gfPlayer = value;
+		"stage":
+			SongData.stage = value;
+			
 var copyNotes = [];
 var copySection = 0;
 func copy_section(cool_array):
@@ -1117,58 +1045,64 @@ func copy_section(cool_array):
 			
 		copyNotes.append([i.strumTime, i.noteData, i.sustainLength, i.type]);
 		
-func paste_section(mouse_pos):
+func paste_section():
 	if copyNotes == []:
 		return;
 		
 	for i in copyNotes:
 		var note = i.duplicate();
+		note.append(null);
+		note.append(null);
+		
 		note[0] += section_start_time();
 		
-		if mouse_pos.x >= 760 && mouse_pos.x < 920 && note[1] < 4:
-			note[1] = int(note[1]+4)%8;
-			
-		elif mouse_pos.x < 760 && note[1] >= 4:
-			note[1] = abs(int(note[1]-4));
-			
-		elif mouse_pos.x >= 920 && note[1] < 8 && %new_opponent.button_pressed:
-			var val = 4 if note[1] >= 4 else 8;
-			note[1] = int(note[1]+val)%12;
-			
-		if new_chartData["song"]["notes"][curSection]["sectionNotes"].has(note):
+		var tempNoteData = note[1];
+		
+		match grid.get_side():
+			0:
+				if tempNoteData >= 4:
+					tempNoteData = abs(int(tempNoteData-4));
+			1:
+				if tempNoteData < 4:
+					tempNoteData = int(tempNoteData+4)%8;
+					
+		var noteArray = SongData.get_note_array(tempNoteData);
+		if noteArray.has(note):
 			continue;
 			
-		new_chartData["song"]["notes"][curSection]["sectionNotes"].append(note);
+		note[1] = int(note[1])%4;
+		noteArray.append(note);
 		
+	SongData.reload_section();
 	load_section();
 	
-func _on_must_hit_pressed() -> void:
-	new_chartData["song"]["notes"][curSection]["mustHitSection"] = %must_hit.button_pressed;
+func _on_must_hit_pressed():
+	SongData.songSections[curSection]["mustHitSection"] = %must_hit.button_pressed;
 	load_section();
 	
-func _on_gf_section_pressed() -> void:
-	new_chartData["song"]["notes"][curSection]["gfSection"] = %gf_section.button_pressed;
+func _on_gf_section_pressed():
+	SongData.songSections[curSection]["gfSection"] = %gf_section.button_pressed;
 	load_section();
 	
-func _on_alt_section_pressed() -> void:
-	new_chartData["song"]["notes"][curSection]["altAnim"] = %alt_section.button_pressed;
+func _on_alt_section_pressed():
+	SongData.songSections[curSection]["altAnim"] = %alt_section.button_pressed;
 	load_section();
 	
-func _on_bpm_change_pressed() -> void:
-	new_chartData["song"]["notes"][curSection]["changeBPM"] = %bpm_change.button_pressed;
-	%new_bpm.editable =  %bpm_change.button_pressed;
+func _on_bpm_change_pressed():
+	SongData.songSections[curSection]["changeBPM"] = %bpm_change.button_pressed;
+	%new_bpm.editable = %bpm_change.button_pressed;
 	load_section();
 	
-func _on_section_step_value_changed(value: float) -> void:
-	%section_step.value = new_chartData["song"]["notes"][curSection]["lengthInSteps"]
+func _on_section_step_value_changed(value):
+	SongData.songSections[curSection]["lengthInSteps"] = value;
 	load_section();
 	
-func _on_new_bpm_value_changed(value: float) -> void:
-	new_chartData["song"]["notes"][curSection]["bpm"] = value;
+func _on_new_bpm_value_changed(value):
+	SongData.songSections[curSection]["bpm"] = value;
 	load_section();
 	
 func _on_clear_section_pressed() -> void:
-	new_chartData["song"]["notes"][curSection]["sectionNotes"] = [];
+	SongData.clear_section(curSection);
 	load_section();
 	
 func _on_add_section_pressed() -> void:
@@ -1180,18 +1114,13 @@ func _on_note_sustain_lenght_value_changed(value: float) -> void:
 		
 	load_section();
 	
-func _on_new_opponent_toggled(toggled_on: bool) -> void:
-	iconP3.visible = toggled_on;
-	player3Options.disabled = !toggled_on;
-	add_new_tile = toggled_on;
-	
 func _on_add_event_pressed() -> void:
 	if curselected_event.is_empty():
 		return;
 		
 	notesEvents.clear();
 	var found = false;
-	for j in new_chartData["song"]["events"]:
+	for j in SongData.songEvents:
 		if j[0] == curselected_event[0] && int(j[1]) == int(curselected_event[1]):
 			if j.size() < 5:
 				j.append_array([event_text_array[events_button.selected], %"value 1".text, %"value 2".text]);
@@ -1199,42 +1128,41 @@ func _on_add_event_pressed() -> void:
 				break;
 				
 	if !found:
-		new_chartData["song"]["events"].append([curselected_event[0], curselected_event[1], event_text_array[events_button.selected], %"value 1".text, %"value 2".text]);
+		SongData.songEvents.append([curselected_event[0], curselected_event[1], event_text_array[events_button.selected], %"value 1".text, %"value 2".text]);
 		
-	for i in new_chartData["song"]["events"].size():
-		if new_chartData["song"]["events"][i][0] == curselected_event[0] && int(new_chartData["song"]["events"][i][1]) == int(curselected_event[1]):
-			notesEvents.add_item(new_chartData["song"]["events"][i][2]);
+	for i in SongData.songEvents.size():
+		if SongData.songEvents[i][0] == curselected_event[0] && int(SongData.songEvents[i][1]) == int(curselected_event[1]):
+			notesEvents.add_item(SongData.songEvents[i][2]);
 			notesEvents.set_item_metadata(notesEvents.item_count - 1, i);
 			
 var event_index = -1;
 func eventsChange(index):
 	event_index = notesEvents.get_item_metadata(index);
 	
-	events_button.select(event_text_array.find(new_chartData["song"]["events"][event_index][2]));
-	%"value 1".text = new_chartData["song"]["events"][event_index][3];
-	%"value 2".text = new_chartData["song"]["events"][event_index][4];
+	events_button.select(event_text_array.find(SongData.songEvents[event_index][2]));
+	%"value 1".text = SongData.songEvents[event_index][3];
+	%"value 2".text = SongData.songEvents[event_index][4];
 	
 func _on_value_1_text_changed(new_text):
 	if event_index == -1:
 		return;
 		
-	new_chartData["song"]["events"][event_index][3] = new_text;
+	SongData.songEvents[event_index][3] = new_text;
 	
 func _on_value_2_text_changed(new_text):
 	if event_index == -1:
 		return;
 		
-	new_chartData["song"]["events"][event_index][4] = new_text;
+	SongData.songEvents[event_index][4] = new_text;
 	
 func add_null_section():
-	new_chartData["song"]["notes"].append({
+	SongData.songSections.append({
 		"altAnim": false,
 		"bpm": 0.0,
 		"changeBPM": false,
 		"gfSection": false,
 		"lengthInSteps": 16.0,
-		"mustHitSection": new_chartData["song"]["notes"][curSection-1]["mustHitSection"],
-		"sectionNotes": []
+		"mustHitSection": SongData.songSections[curSection-1]["mustHitSection"],
 	});
 	
 func number_to_time(pos_Y = 0.0):

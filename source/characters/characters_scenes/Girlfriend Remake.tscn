@@ -769,7 +769,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ol872")
 }],
-"loop": false,
+"loop": 0,
 "name": &"ANIM_GF_Hey",
 "speed": 17.0
 }, {
@@ -819,7 +819,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_e3sde")
 }],
-"loop": false,
+"loop": 0,
 "name": &"ANIM_GF_IdleBOP1",
 "speed": 17.0
 }, {
@@ -869,7 +869,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xrv2j")
 }],
-"loop": false,
+"loop": 0,
 "name": &"ANIM_GF_IdleBOP2",
 "speed": 17.0
 }, {
@@ -916,7 +916,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ohk7k")
 }],
-"loop": false,
+"loop": 0,
 "name": &"ANIM_GF_Left",
 "speed": 17.0
 }, {
@@ -963,7 +963,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5mtcf")
 }],
-"loop": false,
+"loop": 0,
 "name": &"ANIM_GF_Up",
 "speed": 17.0
 }, {
@@ -1208,7 +1208,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kgbc0")
 }],
-"loop": false,
+"loop": 0,
 "name": &"GF_ANIM_Crying",
 "speed": 17.0
 }, {
@@ -1255,7 +1255,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_6wsmv")
 }],
-"loop": false,
+"loop": 0,
 "name": &"GF_ANIM_Down",
 "speed": 17.0
 }, {
@@ -1302,7 +1302,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_0merg")
 }],
-"loop": false,
+"loop": 0,
 "name": &"GF_ANIM_Right",
 "speed": 17.0
 }]
@@ -1323,6 +1323,7 @@ anims_timer = {
 }
 anim_type = 3
 have_death_animation = false
+idle_type = 2
 
 [node name="speaker" parent="." unique_id=1602272289 instance=ExtResource("2_h2efs")]
 position = Vector2(104, 48)

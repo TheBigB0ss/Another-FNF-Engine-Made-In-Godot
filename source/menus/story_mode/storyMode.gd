@@ -1,4 +1,4 @@
-extends weekStuff
+extends Node2D
 
 @onready var locker = $'lock';
 
@@ -42,6 +42,30 @@ var coolOffset = 115;
 var score = 0;
 var week_score = 0;
 
+var weekJson = {
+	"songs": [[]],
+	"hideFromFreeplay": false,
+	"hideFromStoryMode": false,
+	"isLocked": false,
+	"weekName": "",
+	"lastWeek": "",
+	"weekDescription": "",
+	"weekCharacters": [],
+	"weekDifficulties": []
+}
+
+func get_week_files():
+	var file = [];
+	var coolFolder = DirAccess.open("res://assets/data/weeks data/%s"%[SongData.week_folder_path]);
+	if coolFolder:
+		coolFolder.list_dir_begin();
+		var nameShit = coolFolder.get_next();
+		while nameShit != "":
+			file.append(nameShit.replace(".json", ""));
+			nameShit = coolFolder.get_next();
+			
+	return file;
+	
 func loadJson(_week):
 	var jsonFile = FileAccess.open("res://assets/data/weeks data/%s/%s.json"%[SongData.week_folder_path, _week],FileAccess.READ);
 	var jsonData = JSON.new();
@@ -69,7 +93,7 @@ func _ready():
 			
 	for i in new_weeks:
 		var storySprite = Sprite2D.new();
-		storySprite.texture = load("res://assets/images/weeks/%s.png"%[i]);
+		storySprite.texture = load("res://assets/images/story mode/titles/%s.png"%[i]);
 		storySprite.position.y = offSetShit;
 		weeksSpr.add_child(storySprite);
 		offSetShit += coolOffset
@@ -107,16 +131,16 @@ func _input(ev):
 					go_to_week();
 					
 			if ev.keycode in [GlobalOptions.get_key("ui_left")] && !noSpam && ev.pressed && !ev.echo:
-				leftArrow.play("arrow push left");
+				leftArrow.play("leftConfirm");
 				changeDiff(-1);
 			else:
-				leftArrow.play("arrow left");
+				leftArrow.play("leftIdle");
 				
 			if ev.keycode in [GlobalOptions.get_key("ui_right")] && !noSpam && ev.pressed && !ev.echo:
-				rightArrow.play("arrow push right");
+				rightArrow.play("rightConfirm");
 				changeDiff(1);
 			else:
-				rightArrow.play("arrow right");
+				rightArrow.play("rightIdle");
 				
 var confirm_timer = 0.075;
 func _process(delta):
@@ -178,7 +202,7 @@ func go_to_week():
 	Sound.playAudio("confirmMenu", false);
 	
 	if week_chars[curWeek][1] == "BF":
-		menu_bf.get_child(0).play("M bf HEY");
+		menu_bf.get_child(0).play("confirm");
 		
 	await get_tree().create_timer(1).timeout;
 	Global.changeScene("gameplay/PlayState", true, false);
@@ -192,7 +216,7 @@ func changeDiff(shit):
 		
 	curDiff += shit;
 	curDiff = wrapi(curDiff, 0, len(diffs));
-	diffSpr.texture = load("res://assets/images/difficulties/%s.png"%[diffs[curDiff]]);
+	diffSpr.texture = load("res://assets/images/story mode/difficulties/%s.png"%[diffs[curDiff]]);
 	
 	update_weekScore();
 	
@@ -230,7 +254,7 @@ func updateWeek():
 	
 	diffs = ["easy", "normal", "hard"] if week_difficulties[curWeek] == [] else week_difficulties[curWeek];
 	
-	diffSpr.texture = load("res://assets/images/difficulties/%s.png"%[diffs[curDiff if !curDiff > diffs.size()-1 else 0]]);
+	diffSpr.texture = load("res://assets/images/story mode/difficulties/%s.png"%[diffs[curDiff if !curDiff > diffs.size()-1 else 0]]);
 	
 	locker.visible = !is_unlocked;
 	leftArrow.visible = is_unlocked;
@@ -288,7 +312,7 @@ func changeMenuCharacter():
 				
 			curChar.queue_free();
 			
-		var path = "res://source/characters/characters_storyMode/Menu_%s.tscn"%[charName];
+		var path = "res://source/menus/story_mode/characters/Menu_%s.tscn"%[charName];
 		var new_char = load(path).instantiate();
 		new_char.name = charName;
 		char_grp.add_child(new_char);

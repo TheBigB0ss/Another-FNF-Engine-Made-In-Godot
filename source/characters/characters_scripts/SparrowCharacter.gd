@@ -71,7 +71,6 @@ var anim_time = 5;
 var anim_beat = 2;
 
 var character = self;
-
 @export var flip_h = false;
 @export var flip_v = false;
 

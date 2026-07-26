@@ -145,7 +145,6 @@ func _choice_pause_opts():
 						
 				main_scene.playerStrum.playerNotes.clear();
 				main_scene.opponentStrum.opponentNotes.clear();
-				main_scene.newOpponentStrum.opponentNotes.clear();
 				
 				main_scene.setTimePos(curTime);
 				

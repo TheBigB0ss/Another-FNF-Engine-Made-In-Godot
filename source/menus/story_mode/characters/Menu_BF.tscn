@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://vap3fer2ckny"]
+
+[ext_resource type="Script" uid="uid://dk0iqkss82o73" path="res://addons/sparrow_sprite/SparrowSprite.gd" id="1_bjj08"]
+[ext_resource type="Texture2D" uid="uid://dk4hobe4j7hkr" path="res://assets/images/story mode/characters/bf.png" id="2_t5vks"]
+
+[node name="MenuBf" type="Node2D" unique_id=932826162]
+script = ExtResource("1_bjj08")
+texture = ExtResource("2_t5vks")
+xmlPath = "res://assets/images/story mode/characters/bf.xml"
+frame = 8
+fps = 20
+animation = 1
+metadata/_custom_type_script = "uid://dk0iqkss82o73"

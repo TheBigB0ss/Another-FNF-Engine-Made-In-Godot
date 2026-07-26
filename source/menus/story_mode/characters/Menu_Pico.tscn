@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://dujf8glctpd1w"]
+
+[ext_resource type="Script" uid="uid://dk0iqkss82o73" path="res://addons/sparrow_sprite/SparrowSprite.gd" id="1_6cjh8"]
+[ext_resource type="Texture2D" uid="uid://c3xxs1r4gs86n" path="res://assets/images/story mode/characters/pico.png" id="2_uw6bs"]
+
+[node name="MenuPico" type="Node2D" unique_id=577456597]
+script = ExtResource("1_6cjh8")
+texture = ExtResource("2_uw6bs")
+xmlPath = "res://assets/images/story mode/characters/pico.xml"
+fps = 11
+animation = 0
+metadata/_custom_type_script = "uid://dk0iqkss82o73"

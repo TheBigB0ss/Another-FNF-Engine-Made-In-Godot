@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://f37p03ir2jr5"]
 
 [ext_resource type="Script" uid="uid://mdw80o30svwt" path="res://source/menus/story_mode/storyMode.gd" id="1_bpcgf"]
-[ext_resource type="SpriteFrames" uid="uid://dcuob18cf8qsn" path="res://assets/images/story mode/menu_assets.res" id="2_w5ivh"]
+[ext_resource type="Script" uid="uid://dk0iqkss82o73" path="res://addons/sparrow_sprite/SparrowSprite.gd" id="2_w5ivh"]
 [ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_1ftmq"]
-[ext_resource type="Texture2D" uid="uid://dyx812j1nrcuc" path="res://assets/images/story mode/lockerIcon.png" id="5_j1oqd"]
+[ext_resource type="Texture2D" uid="uid://bdbgyiokg1m7q" path="res://assets/images/story mode/ui/arrows.png" id="3_n5ntm"]
+[ext_resource type="Texture2D" uid="uid://dyx812j1nrcuc" path="res://assets/images/story mode/ui/lockerIcon.png" id="5_j1oqd"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_w5ivh"]
 font = ExtResource("3_1ftmq")
@@ -69,15 +70,21 @@ offset_right = 160.0
 offset_bottom = 40.0
 metadata/_edit_use_anchors_ = true
 
-[node name="LeftArrow" type="AnimatedSprite2D" parent="arrows" unique_id=1690710672]
-position = Vector2(763, 480)
-sprite_frames = ExtResource("2_w5ivh")
-animation = &"arrow left"
+[node name="LeftArrow" type="Node2D" parent="arrows" unique_id=1310225511]
+position = Vector2(755, 480)
+script = ExtResource("2_w5ivh")
+texture = ExtResource("3_n5ntm")
+xmlPath = "res://assets/images/story mode/ui/arrows.xml"
+animation = 0
+metadata/_custom_type_script = "uid://dk0iqkss82o73"
 
-[node name="RightArrow" type="AnimatedSprite2D" parent="arrows" unique_id=1748450108]
+[node name="RightArrow" type="Node2D" parent="arrows" unique_id=807230325]
 position = Vector2(1125, 480)
-sprite_frames = ExtResource("2_w5ivh")
-animation = &"arrow right"
+script = ExtResource("2_w5ivh")
+texture = ExtResource("3_n5ntm")
+xmlPath = "res://assets/images/story mode/ui/arrows.xml"
+animation = 1
+metadata/_custom_type_script = "uid://dk0iqkss82o73"
 
 [node name="characters" type="Control" parent="." unique_id=1465923696]
 layout_mode = 3

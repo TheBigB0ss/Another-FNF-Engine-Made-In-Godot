@@ -26,7 +26,6 @@ position = Vector2(475, 348)
 
 [node name="offset_layer" type="CanvasLayer" parent="." unique_id=407402591]
 layer = 3
-visible = false
 
 [node name="TabContainer" type="TabContainer" parent="offset_layer" unique_id=1159964180]
 offset_left = 807.0
@@ -458,6 +457,7 @@ anchors_preset = 0
 
 [node name="rating_layer" type="CanvasLayer" parent="." unique_id=664715140]
 layer = 3
+visible = false
 
 [node name="combo" type="Sprite2D" parent="rating_layer" unique_id=1428902524]
 scale = Vector2(0.489796, 0.478261)

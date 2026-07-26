@@ -1,4 +1,5 @@
-extends Node2D
+@tool
+class_name DeadCharacter extends Node2D
 
 var charData = {};
 var charPath = '';

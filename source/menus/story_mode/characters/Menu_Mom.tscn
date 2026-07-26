@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://6b440hajg8sh"]
+
+[ext_resource type="Script" uid="uid://dk0iqkss82o73" path="res://addons/sparrow_sprite/SparrowSprite.gd" id="1_h2jog"]
+[ext_resource type="Texture2D" uid="uid://c8c4olmlq2mg3" path="res://assets/images/story mode/characters/mom.png" id="2_5netr"]
+
+[node name="MenuMom" type="Node2D" unique_id=1351858034]
+scale = Vector2(0.835, 0.835)
+script = ExtResource("1_h2jog")
+texture = ExtResource("2_5netr")
+xmlPath = "res://assets/images/story mode/characters/mom.xml"
+fps = 11
+animation = 0
+metadata/_custom_type_script = "uid://dk0iqkss82o73"

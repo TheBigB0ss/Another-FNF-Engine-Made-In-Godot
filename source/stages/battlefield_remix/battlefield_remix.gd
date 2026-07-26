@@ -12,11 +12,9 @@ var steve_time = false;
 
 var tank_angle = 0.0;
 
-func _ready():
-	if SongData.isPlaying:
-		if game.curSong == "stress-remix":
-			game.newOpponentStrum.hide();
-			
+@onready var steve = $steve;
+@onready var steveStrum = $steveStrum;
+
 func _process(delta):
 	tank_angle += delta*0.1;
 	
@@ -30,15 +28,11 @@ func _process(delta):
 	if SongData.isPlaying:
 		if game.curSong == "stress-remix":
 			if steve_time:
-				game.new_opponent.position.x = min(game.new_opponent.position.x + 1330*delta, 550);
+				steve.position.x = min(steve.position.x + 1330*delta, 80);
 				
-			if game.new_opponent.position.x < 550:
-				game.newOpponentStrum.modulate.a = 0.0;
-				if game.iconP3 != null:
-					game.iconP3.modulate.a = 0.0;
-			else:
-				game.newOpponentStrum.modulate.a = lerp(game.newOpponentStrum.modulate.a, 1.0, 0.16);
-				game.iconP3.modulate.a = lerp(game.iconP3.modulate.a, 1.0, 0.16);
+			if steve.position.x > 79:
+				steveStrum.enable = true;
+				steveStrum.modulate.a = lerp(steveStrum.modulate.a, 0.70, 0.15);
 				steve_time = false;
 				
 func beat_hit(beat):
@@ -53,7 +47,7 @@ func beat_hit(beat):
 	if game.curSong == "stress-remix":
 		match beat:
 			308:
-				game.new_opponent._playAnim("running");
+				steve._playAnim("running");
 				steve_time = true;
 				
 func crowd_dance():

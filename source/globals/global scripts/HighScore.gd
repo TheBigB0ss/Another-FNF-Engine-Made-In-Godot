@@ -69,9 +69,9 @@ func update_version():
 	rank_data["version"] = version;
 	percent_data["version"] = version;
 	
-func clear_data(): clearRank(); clearPercent(); clearScore(); save_song(); clearWeekStatus(); clearSongStatus();
 func clearRank(): rank_data = {}; save_rank();
 func clearPercent(): percent_data = {}; save_percent();
 func clearScore(): score_data = {}; save_score();
 func clearSongStatus(): unlockSongs = {}; save_song();
 func clearWeekStatus(): week_status = {}; save_week_status();
+func clear_data(): clearRank(); clearPercent(); clearScore(); save_song(); clearWeekStatus(); clearSongStatus();

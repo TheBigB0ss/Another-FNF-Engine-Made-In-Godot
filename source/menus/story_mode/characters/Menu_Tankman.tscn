@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cfgmd4a515374"]
+
+[ext_resource type="Script" uid="uid://dk0iqkss82o73" path="res://addons/sparrow_sprite/SparrowSprite.gd" id="1_ft56h"]
+[ext_resource type="Texture2D" uid="uid://chlmd0eefmsdv" path="res://assets/images/story mode/characters/tankman.png" id="2_35h04"]
+
+[node name="MenuTankman" type="Node2D" unique_id=2000141433]
+script = ExtResource("1_ft56h")
+texture = ExtResource("2_35h04")
+xmlPath = "res://assets/images/story mode/characters/tankman.xml"
+frame = 6
+fps = 9
+animation = 0
+metadata/_custom_type_script = "uid://dk0iqkss82o73"

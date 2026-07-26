@@ -9,6 +9,7 @@
 [ext_resource type="FontFile" uid="uid://clifiya6s5xnf" path="res://assets/fonts/pixel.otf" id="5_pxn5x"]
 [ext_resource type="Script" uid="uid://dihavia4gx2aq" path="res://source/gameplay/ratings/nums.gd" id="5_rvgcf"]
 [ext_resource type="Script" uid="uid://lyuq1eefi8od" path="res://source/gameplay/strums/OpponentStrum.gd" id="6_o40cs"]
+[ext_resource type="Script" uid="uid://bqjl58oped07x" path="res://source/gameplay/camera/camera.gd" id="11_s3ehv"]
 [ext_resource type="PackedScene" uid="uid://c2lkjdn511dpc" path="res://source/gameplay/pause/pause_layer.tscn" id="13_7gusd"]
 [ext_resource type="PackedScene" uid="uid://lmu4akqkj75l" path="res://source/gameplay/dialogue/Dialogue box.tscn" id="14_2bco5"]
 
@@ -105,12 +106,6 @@ metadata/_edit_use_anchors_ = true
 [node name="Strum_Layer" type="CanvasLayer" parent="strums" unique_id=2037664863]
 layer = 2
 
-[node name="Second Opponent Note" type="Node2D" parent="strums/Strum_Layer" unique_id=576651245]
-script = ExtResource("6_o40cs")
-is_secondary_strum = true
-noteOffset = 50
-strumScale = Vector2(0.5, 0.5)
-
 [node name="Player Notes" type="Node2D" parent="strums/Strum_Layer" unique_id=1701820447]
 position = Vector2(840, 95)
 script = ExtResource("5_hjbjt")
@@ -151,7 +146,6 @@ texture_progress = SubResource("CompressedTexture2D_pxn5x")
 tint_under = Color(0.12662369, 0.12662369, 0.12662369, 1)
 
 [node name="icons" type="Node2D" parent="hud/Hud_Layer" unique_id=1671112722]
-position = Vector2(2, -4)
 
 [node name="timeLabel" type="Label" parent="hud/Hud_Layer" unique_id=1238761713]
 offset_left = 429.99997
@@ -233,6 +227,7 @@ position = Vector2(620, 350)
 zoom = Vector2(0.8, 0.8)
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
+script = ExtResource("11_s3ehv")
 
 [node name="EventLoader" type="Node" parent="." unique_id=459085608 node_paths=PackedStringArray("scene")]
 script = ExtResource("2_4fsh2")

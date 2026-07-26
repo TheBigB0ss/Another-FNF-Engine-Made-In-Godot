@@ -36,16 +36,12 @@ var chart_dont_exist = false;
 var player1 = "";
 var player2 = "";
 var gfPlayer = "";
-var player3 = "";
 
 var player1StagePosition = Vector2.ZERO;
 var player1Zindex = 0;
 
 var player2StagePosition = Vector2.ZERO;
 var player2Zindex = 0;
-
-var player3StagePosition = Vector2.ZERO;
-var player3Zindex = 0;
 
 var gfStagePosition = Vector2.ZERO;
 var gfZindex = 0;
@@ -57,7 +53,6 @@ var death_count = 0;
 var isStoryMode = false;
 var restartSong = false;
 var is_not_in_cutscene = true;
-var haveTwoOpponents = false;
 var isPixelStage = false;
 var needVoice = true;
 
@@ -120,9 +115,6 @@ func loadStageJson(new_stage):
 	player2StagePosition = Vector2(SongData.stageData["opponent"][0], SongData.stageData["opponent"][1]);
 	player2Zindex = stageData["opponent Z_Index"];
 	
-	player3StagePosition = Vector2(SongData.stageData["new opponent"][0], SongData.stageData["new opponent"][1]);
-	player3Zindex = stageData["new opponent Z_Index"];
-	
 	gfStagePosition = Vector2(SongData.stageData["gf"][0], SongData.stageData["gf"][1]);
 	gfZindex = stageData["gf Z_Index"];
 	
@@ -154,6 +146,8 @@ func loadJson(new_song, difficulty = "", new_chart = null):
 			convert_codenameChart(chartData, eventsPath);
 		else:
 			set_chart(chartData, eventsPath);
+			
+		reload_section();
 	else:
 		chart_dont_exist = true;
 		
@@ -170,7 +164,6 @@ func set_chart(songChart, eventsPath = ""):
 	stage = songChart["meta"]["stage"];
 	song = songChart["meta"]["song"];
 	
-	haveTwoOpponents = songChart["meta"]["two opponents"];
 	isPixelStage = songChart["meta"]["isPixelStage"];
 	needVoice = songChart["meta"]["needsVoices"];
 	
@@ -179,7 +172,6 @@ func set_chart(songChart, eventsPath = ""):
 	
 	player1 = songChart["meta"]["player1"];
 	player2 = songChart["meta"]["player2"];
-	player3 = songChart["meta"]["player3"];
 	gfPlayer = songChart["meta"]["gfVersion"];
 	
 	for strum in songChart["strums"]:
@@ -191,7 +183,7 @@ func set_chart(songChart, eventsPath = ""):
 			var note = [i[0], i[1], i[2], i[3], i[4] if i[4] != null else null, i[5] if i[5] != null else null];
 			opponentNotes.append(note);
 			
-		if haveTwoOpponents && strum["extra"] != []:
+		if strum.has("extra") && strum["extra"] != []:
 			for i in strum["extra"]:
 				var note = [i[0], i[1], i[2], i[3], i[4] if i[4] != null else null, i[5] if i[5] != null else null];
 				extraOpponentNotes.append(note);
@@ -234,7 +226,6 @@ func convert_pyschChart(songChart, eventsPath = ""):
 	stage = songChart["song"].get("stage", "stage");
 	song = songChart["song"]["song"];
 	
-	haveTwoOpponents = songChart["song"].get("two opponents", false);
 	isPixelStage = songChart["song"].get("isPixelStage", false);
 	needVoice = songChart["song"].get("needsVoices", false);
 	
@@ -243,7 +234,6 @@ func convert_pyschChart(songChart, eventsPath = ""):
 	
 	player1 = songChart["song"]["player1"];
 	player2 = songChart["song"]["player2"];
-	player3 = songChart["song"].get("player3", "none");
 	gfPlayer = songChart["song"]["gfVersion"];
 	
 	for i in songChart["song"]["notes"].size():
@@ -261,7 +251,7 @@ func convert_pyschChart(songChart, eventsPath = ""):
 		for j in section["sectionNotes"]:
 			var note = {
 				"noteTime": j[0],
-				"noteData": int(j[1])%(4 if !haveTwoOpponents else 12),
+				"noteData": int(j[1])%4,
 				"noteLength": j[2],
 				"noteType": j[3] if j.size() > 3 else "",
 				"noteValue1": j[4] if j.size() > 4 else null,
@@ -278,7 +268,7 @@ func convert_pyschChart(songChart, eventsPath = ""):
 					templateChart["strums"][0]["opponent"].append(note);
 				else:
 					templateChart["strums"][0]["player"].append(note);
-			elif int(j[1]) >= 8 && haveTwoOpponents:
+			elif int(j[1]) >= 8:
 				templateChart["strums"][0]["extra"].append(note);
 				
 	for i in templateChart["sections"]:
@@ -378,56 +368,63 @@ func convert_codenameChart(songChart, songName, eventsPath = ""):
 					extraOpponentNotes.append(newNote);
 					
 #just for chart editor
-func toPsychChart():
-	var templateChart = {
-		"song": {
-			"song": song,
-			"player1": player1,
-			"player2": player2,
-			"player3": player3 if player3 != "" else "none",
-			"gfVersion": gfPlayer,
-			"stage": stage,
-			"needsVoices": needVoice,
-			"speed": songSpeed,
-			"bpm": songBpm,
-			"isPixelStage": isPixelStage,
-			"two opponents": haveTwoOpponents,
-			"events": [],
-			"notes": []
-		}
-	};
+
+var player_section_notes = {};
+var opponent_section_notes = {};
+var section_events = {};
+
+func reload_section():
+	player_section_notes.clear();
+	opponent_section_notes.clear();
+	section_events.clear();
 	
-	for section in songSections:
-		templateChart["song"]["notes"].append({
-			"lengthInSteps": section["lengthInSteps"],
-			"mustHitSection": section["mustHitSection"],
-			"gfSection": section["gfSection"],
-			"altAnim": section["altAnim"],
-			"changeBPM": section["changeBPM"],
-			"bpm": section["bpm"],
-			"sectionNotes": []
-		});
+	for i in songSections.size():
+		player_section_notes[i] = [];
+		opponent_section_notes[i] = [];
+		section_events[i] = [];
 		
-	templateChart["song"]["events"] = songEvents;
 	for note in playerNotes:
-		var lane = note[1];
-		if !songSections[get_section(note[0])]["mustHitSection"]:
-			lane += 4;
-			
-		templateChart["song"]["notes"][get_section(note[0])]["sectionNotes"].append([note[0], lane, note[2], note[3]]);
+		var sec = get_section(note[0]);
+		player_section_notes[sec].append(note);
 		
 	for note in opponentNotes:
-		var lane = note[1];
-		if songSections[get_section(note[0])]["mustHitSection"]:
-			lane += 4;
+		var sec = get_section(note[0])
+		opponent_section_notes[sec].append(note);
+		
+	for event in songEvents:
+		var sec = get_section(event[0])
+		section_events[sec].append(event);
+		
+func get_character_section_notes(section, notesArr):
+	if notesArr == playerNotes:
+		return player_section_notes.get(section, []);
+		
+	if notesArr == opponentNotes:
+		return opponent_section_notes.get(section, []);
+		
+	if notesArr == songEvents:
+		return section_events.get(section, []);
+		
+	return [];
+	
+func get_section_notes(section):
+	var notes = [];
+	for note in playerNotes:
+		if get_section(note[0]) == section:
+			notes.append(note);
 			
-		templateChart["song"]["notes"][get_section(note[0])]["sectionNotes"].append([note[0], lane, note[2], note[3]]);
-		
-	for note in extraOpponentNotes:
-		var lane = note[1] + 8;
-		templateChart["song"]["notes"][get_section(note[0])]["sectionNotes"].append([note[0], lane, note[2], note[3]]);
-		
-	return templateChart;
+	for note in opponentNotes:
+		if get_section(note[0]) == section:
+			notes.append(note);
+			
+	return notes;
+	
+func get_note_array(noteData):
+	return playerNotes if noteData >= 4 else opponentNotes;
+	
+func clear_section(section):
+	playerNotes = playerNotes.filter(func(n): return get_section(n[0]) != section);
+	opponentNotes = opponentNotes.filter(func(n): return get_section(n[0]) != section);
 	
 func get_section(time):
 	var bpmChangeMap = [];

@@ -1,0 +1,310 @@
+[gd_scene format=3 uid="uid://c3otcy7llcm01"]
+
+[ext_resource type="Script" uid="uid://brj6465rbjxrp" path="res://source/menus/editors/cam_editor/cam_editor.gd" id="1_e3503"]
+[ext_resource type="Script" uid="uid://cwqsukj2rj26" path="res://source/menus/editors/cam_editor/time_line.gd" id="2_0isqf"]
+[ext_resource type="Script" uid="uid://b6yq7ufdeqybn" path="res://source/menus/editors/cam_editor/selectionBox.gd" id="3_fngmo"]
+[ext_resource type="Script" uid="uid://cu8lyy2uggjbe" path="res://source/menus/editors/cam_editor/cross.gd" id="3_golg8"]
+[ext_resource type="Texture2D" uid="uid://butl2egj5i38n" path="res://assets/images/hud/timeBar.png" id="4_ihme6"]
+[ext_resource type="Texture2D" uid="uid://b23ynj36pxt2r" path="res://assets/images/editors/offset_ui/ui_pointer.png" id="5_eify0"]
+[ext_resource type="Script" uid="uid://bylq1p6vnb3qd" path="res://source/gameplay/events/EventLoader.gd" id="7_eify0"]
+
+[node name="CamEditor" type="Node2D" unique_id=21430647]
+script = ExtResource("1_e3503")
+
+[node name="stage" type="Node2D" parent="." unique_id=1835078329]
+
+[node name="FileDialog" type="FileDialog" parent="." unique_id=2051653365]
+oversampling_override = 1.0
+position = Vector2i(0, 36)
+size = Vector2i(515, 180)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1570823973]
+layer = 3
+
+[node name="timeLine" type="Control" parent="CanvasLayer" unique_id=1676353724]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 650.0
+offset_bottom = 650.0
+script = ExtResource("2_0isqf")
+
+[node name="cam_events" type="Node2D" parent="CanvasLayer/timeLine" unique_id=119420539]
+position = Vector2(0, -650)
+
+[node name="zoom_events" type="Node2D" parent="CanvasLayer/timeLine" unique_id=713586250]
+position = Vector2(0, -650)
+
+[node name="selectionBox" type="Node2D" parent="CanvasLayer" unique_id=976537749]
+script = ExtResource("3_fngmo")
+
+[node name="TabContainer" type="TabContainer" parent="CanvasLayer" unique_id=2072994399]
+offset_left = 881.0
+offset_top = 19.0
+offset_right = 1275.0
+offset_bottom = 224.0
+current_tab = 0
+
+[node name="general" type="TabBar" parent="CanvasLayer/TabContainer" unique_id=91621802]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="song_name" type="LineEdit" parent="CanvasLayer/TabContainer/general" unique_id=957730770]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 26.0
+offset_right = 186.0
+offset_bottom = 57.0
+scale = Vector2(1.03, 1)
+
+[node name="song_name_text" type="Label" parent="CanvasLayer/TabContainer/general" unique_id=1687208023]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 3.0
+offset_right = 43.0
+offset_bottom = 26.0
+text = "song:"
+
+[node name="save_json" type="Button" parent="CanvasLayer/TabContainer/general" unique_id=868784764]
+layout_mode = 0
+offset_left = 289.0
+offset_top = 26.0
+offset_right = 383.0
+offset_bottom = 57.0
+text = "save events"
+
+[node name="load_song" type="Button" parent="CanvasLayer/TabContainer/general" unique_id=1326711001]
+layout_mode = 0
+offset_left = 289.0
+offset_top = 66.0
+offset_right = 388.0
+offset_bottom = 97.0
+text = "load song"
+
+[node name="default_cam" type="CheckBox" parent="CanvasLayer/TabContainer/general" unique_id=481813246]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 60.0
+offset_right = 264.0
+offset_bottom = 91.0
+button_pressed = true
+text = "keep default camera changes?"
+
+[node name="default_zoom" type="CheckBox" parent="CanvasLayer/TabContainer/general" unique_id=510121072]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 88.0
+offset_right = 264.0
+offset_bottom = 119.0
+button_pressed = true
+text = "keep default zoom changes?"
+
+[node name="cam_settings" type="TabBar" parent="CanvasLayer/TabContainer" unique_id=1578358511]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="x_value" type="SpinBox" parent="CanvasLayer/TabContainer/cam_settings" unique_id=266643749]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 69.0
+offset_top = 4.0
+offset_right = 155.5
+offset_bottom = 35.0
+max_value = 1280.0
+
+[node name="x_value_text" type="Label" parent="CanvasLayer/TabContainer/cam_settings" unique_id=874113751]
+layout_mode = 0
+offset_left = 6.0000005
+offset_top = 8.0
+offset_right = 66.0
+offset_bottom = 31.0
+text = "x target"
+
+[node name="y_value" type="SpinBox" parent="CanvasLayer/TabContainer/cam_settings" unique_id=1509374974]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 69.0
+offset_top = 42.0
+offset_right = 155.5
+offset_bottom = 73.0
+max_value = 720.0
+
+[node name="y_value_text" type="Label" parent="CanvasLayer/TabContainer/cam_settings" unique_id=109970308]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 46.0
+offset_right = 66.0
+offset_bottom = 69.0
+text = "y target"
+
+[node name="duration" type="SpinBox" parent="CanvasLayer/TabContainer/cam_settings" unique_id=1581679353]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 74.0
+offset_top = 87.0
+offset_right = 160.5
+offset_bottom = 118.0
+max_value = 9999.0
+value = 500.0
+
+[node name="duration_text" type="Label" parent="CanvasLayer/TabContainer/cam_settings" unique_id=1381894320]
+layout_mode = 0
+offset_left = 5.0000005
+offset_top = 88.0
+offset_right = 73.0
+offset_bottom = 111.0
+text = "duration"
+
+[node name="ease_options" type="OptionButton" parent="CanvasLayer/TabContainer/cam_settings" unique_id=1765616187]
+layout_mode = 0
+offset_left = 44.0
+offset_top = 127.0
+offset_right = 76.0
+offset_bottom = 147.0
+
+[node name="ease_text" type="Label" parent="CanvasLayer/TabContainer/cam_settings" unique_id=554927633]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 127.0
+offset_right = 65.0
+offset_bottom = 150.0
+text = "ease"
+
+[node name="zoom_settings" type="TabBar" parent="CanvasLayer/TabContainer" unique_id=1157374643]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="duration_text" type="Label" parent="CanvasLayer/TabContainer/zoom_settings" unique_id=308924409]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 53.0
+offset_right = 73.0
+offset_bottom = 76.0
+text = "duration"
+
+[node name="zoomDuration" type="SpinBox" parent="CanvasLayer/TabContainer/zoom_settings" unique_id=690877148]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 74.0
+offset_top = 49.0
+offset_right = 160.5
+offset_bottom = 80.0
+min_value = 100.0
+max_value = 9999.0
+value = 100.0
+
+[node name="zoomValue_text" type="Label" parent="CanvasLayer/TabContainer/zoom_settings" unique_id=1706072220]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 11.0
+offset_right = 66.0
+offset_bottom = 34.0
+text = "zoom value"
+
+[node name="zoomValue" type="SpinBox" parent="CanvasLayer/TabContainer/zoom_settings" unique_id=1670499836]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 97.0
+offset_top = 8.0
+offset_right = 183.5
+offset_bottom = 39.0
+max_value = 999.0
+step = 0.1
+value = 1.0
+
+[node name="ease_options" type="OptionButton" parent="CanvasLayer/TabContainer/zoom_settings" unique_id=984212538]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 91.0
+offset_right = 75.0
+offset_bottom = 111.0
+
+[node name="ease_text" type="Label" parent="CanvasLayer/TabContainer/zoom_settings" unique_id=1858966531]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 92.0
+offset_right = 65.0
+offset_bottom = 115.0
+text = "ease"
+
+[node name="help" type="TabBar" parent="CanvasLayer/TabContainer" unique_id=371347554]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="info" type="Label" parent="CanvasLayer/TabContainer/help" unique_id=876173650]
+layout_mode = 0
+offset_left = 1.9999995
+offset_right = 508.0
+offset_bottom = 75.0
+scale = Vector2(0.755, 0.755)
+text = "- Shift + LB Mouse: drag camera cross
+
+- arrow keys: change camera offset"
+
+[node name="infos" type="Control" parent="CanvasLayer" unique_id=164180357]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 954.0
+offset_top = -516.0
+offset_right = 994.0
+offset_bottom = -476.0
+
+[node name="box" type="PanelContainer" parent="CanvasLayer/infos" unique_id=239954152]
+layout_mode = 0
+offset_left = -26.0
+offset_top = 745.0
+offset_right = 321.0
+offset_bottom = 833.0
+
+[node name="timeBar" type="TextureProgressBar" parent="CanvasLayer/infos" unique_id=986365121]
+layout_mode = 0
+offset_left = -24.950012
+offset_top = 806.9999
+offset_right = 375.05
+offset_bottom = 825.9999
+scale = Vector2(0.85, 0.85)
+max_value = 1.0
+texture_under = ExtResource("4_ihme6")
+texture_progress = ExtResource("4_ihme6")
+tint_under = Color(0, 0, 0, 1)
+
+[node name="timeText" type="Label" parent="CanvasLayer/infos" unique_id=115444298]
+layout_mode = 0
+offset_left = -24.0
+offset_top = 752.0
+offset_right = 46.0
+offset_bottom = 775.0
+text = "0:00/0:00"
+
+[node name="songPointer" type="Sprite2D" parent="CanvasLayer/infos" unique_id=2084655893]
+texture_filter = 1
+position = Vector2(-18.950012, 795)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("5_eify0")
+
+[node name="cross" type="Node2D" parent="." unique_id=1483728098]
+z_index = 15
+script = ExtResource("3_golg8")
+
+[node name="chart_inst" type="AudioStreamPlayer" parent="." unique_id=1205952482]
+
+[node name="chart_voices" type="AudioStreamPlayer" parent="." unique_id=967308949]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1213488990]
+position = Vector2(640, 360)
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
+
+[node name="EventLoader" type="Node" parent="." unique_id=371575660 node_paths=PackedStringArray("scene")]
+script = ExtResource("7_eify0")
+scene = NodePath("..")
+metadata/_custom_type_script = "uid://bylq1p6vnb3qd"
+
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="pressed" from="CanvasLayer/TabContainer/general/save_json" to="." method="_on_save_json_pressed"]
+[connection signal="pressed" from="CanvasLayer/TabContainer/general/load_song" to="." method="_on_load_song_pressed"]

@@ -1,0 +1,231 @@
+{
+	"camera events": [
+		{
+			"duration": 500.0,
+			"easing": "sineInOut",
+			"strumTime": 225.0,
+			"targetX": 324.0,
+			"targetY": 147.0
+		},
+		{
+			"duration": 500.0,
+			"easing": "sineInOut",
+			"strumTime": 2485.0,
+			"targetX": 943.0,
+			"targetY": 444.0
+		},
+		{
+			"duration": 500.0,
+			"easing": "cubicInOut",
+			"strumTime": 4508.0,
+			"targetX": 325.0,
+			"targetY": 180.0
+		},
+		{
+			"duration": 500.0,
+			"easing": "cubicInOut",
+			"strumTime": 7380.0,
+			"targetX": 929.0,
+			"targetY": 440.0
+		},
+		{
+			"duration": 875.0,
+			"easing": "circInOut",
+			"strumTime": 9532.0,
+			"targetX": 324.0,
+			"targetY": 191.0
+		},
+		{
+			"duration": 875.0,
+			"easing": "circInOut",
+			"strumTime": 11714.0,
+			"targetX": 915.0,
+			"targetY": 437.0
+		},
+		{
+			"duration": 875.0,
+			"easing": "circInOut",
+			"strumTime": 14516.0,
+			"targetX": 317.0,
+			"targetY": 176.0
+		},
+		{
+			"duration": 875.0,
+			"easing": "circInOut",
+			"strumTime": 16552.0,
+			"targetX": 911.0,
+			"targetY": 437.0
+		},
+		{
+			"duration": 875.0,
+			"easing": "expoInOut",
+			"strumTime": 19008.0,
+			"targetX": 331.0,
+			"targetY": 181.0
+		},
+		{
+			"duration": 875.0,
+			"easing": "expoInOut",
+			"strumTime": 21347.0,
+			"targetX": 937.0,
+			"targetY": 451.0
+		},
+		{
+			"duration": 875.0,
+			"easing": "expoInOut",
+			"strumTime": 23977.0,
+			"targetX": 309.0,
+			"targetY": 152.0
+		},
+		{
+			"duration": 875.0,
+			"easing": "expoInOut",
+			"strumTime": 26139.0,
+			"targetX": 882.0,
+			"targetY": 417.0
+		},
+		{
+			"duration": 875.0,
+			"easing": "sineInOut",
+			"strumTime": 28827.0,
+			"targetX": 322.0,
+			"targetY": 172.0
+		},
+		{
+			"duration": 875.0,
+			"easing": "sineInOut",
+			"strumTime": 31155.0,
+			"targetX": 928.0,
+			"targetY": 442.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "elasticInOut",
+			"strumTime": 33073.0,
+			"targetX": 319.0,
+			"targetY": 191.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "elasticInOut",
+			"strumTime": 35707.0,
+			"targetX": 910.0,
+			"targetY": 440.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "circInOut",
+			"strumTime": 37987.0,
+			"targetX": 337.0,
+			"targetY": 200.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "circInOut",
+			"strumTime": 40647.0,
+			"targetX": 937.0,
+			"targetY": 443.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "elasticInOut",
+			"strumTime": 42811.0,
+			"targetX": 306.0,
+			"targetY": 184.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "elasticInOut",
+			"strumTime": 44803.0,
+			"targetX": 930.0,
+			"targetY": 442.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "quintInOut",
+			"strumTime": 47799.0,
+			"targetX": 331.0,
+			"targetY": 189.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "quintInOut",
+			"strumTime": 50349.0,
+			"targetX": 916.0,
+			"targetY": 442.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "sineInOut",
+			"strumTime": 52996.0,
+			"targetX": 326.0,
+			"targetY": 182.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "sineInOut",
+			"strumTime": 55068.0,
+			"targetX": 920.0,
+			"targetY": 438.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "linear",
+			"strumTime": 57338.0,
+			"targetX": 332.0,
+			"targetY": 194.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "linear",
+			"strumTime": 59945.0,
+			"targetX": 912.0,
+			"targetY": 442.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "quadInOut",
+			"strumTime": 62319.0,
+			"targetX": 321.0,
+			"targetY": 177.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "quadInOut",
+			"strumTime": 64347.0,
+			"targetX": 912.0,
+			"targetY": 435.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "cubicInOut",
+			"strumTime": 67116.0,
+			"targetX": 314.0,
+			"targetY": 177.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "cubicInOut",
+			"strumTime": 69534.0,
+			"targetX": 934.0,
+			"targetY": 440.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "bounceIn",
+			"strumTime": 71301.0,
+			"targetX": 304.0,
+			"targetY": 177.0
+		},
+		{
+			"duration": 970.0,
+			"easing": "bounceIn",
+			"strumTime": 74343.0,
+			"targetX": 919.0,
+			"targetY": 440.0
+		}
+	],
+	"ignore default cams events": false,
+	"ignore default zooms events": false,
+	"zoom events": []
+}

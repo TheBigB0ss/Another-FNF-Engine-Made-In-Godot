@@ -1,12 +1,15 @@
 [gd_scene format=3 uid="uid://de51xg7o8kadi"]
 
-[ext_resource type="Script" uid="uid://dw0lkkcaqx4nr" path="res://source/characters/characters_scripts/DeadCharacter.gd" id="1_q874k"]
-[ext_resource type="SpriteFrames" uid="uid://bakjttcgw1whp" path="res://assets/images/characters/bfDead.res" id="2_r7irk"]
+[ext_resource type="Script" uid="uid://k8dtu8n2k43f" path="res://source/characters/characters_scripts/DeadSparrowCharacter.gd" id="1_grn7u"]
+[ext_resource type="Texture2D" uid="uid://bhvtksy7wnibi" path="res://assets/images/characters/BOYFRIEND.png" id="2_elawb"]
 
-[node name="Bf dead" type="Node2D" unique_id=274398951]
-script = ExtResource("1_q874k")
+[node name="Bf dead" type="Node2D" unique_id=631314290]
+script = ExtResource("1_grn7u")
 json_path = "res://assets/data/characters/Bf dead.json"
-
-[node name="character" type="AnimatedSprite2D" parent="." unique_id=120486290]
-sprite_frames = ExtResource("2_r7irk")
-animation = &"BF Dead Loop"
+texture = ExtResource("2_elawb")
+xmlPath = "res://assets/images/characters/BOYFRIEND.xml"
+frame = 33
+fps = 24
+loop = false
+animation = 0
+metadata/_custom_type_script = "uid://k8dtu8n2k43f"

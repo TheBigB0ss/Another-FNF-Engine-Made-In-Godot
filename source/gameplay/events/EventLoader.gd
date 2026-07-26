@@ -18,8 +18,12 @@ signal event_emit(event_name, args);
 
 func _ready() -> void:
 	main_scene = scene;
+	reload_events();
+	
+func reload_events():
 	if !SongData.songEvents.is_empty():
 		for i in SongData.songEvents:
+			print(i)
 			array_events_notes.insert(0, [i[0], i[1], i[2], i[3], i[4]]);
 			
 func _process(_delta: float) -> void:
@@ -73,9 +77,6 @@ func trigger_event(event_name, value1, value2):
 			
 		"flash":
 			Flash.flashAppears(value1.to_float(), Color(value2));
-			
-		#"set camera position":
-		#	set_new_camPos(value1, value2);
 			
 		"add cam zoom":
 			main_scene.sectionCamera.zoom = Vector2(value1.to_float(), value1.to_float());
@@ -202,12 +203,3 @@ func characterPlayAnim(id, anim):
 			if SongData.gfPlayer != "" && main_scene.gf != null:
 				main_scene.gf._playAnim(anim, true);
 				
-#func set_new_camPos(pos, just_for_one_section):
-	#var splitedPos = pos.split(",");
-	#var new_cam_pos = Vector2(splitedPos[0].to_int(), splitedPos[1].to_int());
-	#
-	#if main_scene.sectionCamera != null && SongData.isPlaying:
-		#main_scene.move_cam(GlobalOptions.updated_cam == "smooth", new_cam_pos);
-		#
-	#main_scene.camera_focus = (just_for_one_section == "true");
-	#

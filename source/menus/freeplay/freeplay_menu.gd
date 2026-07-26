@@ -1,4 +1,4 @@
-extends weekStuff
+extends Node2D
 
 @onready var song_stuff = $'songs';
 @onready var icons_stuff = $'icons';
@@ -28,14 +28,18 @@ var coolOffset = 140;
 
 var dont_have_chart = false;
 
-func loadJson(week):
-	var jsonFile = FileAccess.open("res://assets/data/weeks data/%s/%s.json"%[SongData.week_folder_path, week],FileAccess.READ);
-	var jsonData = JSON.new();
-	jsonData.parse(jsonFile.get_as_text());
-	weekJson = jsonData.get_data();
-	jsonFile.close();
-	return weekJson;
-	
+var weekJson = {
+	"songs": [[]],
+	"hideFromFreeplay": false,
+	"hideFromStoryMode": false,
+	"isLocked": false,
+	"weekName": "",
+	"lastWeek": "",
+	"weekDescription": "",
+	"weekCharacters": [],
+	"weekDifficulties": []
+}
+
 func get_week_files():
 	var file = [];
 	var coolFolder = DirAccess.open("res://assets/data/weeks data/%s"%[SongData.week_folder_path]);
@@ -47,6 +51,14 @@ func get_week_files():
 			nameShit = coolFolder.get_next();
 			
 	return file;
+	
+func loadJson(week):
+	var jsonFile = FileAccess.open("res://assets/data/weeks data/%s/%s.json"%[SongData.week_folder_path, week],FileAccess.READ);
+	var jsonData = JSON.new();
+	jsonData.parse(jsonFile.get_as_text());
+	weekJson = jsonData.get_data();
+	jsonFile.close();
+	return weekJson;
 	
 func _ready() -> void:
 	Conductor.reset();

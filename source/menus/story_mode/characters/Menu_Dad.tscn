@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://qsy1eljk502d"]
+
+[ext_resource type="Script" uid="uid://dk0iqkss82o73" path="res://addons/sparrow_sprite/SparrowSprite.gd" id="1_jxycf"]
+[ext_resource type="Texture2D" uid="uid://cwwsxddpyy51d" path="res://assets/images/story mode/characters/dad.png" id="2_fjnqg"]
+
+[node name="MenuDad" type="Node2D" unique_id=889487442]
+script = ExtResource("1_jxycf")
+texture = ExtResource("2_fjnqg")
+xmlPath = "res://assets/images/story mode/characters/dad.xml"
+frame = 11
+fps = 9
+animation = 0
+metadata/_custom_type_script = "uid://dk0iqkss82o73"

@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cecrkjpsyjngd"]
+
+[ext_resource type="Script" uid="uid://dk0iqkss82o73" path="res://addons/sparrow_sprite/SparrowSprite.gd" id="1_jfx0w"]
+[ext_resource type="Texture2D" uid="uid://dfi36mwjcpl7f" path="res://assets/images/story mode/characters/senpai.png" id="2_4yftk"]
+
+[node name="MenuSenpai" type="Node2D" unique_id=1382851087]
+texture_filter = 1
+script = ExtResource("1_jfx0w")
+texture = ExtResource("2_4yftk")
+xmlPath = "res://assets/images/story mode/characters/senpai.xml"
+frame = 5
+fps = 11
+animation = 0
+metadata/_custom_type_script = "uid://dk0iqkss82o73"

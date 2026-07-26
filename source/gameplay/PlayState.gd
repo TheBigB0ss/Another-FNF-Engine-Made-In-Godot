@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 
 @onready var hud = $hud/Hud_Layer;
 @onready var timeText = $'hud/Hud_Layer/timeLabel';
@@ -15,7 +15,6 @@ var health = 50.0;
 
 var iconP1 = Icon.new();
 var iconP2 = Icon.new();
-var iconP3 = Icon.new();
 @onready var iconGrp = $'hud/Hud_Layer/icons';
 
 var ratingPart = "";
@@ -55,7 +54,6 @@ var isDead = false;
 var bf = Character.new();
 var gf = Character.new();
 var dad = Character.new();
-var new_opponent = Character.new();
 
 @onready var stageGrp = $'stage';
 var stage = null;
@@ -69,7 +67,6 @@ var skipIntro = false;
 
 @onready var playerStrum = $'strums/Strum_Layer/Player Notes';
 @onready var opponentStrum = $'strums/Strum_Layer/Opponent Notes';
-@onready var newOpponentStrum = $"strums/Strum_Layer/Second Opponent Note";
 @onready var game_strums = $'strums/Strum_Layer';
 
 var curStage = "";
@@ -115,9 +112,6 @@ func _ready():
 	pause_menu.visible = false;
 	pause_menu.can_use = false;
 	
-	Conductor.connect("new_beat", beat_hit);
-	Conductor.connect("new_step", step_hit);
-	
 	isStoryMode = SongData.isStoryMode;
 	playlist = SongData.week_songs;
 	songDiff = SongData.week_diffs;
@@ -130,6 +124,8 @@ func _ready():
 			
 	SongData.isOnDeathScreen = false;
 	SongData.isPlaying = true;
+	
+	Conductor.connect("new_step", step_hit);
 	
 	GlobalOptions.connect("ghost_tapping_miss", miss_note);
 	Achievements.connect("end_achievement", finishSong);
@@ -155,9 +151,6 @@ func _ready():
 	dad = dad.init_character(self, SongData.gfStagePosition if SongData.player2 == "gf" else SongData.player2StagePosition, SongData.player2Zindex, SongData.player2, 3);
 	gf = gf.init_character(self, SongData.gfStagePosition, SongData.gfZindex, SongData.gfPlayer, 1);
 	
-	if SongData.player3 != "" && SongData.haveTwoOpponents:
-		new_opponent = new_opponent.init_character(self, SongData.player3StagePosition, SongData.player3Zindex, SongData.player3, 2);
-		
 	stageGrp.add_child(stage);
 	
 	if bf.character != null:
@@ -185,9 +178,7 @@ func _ready():
 	
 	iconP1 = iconP1.init_icon(iconGrp, bf.curIcon, false, bf.animatedIcon, Vector2(710, 645));
 	iconP2 = iconP2.init_icon(iconGrp, dad.curIcon, true, dad.animatedIcon, Vector2(610, 645));
-	if SongData.player3 != "" && SongData.haveTwoOpponents:
-		iconP3 = iconP3.init_icon(iconGrp, new_opponent.curIcon, true, new_opponent.animatedIcon, Vector2(550, 585));
-		
+	
 	SongData.updated_chart = SongData.chartData;
 	
 	Conductor.mapBPMChanges();
@@ -199,7 +190,6 @@ func _ready():
 	startSong();
 	setup_hud();
 	setup_hud_scroll();
-	setup_second_opponent_strum();
 	setup_classic_hud();
 	updateScoreText();
 	
@@ -215,7 +205,7 @@ func _ready():
 				stage.start_cutscene();
 				
 	if curSong == "ugh" or curSong == "guns" or curSong == "stress":
-		stage.connect("end_tankman_cutscene", startCountdown)
+		stage.connect("end_tankman_cutscene", startCountdown);
 		
 	if Global.has_dialogue():
 		SongData.is_not_in_cutscene = false;
@@ -232,11 +222,6 @@ func _ready():
 		
 	if SongData.is_not_in_cutscene && !Global.is_on_video:
 		startCountdown();
-		
-	sectionCamera.zoom = SongData.stageZoom;
-	
-	if SongData.is_not_in_cutscene && is_on_intro:
-		move_cam(GlobalOptions.updated_cam == "smooth", (dad.global_position + Vector2(dad.camera_pos[0], dad.camera_pos[1])));
 		
 	if GlobalOptions.show_songCard:
 		var newSongCard = SongCard.new();
@@ -281,9 +266,6 @@ func _process(delta: float) -> void:
 	var helthLerpValue = lerp(float(healthBar.value), float(health), 0.40);
 	healthBar.value = helthLerpValue;
 	
-	if SongData.is_not_in_cutscene && !Global.is_on_video:
-		sectionCamera.zoom = lerp(sectionCamera.zoom, SongData.stageZoom, 0.10);
-		
 	if !is_on_intro && Conductor.getSongTime >= 0 && !playlist.is_empty():
 		discord_songName = "Playing: %s (%s)"%[playlist[0], songDiff];
 		
@@ -297,9 +279,6 @@ func _process(delta: float) -> void:
 	iconP1.position.x = lerp(iconP1.position.x, healthRemap+160, 0.40);
 	iconP2.position.x = lerp(iconP2.position.x, healthRemap+55, 0.40);
 	
-	if iconP3 != null:
-		iconP3.position.x = lerp(iconP3.position.x, healthRemap+20, 0.40);
-		
 	if GlobalOptions.isUsingBot:
 		botplayText.show();
 		botplayTime += delta;
@@ -307,13 +286,6 @@ func _process(delta: float) -> void:
 	else:
 		botplayText.hide();
 		
-	for i in [dad, gf, bf, new_opponent]:
-		if i == null:
-			continue;
-			
-		if i.cam_follow_pos:
-			cam_follow_poses(i);
-			
 	var curMinutes = str(int(inst.get_playback_position()) / 60).pad_zeros(1);
 	var curSeconds = str(int(inst.get_playback_position()) % 60).pad_zeros(2);
 	var maxMinutes = str(int(inst.stream.get_length()) / 60).pad_zeros(1);
@@ -367,23 +339,18 @@ func set_new_achievement(achievement, final):
 func set_icon_anim():
 	var iconP1_Anim = "idle";
 	var iconP2_Anim = "idle";
-	var iconP3_Anim = "idle";
 	
 	if health <= 15:
 		iconP1_Anim = "lose";
 		iconP2_Anim = "win";
-		iconP3_Anim = "win";
 		
 	elif health >= 80:
 		iconP1_Anim = "win";
 		iconP2_Anim = "lose";
-		iconP3_Anim = "lose";
 		
 	iconP1.play_icon_anim(iconP1_Anim);
 	iconP2.play_icon_anim(iconP2_Anim);
-	if iconP3 != null:
-		iconP3.play_icon_anim(iconP3_Anim);
-		
+	
 var ratingColors = {
 	"sicks": Color.CYAN,
 	"goods": Color.FOREST_GREEN,
@@ -395,66 +362,56 @@ func pressedNote(note):
 		return;
 		
 	voices.volume_db = 0;
-	playerStrum.strumNode.get_child(note.noteData).strumPressed = true;
+	var strum = playerStrum.strumNode.get_child(note.noteData);
+	strum.strumPressed = true;
+	
+	funkinScript.call_func("on_note_hit", [note]);
 	
 	var ms = (note.strumTime - Conductor.getSongTime);
-	var pressed = false;
 	
 	if GlobalOptions.isUsingBot:
 		return;
 		
-	funkinScript.call_func("on_note_hit", [note]);
-	
 	msText.text = str(snapped(ms, 0.01), "Ms");
 	msText.modulate.a = 1.0;
 	msText.position.x = rating_spr.position.x - msText.size.x*0.5;
 	msText.position.y = rating_spr.position.y + (msText.size.x*0.5)+20;
 	
-	if !pressed:
-		for i in rating_data.keys():
-			if ms <= rating_data[i]["Ms"][0] && !ms <= rating_data[i]["Ms"][1]:
-				notesPlayed += rating_data[i]["Percent"];
-				score += rating_data[i]["Score"]+randi_range(0, 15);
+	for i in rating_data.keys():
+		if ms <= rating_data[i]["Ms"][0] && !ms <= rating_data[i]["Ms"][1]:
+			notesPlayed += rating_data[i]["Percent"];
+			score += rating_data[i]["Score"]+randi_range(0, 15);
+			
+			msText.modulate = ratingColors[rating_data[i]["Rating"]];
+			match rating_data[i]["Rating"]:
+				"shits": shits += 1;
+				"bads": bads += 1;
+				"goods": goods += 1;
+				"sicks": sicks += 1;
 				
-				msText.modulate = ratingColors[rating_data[i]["Rating"]];
-				match rating_data[i]["Rating"]:
-					"shits": shits += 1;
-					"bads": bads += 1;
-					"goods": goods += 1;
-					"sicks": sicks += 1;
-					
-				rating_spr.pop_up_rating(rating_data[i]["RatingID"]);
+			rating_spr.pop_up_rating(rating_data[i]["RatingID"]);
+			
+			if i == "Sick" && GlobalOptions.show_splashes:
+				splash_note(randi_range(1, 2), int(note.noteData)%4, note.noteAnim, playerStrum.position.x + strum.position.x, playerStrum.position.y + strum.position.y);
 				
-				if i == "Sick" && GlobalOptions.show_splashes:
-					var curSplash = int(randi_range(1, 2));
-					var splashData = int(note.noteData)%4;
-					var splashAnim = note.noteAnim;
-					var splashPosX = playerStrum.position.x+playerStrum.strumNode.get_child(note.noteData).position.x;
-					var splashPosY = playerStrum.position.y+playerStrum.strumNode.get_child(note.noteData).position.y;
-					
-					splash_note(curSplash, splashData, splashAnim, splashPosX, splashPosY);
-					
-				totalHits += 1;
-				combo += 1;
-				
-				break;
-				
-		if GlobalOptions.updated_hud != "classic hud":
-			nums_spr.pop_up_rating();
-			if combo >= 10:
-				combo_spr.pop_up_rating();
-			else:
-				combo_spr.hide();
+			totalHits += 1;
+			combo += 1;
+			break;
+			
+	if GlobalOptions.updated_hud != "classic hud":
+		nums_spr.pop_up_rating();
+		if combo >= 10:
+			combo_spr.pop_up_rating();
 		else:
-			if combo >= 10:
-				nums_spr.pop_up_rating();
-			else:
-				nums_spr.hide();
-				
-		updateScoreText();
-		
-		pressed = true;
-		
+			combo_spr.hide();
+	else:
+		if combo >= 10:
+			nums_spr.pop_up_rating();
+		else:
+			nums_spr.hide();
+			
+	updateScoreText();
+	
 func opponentNotePressed(note):
 	funkinScript.call_func("on_opponent_hit", [note]);
 	
@@ -507,7 +464,6 @@ func playCharacterAnim(curNote:Note, new_char):
 		return;
 		
 	var noteAnim = curNote.curNoteAnim;
-	
 	var altAnim = "-alt" if (curNote.is_altAnim or SongData.songSections[Conductor.curSection]["altAnim"]) && new_char.animList.has(noteAnim + "-alt") else "";
 	
 	if curNote.note_pressed:
@@ -526,18 +482,14 @@ func playCharacterAnim(curNote:Note, new_char):
 		
 	curNote.note_pressed = true;
 	
-func play_strum_anim(note = null, is_opponent = false, timer = 0.0, is_second_opponent = false, isCPU = false):
+func play_strum_anim(note = null, is_opponent = false, timer = 0.0, isCPU = false):
 	var taget_key = "player";
 	var target = {
 		"player": playerStrum,
-		"opponent": opponentStrum,
-		"second opponent": newOpponentStrum
+		"opponent": opponentStrum
 	};
 	
-	if is_second_opponent && !is_opponent:
-		taget_key = "second opponent";
-		
-	elif is_opponent:
+	if is_opponent:
 		taget_key = "opponent";
 		
 	var strum_target = target[taget_key];
@@ -545,16 +497,6 @@ func play_strum_anim(note = null, is_opponent = false, timer = 0.0, is_second_op
 		strum_target.strumNode.get_child(note.noteData).reset_arrow_anim = timer;
 		
 	strum_target.strumNode.get_child(note.noteData).play_note_anim("confirm");
-	
-var cam_offset_values = {
-	"singLeft": Vector2.LEFT,
-	"singDown": Vector2.DOWN,
-	"singUp": Vector2.UP,
-	"singRight": Vector2.RIGHT
-};
-func cam_follow_poses(new_char):
-	var camOffset = cam_offset_values.get(new_char.curAnim, Vector2.ZERO)*20;
-	sectionCamera.offset = lerp(sectionCamera.offset, camOffset, 0.10);
 	
 func checkPlayerDead():
 	if health > 0:
@@ -665,9 +607,6 @@ func startCountdown():
 		if is_instance_valid(i):
 			i.back_to_idle(idleCounter);
 			
-	if SongData.haveTwoOpponents && is_instance_valid(new_opponent):
-		new_opponent.back_to_idle(idleCounter);
-		
 	for i in 5:
 		await get_tree().create_timer(Conductor.crochet/1000).timeout;
 		
@@ -802,33 +741,6 @@ func updateScoreText():
 		if GlobalOptions.updated_hud == "classic hud":
 			ratingText.text += "\nMisses: %s\nRank: %s"%[int(misses), rankName];
 			
-var cam_target = null;
-func step_hit(_step):
-	if SongData.songSections[Conductor.curSection]["changeBPM"]:
-		Conductor.changeBpm(SongData.songSections[Conductor.curSection]["bpm"]);
-		
-	camera_on_Bf = SongData.songSections[Conductor.curSection]["mustHitSection"];
-	gf_is_singing = SongData.songSections[Conductor.curSection]["gfSection"];
-	
-	if camera_focus:
-		return;
-		
-	cam_target = dad;
-	if gf_is_singing:
-		cam_target = gf;
-	elif camera_on_Bf:
-		cam_target = bf;
-		
-	if sectionCamera != null && SongData.isPlaying && cam_target != null:
-		move_cam(GlobalOptions.updated_cam == "smooth", (cam_target.global_position + Vector2(cam_target.camera_pos[0], cam_target.camera_pos[1])));
-		
-func beat_hit(beat):
-	if !GlobalOptions.screen_zoom:
-		return;
-		
-	if beat % 4 == 0 && !is_on_intro:
-		sectionCamera.zoom = SongData.stageZoomBeat;
-		
 func setTimePos(time):
 	time = max(0, time);
 	
@@ -841,11 +753,8 @@ func setTimePos(time):
 	
 	timeBar.value = Conductor.getSongTime/1000;
 	
-func move_cam(smoothing, pos):
-	sectionCamera.global_position = (pos if !smoothing else lerp(sectionCamera.global_position, pos, 1.0));
-	
 func setup_hud():
-	for i in [healthBar, iconP1, iconP2, iconP3]:
+	for i in [healthBar, iconP1, iconP2]:
 		if i:
 			i.modulate.a = 0.0 if GlobalOptions.hide_hud else GlobalOptions.health_bar_alpha;
 			
@@ -875,18 +784,6 @@ func setup_hud_scroll():
 		for i in [iconP1, iconP2]:
 			i.position.y = 65;
 			
-		if iconP3:
-			iconP3.position.y = 125;
-			
-func setup_second_opponent_strum():
-	newOpponentStrum.visible = SongData.haveTwoOpponents;
-	if !SongData.haveTwoOpponents:
-		return;
-		
-	newOpponentStrum.position = Vector2(550, 600 if GlobalOptions.down_scroll else 100);
-	newOpponentStrum.modulate.a = 0.6;
-	newOpponentStrum.visible = !GlobalOptions.middle_scroll;
-	
 func setup_classic_hud():
 	if GlobalOptions.updated_hud != "classic hud":
 		return;
@@ -894,8 +791,11 @@ func setup_classic_hud():
 	if !GlobalOptions.middle_scroll:
 		playerStrum.position.x -= 80;
 		
-	newOpponentStrum.position.x -= 40;
-	
 	scoreText.text = "Score: %s"%[int(score)];
 	scoreText.position = Vector2(620, 90 if GlobalOptions.down_scroll else 680);
 	scoreText.scale = Vector2.ONE * 0.03;
+	
+func step_hit(_step):
+	if SongData.songSections[Conductor.curSection]["changeBPM"]:
+		Conductor.changeBpm(SongData.songSections[Conductor.curSection]["bpm"]);
+		

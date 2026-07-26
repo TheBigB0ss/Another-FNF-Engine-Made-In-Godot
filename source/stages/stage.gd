@@ -6,9 +6,10 @@ func init_game(stage):
 	game = stage;
 	
 func _init() -> void:
-	Conductor.new_beat.connect(beat_hit);
-	Conductor.new_step.connect(step_hit);
-	
+	if SongData.isPlaying:
+		Conductor.new_beat.connect(beat_hit);
+		Conductor.new_step.connect(step_hit);
+		
 func step_hit(step) -> void:
 	pass
 	
