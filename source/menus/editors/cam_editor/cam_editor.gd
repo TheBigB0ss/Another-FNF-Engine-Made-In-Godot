@@ -52,6 +52,9 @@ var curselected_cam_event = null;
 var curselected_zoom_event = null;
 
 func _ready() -> void:
+	MusicManager.stop();
+	Discord.update_discord_info("camera editor", "Is in menus");
+	
 	Conductor.new_beat.connect(beat_hit);
 	Conductor.new_step.connect(step_hit);
 	
@@ -77,6 +80,11 @@ func delete_event(strumtime, array):
 func _input(ev):
 	if ev is InputEventKey:
 		if ev.pressed:
+			if ev.keycode in [KEY_ESCAPE]:
+				Global.update_cursor("default");
+				MusicManager._play_song("freakyMenu", "music", true);
+				Global.changeScene("menus/main_menu/MainMenu", true, false);
+				
 			if ev.keycode == KEY_DELETE:
 				for i in camsEventsToDelete:
 					if i == null:
