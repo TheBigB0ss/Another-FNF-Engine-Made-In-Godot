@@ -338,6 +338,7 @@ func _input(ev):
 						delete_note(j.strumTime + section_start_time(), j.noteData);
 						selected_notes.erase(j);
 						
+				SongData.reload_section();
 				load_section();
 				
 			if ev.keycode in [KEY_Q] && curselected_note != []:
