@@ -86,6 +86,7 @@ func reload():
 	notify_property_list_changed();
 	
 func draw_symbol(element, layer, index, elementTransform, key = "atlas"):
+	
 	var elementData = element.get("SI", element.get("ASI"));
 	var symbolID = symbol_data[elementData["SN"]];
 	var keyID = str(key, "--", symbolID["SN"], "--", layer, "--", index);
@@ -144,7 +145,7 @@ func draw_symbol(element, layer, index, elementTransform, key = "atlas"):
 					newId += 1;
 					
 func create_sprite(data, keyID, index, spriteTransform):
-	var id = str("--", keyID, "--SPRITE--", index, "--INDEX--", spriteZIndex);
+	var id = "%s-%s-%d-%d"%[keyID, data["N"], index, spriteZIndex];
 	
 	var imgId = data["N"];
 	var rect = atlas[imgId]["sprite_rect"];

@@ -8,14 +8,16 @@ func init_script(newGame, song = "", diff = ""):
 		if song.contains("remix"):
 			song = song.replace("-remix", "");
 			
+	game = newGame
 	var script_path = "res://assets/data/songs/%s/script%s.gd"%[song, str("-",diff) if diff != "" else ""];
 	
-	game = newGame;
-	if FileAccess.file_exists(script_path):
-		current_script = load(script_path).new();
-	else:
-		current_script = FunkinScript.new();
+	var script = ResourceLoader.load(script_path);
+	
+	if script == null:
+		return FunkinScript.new();
 		
+	current_script = script.new();
+	
 	current_script.game = game;
 	newGame.add_child(current_script);
 	

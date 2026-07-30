@@ -130,6 +130,8 @@ func _ready():
 	curCharacter = curCharacter.replace(".json", "");
 	
 	characterScript = CharacterScript.init_character_script(curCharacter, self);
+	print("Script:", characterScript)
+	print("Script class:", characterScript.get_script().resource_path)
 	characterScript.call_func("on_ready");
 	
 	init_json(json_path);

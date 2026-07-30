@@ -1,7 +1,6 @@
 class_name CharacterScript extends Node
 
 var game = ScriptLoader.game;
-var current_script = null;
 
 func _init() -> void:
 	Conductor.new_beat.connect(beat_hit);
@@ -13,14 +12,17 @@ func _init() -> void:
 	
 static func init_character_script(character, parent):
 	var script_path = "res://assets/data/characters/%s.gd"%[character];
-	var new_script:CharacterScript;
-	if FileAccess.file_exists(script_path):
-		new_script = load(script_path).new();
-	else:
-		new_script = CharacterScript.new();
+	
+	var current_script = null;
+	var script = ResourceLoader.load(script_path);
+	
+	if script == null:
+		return CharacterScript.new();
 		
-	parent.add_child(new_script);
-	return new_script;
+	current_script = script.new();
+	
+	parent.add_child(current_script);
+	return current_script;
 	
 func call_game_func(funcName, args = []):
 	return ScriptLoader.call_game_func(funcName, args);
