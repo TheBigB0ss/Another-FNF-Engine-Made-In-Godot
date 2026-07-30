@@ -110,7 +110,7 @@ func _process(delta):
 		if Conductor.getSongTime > 320 + note.strumTime && note.sustainLength <= 0:
 			notes_to_delete.append(note);
 			
-		if Conductor.getSongTime > 335+(note.strumTime+note.ogSustain) && note.sustainLength > 0 && !note.is_pressing:
+		if Conductor.getSongTime > 335 + (note.strumTime+note.ogSustain) && note.sustainLength > 0 && !note.is_pressing:
 			notes_to_delete.append(note);
 			
 	for note in opponentNotes:

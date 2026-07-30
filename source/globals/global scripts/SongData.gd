@@ -124,6 +124,9 @@ func loadJson(new_song, difficulty = "", new_chart = null):
 	extraOpponentNotes.clear();
 	songSections.clear();
 	
+	characters.clear();
+	camera_data.clear();
+	
 	var difficultyPath = "";
 	var eventsPath = "";
 	

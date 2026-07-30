@@ -55,6 +55,8 @@ var idle_type:IDLE_MODE = IDLE_MODE.DEFAULT:
 		idle_type = val;
 		notify_property_list_changed();
 		
+var current_idle_type:IDLE_MODE;
+
 var death_scene = "";
 var frame_count = 2.4;
 
@@ -77,6 +79,8 @@ var character = self;
 var base_position = Vector2.ZERO;
 var offset = Vector2.ZERO;
 
+var characterScript:CharacterScript;
+
 func _init() -> void:
 	if Engine.is_editor_hint():
 		return;
@@ -84,14 +88,14 @@ func _init() -> void:
 	Conductor.new_beat.connect(beat_hit);
 	Conductor.new_step.connect(step_hit);
 	
-func beat_hit(beat) -> void:
-	if idle_type != IDLE_MODE.BEAT:
+func beat_hit(beat):
+	if current_idle_type != IDLE_MODE.BEAT:
 		return;
 		
 	back_to_idle(beat);
 	
-func step_hit(step) -> void:
-	if idle_type != IDLE_MODE.STEP:
+func step_hit(step):
+	if current_idle_type != IDLE_MODE.STEP:
 		return;
 		
 	back_to_idle(step);
@@ -121,6 +125,9 @@ func _ready():
 	curCharacter = json_path.get_file();
 	curCharacter = curCharacter.replace(".json", "");
 	
+	characterScript = CharacterScript.init_character_script(curCharacter, self);
+	characterScript.call_func("on_ready");
+	
 	init_json(json_path);
 	
 	healthBar_Color = Color(charData.get("HealthBarColor", healthBar_Color));
@@ -147,12 +154,15 @@ func _ready():
 			charData["Poses"][i].get("special anim", false)
 		];
 		
-	if idle_type == IDLE_MODE.DEFAULT && !Engine.is_editor_hint():
+	current_idle_type = idle_type;
+	if current_idle_type == IDLE_MODE.DEFAULT:
 		match GlobalOptions.idleMode:
 			"beat":
-				idle_type = IDLE_MODE.BEAT;
+				current_idle_type = IDLE_MODE.BEAT;
 			"step":
-				idle_type = IDLE_MODE.STEP;
+				current_idle_type = IDLE_MODE.STEP;
+			_:
+				current_idle_type = IDLE_MODE.BEAT;
 				
 	base_position = character.position;
 	
@@ -160,6 +170,8 @@ func _ready():
 	
 func _process(delta):
 	super(delta);
+	
+	characterScript.call_func("on_process", [delta]);
 	
 	character.scale.x = abs(character.scale.x) * (-1 if flip_h else 1);
 	character.scale.y = abs(character.scale.y) * (-1 if flip_v else 1);
@@ -217,6 +229,8 @@ func character_process(delta):
 var can_dance = false;
 var have_anims = false;
 func dance():
+	characterScript.call_func("on_dance");
+	
 	have_anims = animList.has("danceRight") && animList.has("danceLeft");
 	if have_anims:
 		can_dance = !can_dance;
@@ -230,6 +244,8 @@ var current_anim = "";
 var newLimit = 0;
 var newFrame = 0;
 func _playAnim(anim = "", special = false):
+	characterScript.call_func("on_sing", [anim]);
+	
 	playing = true;
 	for i in animList.size():
 		#if is_instance_valid(curNote) && characterState == CHARACTER_STATES.HOLDING && anim.begins_with("sing") && curNote.curNoteAnim != anim:

@@ -5,8 +5,7 @@ extends Node2D
 @onready var ratingText = $'hud/Hud_Layer/ratingLabel'
 @onready var scoreText = $'hud/Hud_Layer/scoreLabel';
 @onready var timeBar = $"hud/Hud_Layer/timeBar";
-
-var health = 50.0;
+@onready var countdownSprite = $'hud/Hud_Layer/countdown';
 
 @onready var healthBar = $'hud/Hud_Layer/healthBar';
 
@@ -29,9 +28,14 @@ var ratings = ["sick", "good", "bad", "shit", "miss"];
 @onready var pause_menu = $'pause/Pause_Layer';
 @onready var dialogue_box = $'dialogue/DialogueBox';
 
+@onready var playerStrum = $'strums/Strum_Layer/Player Notes';
+@onready var opponentStrum = $'strums/Strum_Layer/Opponent Notes';
+@onready var game_strums = $'strums/Strum_Layer';
 @onready var note_splshes = $'strums/Strum_Layer/Splashes';
 
 var can_pause = false;
+
+var health = 50.0;
 
 var sicks = 0;
 var goods = 0;
@@ -61,13 +65,7 @@ var stage = null;
 var is_on_intro = false;
 var finished_song = false;
 
-@onready var countdownSprite = $'hud/Hud_Layer/countdown';
-
 var skipIntro = false;
-
-@onready var playerStrum = $'strums/Strum_Layer/Player Notes';
-@onready var opponentStrum = $'strums/Strum_Layer/Opponent Notes';
-@onready var game_strums = $'strums/Strum_Layer';
 
 var curStage = "";
 var curSong = "";
@@ -95,7 +93,6 @@ var achievements_map = {};
 var splash_normal = preload("res://source/arrows/splashes/noteSplashes.tscn");
 var splash_pixel = preload("res://source/arrows/splashes/pixel/pixelNoteSplash.tscn");
 
-var funkinScript:FunkinScript;
 @onready var eventLoader = $EventLoader;
 
 func _ready():
@@ -125,10 +122,12 @@ func _ready():
 	SongData.isOnDeathScreen = false;
 	SongData.isPlaying = true;
 	
-	Conductor.connect("new_step", step_hit);
-	
 	GlobalOptions.connect("ghost_tapping_miss", miss_note);
+	
 	Achievements.connect("end_achievement", finishSong);
+	
+	Conductor.connect("new_step", step_hit);
+	Conductor.connect("new_beat", beat_hit);
 	
 	Global.connect("end_dialogue", startCountdown);
 	Global.connect("end_cutscene", startCountdown);
@@ -144,8 +143,8 @@ func _ready():
 	curSong = SongData.song;
 	curStage = SongData.stage;
 	
-	funkinScript = FunkinScript.init_script(self, curSong);
-	funkinScript.call_func("on_ready");
+	ScriptLoader.init_script(self, curSong, "remix" if songDiff == "remix" else "");
+	ScriptLoader.call_func("on_ready");
 	
 	bf = bf.init_character(self, SongData.player1StagePosition, SongData.player1Zindex, SongData.player1, 4);
 	dad = dad.init_character(self, SongData.gfStagePosition if SongData.player2 == "gf" else SongData.player2StagePosition, SongData.player2Zindex, SongData.player2, 3);
@@ -239,8 +238,9 @@ var start_song = false;
 var discord_songName = "";
 var last_song_seek = 0.0;
 
+var curHealth = 0.0;
 func _process(delta: float) -> void:
-	funkinScript.call_func("on_process", [delta]);
+	ScriptLoader.call_func("on_process", [delta]);
 	msText.modulate.a = max(msText.modulate.a - 1.95 * delta, 0.0);
 	
 	if !start_song:
@@ -263,8 +263,15 @@ func _process(delta: float) -> void:
 		inst.stream_paused = true;
 		voices.stream_paused = true;
 		
-	var helthLerpValue = lerp(float(healthBar.value), float(health), 0.40);
-	healthBar.value = helthLerpValue;
+	curHealth = lerp(curHealth, float(health), 1.0 - exp(-15.0 * delta));
+	healthBar.value = curHealth;
+	
+	var healthPosition = remap(curHealth, healthBar.min_value, healthBar.max_value, healthBar.global_position.x + healthBar.size.x, healthBar.global_position.x);
+	
+	var p1Offset = iconP1.get_rect().size.x * 0.5 - 20;
+	var p2Offset = iconP2.get_rect().size.x * 0.5 - 20;
+	iconP1.position.x = lerp(iconP1.position.x, healthPosition+p1Offset, 1.0 - exp(-20.0 * delta));
+	iconP2.position.x = lerp(iconP2.position.x, healthPosition-p2Offset, 1.0 - exp(-20.0 * delta));
 	
 	if !is_on_intro && Conductor.getSongTime >= 0 && !playlist.is_empty():
 		discord_songName = "Playing: %s (%s)"%[playlist[0], songDiff];
@@ -273,11 +280,6 @@ func _process(delta: float) -> void:
 		timeBar.value = Conductor.getSongTime/1000;
 		
 	timeBar.max_value = inst.stream.get_length();
-	
-	var healthRemap = remap(health, healthBar.min_value, healthBar.max_value, 850, 250);
-	
-	iconP1.position.x = lerp(iconP1.position.x, healthRemap+160, 0.40);
-	iconP2.position.x = lerp(iconP2.position.x, healthRemap+55, 0.40);
 	
 	if GlobalOptions.isUsingBot:
 		botplayText.show();
@@ -309,7 +311,6 @@ func _process(delta: float) -> void:
 				
 		match rankName:
 			"SFC", "GFC":
-				AchievementPopUp.set_achievement('combo master', true);
 				AchievementPopUp.set_achievement('perfectionist', true);
 			"FC":
 				AchievementPopUp.set_achievement('combo master', true);
@@ -365,15 +366,16 @@ func pressedNote(note):
 	var strum = playerStrum.strumNode.get_child(note.noteData);
 	strum.strumPressed = true;
 	
-	funkinScript.call_func("on_note_hit", [note]);
+	ScriptLoader.call_func("on_note_hit", [note]);
+	bf.characterScript.call_func("on_note_hit", [note]);
 	
 	var ms = (note.strumTime - Conductor.getSongTime);
 	
 	if GlobalOptions.isUsingBot:
 		return;
 		
-	msText.text = str(snapped(ms, 0.01), "Ms");
 	msText.modulate.a = 1.0;
+	msText.text = str(snapped(ms, 0.01), "Ms");
 	msText.position.x = rating_spr.position.x - msText.size.x*0.5;
 	msText.position.y = rating_spr.position.y + (msText.size.x*0.5)+20;
 	
@@ -413,14 +415,16 @@ func pressedNote(note):
 	updateScoreText();
 	
 func opponentNotePressed(note):
-	funkinScript.call_func("on_opponent_hit", [note]);
+	ScriptLoader.call_func("on_opponent_hit", [note]);
+	dad.characterScript.call_func("on_note_hit", [note]);
 	
 func miss_note(note):
 	if GlobalOptions.playMissSound:
 		Sound.playAudio("miss_sounds/missnote%s"%[randi_range(1, 3)], false);
 		Sound.audio.volume_db = -8;
 		
-	funkinScript.call_func("on_note_miss", [note]);
+	ScriptLoader.call_func("on_note_miss", [note]);
+	bf.characterScript.call_func("on_miss", [note]);
 	
 	voices.volume_db = -80;
 	misses += 1;
@@ -433,9 +437,6 @@ func miss_note(note):
 		
 	combo = 0;
 	
-	if curStage == "philly remix" && curSong == "philly-nice-remix" && songDiff == "remix":
-		stage.funny_guy();
-		
 	if GlobalOptions.updated_hud != "classic hud":
 		rating_spr.pop_up_rating(4);
 		
@@ -445,10 +446,10 @@ func miss_note(note):
 	voices.volume_db = 0;
 	
 func noteCreated(note):
-	funkinScript.call_func("on_note_created", [note]);
+	ScriptLoader.call_func("on_note_created", [note]);
 	
 func eventEmit(eventName, args):
-	funkinScript.call_func("on_event", [eventName, args]);
+	ScriptLoader.call_func("on_event", [eventName, args]);
 	
 func playBfMissAnim(curNote:Note):
 	if curNote.is_a_bad_note:
@@ -502,13 +503,11 @@ func checkPlayerDead():
 	if health > 0:
 		return;
 		
-	funkinScript.call_func("on_death_scene");
+	can_pause = false;
 	
-	SongData.characters = {
-		"bf": [bf.global_position, bf.scale, bf.rotation, bf.death_scene, bf.have_death_animation],
-		"opponent": [dad.global_position, dad.scale, dad.rotation, dad.death_scene, dad.have_death_animation],
-		"gf": [gf.global_position, gf.scale, gf.rotation, gf.death_scene, gf.have_death_animation] if gf != null else [Vector2(0,0), Vector2(0,0), 0.0, "", false]
-	};
+	ScriptLoader.call_func("on_death_scene");
+	
+	SongData.characters = {"bf": [bf.global_position, bf.scale, bf.rotation, bf.death_scene, bf.have_death_animation]};
 	SongData.camera_data = {
 		"position": sectionCamera.global_position,
 		"zoom": sectionCamera.zoom,
@@ -516,7 +515,6 @@ func checkPlayerDead():
 	};
 	SongData.death_count += 1;
 	SongData.isOnDeathScreen = true;
-	can_pause = false;
 	Global.changeScene("/gameplay/death_scene/death_scene", false, false);
 	
 func newRank():
@@ -552,10 +550,23 @@ func _input(ev):
 			if ev.keycode in [KEY_R] && GlobalOptions.restart_action:
 				health = 0;
 				
-			if ev.keycode in [GlobalOptions.get_key("7")]:
+			if ev.keycode in [GlobalOptions.get_key("chartKey")]:
 				SongData.week_songs = playlist[0];
 				SongData.isPlaying = false;
 				Global.changeScene("menus/editors/chart_editor/chartState", true, false);
+				
+			if ev.keycode in [GlobalOptions.get_key("offsetKey")]:
+				SongData.characters = {"opponent": dad.curCharacter};
+				SongData.week_songs = playlist[0];
+				SongData.week_diffs = songDiff;
+				SongData.isPlaying = true;
+				Global.changeScene("menus/editors/offset_editor/offset_menu", true, false);
+				
+			if ev.keycode in [GlobalOptions.get_key("camEditorKey")]:
+				SongData.week_songs = playlist[0];
+				SongData.week_diffs = songDiff;
+				SongData.isPlaying = true;
+				Global.changeScene("menus/editors/cam_editor/cam_editor", true, false);
 				
 			if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && can_pause:
 				pause_menu.can_use = true;
@@ -601,6 +612,8 @@ func startCountdown():
 			voices.play(0.0);
 		inst.play(0.0);
 		
+		ScriptLoader.call_func("on_song_start");
+		
 		return;
 		
 	for i in [bf, dad, gf]:
@@ -610,7 +623,7 @@ func startCountdown():
 	for i in 5:
 		await get_tree().create_timer(Conductor.crochet/1000).timeout;
 		
-		funkinScript.call_func("on_countdown", [i]);
+		ScriptLoader.call_func("on_countdown", [i]);
 		
 		if countdownSprite == null:
 			continue;
@@ -625,7 +638,7 @@ func startCountdown():
 			
 			countdownSprite.queue_free();
 			
-			funkinScript.call_func("on_song_start");
+			ScriptLoader.call_func("on_song_start");
 			
 			continue;
 			
@@ -638,10 +651,10 @@ func startCountdown():
 		idleCounter += 1;
 		
 func set_contdownSpr(path, spr):
-	var tween = get_tree().create_tween();
-	tween.tween_property(countdownSprite, "modulate:a", 1.0, 0.14);
 	countdownSprite.texture = load("res://assets/images/coutdown/%s/%s.png"%[path, spr]);
-	tween.tween_property(countdownSprite, "modulate:a", 0.0, 0.14);
+	var tween = create_tween();
+	tween.tween_property(countdownSprite, "modulate:a", 1.0, 0.15);
+	tween.tween_property(countdownSprite, "modulate:a", 0.0, 0.15);
 	
 func startSong():
 	if SongData.song == "":
@@ -654,11 +667,15 @@ func startSong():
 	voices.stream = music_voices;
 	
 func finishSong():
+	can_pause = false;
+	
 	SongData.isOnChartMode = false;
 	SongData.restartSong = false;
 	SongData.death_count = 0;
 	
 	var diffSet = "" if songDiff == "" else str('-', songDiff);
+	
+	ScriptLoader.call_func("on_song_end");
 	
 	if !GlobalOptions.isUsingBot or !SongData.isOnChartMode:
 		if score > HighScore.get_score(playlist[0], diffSet):
@@ -676,21 +693,8 @@ func finishSong():
 		
 	inst.stop();
 	voices.stop();
-	can_pause = false;
 	
-	funkinScript.call_func("on_song_end");
-	
-	match curSong:
-		"test":
-			HighScore.unlocksong("test", "bf-pixel", [0.0, 0.845, 1.0], "test week", ["easy", "normal", "hard"]);
-		"monster":
-			HighScore.unlocksong("monster", "monster", [1, 0.989, 0], "week 2", ["easy", "normal", "hard"]);
-			
 	if SongData.isStoryMode:
-		if curSong == "eggnog" && !is_on_intro:
-			Flash.just_appear(8, Color(0.0, 0.0, 0.0));
-			Sound.playAudio("Lights_Shut_off", false);
-			
 		playlist.remove_at(0);
 		print(playlist);
 		
@@ -799,3 +803,5 @@ func step_hit(_step):
 	if SongData.songSections[Conductor.curSection]["changeBPM"]:
 		Conductor.changeBpm(SongData.songSections[Conductor.curSection]["bpm"]);
 		
+func beat_hit(_beat):
+	pass;

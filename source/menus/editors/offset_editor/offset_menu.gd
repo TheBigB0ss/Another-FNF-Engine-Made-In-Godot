@@ -63,7 +63,7 @@ func _ready():
 	comboSpr.position = Vector2(GlobalOptions.ratings_positions["combo"][0], GlobalOptions.ratings_positions["combo"][1]);
 	numsSpr.position = Vector2(GlobalOptions.ratings_positions["nums"][0], GlobalOptions.ratings_positions["nums"][1]);
 	
-	change_character(0);
+	change_character();
 	play_anim();
 	
 var adjusting_rating = false;
@@ -80,7 +80,7 @@ func get_char_json(character, cur_offset, option):
 	jsonFile.close();
 	return offset["Poses"][cur_offset][option];
 	
-func change_character(_char):
+func change_character(_char = 0):
 	for i in characterGrp.get_children():
 		characterGrp.remove_child(i);
 		i.queue_free();
@@ -91,7 +91,7 @@ func change_character(_char):
 	characterData = [];
 	characterJson = {};
 	
-	var character = load("res://source/characters/characters_scenes/%s.tscn"%[character_list[characters_options.selected]]).instantiate();
+	var character = load("res://source/characters/characters_scenes/%s.tscn"%[character_list[characters_options.selected if !SongData.isPlaying else character_list.find(SongData.characters["opponent"])]]).instantiate();
 	characterGrp.add_child(character);
 	
 	for i in characterGrp.get_children():
@@ -117,11 +117,11 @@ func change_character(_char):
 	
 func update_offset_value(x = 0, y = 0):
 	for i in characterGrp.get_children():
-		if i.character is AnimatedSprite2D or i.character is SparrowCharacter:
+		if i.character is AnimatedSprite2D or i.character is SparrowCharacter or i.character is DeadSparrowCharacter:
 			i.character.offset = Vector2.ZERO;
 			i.character.offset = Vector2(x, y);
 			
-		if i.character is Sprite2D or i.character is AtlasCharacter:
+		if i.character is Sprite2D or i.character is AtlasCharacter or i.character is DeadAtlasCharacter:
 			i.character.position = i.base_position + Vector2(x, y);
 			
 func update_cross(x, y):
@@ -151,7 +151,7 @@ func play_anim():
 		if i.character is Sprite2D:
 			i.character_anim.play(i.posesList[cur_pose]);
 			
-		elif i.character is AnimatedSprite2D or i.character is AtlasCharacter or i.character is SparrowCharacter:
+		elif i.character is AnimatedSprite2D or i.character is AtlasCharacter or i.character is SparrowCharacter or i.character is DeadSparrowCharacter or i.character is DeadAtlasCharacter:
 			i.character.play(i.posesList[cur_pose]);
 			
 func set_rating_pos():
@@ -190,7 +190,7 @@ func mouse_inside_character(spr, offset):
 	var mouse = get_global_mouse_position();
 	var size = null;
 	
-	if spr is AtlasCharacter or spr is SparrowCharacter:
+	if spr is AtlasCharacter or spr is SparrowCharacter or spr is DeadSparrowCharacter or spr is DeadAtlasCharacter:
 		return false;
 		
 	if spr is AnimatedSprite2D:
@@ -236,9 +236,13 @@ func _input(ev):
 				
 			if ev.keycode in [KEY_ESCAPE]:
 				Global.update_cursor("default");
-				MusicManager._play_song("freakyMenu", "music", true);
-				Global.changeScene("menus/main_menu/MainMenu", true, false);
-				
+				if !SongData.isPlaying:
+					MusicManager._play_song("freakyMenu", "music", true);
+					Global.changeScene("menus/main_menu/MainMenu", true, false);
+				else:
+					SongData.loadJson(SongData.week_songs[0], SongData.week_diffs, null);
+					Global.changeScene("gameplay/PlayState", true, false);
+					
 			if !adjusting_rating:
 				if ev.keycode in [KEY_E]:
 					change_anim(1);
@@ -307,7 +311,7 @@ func change_character_frame(frame = 1, instant = false):
 			var val = (max_frames if frame > 0 else 0.0) if instant else character.frame+frame;
 			character.frame = clamp(val, 0.0, max_frames);
 			
-		elif i.character is SparrowCharacter:
+		elif i.character is SparrowCharacter or i.character is DeadSparrowCharacter:
 			character = i.character;
 			max_frames = character.get_anim_length(i.posesList[cur_pose])-1;
 			character.playing = false;
@@ -317,7 +321,7 @@ func change_character_frame(frame = 1, instant = false):
 			character.frame = int(character.timer);
 			character.queue_redraw();
 			
-		elif i.character is AtlasSprite:
+		elif i.character is AtlasSprite or i.character is DeadAtlasCharacter:
 			character = i.character;
 			max_frames = int(abs(character.start_frame-character.limit));
 			character.playing = false;
@@ -364,11 +368,11 @@ func _process(_delta: float) -> void:
 			frame = i.character.frame;
 			total_frames = i.character.sprite_frames.get_frame_count(i.posesList[cur_pose]);
 			
-		elif i.character is AtlasCharacter:
+		elif i.character is AtlasCharacter or i.character is DeadAtlasCharacter:
 			frame = int(i.character.frame-i.character.start_frame);
 			total_frames = int(abs(i.character.start_frame-i.character.limit))+1;
 			
-		elif i.character is SparrowCharacter:
+		elif i.character is SparrowCharacter or i.character is DeadSparrowCharacter:
 			frame = int(i.character.timer);
 			total_frames = int(i.character.get_anim_length(i.posesList[cur_pose]));
 			
@@ -493,7 +497,7 @@ func _process(_delta: float) -> void:
 	
 	for i in characterGrp.get_children():
 		if !offset_count > i.animList.size()-1:
-			offset_array.append(get_char_json(character_list[characters_options.selected], offset_count, "Offset"));
+			offset_array.append(get_char_json(character_list[characters_options.selected if !SongData.isPlaying else character_list.find(SongData.characters["opponent"])], offset_count, "Offset"));
 			animTimes.append(5);
 			animBeats.append(2);
 			specialAnims.append(false);

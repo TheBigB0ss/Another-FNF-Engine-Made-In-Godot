@@ -2,7 +2,7 @@
 class_name DeadSparrowCharacter extends SparrowSprite
 
 var charData = {};
-var charPath = '';
+var curCharacter = '';
 var animList = [];
 var posesList = [];
 
@@ -37,8 +37,8 @@ func init_json(char_json_path):
 	jsonFile.close();
 	
 func _ready():
-	charPath = json_path.get_file();
-	charPath = charPath.replace(".json", "");
+	curCharacter = json_path.get_file();
+	curCharacter = curCharacter.replace(".json", "");
 	
 	init_json(json_path);
 	

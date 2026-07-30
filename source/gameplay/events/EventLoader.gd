@@ -23,7 +23,6 @@ func _ready() -> void:
 func reload_events():
 	if !SongData.songEvents.is_empty():
 		for i in SongData.songEvents:
-			print(i)
 			array_events_notes.insert(0, [i[0], i[1], i[2], i[3], i[4]]);
 			
 func _process(_delta: float) -> void:

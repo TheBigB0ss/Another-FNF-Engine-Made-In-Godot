@@ -62,6 +62,10 @@ func _ready() -> void:
 		camEaseOpts.add_item(i);
 		zoomEaseOpts.add_item(i);
 		
+	if !SongData.week_songs.is_empty() && SongData.isPlaying:
+		%song_name.text = SongData.week_songs[0];
+		reload_scene(SongData.week_songs[0]);
+		
 	pointer_starter = songPointer.position;
 	
 func play_song():
@@ -74,6 +78,7 @@ func delete_event(strumtime, array):
 	for i in array:
 		if int(i["strumTime"]) == int(strumtime):
 			notes_deleted.append(i);
+			
 	for i in notes_deleted:
 		array.erase(i);
 		
@@ -82,9 +87,13 @@ func _input(ev):
 		if ev.pressed:
 			if ev.keycode in [KEY_ESCAPE]:
 				Global.update_cursor("default");
-				MusicManager._play_song("freakyMenu", "music", true);
-				Global.changeScene("menus/main_menu/MainMenu", true, false);
-				
+				if !SongData.isPlaying:
+					MusicManager._play_song("freakyMenu", "music", true);
+					Global.changeScene("menus/main_menu/MainMenu", true, false);
+				else:
+					SongData.loadJson(SongData.week_songs[0], SongData.week_diffs, null);
+					Global.changeScene("gameplay/PlayState", true, false);
+					
 			if ev.keycode == KEY_DELETE:
 				for i in camsEventsToDelete:
 					if i == null:
@@ -170,6 +179,9 @@ func reload_scene(songName):
 		for i in bf.camera_pos.size()-1:
 			bf.camera_pos[i] *= -1;
 			
+	camera.global_position = (dad.global_position + Vector2(dad.camera_pos[0], dad.camera_pos[1]));
+	positionCross.global_position = (dad.global_position + Vector2(dad.camera_pos[0], dad.camera_pos[1]));
+	
 	stageGrp.add_child(stage);
 	
 	camera.zoom = SongData.stageZoom;
@@ -227,7 +239,7 @@ func _process(delta: float) -> void:
 	update_events_position(zoomGrp, zoom_events);
 	
 	if %default_zoom.button_pressed && SongData.stageZoom != Vector2.ZERO:
-		camera.zoom = lerp(camera.zoom, SongData.stageZoom, 0.10);
+		camera.zoom = lerp(camera.zoom, SongData.stageZoom, 1.0 - exp(-8.0 * delta));
 		
 	if isPlaying:
 		selectionBox.selectionRect = Rect2();

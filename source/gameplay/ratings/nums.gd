@@ -29,7 +29,7 @@ func _ready() -> void:
 	hide();
 	
 func _process(delta):
-	modulate.a = lerp(modulate.a, 0.0, fade_speed * delta);
+	modulate.a = lerp(modulate.a, 0.0, 1.0 - exp(-fade_speed * delta));
 	for i in nums:
 		i["velocity"] += i["acceleration"] * delta;
 		i["position"] += i["velocity"] * delta;
@@ -53,10 +53,7 @@ func pop_up_rating():
 		var numbers = {
 			"texture": numScore[int(combo[i])],
 			"position": Vector2(i * (10 if SongData.isPixelStage else 90) + rand_x, rand_y),
-			"velocity": Vector2(
-				-randi_range(0, 50) * scale_factor,
-				-randi_range(130, 190) * scale_factor
-			),
+			"velocity": Vector2(-randi_range(0, 50) * scale_factor,-randi_range(130, 190) * scale_factor),
 			"acceleration": Vector2(0, randf_range(420, 760) * scale_factor)
 		};
 		

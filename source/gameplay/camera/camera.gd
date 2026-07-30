@@ -41,7 +41,7 @@ func _ready() -> void:
 		
 func _process(delta: float) -> void:
 	if (SongData.is_not_in_cutscene && !Global.is_on_video) or useDefaultZoomEvent:
-		zoom = lerp(zoom, SongData.stageZoom, 0.10);
+		zoom = lerp(zoom, SongData.stageZoom, 1.0 - exp(-8.0 * delta));
 		
 	for i in cameraEvents:
 		if i["duration"] <= 0:
@@ -86,7 +86,7 @@ func _process(delta: float) -> void:
 			
 	if useDefaultCamsEvent:
 		if GlobalOptions.updated_cam == "smooth":
-			global_position = global_position.lerp(target_position, 1.0 - exp(-12.0 * delta));
+			global_position = global_position.lerp(target_position, 1.0 - exp(-10.0 * delta));
 		else:
 			global_position = target_position;
 			
@@ -109,7 +109,7 @@ func step_hit(_step):
 		cam_target = main_scene.bf;
 		
 	if SongData.isPlaying && cam_target != null:
-		target_position = cam_target.global_position + Vector2(cam_target.camera_pos[0], cam_target.camera_pos[1])
+		target_position = cam_target.global_position + Vector2(cam_target.camera_pos[0], cam_target.camera_pos[1]);
 		
 var cam_offset_values = {
 	"singLeft": Vector2.LEFT,

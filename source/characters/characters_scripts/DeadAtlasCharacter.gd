@@ -2,7 +2,7 @@
 class_name DeadAtlasCharacter extends AtlasSprite
 
 var charData = {};
-var charPath = '';
+var curCharacter = '';
 var animList = [];
 var posesList = [];
 
@@ -41,8 +41,8 @@ func init_json(char_json_path):
 func _ready():
 	is_animated_sprite = character is AnimatedSprite2D;
 	
-	charPath = json_path.get_file();
-	charPath = charPath.replace(".json", "");
+	curCharacter = json_path.get_file();
+	curCharacter = curCharacter.replace(".json", "");
 	
 	init_json(json_path);
 	
@@ -67,7 +67,7 @@ func _process(delta):
 	
 	if Engine.is_editor_hint():
 		return;
-	
+		
 	if curAnim.begins_with("dead") && SongData.isOnDeathScreen:
 		idleTimer += delta;
 		

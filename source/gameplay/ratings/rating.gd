@@ -25,7 +25,7 @@ func _ready() -> void:
 	hide();
 	
 func _process(delta):
-	modulate.a = lerp(modulate.a, 0.0, fade_speed * delta);
+	modulate.a = lerp(modulate.a, 0.0, 1.0 - exp(-fade_speed * delta));
 	velocity += acceleration * delta;
 	position += velocity * delta;
 	

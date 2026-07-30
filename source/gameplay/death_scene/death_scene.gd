@@ -18,21 +18,20 @@ func _ready():
 	
 	death_anim._playAnim("dead");
 	
+	Global.emit_signal("on_death_screen");
+	
 	camera.global_position = SongData.camera_data["position"];
 	camera.zoom = SongData.camera_data["zoom"];
 	camera.rotation = SongData.camera_data["rotation"];
 	
 	if SongData.isOnDeathScreen:
 		if song == "ugh" or song == "guns" or song == "stress":
-			Sound.add_new_sound("game over/tankman gameover voice lines/jeffGameover-%s"%[choice_voice_line()]);
+			Sound.add_new_sound("game over/tankman gameover voice lines/jeffGameover-%s"%[randi_range(1, 25)]);
 			
 		Sound.playAudio("game over/fnf_loss_sfx", false);
-		if death_anim.charPath == "Bf Pixel dead":
+		if death_anim.curCharacter == "Bf Pixel dead":
 			Sound.playAudio("game over/fnf_loss_sfx", true);
 			
-func choice_voice_line():
-	return randi_range(1, 25);
-	
 var dead_confirmed = false;
 var confirm = false;
 func _process(_delta: float) -> void:
@@ -47,11 +46,13 @@ func _process(_delta: float) -> void:
 			tw.tween_property(camera, "global_position", death_anim.global_position, 1.2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT);
 			tw.tween_property(camera, "zoom", Vector2.ONE, 1.2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT);
 			
-			if death_anim.charPath == "Bf Pixel dead":
-				MusicManager._play_song("game over/gameOver-pixel", "music", true);
-				
-			MusicManager._play_song("game over/gameOver", "music", true);
+			Global.emit_signal("on_death_confirm");
 			
+			if death_anim.curCharacter == "Bf Pixel dead":
+				MusicManager._play_song("game over/gameOver-pixel", "music", true);
+			else:
+				MusicManager._play_song("game over/gameOver", "music", true);
+				
 			dead_confirmed = true;
 			
 func _input(ev):
@@ -59,17 +60,18 @@ func _input(ev):
 		if ev.pressed && !ev.echo && !confirm:
 			if ev.keycode in [KEY_ENTER] && death_anim.curAnim != "dead":
 				MusicManager._play_song("game over/gameOverEnd", "music", false);
-				if death_anim.charPath == "Bf Pixel dead":
+				if death_anim.curCharacter == "Bf Pixel dead":
 					MusicManager._play_song("game over/gameOverEnd-pixel", "music", false);
 					
 				death_anim._playAnim("dead confirm");
 				death_anim.idleTimer = 0;
+				
+				SongData.isOnDeathScreen = false;
+				
 				confirm = true;
 				
 				var tw = get_tree().create_tween();
 				tw.tween_property(camera, "zoom", SongData.camera_data["zoom"], 1.2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT);
-				
-				SongData.isOnDeathScreen = false;
 				
 			if ev.keycode in [KEY_ESCAPE]:
 				SongData.death_count = 0;

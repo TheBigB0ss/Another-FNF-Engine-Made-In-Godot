@@ -3,6 +3,9 @@ extends Node
 signal end_dialogue;
 signal end_cutscene;
 
+signal on_death_screen;
+signal on_death_confirm;
+
 var finished_intro = false;
 var can_use_menus = true;
 var is_on_video = false;

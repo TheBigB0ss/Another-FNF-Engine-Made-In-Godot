@@ -20,11 +20,11 @@ func init_icon(parent, path, is_opponent, is_animated, icon_position):
 func _ready() -> void:
 	Conductor.new_beat.connect(beat_hit);
 	
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if !enable:
 		return;
 		
-	scale = lerp(scale, Vector2(1.0, 1.0), 0.10);
+	scale = lerp(scale, Vector2(1.0, 1.0), 1.0 - exp(-8.0 * delta));
 	
 func play_icon_anim(anim):
 	if !texture:
@@ -60,7 +60,7 @@ func beat_hit(_beat):
 		return;
 		
 	if GlobalOptions.updated_icon != "disabled":
-		scale = Vector2(1.25, 1.25);
+		scale = Vector2(1.15, 1.15);
 		
 func reload_icon(icon, playIconAnim = ""):
 	texture = load("res://assets/images/icons/icon-%s.png"%[icon]);

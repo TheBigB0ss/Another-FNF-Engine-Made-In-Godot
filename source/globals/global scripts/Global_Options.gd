@@ -51,7 +51,9 @@ var keys = {
 	"escape": [KEY_ESCAPE, "escape", 2],
 	"equal": [KEY_EQUAL, "equal", 3],
 	"minus": [KEY_MINUS, "minus", 3],
-	"7": [KEY_7, "7", 3],
+	"chartKey": [KEY_7, "7", 3],
+	"offsetKey": [KEY_8, "8", 3],
+	"camEditorKey": [KEY_9, "9", 3],
 	"F11": [KEY_F11, "F11", 3]
 };
 
@@ -153,7 +155,9 @@ func reset_settings():
 			"escape": [KEY_ESCAPE, "escape", 2],
 			"equal": [KEY_EQUAL, "equal", 3],
 			"minus": [KEY_MINUS, "minus", 3],
-			"7": [KEY_7, "7", 3],
+			"chartKey": [KEY_7, "7", 3],
+			"offsetKey": [KEY_8, "8", 3],
+			"camEditorKey": [KEY_9, "9", 3],
 			"F11": [KEY_F11, "F11", 3]
 		},
 		"options": {
@@ -393,8 +397,16 @@ func set_options():
 				"description": "change volume down key"
 			},
 			"Chart Key:":{
-				"value": keys["7"][1], 
+				"value": keys["chartKey"][1], 
 				"description": "change chart key"
+			},
+			"Offset Short Cut Key:":{
+				"value": keys["offsetKey"][1], 
+				"description": "change offset menu short cut key"
+			},
+			"Cam Editor Short Cut Key:":{
+				"value": keys["camEditorKey"][1], 
+				"description": "change cam editor short cut key"
 			},
 			"Screenshot Key:":{
 				"value": keys["F11"][1],

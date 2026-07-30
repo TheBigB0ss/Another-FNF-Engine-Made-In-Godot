@@ -54,6 +54,7 @@ func _ready() -> void:
 	settings.position.y = float(480-coolOffset*new_cur_option);
 	
 	coolKeyText = Alphabet.new();
+	coolKeyText.scale = Vector2(0.75, 0.75);
 	coolKeyText.position = Vector2(30, 290);
 	$keys.add_child(coolKeyText);
 	
