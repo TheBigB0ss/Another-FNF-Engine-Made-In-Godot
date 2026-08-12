@@ -23,15 +23,16 @@ var colors = {
 };
 
 func _ready():
-	if game.curSong != "blammed-remix" && game.songDiff == "remix":
+	if game.curSong != "blammed" && game.songDiff == "remix":
 		darnell.hide();
 		nene.hide();
 		
 	if SongData.isPlaying:
-		if game.curSong == "philly-nice-remix" && game.songDiff == "remix":
+		if game.curSong == "philly-nice" && game.songDiff == "remix":
 			for i in [darnellStrum, neneStrum]:
 				if GlobalOptions.down_scroll:
 					i.position.y = 885;
+					
 				i.enable = true;
 				i.pressed_note.connect(note_pressed);
 				
@@ -69,7 +70,7 @@ func beat_hit(beat) -> void:
 	if beat % 4 == 0:
 		set_color();
 		
-	if game.curSong == "philly-nice-remix" && game.songDiff == "remix":
+	if game.curSong == "philly-nice" && game.songDiff == "remix":
 		match beat:
 			260:
 				$ColorRect.show();
@@ -83,14 +84,11 @@ func beat_hit(beat) -> void:
 				
 func step_hit(_step) -> void:
 	if SongData.isPlaying:
-		if itsBuddysPart && game.curSong == "philly-nice-remix" && game.songDiff == "remix":
+		if itsBuddysPart && game.curSong == "philly-nice" && game.songDiff == "remix":
 			if game.camera_on_Bf:
-				game.cam_target = game.bf
+				game.sectionCamera.target_position = game.bf.global_position;
 			else:
-				game.cam_target = buddyTarget;
-				
-			if game.sectionCamera != null && SongData.isPlaying:
-				call_func("move_cam", [true if GlobalOptions.updated_cam == "smooth" else false, (game.cam_target.global_position + Vector2(game.cam_target.camera_pos[0], game.cam_target.camera_pos[1]))]);
+				game.sectionCamera.target_position = buddyTarget.global_position;
 				
 func funny_guy():
 	darnell._playAnim("singLaugh");

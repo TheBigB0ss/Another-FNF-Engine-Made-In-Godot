@@ -91,7 +91,6 @@ func _input(ev):
 					MusicManager._play_song("freakyMenu", "music", true);
 					Global.changeScene("menus/main_menu/MainMenu", true, false);
 				else:
-					SongData.loadJson(SongData.week_songs[0], SongData.week_diffs, null);
 					Global.changeScene("gameplay/PlayState", true, false);
 					
 			if ev.keycode == KEY_DELETE:
@@ -142,7 +141,7 @@ func reload_scene(songName):
 	
 	SongData.loadJson(songName, "");
 	
-	var camPath = "res://assets/data/songs/%s/camera_events.json"%[songName];
+	var camPath = "res://assets/songs/%s/chart/camera_events.json"%[songName];
 	if FileAccess.file_exists(camPath):
 		var camFile = FileAccess.open(camPath, FileAccess.READ);
 		var camJsonData = JSON.new();
@@ -191,8 +190,8 @@ func reload_scene(songName):
 	load_events();
 	
 func load_song(songName):
-	var music_inst = load("res://assets/songs/" + songName + "/Inst.ogg");
-	var music_voices = load("res://assets/songs/" + songName + "/Voices.ogg");
+	var music_inst = load("res://assets/songs/" + songName + "/song/Inst.ogg");
+	var music_voices = load("res://assets/songs/" + songName + "/song/Voices.ogg");
 	
 	inst.stream = music_inst;
 	voices.stream = music_voices;

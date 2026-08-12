@@ -30,7 +30,7 @@ func _ready() -> void:
 	
 	if SongData.isPlaying:
 		if song == "stress":
-			var jsonFile = FileAccess.open("res://assets/data/songs/stress/picospeaker.json", FileAccess.READ);
+			var jsonFile = FileAccess.open("res://assets/songs/stress/chart/picospeaker.json", FileAccess.READ);
 			var jsonData = JSON.new();
 			jsonData.parse(jsonFile.get_as_text());
 			pico_data = jsonData.get_data();

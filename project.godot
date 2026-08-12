@@ -27,6 +27,7 @@ run/vsync/vsync_mode=0
 [autoload]
 
 ScriptLoader="*uid://dec4v1x2qktab"
+ModLoader="*uid://ctlbl23d4b8qy"
 Conductor="*res://source/globals/global scripts/Conductor.gd"
 CamTween="*uid://cn6clqfqv4w3h"
 Sound="*res://source/globals/global scripts/Sound.gd"

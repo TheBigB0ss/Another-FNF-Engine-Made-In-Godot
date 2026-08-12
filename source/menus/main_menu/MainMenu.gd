@@ -65,7 +65,7 @@ func _input(ev):
 var can_show_magenta = true;
 var magenta_time = 0.095;
 func _process(delta):
-	coolOptions.position.y = lerp(coolOptions.position.y, (720/2.0)-(coolOffset*curOption), 0.040);
+	coolOptions.position.y = lerp(coolOptions.position.y, (720/2.0)-(coolOffset*curOption), 1.0 - exp(-9.0 * delta));
 	if !choiced:
 		return;
 		

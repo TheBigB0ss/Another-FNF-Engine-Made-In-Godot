@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="noteSplashPixel.png">
+	<!-- Created with Adobe Animate version 23.0.1.70 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="pixelHoldNoteCover instância 10000" x="0" y="0" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10001" x="0" y="0" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10002" x="100" y="0" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10003" x="100" y="0" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10004" x="200" y="0" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10005" x="200" y="0" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10006" x="300" y="0" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10007" x="300" y="0" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10008" x="400" y="0" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10009" x="400" y="0" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10010" x="0" y="100" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10011" x="0" y="100" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10012" x="100" y="100" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10013" x="100" y="100" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10014" x="200" y="100" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10015" x="200" y="100" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10016" x="300" y="100" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10017" x="300" y="100" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10018" x="400" y="100" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10019" x="400" y="100" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10020" x="400" y="100" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10021" x="400" y="100" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10022" x="0" y="200" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10023" x="0" y="200" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10024" x="100" y="200" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10025" x="100" y="200" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10026" x="200" y="200" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10027" x="200" y="200" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10028" x="300" y="200" width="100" height="100"/>
+	<SubTexture name="pixelHoldNoteCover instância 10029" x="300" y="200" width="100" height="100"/>
+</TextureAtlas>

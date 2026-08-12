@@ -4,73 +4,90 @@
 	"FlipY": false,
 	"HealthBarColor": "#ffffffff",
 	"HealthIcon": "tankman",
-	"LoopAnim": true,
 	"Poses": [
 		{
 			"Anim": "idle dance",
+			"Anim Time": 5,
 			"Name": "Tankman Idle Dance 1",
 			"Offset": [
-				7.0,
+				8.0,
 				-9.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singLeft",
+			"Anim Time": 5,
 			"Name": "Tankman Right Note 1",
 			"Offset": [
 				-42.0,
 				-1.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singDown",
+			"Anim Time": 5,
 			"Name": "Tankman DOWN note 1",
 			"Offset": [
 				15.0,
 				45.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singUp",
+			"Anim Time": 5,
 			"Name": "Tankman UP note 1",
 			"Offset": [
 				-17.0,
 				-32.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singRight",
+			"Anim Time": 5,
 			"Name": "Tankman Note Left 1",
 			"Offset": [
 				70.0,
 				6.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "hey",
+			"Anim Time": 5,
 			"Name": "TANKMAN UGH 1",
 			"Offset": [
 				9.0,
 				-3.0
 			],
-			"Anim Time": 30,
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "good anim",
+			"Anim Time": 5,
 			"Name": "PRETTY GOOD tankman 1",
 			"Offset": [
 				57.0,
 				-16.0
 			],
-			"Anim Time": 45,
-			"special anim": true
+			"anim beat": 2,
+			"special anim": false
 		}
 	],
-	"anim time": 5.0,
+	"anim type": 2,
 	"camera follow pos": false,
 	"cameraPos": [
-		40.0,
-		-10.0
+		-180.0,
+		-100.0
 	],
 	"isPlayer": true,
 	"scale": [

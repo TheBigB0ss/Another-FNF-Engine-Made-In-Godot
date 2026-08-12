@@ -21,10 +21,6 @@ var spriteStuff = {};
 @export var start_frame = 0;
 @export var animate_symbols = false;
 
-var frames = [];
-var sprite_name = [];
-var cool_elements = [];
-
 var atlas = {};
 var animationData = {};
 var spriteData = {};
@@ -86,7 +82,6 @@ func reload():
 	notify_property_list_changed();
 	
 func draw_symbol(element, layer, index, elementTransform, key = "atlas"):
-	
 	var elementData = element.get("SI", element.get("ASI"));
 	var symbolID = symbol_data[elementData["SN"]];
 	var keyID = str(key, "--", symbolID["SN"], "--", layer, "--", index);

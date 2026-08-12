@@ -9,10 +9,8 @@ func init_script(newGame, song = "", diff = ""):
 			song = song.replace("-remix", "");
 			
 	game = newGame
-	var script_path = "res://assets/data/songs/%s/script%s.gd"%[song, str("-",diff) if diff != "" else ""];
-	
+	var script_path = "res://assets/songs/%s/chart/script%s.gd"%[song, str("-",diff) if diff != "" else ""];
 	var script = ResourceLoader.load(script_path);
-	
 	if script == null:
 		return FunkinScript.new();
 		

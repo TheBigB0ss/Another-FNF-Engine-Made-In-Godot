@@ -25,7 +25,7 @@ func _ready() -> void:
 		
 	ogdadPos = game.dad.position;
 	
-	if game.curSong == "thorns-remix" && !GlobalOptions.low_quality:
+	if game.curSong == "thorns" && game.songDiff == "remix" && !GlobalOptions.low_quality:
 		game.opponentStrum.strumNode.visible = false;
 		
 	#if !GlobalOptions.low_quality or GlobalOptions.use_shader:
@@ -62,7 +62,7 @@ func _process(delta: float) -> void:
 	move_timer += delta;
 	dad_time += delta * 2.0;
 	
-	if game.curSong == "thorns-remix" && !GlobalOptions.low_quality:
+	if game.curSong == "thorns" && game.songDiff == "remix" && !GlobalOptions.low_quality:
 		time += delta * 3;
 		for i in game.opponentStrum.strumNode.get_child_count():
 			var note = game.opponentStrum.strumNode.get_child(i);

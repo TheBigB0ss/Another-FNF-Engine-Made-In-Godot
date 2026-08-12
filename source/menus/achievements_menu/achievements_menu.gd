@@ -4,6 +4,7 @@ extends Node2D
 @onready var descriptionText = $description_stuff/description_text;
 @onready var progressBar = $description_stuff/progressBar;
 @onready var progressText = $description_stuff/progressText;
+@onready var description_stuff = $description_stuff;
 
 var cur_Achievement = 0;
 var coolOffset = 145;
@@ -37,16 +38,17 @@ func _ready():
 			new_achievement.cool_name = i;
 			new_achievement.achievement_ID = id;
 			new_achievement.position.x = 250;
-			
-			var row = (achievements_list.find(i) % achievements_row)*160;
-			var col = floor(achievements_list.find(i) / achievements_row)*160;
-			
-			new_achievement.global_position += Vector2(row, col);
 			achievementsGrp.add_child(new_achievement);
 			
 			offSetShit += coolOffset;
 			id += 1;
 			
+	for i in achievements_list.size():
+		var row = (i % achievements_row) * 160;
+		var col = (i / achievements_row) * 160;
+		
+		achievementsGrp.get_child(i).global_position += Vector2(row, col);
+		
 	achievementName.scale = Vector2(0.55, 0.55);
 	achievementName.position = Vector2(20, 610);
 	$description_stuff.add_child(achievementName);
@@ -80,32 +82,44 @@ func _input(ev):
 func change_achievement(change):
 	Sound.playAudio("scrollMenu", false);
 	
-	var cur_col = cur_Achievement - int(floor(float(cur_Achievement) / achievements_row) * achievements_row);
+	var row = cur_Achievement / achievements_row;
+	var col = cur_Achievement % achievements_row;
 	
-	cur_Achievement += change;
-	
-	if cur_Achievement < 0:
-		cur_Achievement += ceil(float(achievements_list.size()) / achievements_row) * achievements_row;
-		
-		if cur_Achievement >= achievements_list.size():
+	match change:
+		1:
+			if col < achievements_row - 1 && cur_Achievement + 1 < achievements_list.size():
+				cur_Achievement += 1
+			else:
+				cur_Achievement = row * achievements_row;
+		-1:
+			if col > 0:
+				cur_Achievement -= 1;
+			else:
+				cur_Achievement = min((row + 1) * achievements_row, achievements_list.size()) - 1;
+		5:
+			cur_Achievement += achievements_row;
+			if cur_Achievement >= achievements_list.size():
+				cur_Achievement = col;
+		-5:
 			cur_Achievement -= achievements_row;
+			if cur_Achievement < 0:
+				cur_Achievement = int(ceil(float(achievements_list.size()) / achievements_row)) - 1 * achievements_row + col;
+		_:
+			cur_Achievement = change;
 			
-	if cur_Achievement >= achievements_list.size():
-		cur_Achievement = cur_col;
-		
-	Global.currentAchievements = cur_Achievement;
-	update_achievement();
+	Global.currentAchievements = cur_Achievement
+	update_achievement()
 	
 var achievement_name = "";
 var achievement_value = false;
 
 var seeingAchievementStatus = false;
-func _process(_delta):
-	var cur_col = -floor(cur_Achievement / achievements_row) * 160;
-	achievementsGrp.position.y = lerp(float(achievementsGrp.position.y)+90, float(cur_col), 0.25)
+func _process(delta):
+	achievementsGrp.position.y = lerp(achievementsGrp.position.y, -(cur_Achievement / achievements_row) * 160.0 + 160.0, 1.0 - exp(-8.0 * delta));
+	description_stuff.position.y = lerp(description_stuff.position.y, -35.0 if seeingAchievementStatus else 165.0, 1.0 - exp(-8.0 * delta));
 	
 	for j in achievements_list.size():
-		achievementsGrp.get_child(j).scale = lerp(achievementsGrp.get_child(j).scale, Vector2(1.20, 1.20) if j == cur_Achievement else Vector2(1, 1), 0.60);
+		achievementsGrp.get_child(j).scale = lerp(achievementsGrp.get_child(j).scale, Vector2(1.20, 1.20) if j == cur_Achievement else Vector2(1, 1), 1.0 - exp(-10.0 * delta));
 		
 	#for i in achievementsGrp.get_children():
 		#if mouse_inside(i.achievement_spr):
@@ -114,20 +128,13 @@ func _process(_delta):
 			#if Input.is_action_just_pressed("mouse_click"):
 				#seeingAchievementStatus = !seeingAchievementStatus;
 				
-	if seeingAchievementStatus:
-		$description_stuff.position.y = lerp(float($description_stuff.position.y), -35.0, 0.25);
-		#$esc_text.position.y = lerp(float($esc_text.position.y), 15.0, 0.25);
-	else:
-		$description_stuff.position.y = lerp(float($description_stuff.position.y), 165.0, 0.25);
-		#$esc_text.position.y = lerp(float($esc_text.position.y), -55.0, 0.25);
-		
-func mouse_inside(spr):
-	var mouse = get_global_mouse_position();
-	var size = spr.get_texture().get_size() * spr.scale;
-	if mouse.x > spr.global_position.x - size.x / 2 && mouse.x < spr.global_position.x + size.x / 2 && mouse.y > spr.global_position.y - size.y / 2 && mouse.y < spr.global_position.y + size.y / 2:
-		return true;
-		
-	return false;
+#func mouse_inside(spr):
+	#var mouse = get_global_mouse_position();
+	#var size = spr.get_texture().get_size() * spr.scale;
+	#if mouse.x > spr.global_position.x - size.x / 2 && mouse.x < spr.global_position.x + size.x / 2 && mouse.y > spr.global_position.y - size.y / 2 && mouse.y < spr.global_position.y + size.y / 2:
+		#return true;
+		#
+	#return false;
 	
 var suffix = "";
 func update_achievement():

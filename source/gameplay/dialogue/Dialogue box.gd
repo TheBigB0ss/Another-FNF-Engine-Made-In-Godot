@@ -26,14 +26,14 @@ var characters_spr_array = [];
 func start():
 	curSong = SongData.song;
 	
-	if FileAccess.file_exists("res://assets/data/songs/%s/%sDialogue.txt"%[curSong, curSong]):
+	if FileAccess.file_exists("res://assets/songs/%s/chart/%sDialogue.txt"%[curSong, curSong]):
 		for i in getTxt().size():
 			if getTxt()[i][0] != "":
 				characters_array.append(getTxt()[i][0]);
 				characters_spr_array.append(getTxt()[i][1]);
 				dialogue_array.append(getTxt()[i][2]);
 				
-	elif FileAccess.file_exists("res://assets/data/songs/%s/%sDialogue.json"%[curSong, curSong]):
+	elif FileAccess.file_exists("res://assets/songs/%s/chart/%sDialogue.json"%[curSong, curSong]):
 		for i in get_json_text()["structure"].size():
 			characters_array.append(get_json_text()["structure"][i]["role"]);
 			characters_spr_array.append(get_json_text()["structure"][i]["character"]);
@@ -100,7 +100,7 @@ func getTxt():
 		"senpai", "roses", "thorns":
 			is_joke_dialogue = (randi_range(0, 3000) <= 5);
 			
-	var path_file = ("res://assets/data/songs/%s/%sDialogue.txt"%[curSong, curSong]) if !is_joke_dialogue else ("res://assets/data/songs/%s/%sDialogue-joke.txt"%[curSong, curSong]);
+	var path_file = ("res://assets/songs/%s/chart/%sDialogue.txt"%[curSong, curSong]) if !is_joke_dialogue else ("res://assets/songs/%s/chart/%sDialogue-joke.txt"%[curSong, curSong]);
 	var readTxt = FileAccess.open(path_file, FileAccess.READ);
 	txtData = readTxt.get_as_text().split("\n");
 	
@@ -113,7 +113,7 @@ func getTxt():
 func get_json_text():
 	var dialogue_data = {};
 	
-	var path_file = "res://assets/data/songs/%s/%sDialogue.json"%[curSong, curSong];
+	var path_file = "res://assets/songs/%s/chart/%sDialogue.json"%[curSong, curSong];
 	var jsonFile = FileAccess.open(path_file, FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());

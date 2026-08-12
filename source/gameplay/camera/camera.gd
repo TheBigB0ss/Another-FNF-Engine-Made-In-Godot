@@ -20,7 +20,7 @@ func _ready() -> void:
 	Conductor.connect("new_beat", beat_hit);
 	Conductor.connect("new_step", step_hit);
 	
-	var camPath = "res://assets/data/songs/%s/camera_events.json"%[SongData.song];
+	var camPath = "res://assets/songs/%s/chart/camera_events.json"%[SongData.song];
 	if FileAccess.file_exists(camPath):
 		var camFile = FileAccess.open(camPath, FileAccess.READ);
 		var camJsonData = JSON.new();
@@ -41,7 +41,8 @@ func _ready() -> void:
 		
 func _process(delta: float) -> void:
 	if (SongData.is_not_in_cutscene && !Global.is_on_video) or useDefaultZoomEvent:
-		zoom = lerp(zoom, SongData.stageZoom, 1.0 - exp(-8.0 * delta));
+		var t = 1.0 - exp(-8.0 * delta);
+		zoom = lerp(zoom, SongData.stageZoom, t);
 		
 	for i in cameraEvents:
 		if i["duration"] <= 0:
@@ -84,6 +85,8 @@ func _process(delta: float) -> void:
 		if i.cam_follow_pos:
 			cam_follow_poses(i);
 			
+	offset = lerp(offset, camOffset, 1.0 - exp(-10.0 * delta));
+	
 	if useDefaultCamsEvent:
 		if GlobalOptions.updated_cam == "smooth":
 			global_position = global_position.lerp(target_position, 1.0 - exp(-10.0 * delta));
@@ -111,6 +114,7 @@ func step_hit(_step):
 	if SongData.isPlaying && cam_target != null:
 		target_position = cam_target.global_position + Vector2(cam_target.camera_pos[0], cam_target.camera_pos[1]);
 		
+var camOffset = Vector2.ZERO;
 var cam_offset_values = {
 	"singLeft": Vector2.LEFT,
 	"singDown": Vector2.DOWN,
@@ -118,6 +122,5 @@ var cam_offset_values = {
 	"singRight": Vector2.RIGHT
 };
 func cam_follow_poses(new_char):
-	var camOffset = cam_offset_values.get(new_char.curAnim, Vector2.ZERO)*25;
-	offset = lerp(offset, camOffset, 0.10);
+	camOffset = cam_offset_values.get(new_char.curAnim, Vector2.ZERO)*25;
 	

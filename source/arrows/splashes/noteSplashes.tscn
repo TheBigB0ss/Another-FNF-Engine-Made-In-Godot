@@ -1,13 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://d04wkw134v1vn"]
+[gd_scene format=3 uid="uid://d04wkw134v1vn"]
 
 [ext_resource type="SpriteFrames" uid="uid://hfj7klpn5ihs" path="res://assets/images/arrows/splashes/noteSplashes.res" id="1_pu3vb"]
-[ext_resource type="Script" uid="uid://cehnllbcbi7xv" path="res://source/arrows/splashes/noteSplashes.gd" id="2_tfo5s"]
+[ext_resource type="Script" uid="uid://10dcgsf0fxtt" path="res://source/arrows/splashes/noteSplashes.gd" id="2_tfo5s"]
 
-[node name="noteSplashes" type="AnimatedSprite2D"]
-position = Vector2(0, 2)
+[node name="noteSplashes" type="AnimatedSprite2D" unique_id=1025218564]
 scale = Vector2(0.9, 0.9)
 sprite_frames = ExtResource("1_pu3vb")
-animation = &"note impact 1 purple"
+animation = &"finishCoverblue"
 script = ExtResource("2_tfo5s")
 
 [connection signal="animation_finished" from="." to="." method="_on_animation_finished"]

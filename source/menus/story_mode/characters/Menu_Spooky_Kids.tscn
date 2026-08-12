@@ -7,7 +7,7 @@
 script = ExtResource("1_07617")
 texture = ExtResource("2_wxo67")
 xmlPath = "res://assets/images/story mode/characters/spooky.xml"
-frame = 6
-fps = 8
+frame = 15
+loop = false
 animation = 0
 metadata/_custom_type_script = "uid://dk0iqkss82o73"

@@ -3,16 +3,14 @@ extends Node2D
 @onready var main_scene = get_tree().current_scene;
 var notes = ["left", "down", "up", "right"];
 var strumArray = [];
-var offSetShit = 0;
+var offSetShit = 105;
 @export var is_secondary_strum = false;
-@export var noteOffset = 105;
 @export var note_data: Dictionary = {
 	"Texture Folder": "default",
 	"Note Texture": "notes",
 	"Strum Texture": "strumLineNotes",
 	"Note Line Texture": "NOTE_hold_assets"
 };
-@export var strumScale = Vector2(1,1);
 var strumNode = null;
 var noteNode = null;
 
@@ -34,9 +32,10 @@ func _ready() -> void:
 	
 	for i in notes.size():
 		var strumNote = Note.new();
-		strumNote.modulate.a = 0.0;
-		strumNote.position.x = offSetShit;
+		strumNote.modulate.a = 0;
+		strumNote.position.x = i * offSetShit;
 		strumNote.isStrumNote = true;
+		
 		if !SongData.isPixelStage:
 			strumNote.note_type = note_data["Texture Folder"];
 			strumNote.note_skin = note_data["Note Texture"];
@@ -44,56 +43,51 @@ func _ready() -> void:
 			strumNote.note_lines = note_data["Note Line Texture"];
 			
 		strumNote.noteData = i;
+		
 		strumNode.add_child(strumNote);
-		offSetShit += noteOffset;
+		strumArray.append(strumNote);
 		
-		strumArray.append(strumNote.strumNote);
-		strumArray[i].play(notes[i]+" static");
+		strumNote.strumNote.play(notes[i] + " static");
 		
-	for i in strumArray.size():
-		var cool_scale = strumScale;
-		if SongData.isPixelStage:
-			cool_scale = Vector2(9,9) if !is_secondary_strum else Vector2(4,4);
-		strumArray[i].scale = cool_scale;
-		
-	var note_appers_now = get_tree().current_scene.get("skipIntro");
-	if !note_appers_now:
+	if !main_scene.skipIntro:
 		notesAppears();
-		
-	if note_appers_now:
+	else:
 		for i in strumNode.get_children():
 			i.modulate.a = 1;
 			
 	var notesArray = SongData.opponentNotes if !is_secondary_strum else SongData.extraOpponentNotes;
 	for i in notesArray:
-		var noteData = [i[0], i[1], i[2], i[3], i[4], i[5], false];
+		var noteData = [i[0], i[1], i[2], i[3], i[4], i[5]];
 		array_notes.insert(0, noteData);
 		
 	array_notes.sort_custom(func(a,b): return a[0]<b[0]);
 	
+var spawnId = 0;
 var notes_to_delete = [];
 func _process(delta):
-	for i in array_notes:
-		var distance = (i[0] - Conductor.getSongTime)*Conductor.songSpeed;
-		var distance_offset = 4000 if GlobalOptions.down_scroll else 2200;
+	var distance_offset = 4000 if GlobalOptions.down_scroll else 2200;
+	while spawnId < array_notes.size():
+		var distance = (array_notes[spawnId][0] - Conductor.getSongTime)*Conductor.songSpeed;
 		
-		if distance <= distance_offset && !i[6]:
-			spawnNote(i[0], i[1], i[2], i[3], i[4], i[5]);
-			array_notes.erase(i);
-		else:
+		if distance > distance_offset:
 			break;
 			
+		spawnNote(array_notes[spawnId][0], array_notes[spawnId][1], array_notes[spawnId][2], array_notes[spawnId][3], array_notes[spawnId][4], array_notes[spawnId][5]);
+		
+		spawnId += 1;
+		
 	for note in notesList:
 		if note == null:
 			continue
 			
-		var strum = strumNode.get_child(note.noteData);
+		var strum = strumArray[note.noteData];
 		var strum_pos = strum.position;
 		var strumY = strum_pos.y;
 		
 		note.position.x = strum_pos.x;
 		note.rotation = strum.rotation;
 		note.modulate.a = strum.modulate.a;
+		note.scale = strum.scale;
 		
 		if !note.is_pressing or note.missedLongNote or note.missed:
 			note.position.y = strumY + (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed) if GlobalOptions.down_scroll else strumY - (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed);
@@ -107,12 +101,13 @@ func _process(delta):
 			notes_to_delete.append(note);
 			continue;
 			
-		if Conductor.getSongTime > 320 + note.strumTime && note.sustainLength <= 0:
-			notes_to_delete.append(note);
-			
-		if Conductor.getSongTime > 335 + (note.strumTime+note.ogSustain) && note.sustainLength > 0 && !note.is_pressing:
-			notes_to_delete.append(note);
-			
+		if note.sustainLength <= 0:
+			if Conductor.getSongTime > note.strumTime + 320:
+				notes_to_delete.append(note);
+		else:
+			if !note.is_pressing && Conductor.getSongTime > note.strumTime + note.ogSustain + 335:
+				notes_to_delete.append(note);
+				
 	for note in opponentNotes:
 		if note == null or note.isPlayer or note.is_a_bad_note or note.ignoreNote:
 			continue;
@@ -138,11 +133,11 @@ func _process(delta):
 					
 	notesList = notesList.filter(func(note): return note != null);
 	
-	for notes in strumNode.get_children():
+	for i in 4:
+		var notes = strumArray[i];
 		if notes.reset_arrow_anim > 0:
 			notes.reset_arrow_anim = max(notes.reset_arrow_anim - 4 * delta, 0);
-			
-		if notes.reset_arrow_anim <= 0:
+		elif notes.reset_arrow_anim <= 0:
 			notes.play_note_anim("static");
 			
 	for i in notes_to_delete:
@@ -155,8 +150,8 @@ func _process(delta):
 		i.queue_free();
 		
 func notesAppears():
-	for i in strumNode.get_child_count():
-		var strumNote = strumNode.get_child(i);
+	for i in 4:
+		var strumNote = strumArray[i];
 		strumNote.modulate.a = 0.0;
 		
 		var tw = get_tree().create_tween();
@@ -186,13 +181,15 @@ func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
 		note.manyHits = value1;
 		note.amount = value2;
 		
-	note.rotation = strumNode.get_child(note.noteData).rotation;
-	note.modulate.a = strumNode.get_child(note.noteData).modulate.a;
-	note.strum_positions.y = strumNode.position.y + strumNode.get_child(note.noteData).position.y;
-	note.position.x = strumNode.position.x + strumNode.get_child(note.noteData).position.x;
+	var strum = strumArray[note.noteData];
+	note.scale = strum.scale;
+	note.rotation = strum.rotation;
+	note.modulate.a = strum.modulate.a;
+	note.strum_positions.y = strumNode.position.y + strum.position.y;
+	note.position.x = strumNode.position.x + strum.position.x;
 	
-	if note.note != null:
-		note.note.offset = strumNode.get_child(note.noteData).note.offset;
+	if note.note:
+		note.note.offset = strum.note.offset;
 		
 	opponentNotes.append(note);
 	notesList.append(note);

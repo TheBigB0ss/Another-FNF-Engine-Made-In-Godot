@@ -2,7 +2,7 @@
 	"AnimatedIcon": false,
 	"FlipX": false,
 	"FlipY": false,
-	"HealthBarColor": "#00e8ffff",
+	"HealthBarColor": "#31b0d1ff",
 	"HealthIcon": "bf",
 	"Poses": [
 		{
@@ -127,9 +127,10 @@
 			"special anim": false
 		}
 	],
+	"anim type": 2,
 	"camera follow pos": false,
 	"cameraPos": [
-		-200.0,
+		-230.0,
 		-30.0
 	],
 	"isPlayer": true,

@@ -63,6 +63,7 @@ func _ready():
 	comboSpr.position = Vector2(GlobalOptions.ratings_positions["combo"][0], GlobalOptions.ratings_positions["combo"][1]);
 	numsSpr.position = Vector2(GlobalOptions.ratings_positions["nums"][0], GlobalOptions.ratings_positions["nums"][1]);
 	
+	characters_options.select(0 if !SongData.isPlaying else character_list.find(SongData.characters["opponent"]));
 	change_character();
 	play_anim();
 	
@@ -91,7 +92,7 @@ func change_character(_char = 0):
 	characterData = [];
 	characterJson = {};
 	
-	var character = load("res://source/characters/characters_scenes/%s.tscn"%[character_list[characters_options.selected if !SongData.isPlaying else character_list.find(SongData.characters["opponent"])]]).instantiate();
+	var character = load("res://source/characters/characters_scenes/%s.tscn"%[character_list[characters_options.selected]]).instantiate();
 	characterGrp.add_child(character);
 	
 	for i in characterGrp.get_children():
@@ -212,76 +213,72 @@ func mouse_inside_character(spr, offset):
 var block_grab = false;
 var pos_change_value = 0;
 
+const CAM_KEYS = {
+	KEY_W: Vector2(0, -20),
+	KEY_S: Vector2(0, 20),
+	KEY_A: Vector2(-20, 0),
+	KEY_D: Vector2(20, 0)
+};
+
 func _input(ev):
-	if ev is InputEventKey:
-		if ev.pressed:
-			if ev.echo:
-				if ev.keycode in [KEY_W]:
-					camera.offset.y -= 20;
-					
-				if ev.keycode in [KEY_S]:
-					camera.offset.y += 20;
-					
-				if ev.keycode in [KEY_D]:
-					camera.offset.x += 20;
-					
-				if ev.keycode in [KEY_A]:
-					camera.offset.x -= 20;
-					
-				return;
+	if !(ev is InputEventKey):
+		return;
+		
+	if !ev.pressed:
+		return;
+		
+	if ev.echo:
+		if ev.keycode && CAM_KEYS.has(ev.keycode):
+			camera.offset += CAM_KEYS[ev.keycode];
+			
+		return;
+		
+	match ev.keycode:
+		KEY_TAB:
+			adjusting_rating = !adjusting_rating;
+			set_rating_pos();
+		KEY_ESCAPE:
+			Global.update_cursor("default");
+			if !SongData.isPlaying:
+				MusicManager._play_song("freakyMenu", "music", true);
+				Global.changeScene("menus/main_menu/MainMenu", true, false);
+			else:
+				Global.changeScene("gameplay/PlayState", true, false);
 				
-			if ev.keycode in [KEY_TAB]:
-				adjusting_rating = !adjusting_rating;
-				set_rating_pos();
+	if !adjusting_rating:
+		match ev.keycode:
+			KEY_E:
+				change_anim(1);
+			KEY_Q:
+				change_anim(-1);
+			KEY_SPACE:
+				play_anim();
+			KEY_RIGHT:
+				offset_array[cur_pose][0] += pos_change_value;
+				update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
+			KEY_LEFT:
+				offset_array[cur_pose][0] -= pos_change_value;
+				update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
+			KEY_DOWN:
+				offset_array[cur_pose][1] += pos_change_value;
+				update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
+			KEY_UP:
+				offset_array[cur_pose][1] -= pos_change_value;
+				update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
 				
-			if ev.keycode in [KEY_ESCAPE]:
-				Global.update_cursor("default");
-				if !SongData.isPlaying:
-					MusicManager._play_song("freakyMenu", "music", true);
-					Global.changeScene("menus/main_menu/MainMenu", true, false);
-				else:
-					SongData.loadJson(SongData.week_songs[0], SongData.week_diffs, null);
-					Global.changeScene("gameplay/PlayState", true, false);
-					
-			if !adjusting_rating:
-				if ev.keycode in [KEY_E]:
-					change_anim(1);
-					
-				if ev.keycode in [KEY_Q]:
-					change_anim(-1);
-					
-				if ev.keycode in [KEY_SPACE]:
-					play_anim();
-					
-				if ev.keycode in [KEY_RIGHT]:
-					offset_array[cur_pose][0] += pos_change_value;
-					update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
-					
-				if ev.keycode in [KEY_LEFT]:
-					offset_array[cur_pose][0] -= pos_change_value;
-					update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
-					
-				if ev.keycode in [KEY_DOWN]:
-					offset_array[cur_pose][1] += pos_change_value;
-					update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
-					
-				if ev.keycode in [KEY_UP]:
-					offset_array[cur_pose][1] -= pos_change_value;
-					update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
-					
-				if ev.alt_pressed:
-					if ev.keycode in [KEY_DOWN]:
-						charScale.y -= 1;
-						
-					if ev.keycode in [KEY_UP]:
-						charScale.y += 1;
-						
-					if ev.keycode in [KEY_RIGHT]:
-						charScale.x += 1;
-						
-					if ev.keycode in [KEY_LEFT]:
-						charScale.x -= 1;
-					
+	if ev.alt_pressed:
+		match ev.keycode:
+			KEY_RIGHT:
+				charScale.x += 1;
+			KEY_LEFT:
+				charScale.x -= 1;
+			KEY_UP:
+				charScale.y += 1;
+			KEY_DOWN:
+				charScale.y -= 1;
+				
+		return;
+		
 func change_anim(change):
 	if offset_array != []:
 		cur_pose += change;
@@ -473,25 +470,9 @@ func _process(_delta: float) -> void:
 		
 	if !$FileDialog.visible:
 		if Input.is_action_just_released("mouse_wheel_down"):
-			if camera.zoom.x < 0.50:
-				return;
-				
-			var lastPos = get_global_mouse_position();
-			
-			camera.zoom.x -= 0.2/4;
-			camera.zoom.y -= 0.2/4;
-			
-			var curPos = get_global_mouse_position();
-			camera.position += lastPos - curPos;
-			
+			change_zoom(-0.05);
 		if Input.is_action_just_released("mouse_wheel_up"):
-			var lastPos = get_global_mouse_position();
-			
-			camera.zoom.x += 0.2/4;
-			camera.zoom.y += 0.2/4;
-			
-			var curPos = get_global_mouse_position();
-			camera.position += lastPos - curPos;
+			change_zoom(0.05);
 			
 	Global.update_cursor("pointer" if get_viewport().gui_get_hovered_control() is TabBar or get_viewport().gui_get_hovered_control() is SpinBox or get_viewport().gui_get_hovered_control() is CheckBox or get_viewport().gui_get_hovered_control() is Button or get_viewport().gui_get_hovered_control() is OptionButton else "default");
 	
@@ -550,6 +531,13 @@ func _process(_delta: float) -> void:
 	%beat_time.value = animBeats[cur_pose];
 	%anim_time.value = animTimes[cur_pose];
 	%is_special.button_pressed = specialAnims[cur_pose];
+	
+func change_zoom(val):
+	var last = get_global_mouse_position();
+	camera.zoom += Vector2.ONE * val;
+	
+	var current = get_global_mouse_position();
+	camera.position += last-current;
 	
 func addCharToList():
 	var charList = [];

@@ -26,11 +26,12 @@ func _process(delta):
 	rolling_tank2.rotation = tank_angle + PI/2;
 	
 	if SongData.isPlaying:
-		if game.curSong == "stress-remix":
+		if game.curSong == "stress" && game.songDiff == "remix":
 			if steve_time:
 				steve.position.x = min(steve.position.x + 1330*delta, 80);
 				
 			if steve.position.x > 79:
+				steve.loop = false;
 				steveStrum.enable = true;
 				steveStrum.modulate.a = lerp(steveStrum.modulate.a, 0.70, 0.15);
 				steve_time = false;
@@ -44,9 +45,10 @@ func beat_hit(beat):
 			var newParashooter = ParaShooter.new();
 			paratrooters.add_child(newParashooter);
 			
-	if game.curSong == "stress-remix":
+	if game.curSong == "stress" && game.songDiff == "remix":
 		match beat:
 			308:
+				steve.loop = true;
 				steve._playAnim("running");
 				steve_time = true;
 				

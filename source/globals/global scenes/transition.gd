@@ -32,9 +32,9 @@ func _ready():
 		var path = "res://assets/images/stickers/%s/%s.png"%[stickerPack, i];
 		sticker_textures[i] = load(path);
 		
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	for i in stickersGrp.get_children():
-		i.scale = lerp(i.scale, Vector2(1.0, 1.0), 0.40);
+		i.scale = lerp(i.scale, Vector2(1.0, 1.0), 1.0 - exp(-12.0 * delta));
 		
 func spawnStickers():
 	if deleteStickers:
@@ -52,7 +52,7 @@ func spawnStickers():
 		sticker.texture = sticker_textures[random_sticker];
 		sticker.position = Vector2(randi_range(0, 1280), randi_range(0, 720));
 		sticker.rotation = deg_to_rad(randi_range(-20, 20));
-		sticker.scale = Vector2(1.5, 1.5);
+		sticker.scale = Vector2(1.45, 1.45);
 		stickersGrp.add_child(sticker);
 		
 		if stickersGrp.get_child_count() >= max_amount:

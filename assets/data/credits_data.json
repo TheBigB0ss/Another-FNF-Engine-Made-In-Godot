@@ -186,6 +186,16 @@
 		},
 		{
 			"team": "Another FNF Engine made in Godot",
+			"name": "Fao8",
+			"role": "note splash artist",
+			"icon": "Farofa8",
+			"social midia": {
+				"twitter": "https://x.com/Farofa8_"
+			},
+			"bg_color": "#76e06e"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
 			"name": "M4ccros",
 			"role": "composer",
 			"icon": "M4ccros",

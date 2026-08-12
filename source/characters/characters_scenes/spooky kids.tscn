@@ -6,6 +6,19 @@
 [node name="spooky kids" type="Node2D" unique_id=528222099]
 script = ExtResource("1_fj77n")
 json_path = "res://assets/data/characters/spooky kids.json"
+healthBar_Color = Color(0.9490196, 0.69803923, 0.11372549, 1)
+anims_timer = {
+"danceLeft": [2, 5, false],
+"danceRight": [2, 5, false],
+"hey": [2, 5, false],
+"singDown": [2, 5, false],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false]
+}
+anim_type = 1
+have_death_animation = false
+idle_type = 2
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=1392163793]
 sprite_frames = ExtResource("2_kw52j")

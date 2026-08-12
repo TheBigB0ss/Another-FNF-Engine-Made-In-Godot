@@ -111,11 +111,11 @@ func update_midia():
 		else:
 			socialOpts.get_child(i).modulate.a = 0.5;
 			
-func _process(_delta):
-	opts.position.y = lerp(float(opts.position.y), float(480-coolOffset*creditSelected), 0.23);
+func _process(delta):
+	opts.position.y = lerp(float(opts.position.y), float(480-coolOffset*creditSelected), 1.0 - exp(-12.0 * delta));
 	for j in creditsJson["dev_info"].size():
-		opts.get_child(j).modulate.a = lerp(opts.get_child(j).modulate.a, (1.0 if j == creditSelected else 0.5), 0.20);
-		opts.get_child(j).position.x = lerp(float(opts.get_child(j).position.x), float(150 if j == creditSelected else opts.position.x - 120), 0.25);
+		opts.get_child(j).modulate.a = lerp(opts.get_child(j).modulate.a, (1.0 if j == creditSelected else 0.5), 1.0 - exp(-6.0 * delta));
+		opts.get_child(j).position.x = lerp(float(opts.get_child(j).position.x), float(150 if j == creditSelected else opts.position.x - 120), 1.0 - exp(-12.0 * delta));
 		
 	bg.modulate = lerp(bg.modulate, Color(creditsJson["dev_info"][creditSelected]["bg_color"]), 0.075);
 	

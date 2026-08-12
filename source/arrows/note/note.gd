@@ -66,6 +66,8 @@ var amount = 0;
 var healthPerHit = 2.10;
 var healthPerHolding = 6.50;
 
+var holdSplash = null;
+
 signal opponentNotePressed(note);
 signal notePressed(note);
 
@@ -176,10 +178,9 @@ func set_note_scale(parent_scale, pixelNote):
 	
 func _ready():
 	ogSustain = sustainLength;
-	self.scale = Vector2(0.65, 0.65);
+	scale = Vector2.ONE * (0.25 if isChartNote else 0.65);
 	 
 	add_child(strumNote);
-	
 	add_child(noteLine);
 	add_child(note);
 	noteLine.add_child(noteEnd);
@@ -192,39 +193,29 @@ func _ready():
 		noteLine.add_point(Vector2.ZERO);
 		noteLine.add_point(Vector2(0, sustainLength));
 		
-	if isStrumNote:
-		note.hide();
-		noteLine.hide();
-		noteEnd.hide();
-		strumNote.show();
-	else:
-		note.show();
-		noteLine.show();
-		noteEnd.show();
-		strumNote.hide();
-		
-	noteEnd.visible = isSustain;
+	note.visible = !isStrumNote;
+	noteLine.visible = !isStrumNote;
+	noteEnd.visible = !isStrumNote && isSustain;
+	strumNote.visible = isStrumNote;
 	
 	reload_note_data();
 	reload_note();
 	reload_note_type();
+	
 	note.play(noteAnim);
 	
 	if SongData.isPixelStage:
-		note.scale = Vector2(9,9);
-		strumNote.scale = Vector2(9,9);
-		noteLine.scale = Vector2(1.20, 1.20);
+		note.scale = Vector2.ONE * 9;
+		strumNote.scale = Vector2.ONE * 9;
+		noteLine.scale = Vector2.ONE * 1.2;
 		
-	if isChartNote:
-		self.scale = Vector2(0.25, 0.25);
+	var noteAlpha = 1.0;
+	if !isChartNote && GlobalOptions.updated_hud != "classic hud":
+		noteAlpha = 0.5;
 		
-	if !isChartNote:
-		noteLine.modulate.a = 0.5 if GlobalOptions.updated_hud != "classic hud" else 1;
-		noteEnd.modulate.a = 0.9 if GlobalOptions.updated_hud != "classic hud" else 1;
-	else:
-		noteLine.modulate.a = 1;
-		noteEnd.modulate.a = 1;
-		
+	noteLine.modulate.a = noteAlpha;
+	noteEnd.modulate.a = 1.0 if noteAlpha == 1 else 0.9;
+	
 func _process(delta: float) -> void:
 	if isChartNote:
 		return;
@@ -260,6 +251,16 @@ func _process(delta: float) -> void:
 				pressed();
 				if missTimer <= 0:
 					main_scene.health = min(main_scene.health+healthPerHolding*delta, 100.0);
+					
+				if sustainLength <= 0 && GlobalOptions.show_splashes:
+					if is_instance_valid(holdSplash):
+						if GlobalOptions.isUsingBot:
+							holdSplash.queue_free();
+						else:
+							holdSplash.play_splash(holdSplash.position.x, holdSplash.position.y, "finishpixelCover" if SongData.isPixelStage else "finishCover%s"%[noteAnim]);
+							
+						holdSplash = null;
+						
 			else:
 				opponent_pressed();
 				
@@ -275,6 +276,8 @@ func _process(delta: float) -> void:
 		if missTimer > 0.13:
 			can_press = false;
 			is_pressing = false;
+			if is_instance_valid(holdSplash):
+				holdSplash.queue_free();
 			miss_note();
 			
 func play_note_anim(anim):
@@ -325,6 +328,10 @@ func opponent_pressed(new_character = null):
 	emitPress(true);
 	
 	if sustainLength <= 0:
+		if is_instance_valid(holdSplash):
+			holdSplash.queue_free();
+			holdSplash = null;
+			
 		new_character.animNote = self;
 		destroy_note();
 		

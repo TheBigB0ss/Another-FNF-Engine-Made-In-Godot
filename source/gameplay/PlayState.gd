@@ -9,8 +9,8 @@ extends Node2D
 
 @onready var healthBar = $'hud/Hud_Layer/healthBar';
 
-@onready var voices = $'voices';
-@onready var inst = $'inst';
+@onready var voices = $voices;
+@onready var inst = $inst;
 
 var iconP1 = Icon.new();
 var iconP2 = Icon.new();
@@ -72,7 +72,6 @@ var curSong = "";
 
 var playlist = [];
 var songDiff = [];
-var isStoryMode = false;
 
 @onready var sectionCamera = $"Camera2D";
 
@@ -90,9 +89,6 @@ var rating_data = {};
 var rank_map = {};
 var achievements_map = {};
 
-var splash_normal = preload("res://source/arrows/splashes/noteSplashes.tscn");
-var splash_pixel = preload("res://source/arrows/splashes/pixel/pixelNoteSplash.tscn");
-
 @onready var eventLoader = $EventLoader;
 
 func _ready():
@@ -109,13 +105,13 @@ func _ready():
 	pause_menu.visible = false;
 	pause_menu.can_use = false;
 	
-	isStoryMode = SongData.isStoryMode;
 	playlist = SongData.week_songs;
 	songDiff = SongData.week_diffs;
 	
 	for i in [rating_spr, combo_spr, nums_spr]:
 		if GlobalOptions.rating_mode == "hud element":
 			i.reparent($rating/Rating_Layer, true);
+			
 		elif GlobalOptions.rating_mode == "game element":
 			i.reparent($hud, true);
 			
@@ -192,23 +188,20 @@ func _ready():
 	setup_classic_hud();
 	updateScoreText();
 	
-	if isStoryMode && SongData.death_count <= 0 && !SongData.restartSong && !curSong.contains("-remix"):
+	if SongData.isStoryMode && SongData.death_count <= 0 && !SongData.restartSong && !curSong.contains("-remix"):
 		match curSong:
-			"ugh":
-				stage.ugh_intro();
-			"guns":
-				stage.guns_intro();
-			"stress":
-				stage.stress_intro();
-			"thorns":
-				stage.start_cutscene();
-				
+			"ugh": stage.ugh_intro();
+			"guns": stage.guns_intro();
+			"stress": stage.stress_intro();
+			"thorns": stage.start_cutscene();
+			
 	if curSong == "ugh" or curSong == "guns" or curSong == "stress":
 		stage.connect("end_tankman_cutscene", startCountdown);
 		
 	if Global.has_dialogue():
 		SongData.is_not_in_cutscene = false;
-		if SongData.death_count <= 0 && isStoryMode && !SongData.restartSong:
+		
+		if SongData.death_count <= 0 && SongData.isStoryMode && !SongData.restartSong:
 			match curSong:
 				"thorns":
 					stage.connect("end_senpai_cutscene", start_dialogue);
@@ -241,28 +234,9 @@ var last_song_seek = 0.0;
 var curHealth = 0.0;
 func _process(delta: float) -> void:
 	ScriptLoader.call_func("on_process", [delta]);
-	msText.modulate.a = max(msText.modulate.a - 1.95 * delta, 0.0);
 	
-	if !start_song:
-		return;
-		
-	if !pause_menu.paused:
-		inst.stream_paused = false;
-		voices.stream_paused = false;
-		
-		Conductor.getSongTime += (delta*1000);
-		
-		if finished_song:
-			return;
-			
-		if abs(inst.get_playback_position() - Conductor.getSongTime / 1000) > 0.03 && Time.get_ticks_msec() - last_song_seek > 500:
-			for i in [inst, voices]:
-				i.seek(Conductor.getSongTime / 1000);
-			last_song_seek = Time.get_ticks_msec();
-	else:
-		inst.stream_paused = true;
-		voices.stream_paused = true;
-		
+	msText.modulate.a = max(msText.modulate.a - 2.0 * delta, 0.0);
+	
 	curHealth = lerp(curHealth, float(health), 1.0 - exp(-15.0 * delta));
 	healthBar.value = curHealth;
 	
@@ -270,23 +244,37 @@ func _process(delta: float) -> void:
 	
 	var p1Offset = iconP1.get_rect().size.x * 0.5 - 20;
 	var p2Offset = iconP2.get_rect().size.x * 0.5 - 20;
+	
 	iconP1.position.x = lerp(iconP1.position.x, healthPosition+p1Offset, 1.0 - exp(-20.0 * delta));
 	iconP2.position.x = lerp(iconP2.position.x, healthPosition-p2Offset, 1.0 - exp(-20.0 * delta));
 	
+	if !start_song:
+		return;
+		
+	inst.stream_paused = pause_menu.paused;
+	voices.stream_paused = pause_menu.paused;
+	
+	if !pause_menu.paused:
+		Conductor.getSongTime += (delta*1000);
+		
+		if !finished_song:
+			if abs(inst.get_playback_position() - Conductor.getSongTime / 1000) > 0.03 && Time.get_ticks_msec() - last_song_seek > 500:
+				for i in [inst, voices]:
+					i.seek(Conductor.getSongTime / 1000);
+				last_song_seek = Time.get_ticks_msec();
+				
 	if !is_on_intro && Conductor.getSongTime >= 0 && !playlist.is_empty():
 		discord_songName = "Playing: %s (%s)"%[playlist[0], songDiff];
 		
 	if !Conductor.getSongTime < 0 && !is_on_intro:
 		timeBar.value = Conductor.getSongTime/1000;
-		
 	timeBar.max_value = inst.stream.get_length();
 	
+	botplayText.visible = GlobalOptions.isUsingBot;
+	
 	if GlobalOptions.isUsingBot:
-		botplayText.show();
 		botplayTime += delta;
 		botplayText.modulate.a = ((1+sin(botplayTime*5))/2) if !SongData.isPixelStage else (round((1+sin(botplayTime*5))/2));
-	else:
-		botplayText.hide();
 		
 	var curMinutes = str(int(inst.get_playback_position()) / 60).pad_zeros(1);
 	var curSeconds = str(int(inst.get_playback_position()) % 60).pad_zeros(2);
@@ -305,10 +293,9 @@ func _process(delta: float) -> void:
 			timeText.text = str(int(timeLeft) / 60).pad_zeros(1) + ":" + str(int(timeLeft) % 60).pad_zeros(2);
 			
 	if Conductor.getSongTime/1000 >= inst.stream.get_length() && !finished_song:
-		match curSong:
-			"test":
-				AchievementPopUp.set_achievement('debug mode', true);
-				
+		if curSong == "test":
+			AchievementPopUp.set_achievement('debug mode', true);
+			
 		match rankName:
 			"SFC", "GFC":
 				AchievementPopUp.set_achievement('perfectionist', true);
@@ -318,8 +305,8 @@ func _process(delta: float) -> void:
 		if health <= 15:
 			AchievementPopUp.set_achievement('fucked up', true);
 			
-		if isStoryMode && playlist.size() == 1:
-			set_new_achievement(SongData.weekName, true);
+		if SongData.isStoryMode && playlist.size() == 1:
+			AchievementPopUp.set_achievement(achievements_map[SongData.weekName][0 if songDiff != "hard" else 1], true);
 			
 		if AchievementPopUp.achievements_fuck.is_empty():
 			finishSong();
@@ -332,11 +319,6 @@ func _process(delta: float) -> void:
 	
 	Discord.update_discord_info("Playstate", str(discord_songName, " ",  timeText.text), "Another FNF Engine Made In Godot", Conductor.getSongTime/1000);
 	
-func set_new_achievement(achievement, final):
-	AchievementPopUp.set_achievement(achievements_map[achievement][0], final);
-	if songDiff == "hard":
-		AchievementPopUp.set_achievement(achievements_map[achievement][1], final);
-		
 func set_icon_anim():
 	var iconP1_Anim = "idle";
 	var iconP2_Anim = "idle";
@@ -359,17 +341,21 @@ var ratingColors = {
 	"shits": Color.DARK_RED
 };
 func pressedNote(note):
+	if note.isSustain && GlobalOptions.show_splashes:
+		var splash = splash_note(playerStrum.strumNode.get_child(note.noteData), "holdCover%s"%[note.noteAnim] if !SongData.isPixelStage else "holdpixelCover");
+		note.holdSplash = splash;
+		
+	ScriptLoader.call_func("on_note_hit", [note]);
+	bf.characterScript.call_func("on_note_hit", [note]);
+	
 	if note.is_a_bad_note:
 		return;
 		
 	voices.volume_db = 0;
-	var strum = playerStrum.strumNode.get_child(note.noteData);
-	strum.strumPressed = true;
-	
-	ScriptLoader.call_func("on_note_hit", [note]);
-	bf.characterScript.call_func("on_note_hit", [note]);
 	
 	var ms = (note.strumTime - Conductor.getSongTime);
+	var strum = playerStrum.strumNode.get_child(note.noteData);
+	strum.strumPressed = true;
 	
 	if GlobalOptions.isUsingBot:
 		return;
@@ -394,7 +380,7 @@ func pressedNote(note):
 			rating_spr.pop_up_rating(rating_data[i]["RatingID"]);
 			
 			if i == "Sick" && GlobalOptions.show_splashes:
-				splash_note(randi_range(1, 2), int(note.noteData)%4, note.noteAnim, playerStrum.position.x + strum.position.x, playerStrum.position.y + strum.position.y);
+				splash_note(strum, ("note impact %s %s"%[randi_range(1, 2), note.noteAnim]) if !SongData.isPixelStage else "pixelsplashes%s %s"%[randi_range(1, 2), note.noteAnim]);
 				
 			totalHits += 1;
 			combo += 1;
@@ -415,18 +401,22 @@ func pressedNote(note):
 	updateScoreText();
 	
 func opponentNotePressed(note):
+	if note.isSustain && GlobalOptions.show_splashes:
+		var splash = splash_note(opponentStrum.strumNode.get_child(note.noteData), "holdCover%s"%[note.noteAnim] if !SongData.isPixelStage else "holdpixelCover");
+		note.holdSplash = splash;
+		
 	ScriptLoader.call_func("on_opponent_hit", [note]);
 	dad.characterScript.call_func("on_note_hit", [note]);
 	
 func miss_note(note):
+	ScriptLoader.call_func("on_note_miss", [note]);
+	bf.characterScript.call_func("on_miss", [note]);
+	
 	if GlobalOptions.playMissSound:
 		Sound.playAudio("miss_sounds/missnote%s"%[randi_range(1, 3)], false);
 		Sound.audio.volume_db = -8;
 		
-	ScriptLoader.call_func("on_note_miss", [note]);
-	bf.characterScript.call_func("on_miss", [note]);
-	
-	voices.volume_db = -80;
+	voices.stream.set_sync_stream_volume(0, -80.0);
 	misses += 1;
 	health -= 4;
 	notesPlayed = max(notesPlayed-0.8, 0.0);
@@ -443,7 +433,7 @@ func miss_note(note):
 	updateScoreText();
 	
 	await get_tree().create_timer(0.3).timeout;
-	voices.volume_db = 0;
+	voices.stream.set_sync_stream_volume(0, 0.0);
 	
 func noteCreated(note):
 	ScriptLoader.call_func("on_note_created", [note]);
@@ -545,46 +535,58 @@ func setPercent():
 			return "Perfect!!!";
 			
 func _input(ev):
-	if ev is InputEventKey:
-		if ev.pressed && !ev.echo:
-			if ev.keycode in [KEY_R] && GlobalOptions.restart_action:
-				health = 0;
+	if !(ev is InputEventKey):
+		return;
+		
+	if !ev.pressed or ev.echo:
+		return;
+		
+	if ev.keycode == KEY_R && GlobalOptions.restart_action:
+		health = 0;
+		return;
+		
+	if ev.keycode == GlobalOptions.get_key("chartKey"):
+		SongData.week_songs = playlist[0];
+		SongData.isPlaying = false;
+		Global.changeScene("menus/editors/chart_editor/chartState", true, false);
+		
+		return;
+		
+	if ev.keycode == GlobalOptions.get_key("offsetKey"):
+		SongData.characters = {"opponent": dad.curCharacter};
+		SongData.week_songs = playlist[0];
+		SongData.week_diffs = songDiff;
+		SongData.isPlaying = true;
+		Global.changeScene("menus/editors/offset_editor/offset_menu", true, false);
+		
+		return;
+		
+	if ev.keycode == GlobalOptions.get_key("camEditorKey"):
+		SongData.week_songs = playlist[0];
+		SongData.week_diffs = songDiff;
+		SongData.isPlaying = true;
+		Global.changeScene("menus/editors/cam_editor/cam_editor", true, false);
+		
+		return;
+		
+	if can_pause && (ev.keycode == GlobalOptions.get_key("enter") or ev.keycode == KEY_KP_ENTER):
+		pause_menu.can_use = true;
+		pause_menu.visible = true;
+		
+		pause_menu._paused();
+		get_tree().paused = true;
+		
+		Discord.update_discord_info("pause", "Paused");
+		
+	if OS.is_debug_build():
+		match ev.keycode:
+			KEY_F1:
+				finishSong();
 				
-			if ev.keycode in [GlobalOptions.get_key("chartKey")]:
-				SongData.week_songs = playlist[0];
-				SongData.isPlaying = false;
-				Global.changeScene("menus/editors/chart_editor/chartState", true, false);
-				
-			if ev.keycode in [GlobalOptions.get_key("offsetKey")]:
-				SongData.characters = {"opponent": dad.curCharacter};
-				SongData.week_songs = playlist[0];
-				SongData.week_diffs = songDiff;
-				SongData.isPlaying = true;
-				Global.changeScene("menus/editors/offset_editor/offset_menu", true, false);
-				
-			if ev.keycode in [GlobalOptions.get_key("camEditorKey")]:
-				SongData.week_songs = playlist[0];
-				SongData.week_diffs = songDiff;
-				SongData.isPlaying = true;
-				Global.changeScene("menus/editors/cam_editor/cam_editor", true, false);
-				
-			if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && can_pause:
-				pause_menu.can_use = true;
-				pause_menu.visible = true;
-				
-				pause_menu._paused();
-				get_tree().paused = true;
-				
-				Discord.update_discord_info("pause", "Paused");
-				
-			if OS.is_debug_build():
-				if ev.keycode in [KEY_F1]:
-					#set_new_achievement(SongData.weekName, false);
-					finishSong();
-					
 func startCountdown():
 	SongData.is_not_in_cutscene = true;
 	MusicManager._stop_music();
+	
 	is_on_intro = true;
 	start_song = true;
 	
@@ -660,22 +662,34 @@ func startSong():
 	if SongData.song == "":
 		return;
 		
-	var music_inst = load("res://assets/songs/" + SongData.song + "/Inst.ogg");
-	var music_voices = load("res://assets/songs/" + SongData.song + "/Voices.ogg");
+	var music_inst = load("res://assets/songs/%s/song/Inst%s.ogg"%[SongData.song, "-remix" if songDiff == "remix" else ""]);
+	var music_voices = "res://assets/songs/%s/song/Voices%s.ogg"%[SongData.song, "-remix" if songDiff == "remix" else ""];
 	
+	var music_voices_player = "res://assets/songs/%s/song/Voices-player%s.ogg"%[SongData.song, "-remix" if songDiff == "remix" else ""];
+	var music_voices_opponent = "res://assets/songs/%s/song/Voices-opponent%s.ogg"%[SongData.song, "-remix" if songDiff == "remix" else ""];
+	
+	var vocalsSynchronized = AudioStreamSynchronized.new();
+	if ResourceLoader.exists(music_voices_player) && ResourceLoader.exists(music_voices_opponent):
+		vocalsSynchronized.stream_count = 2;
+		vocalsSynchronized.set_sync_stream(0, load(music_voices_player));
+		vocalsSynchronized.set_sync_stream(1, load(music_voices_opponent));
+	else:
+		vocalsSynchronized.stream_count = 1;
+		vocalsSynchronized.set_sync_stream(0, load(music_voices));
+		
 	inst.stream = music_inst;
-	voices.stream = music_voices;
+	voices.stream = vocalsSynchronized;
 	
 func finishSong():
 	can_pause = false;
+	
+	ScriptLoader.call_func("on_song_end");
 	
 	SongData.isOnChartMode = false;
 	SongData.restartSong = false;
 	SongData.death_count = 0;
 	
 	var diffSet = "" if songDiff == "" else str('-', songDiff);
-	
-	ScriptLoader.call_func("on_song_end");
 	
 	if !GlobalOptions.isUsingBot or !SongData.isOnChartMode:
 		if score > HighScore.get_score(playlist[0], diffSet):
@@ -720,13 +734,14 @@ func finishSong():
 		Global.changeScene("menus/freeplay/freeplay_menu", true, false);
 		SongData.isPlaying = false;
 		
-	if SongData.isOnChartMode && curSong != "test" && !curSong == "south-old" && curSong != "monster":
+	if SongData.isOnChartMode && curSong != "test" && curSong != "monster":
 		Global.changeScene("menus/editors/chart_editor/chartState", true, false);
 		
-func splash_note(data, noteData, dir, splash_x, splash_y):
-	var splash = splash_pixel.instantiate() if SongData.isPixelStage else splash_normal.instantiate();
-	splash.cool_splash(data, noteData, dir, splash_x, splash_y);
+func splash_note(strum, anim):
+	var splash = preload("res://source/arrows/splashes/noteSplashes.tscn").instantiate();
+	splash.play_splash(strum.global_position.x, strum.global_position.y, anim);
 	note_splshes.add_child(splash);
+	return splash;
 	
 func updateScoreText():
 	ratingName = setPercent();
@@ -759,9 +774,8 @@ func setTimePos(time):
 	
 func setup_hud():
 	for i in [healthBar, iconP1, iconP2]:
-		if i:
-			i.modulate.a = 0.0 if GlobalOptions.hide_hud else GlobalOptions.health_bar_alpha;
-			
+		i.modulate.a = 0.0 if GlobalOptions.hide_hud else GlobalOptions.health_bar_alpha;
+		
 	for i in [timeText, timeBar]:
 		i.visible = GlobalOptions.timeBar_mode != "disable";
 		

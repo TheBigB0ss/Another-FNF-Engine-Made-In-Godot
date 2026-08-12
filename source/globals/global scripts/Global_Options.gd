@@ -400,7 +400,7 @@ func set_options():
 				"value": keys["chartKey"][1], 
 				"description": "change chart key"
 			},
-			"Offset Short Cut Key:":{
+			"Offset Menu Short Cut Key:":{
 				"value": keys["offsetKey"][1], 
 				"description": "change offset menu short cut key"
 			},
@@ -478,11 +478,11 @@ func set_options():
 			},
 			"play miss sound": {
 				"value": settingsJson["gameplay"]["play miss sound"],
-				"description": "play a sound clue when you missed a note"
+				"description": "play a sound cue when you missed a note"
 			},
 			"play note hit sound": {
 				"value": settingsJson["gameplay"]["play note hit sound"],
-				"description": "play a sound clue when you press a note"
+				"description": "play a sound cue when you press a note"
 			},
 			"idle mode": {
 				"value": settingsJson["options"]["idle mode"]["list"],

@@ -11,9 +11,8 @@ func _init() -> void:
 	Global.on_death_confirm.connect(on_game_over_confirm);
 	
 static func init_character_script(character, parent):
-	var script_path = "res://assets/data/characters/%s.gd"%[character];
-	
 	var current_script = null;
+	var script_path = "res://assets/data/characters/%s.gd"%[character];
 	var script = ResourceLoader.load(script_path);
 	
 	if script == null:

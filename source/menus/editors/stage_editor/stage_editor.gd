@@ -228,7 +228,7 @@ func addStageToList():
 func get_stage_json(newStage):
 	var info = {}
 	
-	var jsonFile = FileAccess.open("res://assets/data/stages data/%s.json"%[newStage],FileAccess.READ);
+	var jsonFile = FileAccess.open("res://source/stages/%s/%s.json"%[newStage, newStage],FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
 	info = jsonData.get_data()
@@ -350,7 +350,7 @@ func _on_obj_z_index_value_changed(value: float) -> void:
 	is_updating = true;
 	
 func _on_create_stage_pressed() -> void:
-	var new_jsonFile = FileAccess.open("res://assets/data/stages data/%s.json"%[%stage_name.text], FileAccess.WRITE);
+	var new_jsonFile = FileAccess.open("res://source/stages/%s/%s.json"%[%stage_name.text, %stage_name.text], FileAccess.WRITE);
 	new_jsonFile.store_string(JSON.stringify({
 		"opponent": [0, 0],
 		"gf": [0, 0],

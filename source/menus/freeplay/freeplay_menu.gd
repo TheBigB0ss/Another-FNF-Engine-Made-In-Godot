@@ -63,7 +63,6 @@ func loadJson(week):
 func _ready() -> void:
 	Conductor.reset();
 	Conductor.getSongTime = 0.0;
-	Conductor.connect("new_beat", beat_hit);
 	
 	Discord.update_discord_info("freeplay menu", "Is in menus");
 	
@@ -123,9 +122,9 @@ func add_song(new_song, new_icon, new_color, new_week, diff):
 func _process(delta):
 	Conductor.getSongTime += delta*1000;
 	
-	song_stuff.position.y = lerp(float(song_stuff.position.y), float(350-coolOffset*cur_song), 0.20);
-	icons_stuff.position.y = lerp(float(icons_stuff.position.y), float(350-coolOffset*cur_song), 0.20);
-	$bg.modulate = lerp($bg.modulate, Color(bg_colors[cur_song][0], bg_colors[cur_song][1], bg_colors[cur_song][2]), 0.075);
+	song_stuff.position.y = lerp(float(song_stuff.position.y), float(350-coolOffset*cur_song), 1.0 - exp(-12.0 * delta));
+	icons_stuff.position.y = lerp(float(icons_stuff.position.y), float(350-coolOffset*cur_song), 1.0 - exp(-12.0 * delta));
+	$bg.modulate = lerp($bg.modulate, Color(bg_colors[cur_song][0], bg_colors[cur_song][1], bg_colors[cur_song][2]), 1.0 - exp(-6.0 * delta));
 	
 	cur_score = lerp(float(cur_score), float(score), delta * 20.0);
 	
@@ -144,10 +143,6 @@ func _process(delta):
 	if GlobalOptions.low_quality:
 		return;
 		
-	for i in songs.size():
-		for letterID in song_stuff.get_child(i).get_child_count():
-			song_stuff.get_child(i).get_children()[letterID].scale = lerp(song_stuff.get_child(i).get_children()[letterID].scale, Vector2(1.0, 1.0), 0.10);
-			
 	for i in songs.size():
 		for letters in song_stuff.get_child(i).get_children():
 			if songs[i] == "thorns":
@@ -183,18 +178,8 @@ func _input(ev):
 					go_to_song(songs[cur_song], diffs[cur_diff if !cur_diff > diffs.size()-1 else 0]);
 					
 			if ev.keycode in [KEY_SPACE] && !ev.echo:
-				var inst_shit = songs[cur_song].to_lower() if diffs[cur_diff] != "remix" else str(songs[cur_song].to_lower(),"-remix");
-				MusicManager._play_song(inst_shit + "/Inst", "songs", true);
+				MusicManager._play_song("/Inst%s"%["" if diffs[cur_diff] != "remix" else "-remix"], "songs/%s/song"%[songs[cur_song].to_lower()], true);
 				
-func beat_hit(beat):
-	for i in songs.size():
-		for letterID in song_stuff.get_child(i).get_child_count():
-			if songs[i] == "test":
-				if beat % 2 == 0 && letterID % 2 == 0:
-					song_stuff.get_child(i).get_children()[letterID].scale = Vector2(1.2,1.2);
-				elif beat % 2 != 0 && letterID % 2 != 0:
-					song_stuff.get_child(i).get_children()[letterID].scale = Vector2(1.2,1.2);
-					
 func go_to_song(song, diff_path):
 	SongData.loadJson(song, diff_path);
 	
@@ -216,12 +201,7 @@ func go_to_song(song, diff_path):
 	else:
 		$warning.visible = true;
 		
-		var difficultyPath = "";
-		if diff_path == "" or diff_path == "normal":
-			difficultyPath = "res://assets/data/songs/%s/%s.json"%[song, song];
-		else:
-			difficultyPath = "res://assets/data/songs/%s/%s-%s.json"%[song, song, diff_path];
-			
+		var difficultyPath = ("res://assets/songs/%s/chart/%s.json"%[song, song]) if diff_path == "" or diff_path == "normal" else ("res://assets/songs/%s/chart/%s-%s.json"%[song, song, diff_path]);
 		$warning/Label.text = "Missing Chart:\n%s"%[difficultyPath];
 		Sound.playAudio("cancelMenu", false);
 		

@@ -91,7 +91,7 @@ var characters = {};
 var camera_data = {};
 
 func loadStageJson(new_stage):
-	var jsonFile = FileAccess.open("res://assets/data/stages data/%s.json"%[new_stage], FileAccess.READ);
+	var jsonFile = FileAccess.open("res://source/stages/%s/%s.json"%[new_stage, new_stage], FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
 	stageData = jsonData.get_data();
@@ -109,13 +109,13 @@ func loadStageJson(new_stage):
 	stageZoomBeat = Vector2(stageData["stage beat zoom"], stageData["stage beat zoom"]);
 	stageZoom = Vector2(stageData["stage zoom"], stageData["stage zoom"]);
 	
-	player1StagePosition = Vector2(SongData.stageData["bf"][0], SongData.stageData["bf"][1]);
+	player1StagePosition = Vector2(stageData["bf"][0], stageData["bf"][1]);
 	player1Zindex = stageData["bf Z_Index"];
 	
-	player2StagePosition = Vector2(SongData.stageData["opponent"][0], SongData.stageData["opponent"][1]);
+	player2StagePosition = Vector2(stageData["opponent"][0], stageData["opponent"][1]);
 	player2Zindex = stageData["opponent Z_Index"];
 	
-	gfStagePosition = Vector2(SongData.stageData["gf"][0], SongData.stageData["gf"][1]);
+	gfStagePosition = Vector2(stageData["gf"][0], stageData["gf"][1]);
 	gfZindex = stageData["gf Z_Index"];
 	
 func loadJson(new_song, difficulty = "", new_chart = null):
@@ -130,8 +130,8 @@ func loadJson(new_song, difficulty = "", new_chart = null):
 	var difficultyPath = "";
 	var eventsPath = "";
 	
-	difficultyPath = ("res://assets/data/songs/%s/%s.json"%[new_song, new_song]) if difficulty == "" or difficulty == "normal" else ("res://assets/data/songs/%s/%s-%s.json"%[new_song, new_song, difficulty]);
-	eventsPath = "res://assets/data/songs/%s/events.json"%[new_song];
+	difficultyPath = ("res://assets/songs/%s/chart/%s.json"%[new_song, new_song]) if difficulty == "" or difficulty == "normal" else ("res://assets/songs/%s/chart/%s-%s.json"%[new_song, new_song, difficulty]);
+	eventsPath = "res://assets/songs/%s/chart/events.json"%[new_song];
 	
 	var jsonFile = FileAccess.open(difficultyPath, FileAccess.READ);
 	var jsonData = JSON.new();
@@ -166,7 +166,9 @@ func set_chart(songChart, eventsPath = ""):
 	
 	stage = songChart["meta"]["stage"];
 	song = songChart["meta"]["song"];
-	
+	if song.contains("-remix"):
+		song = song.replace("-remix", "");
+		
 	isPixelStage = songChart["meta"]["isPixelStage"];
 	needVoice = songChart["meta"]["needsVoices"];
 	
@@ -186,11 +188,6 @@ func set_chart(songChart, eventsPath = ""):
 			var note = [i[0], i[1], i[2], i[3], i[4] if i[4] != null else null, i[5] if i[5] != null else null];
 			opponentNotes.append(note);
 			
-		if strum.has("extra") && strum["extra"] != []:
-			for i in strum["extra"]:
-				var note = [i[0], i[1], i[2], i[3], i[4] if i[4] != null else null, i[5] if i[5] != null else null];
-				extraOpponentNotes.append(note);
-				
 	for i in songChart["sections"]:
 		songSections.append(i);
 		
@@ -228,7 +225,9 @@ func convert_pyschChart(songChart, eventsPath = ""):
 	
 	stage = songChart["song"].get("stage", "stage");
 	song = songChart["song"]["song"];
-	
+	if song.contains("-remix"):
+		song = song.replace("-remix", "");
+		
 	isPixelStage = songChart["song"].get("isPixelStage", false);
 	needVoice = songChart["song"].get("needsVoices", false);
 	
@@ -266,14 +265,13 @@ func convert_pyschChart(songChart, eventsPath = ""):
 					templateChart["strums"][0]["player"].append(note);
 				else:
 					templateChart["strums"][0]["opponent"].append(note);
+					
 			elif int(j[1]) < 8:
 				if section["mustHitSection"]:
 					templateChart["strums"][0]["opponent"].append(note);
 				else:
 					templateChart["strums"][0]["player"].append(note);
-			elif int(j[1]) >= 8:
-				templateChart["strums"][0]["extra"].append(note);
-				
+					
 	for i in templateChart["sections"]:
 		songSections.append(i);
 		
@@ -283,9 +281,6 @@ func convert_pyschChart(songChart, eventsPath = ""):
 			
 		for note in strum["opponent"]:
 			opponentNotes.append([note["noteTime"], note["noteData"], note["noteLength"], note["noteType"], note["noteValue1"], note["noteValue2"]]);
-			
-		for note in strum["extra"]:
-			extraOpponentNotes.append([note["noteTime"], note["noteData"], note["noteLength"], note["noteType"], note["noteValue1"], note["noteValue2"]]);
 			
 	if !songChart["song"].get("events", []).is_empty():
 		songEvents = songChart["song"]["events"];
@@ -309,7 +304,7 @@ func convert_codenameChart(songChart, songName, eventsPath = ""):
 	songSections.clear();
 	
 	var metaData = {};
-	var metaPath = "res://assets/data/songs/%s/meta.json"%[songName];
+	var metaPath = "res://assets/songs/%s/chart/meta.json"%[songName];
 	if FileAccess.file_exists(metaPath):
 		var metaJsonFile = FileAccess.open(eventsPath, FileAccess.READ);
 		var metaJsonData = JSON.new();
@@ -322,7 +317,9 @@ func convert_codenameChart(songChart, songName, eventsPath = ""):
 		
 	stage = metaData.get("stage", "stage");
 	song = metaData.get("name", metaData.get("displayName", songName));
-	
+	if song.contains("-remix"):
+		song = song.replace("-remix", "");
+		
 	songBpm = metaData["bpm"];
 	songSpeed = songChart.get("scrollSpeed", metaData.get("scrollSpeed", 1.0));
 	
@@ -363,12 +360,7 @@ func convert_codenameChart(songChart, songName, eventsPath = ""):
 				gfPlayer = strum["characters"][0];
 				for note in strum["notes"]:
 					var newNote = [note["time"], note["id"], note["sLen"], songChart["noteTypes"][note["type"]-1] if note["type"] > 0 else "", null, null];
-					extraOpponentNotes.append(newNote);
-					
-			_:
-				for note in strum["notes"]:
-					var newNote = [note["time"], note["id"], note["sLen"], songChart["noteTypes"][note["type"]-1] if note["type"] > 0 else "", null, null];
-					extraOpponentNotes.append(newNote);
+					opponentNotes.append(newNote);
 					
 #just for chart editor
 
@@ -401,13 +393,10 @@ func reload_section():
 func get_character_section_notes(section, notesArr):
 	if notesArr == playerNotes:
 		return player_section_notes.get(section, []);
-		
 	if notesArr == opponentNotes:
 		return opponent_section_notes.get(section, []);
-		
 	if notesArr == songEvents:
 		return section_events.get(section, []);
-		
 	return [];
 	
 func get_section_notes(section):
@@ -456,3 +445,4 @@ func get_section(time):
 	var stepCrochet = crochet / 4.0;
 	var step = last_change[0] + floor((time - last_change[1]) / stepCrochet);
 	return int(floor(step/16));
+	

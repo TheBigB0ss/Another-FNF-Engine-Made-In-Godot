@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="NoteSplash.png">
+	<!-- Created with Adobe Animate version 23.0.1.70 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Splash_Blue instância 10000" x="0" y="0" width="308" height="313" frameX="-23" frameY="-19" frameWidth="338" frameHeight="332"/>
+	<SubTexture name="Splash_Blue instância 10001" x="308" y="0" width="308" height="313" frameX="-23" frameY="-19" frameWidth="338" frameHeight="332"/>
+	<SubTexture name="Splash_Blue instância 10002" x="616" y="0" width="325" height="320" frameX="-8" frameY="-12" frameWidth="338" frameHeight="332"/>
+	<SubTexture name="Splash_Blue instância 10003" x="941" y="0" width="338" height="332"/>
+	<SubTexture name="Splash_Green instância 10000" x="1279" y="0" width="310" height="313" frameX="-22" frameY="-19" frameWidth="339" frameHeight="332"/>
+	<SubTexture name="Splash_Green instância 10001" x="1589" y="0" width="310" height="313" frameX="-22" frameY="-19" frameWidth="339" frameHeight="332"/>
+	<SubTexture name="Splash_Green instância 10002" x="0" y="332" width="328" height="320" frameX="-7" frameY="-12" frameWidth="339" frameHeight="332"/>
+	<SubTexture name="Splash_Green instância 10003" x="328" y="332" width="339" height="332"/>
+	<SubTexture name="Splash_Purple instância 10000" x="667" y="332" width="308" height="313" frameX="-22" frameY="-19" frameWidth="337" frameHeight="332"/>
+	<SubTexture name="Splash_Purple instância 10001" x="975" y="332" width="308" height="313" frameX="-22" frameY="-19" frameWidth="337" frameHeight="332"/>
+	<SubTexture name="Splash_Purple instância 10002" x="1283" y="332" width="326" height="320" frameX="-7" frameY="-12" frameWidth="337" frameHeight="332"/>
+	<SubTexture name="Splash_Purple instância 10003" x="1609" y="332" width="337" height="332"/>
+	<SubTexture name="Splash_Red instância 10000" x="0" y="664" width="310" height="313" frameX="-23" frameY="-19" frameWidth="340" frameHeight="332"/>
+	<SubTexture name="Splash_Red instância 10001" x="310" y="664" width="310" height="313" frameX="-23" frameY="-19" frameWidth="340" frameHeight="332"/>
+	<SubTexture name="Splash_Red instância 10002" x="620" y="664" width="327" height="320" frameX="-8" frameY="-12" frameWidth="340" frameHeight="332"/>
+	<SubTexture name="Splash_Red instância 10003" x="947" y="664" width="340" height="332"/>
+</TextureAtlas>

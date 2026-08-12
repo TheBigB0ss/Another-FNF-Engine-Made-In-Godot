@@ -51,6 +51,8 @@ font = ExtResource("2_ygq3c")
 font_size = 41
 shadow_color = Color(0, 0, 0, 1)
 
+[sub_resource type="AudioStreamSynchronized" id="AudioStreamSynchronized_g4v7s"]
+
 [node name="PlayState" type="Node2D" unique_id=530081182]
 script = ExtResource("1_nlkw3")
 
@@ -148,6 +150,7 @@ tint_under = Color(0.12662369, 0.12662369, 0.12662369, 1)
 [node name="icons" type="Node2D" parent="hud/Hud_Layer" unique_id=1671112722]
 
 [node name="timeLabel" type="Label" parent="hud/Hud_Layer" unique_id=1238761713]
+texture_filter = 1
 offset_left = 429.99997
 offset_top = 6.0
 offset_right = 8593.566
@@ -157,6 +160,7 @@ label_settings = SubResource("LabelSettings_08ga8")
 horizontal_alignment = 1
 
 [node name="scoreLabel" type="Label" parent="hud/Hud_Layer" unique_id=1862258188]
+texture_filter = 1
 offset_left = 276.0
 offset_top = 670.0
 offset_right = 16847.0
@@ -168,6 +172,7 @@ horizontal_alignment = 1
 
 [node name="botplayLabel" type="Label" parent="hud/Hud_Layer" unique_id=1540411430]
 modulate = Color(1, 1, 1, 0)
+texture_filter = 1
 offset_left = 504.0
 offset_top = 171.0
 offset_right = 5531.0
@@ -188,8 +193,8 @@ position = Vector2(644, 332)
 texture_filter = 1
 offset_left = 8.0
 offset_top = 279.0
-offset_right = 152.0
-offset_bottom = 436.0
+offset_right = 272.0
+offset_bottom = 476.0
 scale = Vector2(0.69, 0.741)
 text = "Total Hits:
 Sicks:
@@ -219,6 +224,7 @@ layer = 3
 visible = false
 
 [node name="voices" type="AudioStreamPlayer" parent="." unique_id=162161933]
+stream = SubResource("AudioStreamSynchronized_g4v7s")
 
 [node name="inst" type="AudioStreamPlayer" parent="." unique_id=1651001125]
 

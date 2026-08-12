@@ -3,15 +3,11 @@ extends Control
 
 var new_anims = []:
 	set(val):
-		new_anims = val.split(",") if val.contains(",") else [val];
 		if val == "":
 			new_anims = [];
-	get:
-		return new_anims;
-		
-func _ready() -> void:
-	new_anims = %LineEdit3.text;
-	
+		else:
+			new_anims = val.split(",");
+			
 func _on_check_box_2_toggled(toggled_on: bool) -> void:
 	%SpinBox2.editable = toggled_on;
 	%LineEdit3.editable = !toggled_on;

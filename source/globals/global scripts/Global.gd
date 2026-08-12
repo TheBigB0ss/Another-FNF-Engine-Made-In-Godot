@@ -10,42 +10,6 @@ var finished_intro = false;
 var can_use_menus = true;
 var is_on_video = false;
 
-var currentStoryMode = 0:
-	set(val):
-		if currentStoryMode != val:
-			currentStoryMode = val;
-			save_current_statu();
-			
-var currentFreeplay = 0:
-	set(val):
-		if currentFreeplay != val:
-			currentFreeplay = val;
-			save_current_statu();
-			
-var currentCredits = 0:
-	set(val):
-		if currentCredits != val:
-			currentCredits = val;
-			save_current_statu();
-			
-var currentOptions = 0:
-	set(val):
-		if currentOptions != val:
-			currentOptions = val;
-			save_current_statu();
-			
-var currentAchievements = 0:
-	set(val):
-		if currentAchievements != val:
-			currentAchievements = val;
-			save_current_statu();
-			
-var currentMainMenu = 0:
-	set(val):
-		if currentMainMenu != val:
-			currentMainMenu = val;
-			save_current_statu();
-			
 var current_selected = {
 	"storyMode": 0,
 	"freeplay": 0,
@@ -55,16 +19,44 @@ var current_selected = {
 	"mainmenu": 0
 };
 
+var currentStoryMode = 0:
+	set(val):
+		if currentStoryMode != val:
+			currentStoryMode = val;
+			current_selected["storyMode"] = currentStoryMode;
+			
+var currentFreeplay = 0:
+	set(val):
+		if currentFreeplay != val:
+			currentFreeplay = val;
+			current_selected["freeplay"] = currentFreeplay;
+			
+var currentCredits = 0:
+	set(val):
+		if currentCredits != val:
+			currentCredits = val;
+			current_selected["credits"] = currentCredits;
+			
+var currentOptions = 0:
+	set(val):
+		if currentOptions != val:
+			currentOptions = val;
+			current_selected["options"] = currentOptions;
+			
+var currentAchievements = 0:
+	set(val):
+		if currentAchievements != val:
+			currentAchievements = val;
+			current_selected["achievements"] = currentAchievements;
+			
+var currentMainMenu = 0:
+	set(val):
+		if currentMainMenu != val:
+			currentMainMenu = val;
+			current_selected["mainmenu"] = currentMainMenu;
+			
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS;
-	
-func save_current_statu():
-	current_selected["storyMode"] = currentStoryMode;
-	current_selected["freeplay"] = currentFreeplay;
-	current_selected["credits"] = currentCredits;
-	current_selected["options"] = currentOptions;
-	current_selected["achievements"] = currentAchievements;
-	current_selected["mainmenu"] = currentMainMenu;
 	
 func getTime():
 	var time = Time.get_time_dict_from_system();
@@ -97,7 +89,7 @@ func update_cursor(cursor):
 	Input.set_custom_mouse_cursor(load("res://assets/images/cursors/cursor-%s.png"%[cursor]), Input.CURSOR_ARROW, Vector2.ZERO);
 	
 func has_dialogue():
-	var base = "res://assets/data/songs/%s/%sDialogue"%[SongData.song, SongData.song];
+	var base = "res://assets/songs/%s/chart/%sDialogue"%[SongData.song, SongData.song];
 	return (FileAccess.file_exists(base + ".txt") || FileAccess.file_exists(base + ".json"));
 	
 func load_json(path = ""):

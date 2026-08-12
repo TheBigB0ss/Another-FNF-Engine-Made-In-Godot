@@ -7,6 +7,7 @@
 script = ExtResource("1_6cjh8")
 texture = ExtResource("2_uw6bs")
 xmlPath = "res://assets/images/story mode/characters/pico.xml"
-fps = 11
+frame = 13
+loop = false
 animation = 0
 metadata/_custom_type_script = "uid://dk0iqkss82o73"

@@ -52,9 +52,9 @@ func _ready():
 	is_paused = true;
 	process_mode = 2;
 	
-func _process(_delta):
-	MusicManager.volume_db = lerp(MusicManager.volume_db, 0.0, 0.005);
-	options_grp.position.y = lerp(float(options_grp.position.y), float(480-coolOffset*cur_option), 0.20);
+func _process(delta):
+	MusicManager.volume_db = lerp(MusicManager.volume_db, 0.0, 1.0 - exp(-3.0 * delta));
+	options_grp.position.y = lerp(float(options_grp.position.y), float(480-coolOffset*cur_option), 1.0 - exp(-9.0 * delta));
 	
 	if Global.can_use_menus:
 		if Input.is_action_just_pressed("ui_accept") && !is_paused:

@@ -7,7 +7,7 @@
 script = ExtResource("1_ft56h")
 texture = ExtResource("2_35h04")
 xmlPath = "res://assets/images/story mode/characters/tankman.xml"
-frame = 6
-fps = 9
+frame = 13
+loop = false
 animation = 0
 metadata/_custom_type_script = "uid://dk0iqkss82o73"

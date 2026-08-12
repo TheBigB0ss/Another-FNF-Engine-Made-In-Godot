@@ -260,10 +260,10 @@ func go_back():
 	else:
 		Global.changeScene("menus/main_menu/MainMenu", true, false);
 		
-func _process(_delta):
+func _process(delta):
 	is_on_reset_menu = reset_menu.visible;
-	options_stuff.position.y = lerp(float(options_stuff.position.y), float(480-coolOffset*cur_option), 0.20);
-	settings.position.y = lerp(float(settings.position.y), float(480-coolOffset*new_cur_option), 0.20);
+	options_stuff.position.y = lerp(float(options_stuff.position.y), float(480-coolOffset*cur_option), 1.0 - exp(-12.0 * delta));
+	settings.position.y = lerp(float(settings.position.y), float(480-coolOffset*new_cur_option), 1.0 - exp(-12.0 * delta));
 	
 func change_option(change):
 	Sound.playAudio("scrollMenu", false);

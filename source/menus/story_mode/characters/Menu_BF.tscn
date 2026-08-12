@@ -7,7 +7,7 @@
 script = ExtResource("1_bjj08")
 texture = ExtResource("2_t5vks")
 xmlPath = "res://assets/images/story mode/characters/bf.xml"
-frame = 8
-fps = 20
+frame = 13
+loop = false
 animation = 1
 metadata/_custom_type_script = "uid://dk0iqkss82o73"
