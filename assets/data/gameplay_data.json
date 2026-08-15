@@ -33,14 +33,14 @@
 			"RatingID": 2
 		},
 		"Good": {
-			"Ms": [60, 0],
+			"Ms": [60, -10],
 			"Score": 140,
 			"Percent": 0.80,
 			"Rating": "goods",
 			"RatingID": 1
 		},
 		"Sick": {
-			"Ms": [0, -150],
+			"Ms": [-10, -150],
 			"Score": 210,
 			"Percent": 1,
 			"Rating": "sicks",

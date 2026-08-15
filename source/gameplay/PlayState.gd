@@ -318,7 +318,6 @@ func _process(delta: float) -> void:
 		
 	checkPlayerDead();
 	set_icon_anim();
-	newRank();
 	
 	Discord.update_discord_info("Playstate", str(discord_songName, " ",  timeText.text), "Another FNF Engine Made In Godot", Conductor.getSongTime/1000);
 	
@@ -512,12 +511,12 @@ func checkPlayerDead():
 	Global.changeScene("/gameplay/death_scene/death_scene", false, false);
 	
 var RANKS = [
-	{"Rank Condition": func(): return sicks > 0, "RANK": "SFC"},
-	{"Rank Condition": func(): return goods > 0, "RANK": "GFC"},
-	{"Rank Condition": func(): return bads > 0 or shits > 0, "RANK": "FC"},
+	{"Rank Condition": func(): return misses > 10, "RANK": "Clear"},
 	{"Rank Condition": func(): return misses > 0, "RANK": "SDCB"},
-	{"Rank Condition": func(): return misses >= 10, "RANK": "Clear"},
-]
+	{"Rank Condition": func(): return bads > 0 or shits > 0, "RANK": "FC"},
+	{"Rank Condition": func(): return goods > 0, "RANK": "GFC"},
+	{"Rank Condition": func(): return sicks > 0, "RANK": "SFC"},
+];
 func newRank():
 	for i in RANKS:
 		if i["Rank Condition"].call():
