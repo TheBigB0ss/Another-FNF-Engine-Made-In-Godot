@@ -19,28 +19,28 @@
 	},
 	"rating_data":{
 		"Shit": {
-			"Ms": [175, 110],
+			"Ms": [175, 115],
 			"Score": 20,
 			"Percent": 0.10,
 			"Rating": "shits",
 			"RatingID": 3
 		},
 		"Bad": {
-			"Ms": [110, 60],
+			"Ms": [115, 60],
 			"Score": 80,
 			"Percent": 0.40,
 			"Rating": "bads",
 			"RatingID": 2
 		},
 		"Good": {
-			"Ms": [60, 30],
+			"Ms": [60, 0],
 			"Score": 140,
 			"Percent": 0.80,
 			"Rating": "goods",
 			"RatingID": 1
 		},
 		"Sick": {
-			"Ms": [30, -140],
+			"Ms": [0, -150],
 			"Score": 210,
 			"Percent": 1,
 			"Rating": "sicks",

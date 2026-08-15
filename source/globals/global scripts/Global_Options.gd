@@ -328,7 +328,8 @@ func set_options():
 			},
 			"debug text mode":{
 				"value": settingsJson["options"]["debug text mode"]["list"],
-				"description": "select the debug text mode"
+				"description": "select the debug text mode",
+				"ID": settingsJson["options"]["debug text mode"]["index"]
 			},
 			"vsync": {
 				"value": settingsJson["graphics"]["vsync"],

@@ -1,0 +1,154 @@
+{
+	"you can do it":{
+		"description": "beat tutorial",
+		"value": false,
+		"secret achievement": false,
+		"achievement index": 0
+	},
+	"a new rapper":{
+		"description": "beat week 1",
+		"value": false,
+		"secret achievement": false,
+		"achievement index": 1
+	},
+	"trick or treat":{
+		"description": "beat week 2",
+		"value": false,
+		"secret achievement": false,
+		"achievement index": 2
+	},
+	"since 99's":{
+		"description": "beat week 3",
+		"value": false,
+		"secret achievement": false,
+		"achievement index": 3
+	},
+	"what is a milf":{
+		"description": "beat week 4",
+		"value": false,
+		"secret achievement": false,
+		"achievement index": 4
+	},
+	"a christmas special":{
+		"description": "beat week 5",
+		"value": false,
+		"secret achievement": false,
+		"achievement index": 5
+	},
+	"so retro":{
+		"description": "beat week 6",
+		"value": false,
+		"secret achievement": false,
+		"achievement index": 6
+	},
+	"what we got here":{
+		"description": "beat week 7",
+		"value": false,
+		"secret achievement": false,
+		"achievement index": 7
+	},
+	"almost there":{
+		"description": "beat all weeks",
+		"value": [0, 8, false],
+		"secret achievement": false,
+		"achievement index": 8
+	},
+	"a new begin":{
+		"description": "beat tutorial on hard",
+		"value": false,
+		"special achievement": true,
+		"secret achievement": false,
+		"achievement index": 9
+	},
+	"a new rockstar":{
+		"description": "beat week 1 on hard",
+		"value": false,
+		"special achievement": true,
+		"secret achievement": false,
+		"achievement index": 10
+	},
+	"spooky scary skeletons":{
+		"description": "beat week 2 on hard",
+		"value": false,
+		"special achievement": true,
+		"secret achievement": false,
+		"achievement index": 11
+	},
+	"go pico go":{
+		"description": "beat week 3 on hard",
+		"value": false,
+		"special achievement": true,
+		"secret achievement": false,
+		"achievement index": 12
+	},
+	"highway troubles":{
+		"description": "beat week 4 on hard",
+		"value": false,
+		"special achievement": true,
+		"secret achievement": false,
+		"achievement index": 13
+	},
+	"rip and tear":{
+		"description": "beat week 5 on hard",
+		"value": false,
+		"special achievement": true,
+		"secret achievement": false,
+		"achievement index": 14
+	},
+	"your gf is in another castle":{
+		"description": "beat week 6 on hard",
+		"value": false,
+		"special achievement": true,
+		"secret achievement": false,
+		"achievement index": 15
+	},
+	"war never change":{
+		"description": "beat week 7 on hard",
+		"value": false,
+		"special achievement": true,
+		"secret achievement": false,
+		"achievement index": 16
+	},
+	"rap god":{
+		"description": "beat all weeks on hard",
+		"value": [0, 8, false],
+		"special achievement": true,
+		"secret achievement": false,
+		"achievement index": 17
+	},
+	"fucked up":{
+		"description": "finish a song with low health",
+		"value": false,
+		"special achievement": false,
+		"secret achievement": false,
+		"achievement index": 18
+	},
+	"debug mode":{
+		"description": "beat test song",
+		"value": false,
+		"special achievement": false,
+		"secret achievement": true,
+		"achievement index": 19
+	},
+	"combo master":{
+		"description": "complete a song with FC",
+		"value": false,
+		"special achievement": true,
+		"secret achievement": false,
+		"achievement index": 20
+	},
+	"perfectionist":{
+		"description": "complete a song with SFC or GFC",
+		"value": false,
+		"special achievement": true,
+		"secret achievement": false,
+		"achievement index": 21
+	},
+	"funkin master":{
+		"description": "unlock all achievements",
+		"value": [0, 22, false],
+		"special achievement": true,
+		"secret achievement": false,
+		"achievement index": 22
+	}
+}

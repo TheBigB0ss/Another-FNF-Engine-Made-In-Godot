@@ -11,7 +11,6 @@ var coolOffset = 0;
 @onready var enterText = $'tiltle stuff/title';
 @onready var newGroundsLogo = $'tiltle stuff/NG Logo';
 @onready var alphabets = $'alphabet_grp';
-@onready var sales_man_bg = $'salesmanBg';
 @onready var bambi = $"tiltle stuff/bnamb";
 
 var hasSkippedIntro = false;
@@ -39,7 +38,7 @@ func _ready():
 	random_text_arr = [getTxt()];
 	
 func _process(delta):
-	new_logo.scale = lerp(new_logo.scale, Vector2(0.3, 0.3), 0.060);
+	new_logo.scale = lerp(new_logo.scale, Vector2(0.3, 0.3), 1.0 - exp(-8.0 * delta));
 	Conductor.getSongTime += delta*1000;
 	
 func show_guys():
@@ -78,7 +77,7 @@ func skipIntro():
 	hasSkippedIntro = true;
 	
 func getTxt():
-	var readTxt = FileAccess.open("res://assets/IntroTexts.txt", FileAccess.READ);
+	var readTxt = FileAccess.open("res://assets/data/IntroTexts.txt", FileAccess.READ);
 	var txtData = readTxt.get_as_text().split("\n");
 	var txtTexts = [];
 	

@@ -397,6 +397,7 @@ func get_character_section_notes(section, notesArr):
 		return opponent_section_notes.get(section, []);
 	if notesArr == songEvents:
 		return section_events.get(section, []);
+		
 	return [];
 	
 func get_section_notes(section):

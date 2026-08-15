@@ -222,7 +222,7 @@ func _process(delta: float) -> void:
 		
 	if self != null:
 		var ms = (strumTime - Conductor.getSongTime);
-		can_press = ms <= 175.0 && ms >= -140.0 && isPlayer;
+		can_press = ms <= 175.0 && ms >= -150.0 && isPlayer;
 		
 	if missed && !ignoreNote:
 		self.modulate.a = 0.3;
@@ -290,6 +290,7 @@ func pressed(new_character = null):
 		
 	curNoteAnim = NOTES_ANIM[noteData];
 	new_character = main_scene.bf if !is_instance_valid(new_character) else new_character;
+	
 	if !new_character.is_player or new_character.curCharacter == "tankman":
 		curNoteAnim = swap_sing_anims("singLeft", "singRight");
 		
@@ -320,6 +321,7 @@ func pressed(new_character = null):
 func opponent_pressed(new_character = null):
 	curNoteAnim = NOTES_ANIM[noteData];
 	new_character = main_scene.dad if !is_instance_valid(new_character) else new_character;
+	
 	if new_character.is_player && new_character.curCharacter != "tankman" && new_character.curCharacter != "pico":
 		curNoteAnim = swap_sing_anims("singLeft", "singRight");
 		

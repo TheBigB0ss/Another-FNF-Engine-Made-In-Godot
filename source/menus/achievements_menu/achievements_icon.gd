@@ -39,6 +39,7 @@ func _ready() -> void:
 	var achievementBg = Sprite2D.new();
 	achievementBg.texture = load("res://assets/images/achievements/%s.png"%[achievementBgSpr]);
 	achievementBg.position = Vector2(achievement_spr.position.x, achievement_spr.position.y);
+	achievementBg.scale = Vector2(0.95, 0.95);
 	achievement_grp.add_child(achievementBg);
 	
 	if cool_value:
@@ -51,6 +52,7 @@ func _ready() -> void:
 		achievement_spr.texture = preload("res://assets/images/achievements/AchievementBgLocked.png");
 	achievement_spr.position.x = suffix_x;
 	achievement_spr.position.y = suffix_y;
+	achievement_spr.scale = Vector2(0.95, 0.95);
 	achievement_grp.add_child(achievement_spr);
 	
 	for i in len(cool_name):

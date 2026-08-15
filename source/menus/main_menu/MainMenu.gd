@@ -46,7 +46,7 @@ func _input(ev):
 				choiced = true;
 				Sound.playAudio("confirmMenu", false);
 				
-				await get_tree().create_timer(0.9).timeout;
+				await get_tree().create_timer(0.95).timeout;
 				match options[curOption]:
 					"storymode":
 						Global.changeScene("/menus/story_mode/storyMode", true, false);

@@ -74,12 +74,18 @@ func _ready():
 	chartTab.get_popup().id_pressed.connect(onChartPress);
 	previewTab.get_popup().id_pressed.connect(onPreviewPress);
 	
-var old_song_text = ".";
-var old_diff_text = ".";
+var old_song_text = "";
+var old_diff_text = "";
 func _process(_delta: float) -> void:
-	if old_song_text != %song_name.text && old_diff_text != %song_difficulty.text:
-		fileTab.get_popup().set_item_text(0, "open file: %s/%s"%[%song_name.text, %song_difficulty.text]);
+	var song_text = %song_name.text;
+	var diff_text = %song_difficulty.text;
+	
+	if old_song_text == song_text && old_diff_text == diff_text:
+		return;
 		
-		old_song_text = %song_name.text;
-		old_diff_text = %song_difficulty.text;
-		
+	var display_diff = diff_text if diff_text != "" else "normal";
+	
+	fileTab.get_popup().set_item_text(0, "open file: %s/%s" % [song_text, display_diff]);
+	
+	old_song_text = song_text;
+	old_diff_text = diff_text;

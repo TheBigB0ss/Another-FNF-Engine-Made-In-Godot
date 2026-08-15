@@ -99,3 +99,20 @@ func load_json(path = ""):
 	jsonFile.close();
 	return json.get_data();
 	
+func get_folder(folder, onlyDirs = false):
+	var file = [];
+	var coolFolder = DirAccess.open("res://%s"%[folder]);
+	if coolFolder:
+		coolFolder.list_dir_begin();
+		
+		var nameShit = coolFolder.get_next();
+		while nameShit != "":
+			if !nameShit.begins_with("."):
+				if !onlyDirs or coolFolder.current_is_dir():
+					file.append(nameShit);
+					
+			nameShit = coolFolder.get_next();
+			
+		coolFolder.list_dir_end();
+	return file;
+	

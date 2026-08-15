@@ -8,11 +8,14 @@ var curr_mem = 0;
 
 func _process(_delta: float) -> void:
 	debugText.visible = (GlobalOptions.debugTextMode != "disable");
-	debugText.text = "FPS: %s"%[int(Engine.get_frames_per_second())];
 	
 	var fps = int(Engine.get_frames_per_second());
 	if GlobalOptions.debugTextMode == "complex":
-		debugText.text = "FPS: %s\nVRAM: %s MB"%[fps, round((Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 104857.6)) / 10];
+		var vram = round((Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 104857.6)) / 10;
+		var process_time = Performance.get_monitor(Performance.TIME_PROCESS);
+		var scene_name = get_tree().current_scene.scene_file_path.get_file().get_basename() if get_tree().current_scene != null else "";
+		
+		debugText.text = "FPS: %s\nVRAM: %s MB\nPROCESS: %s ms\nSCENE: %s\nGODOT Version: %s"%[fps, vram, process_time * 1000.0, scene_name, Engine.get_version_info()["string"]];
 	else:
 		debugText.text = "FPS: %s"%[fps];
 		

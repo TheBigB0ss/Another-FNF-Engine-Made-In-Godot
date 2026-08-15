@@ -14,7 +14,7 @@ texture = ExtResource("2_o4tyv")
 
 [node name="staircase" type="Sprite2D" parent="." unique_id=373707914]
 z_index = 1
-position = Vector2(716, 283)
+position = Vector2(623, 265)
 texture = ExtResource("3_8svfa")
 
 [node name="friend" type="Sprite2D" parent="." unique_id=1610077640]

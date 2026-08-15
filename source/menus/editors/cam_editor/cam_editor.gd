@@ -9,6 +9,8 @@ var dad = Character.new();
 @onready var voices = $'chart_voices';
 @onready var inst = $'chart_inst';
 
+var songLength = 0.0;
+
 var timeline_width = 0.0;
 var isPlaying = false;
 
@@ -190,11 +192,24 @@ func reload_scene(songName):
 	load_events();
 	
 func load_song(songName):
-	var music_inst = load("res://assets/songs/" + songName + "/song/Inst.ogg");
-	var music_voices = load("res://assets/songs/" + songName + "/song/Voices.ogg");
+	var music_inst = load("res://assets/songs/%s/song/Inst.ogg"%[songName]);
 	
+	var music_voices = "res://assets/songs/%s/song/Voices.ogg"%[songName];
+	var music_voices_player = "res://assets/songs/%s/song/Voices-player.ogg"%[songName];
+	var music_voices_opponent = "res://assets/songs/%s/song/Voices-opponent.ogg"%[songName];
+	
+	var vocalsSynchronized = AudioStreamSynchronized.new();
+	
+	if ResourceLoader.exists(music_voices_player) && ResourceLoader.exists(music_voices_player):
+		vocalsSynchronized.stream_count = 2;
+		vocalsSynchronized.set_sync_stream(0, load(music_voices_player));
+		vocalsSynchronized.set_sync_stream(1, load(music_voices_opponent));
+	else:
+		vocalsSynchronized.stream_count = 1;
+		vocalsSynchronized.set_sync_stream(0, load(music_voices));
+		
 	inst.stream = music_inst;
-	voices.stream = music_voices;
+	voices.stream = vocalsSynchronized;
 	
 	inst.play(0.0);
 	voices.play(0.0);
@@ -202,10 +217,15 @@ func load_song(songName):
 	inst.stream_paused = true;
 	voices.stream_paused = true;
 	
-	timeLine.timeline_width = inst.stream.get_length() * 100;
+	var instLength = music_inst.get_length();
+	var vocalsLength = vocalsSynchronized.get_sync_stream(0).get_length();
+	
+	songLength = max(instLength, vocalsLength);
+	
+	timeLine.timeline_width = songLength * 100;
 	timeLine.queue_redraw();
 	
-	timeBar.max_value = inst.stream.get_length();
+	timeBar.max_value = songLength;
 	
 func update_events_position(grp, arr):
 	var id = 0;
@@ -247,8 +267,8 @@ func _process(delta: float) -> void:
 		positionCross.global_position = lerp(positionCross.global_position, camera.global_position, 0.10);
 		
 		if abs(inst.get_playback_position() - Conductor.getSongTime / 1000) > 0.03 && Time.get_ticks_msec() - last_song_seek > 500:
-			for i in [inst, voices]:
-				i.seek(Conductor.getSongTime/1000);
+			inst.seek(Conductor.getSongTime / 1000);
+			voices.seek(Conductor.getSongTime / 1000);
 			last_song_seek = Time.get_ticks_msec();
 	else:
 		if Input.is_action_pressed("mouse_click") && Input.is_action_pressed("ui_shift"):
@@ -262,11 +282,13 @@ func _process(delta: float) -> void:
 	songPointer.position.x = lerp(pointer_starter.x, pointer_starter.x + 330, (timeBar.value / timeBar.max_value));
 	
 	if inst.stream != null && inst != null:
-		var curMinute = str(int(inst.get_playback_position()) / 60).pad_zeros(1);
-		var curSeconds = str(int(inst.get_playback_position()) % 60).pad_zeros(2);
-		var maxMinutes = str(int(inst.stream.get_length()) / 60).pad_zeros(1);
-		var maxSeconds = str(int(inst.stream.get_length()) % 60).pad_zeros(2);
-		chart_info.text = str(curMinute, ":", curSeconds, " / ", maxMinutes, ":", maxSeconds);
+		var currentPosition = max(Conductor.getSongTime / 1000.0, 0.0);
+		
+		var curMinutes = str(int(currentPosition) / 60).pad_zeros(1);
+		var curSeconds = str(int(currentPosition) % 60).pad_zeros(2);
+		var maxMinutes = str(int(songLength) / 60).pad_zeros(1);
+		var maxSeconds = str(int(songLength) % 60).pad_zeros(2);
+		chart_info.text = str(curMinutes, ":", curSeconds, " / ", maxMinutes, ":", maxSeconds);
 		
 	match timeLine.get_track():
 		0:

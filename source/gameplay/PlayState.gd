@@ -12,6 +12,8 @@ extends Node2D
 @onready var voices = $voices;
 @onready var inst = $inst;
 
+var songLength = 0.0;
+
 var iconP1 = Icon.new();
 var iconP2 = Icon.new();
 @onready var iconGrp = $'hud/Hud_Layer/icons';
@@ -259,8 +261,8 @@ func _process(delta: float) -> void:
 		
 		if !finished_song:
 			if abs(inst.get_playback_position() - Conductor.getSongTime / 1000) > 0.03 && Time.get_ticks_msec() - last_song_seek > 500:
-				for i in [inst, voices]:
-					i.seek(Conductor.getSongTime / 1000);
+				inst.seek(Conductor.getSongTime / 1000);
+				voices.seek(Conductor.getSongTime / 1000);
 				last_song_seek = Time.get_ticks_msec();
 				
 	if !is_on_intro && Conductor.getSongTime >= 0 && !playlist.is_empty():
@@ -268,18 +270,19 @@ func _process(delta: float) -> void:
 		
 	if !Conductor.getSongTime < 0 && !is_on_intro:
 		timeBar.value = Conductor.getSongTime/1000;
-	timeBar.max_value = inst.stream.get_length();
-	
+		
 	botplayText.visible = GlobalOptions.isUsingBot;
 	
 	if GlobalOptions.isUsingBot:
 		botplayTime += delta;
 		botplayText.modulate.a = ((1+sin(botplayTime*5))/2) if !SongData.isPixelStage else (round((1+sin(botplayTime*5))/2));
 		
-	var curMinutes = str(int(inst.get_playback_position()) / 60).pad_zeros(1);
-	var curSeconds = str(int(inst.get_playback_position()) % 60).pad_zeros(2);
-	var maxMinutes = str(int(inst.stream.get_length()) / 60).pad_zeros(1);
-	var maxSeconds = str(int(inst.stream.get_length()) % 60).pad_zeros(2);
+	var currentPosition = max(Conductor.getSongTime / 1000.0, 0.0)
+	
+	var curMinutes = str(int(currentPosition) / 60).pad_zeros(1);
+	var curSeconds = str(int(currentPosition) % 60).pad_zeros(2);
+	var maxMinutes = str(int(songLength) / 60).pad_zeros(1);
+	var maxSeconds = str(int(songLength) % 60).pad_zeros(2);
 	
 	var current_time = (curMinutes + ":" + curSeconds if Conductor.getSongTime >= 0 else "0:00");
 	
@@ -289,10 +292,10 @@ func _process(delta: float) -> void:
 		"time elapsed":
 			timeText.text = current_time;
 		"time left":
-			var timeLeft = max(0, inst.stream.get_length() - inst.get_playback_position());
+			var timeLeft = max(0, songLength - currentPosition);
 			timeText.text = str(int(timeLeft) / 60).pad_zeros(1) + ":" + str(int(timeLeft) % 60).pad_zeros(2);
 			
-	if Conductor.getSongTime/1000 >= inst.stream.get_length() && !finished_song:
+	if floor(Conductor.getSongTime/1000) >= songLength && !finished_song:
 		if curSong == "test":
 			AchievementPopUp.set_achievement('debug mode', true);
 			
@@ -366,16 +369,16 @@ func pressedNote(note):
 	msText.position.y = rating_spr.position.y + (msText.size.x*0.5)+20;
 	
 	for i in rating_data.keys():
-		if ms <= rating_data[i]["Ms"][0] && !ms <= rating_data[i]["Ms"][1]:
+		if ms <= rating_data[i]["Ms"][0] && ms >= rating_data[i]["Ms"][1]:
 			notesPlayed += rating_data[i]["Percent"];
 			score += rating_data[i]["Score"]+randi_range(0, 15);
 			
 			msText.modulate = ratingColors[rating_data[i]["Rating"]];
 			match rating_data[i]["Rating"]:
-				"shits": shits += 1;
-				"bads": bads += 1;
-				"goods": goods += 1;
 				"sicks": sicks += 1;
+				"goods": goods += 1;
+				"bads": bads += 1;
+				"shits": shits += 1;
 				
 			rating_spr.pop_up_rating(rating_data[i]["RatingID"]);
 			
@@ -417,6 +420,7 @@ func miss_note(note):
 		Sound.audio.volume_db = -8;
 		
 	voices.stream.set_sync_stream_volume(0, -80.0);
+	
 	misses += 1;
 	health -= 4;
 	notesPlayed = max(notesPlayed-0.8, 0.0);
@@ -507,13 +511,19 @@ func checkPlayerDead():
 	SongData.isOnDeathScreen = true;
 	Global.changeScene("/gameplay/death_scene/death_scene", false, false);
 	
+var RANKS = [
+	{"Rank Condition": func(): return sicks > 0, "RANK": "SFC"},
+	{"Rank Condition": func(): return goods > 0, "RANK": "GFC"},
+	{"Rank Condition": func(): return bads > 0 or shits > 0, "RANK": "FC"},
+	{"Rank Condition": func(): return misses > 0, "RANK": "SDCB"},
+	{"Rank Condition": func(): return misses >= 10, "RANK": "Clear"},
+]
 func newRank():
-	if misses > 10: return "Clear";
-	elif misses > 0: return "SDCB";
-	elif bads > 0 or shits > 0: return "FC";
-	elif goods > 0: return "GFC";
-	elif sicks > 0: return "SFC";
-	else: return "???";
+	for i in RANKS:
+		if i["Rank Condition"].call():
+			return i["RANK"];
+			
+	return "???";
 	
 func setRank(old_rank, new_rank):
 	return rank_map[old_rank] < rank_map[new_rank];
@@ -552,7 +562,7 @@ func _input(ev):
 		
 		return;
 		
-	if ev.keycode == GlobalOptions.get_key("offsetKey"):
+	elif ev.keycode == GlobalOptions.get_key("offsetKey"):
 		SongData.characters = {"opponent": dad.curCharacter};
 		SongData.week_songs = playlist[0];
 		SongData.week_diffs = songDiff;
@@ -561,7 +571,7 @@ func _input(ev):
 		
 		return;
 		
-	if ev.keycode == GlobalOptions.get_key("camEditorKey"):
+	elif ev.keycode == GlobalOptions.get_key("camEditorKey"):
 		SongData.week_songs = playlist[0];
 		SongData.week_diffs = songDiff;
 		SongData.isPlaying = true;
@@ -679,6 +689,13 @@ func startSong():
 		
 	inst.stream = music_inst;
 	voices.stream = vocalsSynchronized;
+	
+	var instLength = music_inst.get_length();
+	var vocalsLength = vocalsSynchronized.get_sync_stream(0).get_length();
+	
+	songLength = max(instLength, vocalsLength);
+	
+	timeBar.max_value = songLength;
 	
 func finishSong():
 	can_pause = false;

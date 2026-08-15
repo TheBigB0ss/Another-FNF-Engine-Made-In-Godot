@@ -22,10 +22,9 @@ func _ready():
 	progressBar.max_value = 100;
 	
 	for i in Achievements.achievements.keys():
-		if i != "version":
-			if !Achievements.get_achievement_info(i)["achievement_hide"]:
-				achievements_sorted_list.append([i, Achievements.get_achievement_info(i)["achievement_index"]]);
-				
+		if !Achievements.get_achievement_info(i)["achievement_hide"]:
+			achievements_sorted_list.append([i, Achievements.get_achievement_info(i)["achievement_index"]]);
+			
 	achievements_sorted_list.sort_custom(func(a, b): return a[1] < b[1]);
 	
 	for i in achievements_sorted_list:
@@ -44,12 +43,12 @@ func _ready():
 			id += 1;
 			
 	for i in achievements_list.size():
-		var row = (i % achievements_row) * 160;
-		var col = (i / achievements_row) * 160;
+		var row = (i % achievements_row);
+		var col = (i / achievements_row);
 		
-		achievementsGrp.get_child(i).global_position += Vector2(row, col);
+		achievementsGrp.get_child(i).global_position += Vector2(row*160, col*160);
 		
-	achievementName.scale = Vector2(0.55, 0.55);
+	achievementName.scale = Vector2(0.5, 0.5);
 	achievementName.position = Vector2(20, 610);
 	$description_stuff.add_child(achievementName);
 	
@@ -82,13 +81,13 @@ func _input(ev):
 func change_achievement(change):
 	Sound.playAudio("scrollMenu", false);
 	
-	var row = cur_Achievement / achievements_row;
-	var col = cur_Achievement % achievements_row;
+	var row = (cur_Achievement / achievements_row);
+	var col = (cur_Achievement % achievements_row);
 	
 	match change:
 		1:
 			if col < achievements_row - 1 && cur_Achievement + 1 < achievements_list.size():
-				cur_Achievement += 1
+				cur_Achievement += 1;
 			else:
 				cur_Achievement = row * achievements_row;
 		-1:
@@ -97,9 +96,12 @@ func change_achievement(change):
 			else:
 				cur_Achievement = min((row + 1) * achievements_row, achievements_list.size()) - 1;
 		5:
-			cur_Achievement += achievements_row;
-			if cur_Achievement >= achievements_list.size():
-				cur_Achievement = col;
+			#cur_Achievement += achievements_row;
+			#if cur_Achievement >= achievements_list.size():
+				#cur_Achievement = col;
+				
+			if (cur_Achievement + achievements_row) < achievements_list.size():
+				cur_Achievement = cur_Achievement + achievements_row;
 		-5:
 			cur_Achievement -= achievements_row;
 			if cur_Achievement < 0:
@@ -107,8 +109,8 @@ func change_achievement(change):
 		_:
 			cur_Achievement = change;
 			
-	Global.currentAchievements = cur_Achievement
-	update_achievement()
+	Global.currentAchievements = cur_Achievement;
+	update_achievement();
 	
 var achievement_name = "";
 var achievement_value = false;
@@ -125,6 +127,7 @@ func _process(delta):
 		#if mouse_inside(i.achievement_spr):
 			#cur_Achievement = i.achievement_ID;
 			#update_achievement();
+			
 			#if Input.is_action_just_pressed("mouse_click"):
 				#seeingAchievementStatus = !seeingAchievementStatus;
 				
@@ -133,7 +136,7 @@ func _process(delta):
 	#var size = spr.get_texture().get_size() * spr.scale;
 	#if mouse.x > spr.global_position.x - size.x / 2 && mouse.x < spr.global_position.x + size.x / 2 && mouse.y > spr.global_position.y - size.y / 2 && mouse.y < spr.global_position.y + size.y / 2:
 		#return true;
-		#
+		
 	#return false;
 	
 var suffix = "";
