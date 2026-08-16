@@ -33,7 +33,7 @@ var ratings = ["sick", "good", "bad", "shit", "miss"];
 @onready var playerStrum = $'strums/Strum_Layer/Player Notes';
 @onready var opponentStrum = $'strums/Strum_Layer/Opponent Notes';
 @onready var game_strums = $'strums/Strum_Layer';
-@onready var note_splshes = $'strums/Strum_Layer/Splashes';
+@onready var note_splashes = $'strums/Strum_Layer/Splashes';
 
 var can_pause = false;
 
@@ -308,8 +308,8 @@ func _process(delta: float) -> void:
 		if health <= 15:
 			AchievementPopUp.set_achievement('fucked up', true);
 			
-		if SongData.isStoryMode && playlist.size() == 1:
-			AchievementPopUp.set_achievement(achievements_map[SongData.weekName][0 if songDiff != "hard" else 1], true);
+		if SongData.isStoryMode && playlist.size() == 1 && achievements_map.has(SongData.weekName):
+			AchievementPopUp.set_achievement(achievements_map[SongData.weekName][0][songDiff if songDiff != "" else "normal"], true);
 			
 		if AchievementPopUp.achievements_fuck.is_empty():
 			finishSong();
@@ -324,11 +324,9 @@ func _process(delta: float) -> void:
 func set_icon_anim():
 	var iconP1_Anim = "idle";
 	var iconP2_Anim = "idle";
-	
 	if health <= 15:
 		iconP1_Anim = "lose";
 		iconP2_Anim = "win";
-		
 	elif health >= 80:
 		iconP1_Anim = "win";
 		iconP2_Anim = "lose";
@@ -337,10 +335,10 @@ func set_icon_anim():
 	iconP2.play_icon_anim(iconP2_Anim);
 	
 var ratingColors = {
-	"sicks": Color.CYAN,
-	"goods": Color.FOREST_GREEN,
-	"bads": Color.DARK_RED,
-	"shits": Color.DARK_RED
+	"Sick": Color.CYAN,
+	"Good": Color.FOREST_GREEN,
+	"Bad": Color.DARK_RED,
+	"Shit": Color.DARK_RED
 };
 func pressedNote(note):
 	if note.isSustain && GlobalOptions.show_splashes:
@@ -368,16 +366,16 @@ func pressedNote(note):
 	msText.position.y = rating_spr.position.y + (msText.size.x*0.5)+20;
 	
 	for i in rating_data.keys():
-		if ms <= rating_data[i]["Ms"][0] && ms >= rating_data[i]["Ms"][1]:
+		if abs(ms) <= rating_data[i]["Ms"]:
 			notesPlayed += rating_data[i]["Percent"];
 			score += rating_data[i]["Score"]+randi_range(0, 15);
 			
-			msText.modulate = ratingColors[rating_data[i]["Rating"]];
-			match rating_data[i]["Rating"]:
-				"sicks": sicks += 1;
-				"goods": goods += 1;
-				"bads": bads += 1;
-				"shits": shits += 1;
+			msText.modulate = ratingColors[i];
+			match i:
+				"Sick": sicks += 1;
+				"Good": goods += 1;
+				"Bad": bads += 1;
+				"Shit": shits += 1;
 				
 			rating_spr.pop_up_rating(rating_data[i]["RatingID"]);
 			
@@ -617,6 +615,7 @@ func startCountdown():
 	if skipIntro && is_on_intro:
 		can_pause = true;
 		is_on_intro = false;
+		
 		Conductor.getSongTime = 0.0;
 		
 		if SongData.needVoice:
@@ -756,7 +755,7 @@ func finishSong():
 func splash_note(strum, anim):
 	var splash = preload("res://source/arrows/splashes/noteSplashes.tscn").instantiate();
 	splash.play_splash(strum.global_position.x, strum.global_position.y, anim);
-	note_splshes.add_child(splash);
+	note_splashes.add_child(splash);
 	return splash;
 	
 func updateScoreText():
@@ -783,6 +782,9 @@ func setTimePos(time):
 		voices.play(time/1000);
 	inst.play(time/1000);
 	
+	for i in note_splashes.get_children():
+		i.queue_free();
+		
 	Conductor.seekTime = time;
 	Conductor.update_position(time);
 	

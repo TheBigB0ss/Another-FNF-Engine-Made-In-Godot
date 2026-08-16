@@ -144,41 +144,41 @@ texture = ExtResource("7_qx6eb")
 
 [node name="play" type="Button" parent="chart_UI/chart_objs/infos" unique_id=232379909]
 layout_mode = 0
-offset_left = 539.0
+offset_left = 537.0
 offset_top = 1264.0
-offset_right = 604.0
+offset_right = 602.0
 offset_bottom = 1295.0
 text = "play"
 
 [node name="previousSection" type="Button" parent="chart_UI/chart_objs/infos" unique_id=1838673618]
 layout_mode = 0
-offset_left = 496.0
+offset_left = 494.0
 offset_top = 1264.0
-offset_right = 537.0
+offset_right = 535.0
 offset_bottom = 1295.0
 text = "<<"
 
 [node name="nextSection" type="Button" parent="chart_UI/chart_objs/infos" unique_id=1792249074]
 layout_mode = 0
-offset_left = 606.0
+offset_left = 604.0
 offset_top = 1264.0
-offset_right = 647.0
+offset_right = 645.0
 offset_bottom = 1295.0
 text = ">>"
 
 [node name="lastSection" type="Button" parent="chart_UI/chart_objs/infos" unique_id=2045088267]
 layout_mode = 0
-offset_left = 649.0
+offset_left = 647.0
 offset_top = 1264.0
-offset_right = 690.0
+offset_right = 688.0
 offset_bottom = 1295.0
 text = ">|"
 
 [node name="firstSection" type="Button" parent="chart_UI/chart_objs/infos" unique_id=962223753]
 layout_mode = 0
-offset_left = 453.0
+offset_left = 451.0
 offset_top = 1264.0
-offset_right = 494.0
+offset_right = 492.0
 offset_bottom = 1295.0
 text = "|<"
 
@@ -709,7 +709,7 @@ metadata/_custom_type_script = "uid://cvh168tg37tji"
 [node name="ChartBf" parent="chart_UI/chart_objs/chartTab/playerPreviewWindow" unique_id=145860512 instance=ExtResource("6_orogo")]
 position = Vector2(32, 141)
 scale = Vector2(0.765, 0.765)
-frame = 1
+frame = 3
 
 [node name="chart_inst" type="AudioStreamPlayer" parent="." unique_id=164621937]
 

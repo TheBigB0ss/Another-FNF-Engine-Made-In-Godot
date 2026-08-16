@@ -143,6 +143,16 @@ func _choice_pause_opts():
 					for j in i.noteNode.get_children():
 						j.queue_free();
 						
+				for note in main_scene.playerStrum.notesList:
+					if is_instance_valid(note.holdSplash):
+						note.holdSplash.queue_free();
+					note.holdSplash = null;
+					
+				for note in main_scene.opponentStrum.notesList:
+					if is_instance_valid(note.holdSplash):
+						note.holdSplash.queue_free();
+					note.holdSplash = null;
+					
 				main_scene.playerStrum.playerNotes.clear();
 				main_scene.opponentStrum.opponentNotes.clear();
 				

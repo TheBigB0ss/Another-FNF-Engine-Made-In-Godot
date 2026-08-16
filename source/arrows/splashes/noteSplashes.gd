@@ -17,3 +17,4 @@ func _on_animation_finished() -> void:
 		return;
 		
 	self.queue_free();
+	

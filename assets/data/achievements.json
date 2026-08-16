@@ -50,6 +50,7 @@
 	"almost there":{
 		"description": "beat all weeks",
 		"value": [0, 8, false],
+		"ids": [0, 7],
 		"secret achievement": false,
 		"achievement index": 8
 	},
@@ -112,6 +113,7 @@
 	"rap god":{
 		"description": "beat all weeks on hard",
 		"value": [0, 8, false],
+		"ids": [9, 16],
 		"special achievement": true,
 		"secret achievement": false,
 		"achievement index": 17
@@ -144,11 +146,19 @@
 		"secret achievement": false,
 		"achievement index": 21
 	},
-	"funkin master":{
-		"description": "unlock all achievements",
-		"value": [0, 22, false],
-		"special achievement": true,
+	"senpai senpai senpai senpai":{
+		"description": "play senpai while playing as senpai and dating a senpai",
+		"value": false,
+		"special achievement": false,
 		"secret achievement": false,
 		"achievement index": 22
+	},
+	"funkin master":{
+		"description": "unlock all achievements",
+		"value": [0, 23, false],
+		"ids": [0, 22],
+		"special achievement": true,
+		"secret achievement": false,
+		"achievement index": 23
 	}
 }

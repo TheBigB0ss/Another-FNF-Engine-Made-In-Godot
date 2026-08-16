@@ -13,7 +13,6 @@ var uncap_fps = false;
 var vsync = true;
 var ghost_tapping = true;
 var low_quality = false;
-var time_bar_alpha = 1.0;
 var health_bar_alpha = 1.0;
 var full_screen = false;
 var volume = 1;
@@ -238,7 +237,6 @@ func apply_changes():
 	debugTextMode = settingsJson["graphics"]["debug text mode"];
 	
 	hide_hud = settingsJson["visual"]["hide hud"];
-	#time_bar_alpha = settingsJson["visual"]["time bar alpha"];
 	timeBar_mode = settingsJson["visual"]["time bar type"];
 	health_bar_alpha = settingsJson["visual"]["health bar alpha"];
 	show_splashes = settingsJson["visual"]["show splashes"];

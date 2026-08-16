@@ -49,7 +49,7 @@ offset_left = 3.0
 offset_top = 662.0
 offset_right = 25263.0
 offset_bottom = 1682.0
-scale = Vector2(0.05, 0.05)
+scale = Vector2(0.04, 0.04)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 label_settings = SubResource("LabelSettings_op38l")
 

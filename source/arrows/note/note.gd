@@ -260,10 +260,13 @@ func _process(delta: float) -> void:
 							holdSplash.play_splash(holdSplash.position.x, holdSplash.position.y, "finishpixelCover" if SongData.isPixelStage else "finishCover%s"%[noteAnim]);
 							
 						holdSplash = null;
-						
 			else:
 				opponent_pressed();
-				
+				if sustainLength <= 0:
+					if is_instance_valid(holdSplash):
+						holdSplash.queue_free();
+						holdSplash = null;
+						
 			if sustainLength <= 0:
 				missed = false;
 				noteEnd.queue_free();
@@ -278,6 +281,7 @@ func _process(delta: float) -> void:
 			is_pressing = false;
 			if is_instance_valid(holdSplash):
 				holdSplash.queue_free();
+				holdSplash = null;
 			miss_note();
 			
 func play_note_anim(anim):
@@ -330,10 +334,6 @@ func opponent_pressed(new_character = null):
 	emitPress(true);
 	
 	if sustainLength <= 0:
-		if is_instance_valid(holdSplash):
-			holdSplash.queue_free();
-			holdSplash = null;
-			
 		new_character.animNote = self;
 		destroy_note();
 		
