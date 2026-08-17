@@ -71,7 +71,7 @@ offset_bottom = 40.0
 metadata/_edit_use_anchors_ = true
 
 [node name="LeftArrow" type="Node2D" parent="arrows" unique_id=1310225511]
-position = Vector2(755, 480)
+position = Vector2(760, 478)
 script = ExtResource("2_w5ivh")
 texture = ExtResource("3_n5ntm")
 xmlPath = "res://assets/images/story mode/ui/arrows.xml"
@@ -79,10 +79,12 @@ animation = 0
 metadata/_custom_type_script = "uid://dk0iqkss82o73"
 
 [node name="RightArrow" type="Node2D" parent="arrows" unique_id=807230325]
-position = Vector2(1125, 480)
+position = Vector2(1121, 478)
 script = ExtResource("2_w5ivh")
 texture = ExtResource("3_n5ntm")
 xmlPath = "res://assets/images/story mode/ui/arrows.xml"
+flip_h = null
+flip_v = null
 animation = 1
 metadata/_custom_type_script = "uid://dk0iqkss82o73"
 

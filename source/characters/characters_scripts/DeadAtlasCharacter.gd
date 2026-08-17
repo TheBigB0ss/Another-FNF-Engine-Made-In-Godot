@@ -28,8 +28,6 @@ var anim_type = 1;
 var base_position = Vector2.ZERO;
 
 var character = self;
-@export var flip_v = false;
-@export var flip_h = false;
 
 func init_json(char_json_path):
 	var jsonFile = FileAccess.open(char_json_path, FileAccess.READ);
@@ -61,9 +59,6 @@ func _ready():
 	
 func _process(delta):
 	super._process(delta);
-	
-	character.scale.x = abs(character.scale.x) * (-1 if flip_h else 1);
-	character.scale.y = abs(character.scale.y) * (-1 if flip_v else 1);
 	
 	if Engine.is_editor_hint():
 		return;

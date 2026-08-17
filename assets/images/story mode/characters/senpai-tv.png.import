@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b6yc7vdad8odb"
-path="res://.godot/imported/parents-xmas.png-05cd4d77e425c97fb5d355a57990f2e6.ctex"
+uid="uid://bjesxl87qp0vi"
+path="res://.godot/imported/senpai-tv.png-1e12975e1472c8d3ecf433802195f897.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/story mode/characters/parents-xmas.png"
-dest_files=["res://.godot/imported/parents-xmas.png-05cd4d77e425c97fb5d355a57990f2e6.ctex"]
+source_file="res://assets/images/story mode/characters/senpai-tv.png"
+dest_files=["res://.godot/imported/senpai-tv.png-1e12975e1472c8d3ecf433802195f897.ctex"]
 
 [params]
 

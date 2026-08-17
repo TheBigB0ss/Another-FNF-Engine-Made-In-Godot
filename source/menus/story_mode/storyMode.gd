@@ -59,7 +59,6 @@ func _ready():
 	Discord.update_discord_info("story menu", "Is in menus");
 	
 	Conductor.reset();
-	Conductor.connect("new_beat", beat_hit);
 	
 	for i in get_week_files():
 		var data = loadJson(i);
@@ -141,8 +140,10 @@ func _input(ev):
 				
 var confirm_timer = 0.075;
 func _process(delta):
-	Conductor.getSongTime += delta * 1000.0;
 	weeksSpr.position.y = lerp(float(weeksSpr.position.y), float(480-coolOffset*curWeek), 1.0 - exp(-12.0 * delta));
+	
+	leftArrow.position.x = lerp(leftArrow.position.x, diffSpr.position.x - diffSpr.texture.get_width() / 2.0 - leftArrow.texture.get_width() + 110, 1.0 - exp(-8.0 * delta));
+	rightArrow.position.x = lerp(rightArrow.position.x, diffSpr.position.x + diffSpr.texture.get_width() / 2.0 - 95, 1.0 - exp(-8.0 * delta));
 	
 	if !choiced:
 		return;
@@ -195,6 +196,7 @@ func go_to_week():
 	Sound.playAudio("confirmMenu", false);
 	
 	if weeks[curWeek]["weekCharacters"][1] == "BF":
+		menu_bf.get_child(0).loop = false;
 		menu_bf.get_child(0).play("confirm");
 		
 	await get_tree().create_timer(1).timeout;
@@ -306,11 +308,3 @@ func changeMenuCharacter():
 		char_grp.add_child(new_char);
 		char_grp.show();
 		
-func beat_hit(beat):
-	for i in [menu_bf, menu_gf, menu_opponent]:
-		if !is_instance_valid(i.get_child(0)):
-			continue;
-			
-		if beat % 2 == 0 && i.get_child(0).xmlList.keys()[i.get_child(0).animation] != "confirm":
-			i.get_child(0).play("idle");
-			

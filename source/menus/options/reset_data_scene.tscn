@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://csjtlx65o4ol2"]
+[gd_scene format=3 uid="uid://csjtlx65o4ol2"]
 
 [ext_resource type="Script" uid="uid://bg8q3p8tilx74" path="res://source/menus/options/reset_data_scene.gd" id="1_armif"]
 [ext_resource type="Shader" uid="uid://chi6jamggry1k" path="res://source/shaders/backdrops shaders/backdrop2.gdshader" id="3_u6fpd"]
@@ -10,16 +10,16 @@ shader = ExtResource("3_u6fpd")
 shader_parameter/tile_size = 100.0
 shader_parameter/scroll_speed = Vector2(0.5, 0.5)
 
-[node name="reset_data_scene" type="CanvasLayer"]
+[node name="reset_data_scene" type="CanvasLayer" unique_id=1868769225]
 script = ExtResource("1_armif")
 
-[node name="panel" type="Control" parent="."]
+[node name="panel" type="Control" parent="." unique_id=1979273787]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="ColorRect" type="ColorRect" parent="panel"]
+[node name="ColorRect" type="ColorRect" parent="panel" unique_id=1584556663]
 layout_mode = 0
 offset_left = -182.0
 offset_top = -142.0
@@ -27,13 +27,13 @@ offset_right = 1432.0
 offset_bottom = 905.0
 color = Color(0, 0, 0, 0.4627451)
 
-[node name="backDropBg" type="Sprite2D" parent="panel"]
+[node name="backDropBg" type="Sprite2D" parent="panel" unique_id=1339957910]
 material = SubResource("ShaderMaterial_vnbf0")
 position = Vector2(632.5, 361.5)
 scale = Vector2(15.85, 9.77)
 texture = ExtResource("4_u6fpd")
 
-[node name="AlphabetObject" type="AnimatedSprite2D" parent="panel"]
+[node name="AlphabetObject" type="AnimatedSprite2D" parent="panel" unique_id=771665715]
 position = Vector2(659, 166)
 scale = Vector2(0.59, 0.59)
 script = ExtResource("4_7husa")
@@ -41,4 +41,13 @@ text = "Are you sure you want to reset your data?"
 centred = true
 metadata/_custom_type_script = "uid://essfoa0h4nwy"
 
-[node name="alphabetGrp" type="Node2D" parent="panel"]
+[node name="AlphabetObject2" type="AnimatedSprite2D" parent="panel" unique_id=1824665914]
+position = Vector2(659, 212)
+scale = Vector2(0.48, 0.48)
+script = ExtResource("4_7husa")
+text = "(will also reset yout achievement progress)"
+is_bold = false
+centred = true
+metadata/_custom_type_script = "uid://essfoa0h4nwy"
+
+[node name="alphabetGrp" type="Node2D" parent="panel" unique_id=1001934917]

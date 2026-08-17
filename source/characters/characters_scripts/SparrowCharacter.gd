@@ -73,8 +73,6 @@ var anim_time = 5;
 var anim_beat = 2;
 
 var character = self;
-@export var flip_h = false;
-@export var flip_v = false;
 
 var characterScript:CharacterScript;
 
@@ -165,9 +163,6 @@ func _ready():
 	
 func _process(delta):
 	super(delta);
-	
-	scale.x = abs(scale.x) * (-1 if flip_h else 1);
-	scale.y = abs(scale.y) * (-1 if flip_v else 1);
 	
 	if !Engine.is_editor_hint():
 		characterScript.call_func("on_process", [delta]);

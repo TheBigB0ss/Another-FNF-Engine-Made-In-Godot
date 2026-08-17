@@ -28,6 +28,9 @@ var atlasTexture:AtlasTexture = AtlasTexture.new();
 @export var sprite_centered:bool = true;
 @export var offset = Vector2.ZERO;
 
+@export var flip_h = false;
+@export var flip_v = false;
+
 var animation = 0:
 	set(value):
 		animation = value;
@@ -91,6 +94,9 @@ func reload():
 	
 var timer = 0.0;
 func _process(delta: float) -> void:
+	scale.x = abs(scale.x) * (-1 if flip_h else 1);
+	scale.y = abs(scale.y) * (-1 if flip_v else 1);
+	
 	if frames.is_empty():
 		return;
 		

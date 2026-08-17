@@ -41,7 +41,8 @@ func _ready() -> void:
 		
 func _process(delta: float) -> void:
 	if (SongData.is_not_in_cutscene && !Global.is_on_video) or useDefaultZoomEvent:
-		zoom = lerp(zoom, SongData.stageZoom, 1.0 - exp(-8.0 * delta));
+		var t = 1.0 - exp(-8.0 * delta);
+		zoom = lerp(zoom, SongData.stageZoom, t);
 		
 	for i in cameraEvents:
 		if i["duration"] <= 0:

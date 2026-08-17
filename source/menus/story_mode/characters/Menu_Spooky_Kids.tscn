@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://b3dc74gqcwbin"]
 
 [ext_resource type="Script" uid="uid://dk0iqkss82o73" path="res://addons/sparrow_sprite/SparrowSprite.gd" id="1_07617"]
-[ext_resource type="Texture2D" uid="uid://78tyk83xemsj" path="res://assets/images/story mode/characters/spooky.png" id="2_wxo67"]
+[ext_resource type="Texture2D" uid="uid://bvnlwr4n4gux6" path="res://assets/images/story mode/characters/spooky_kids.png" id="2_wxo67"]
 
 [node name="MenuSpookyKids" type="Node2D" unique_id=1324213237]
+scale = Vector2(0.755, 0.755)
 script = ExtResource("1_07617")
 texture = ExtResource("2_wxo67")
-xmlPath = "res://assets/images/story mode/characters/spooky.xml"
-frame = 15
-loop = false
+xmlPath = "res://assets/images/story mode/characters/spooky_kids.xml"
+frame = 11
+fps = 19
 animation = 0
 metadata/_custom_type_script = "uid://dk0iqkss82o73"

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://78tyk83xemsj"
-path="res://.godot/imported/spooky.png-a0fb8485eeaf34f60302d49e7c2d5067.ctex"
+uid="uid://cuslvrcfcaiqh"
+path="res://.godot/imported/girlfriend.png-bac650d702f203c425e927e8b0db75a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/story mode/characters/spooky.png"
-dest_files=["res://.godot/imported/spooky.png-a0fb8485eeaf34f60302d49e7c2d5067.ctex"]
+source_file="res://assets/images/story mode/characters/girlfriend.png"
+dest_files=["res://.godot/imported/girlfriend.png-bac650d702f203c425e927e8b0db75a2.ctex"]
 
 [params]
 

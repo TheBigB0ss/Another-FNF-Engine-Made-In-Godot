@@ -32,11 +32,10 @@ offset_left = 807.0
 offset_top = 23.0
 offset_right = 1234.0
 offset_bottom = 467.0
-current_tab = 2
+current_tab = 0
 tab_focus_mode = 0
 
 [node name="help" type="TabBar" parent="offset_layer/TabContainer" unique_id=751837879]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -245,6 +244,7 @@ offset_bottom = 151.0
 text = "use icon color"
 
 [node name="anim settings" type="TabBar" parent="offset_layer/TabContainer" unique_id=1814175706]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 

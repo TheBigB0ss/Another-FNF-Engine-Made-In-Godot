@@ -37,8 +37,8 @@ func _input(ev):
 					"yes":
 						Sound.playAudio("confirmMenu", false);
 						HighScore.clear_data();
+						Achievements.reset_achievements();
 						self.visible = false;
-						
 					"no":
 						Sound.playAudio("cancelMenu", false);
 						self.visible = false;
