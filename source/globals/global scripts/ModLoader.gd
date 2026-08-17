@@ -38,21 +38,10 @@ func load_mods() -> void:
 	
 func load_mod_file(file_name, mods_path):
 	var pck_path = mods_path.path_join(file_name);
-	var mod_name = file_name.get_basename();
-	
 	if !FileAccess.file_exists(pck_path):
 		return;
 		
-	var result = ProjectSettings.load_resource_pack(pck_path, true);
-	
-	if !result:
-		return;
-		
-	mods.append({
-		"name": mod_name,
-		"path": pck_path,
-		"pck": pck_path
-	});
+	ProjectSettings.load_resource_pack(pck_path, true);
 	
 func load_json(path):
 	var mods_path = OS.get_executable_path().get_base_dir().path_join("mods");

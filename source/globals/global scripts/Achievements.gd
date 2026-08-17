@@ -112,18 +112,20 @@ func check_achievement_status(achievement):
 			return achievements[achievement]["value"];
 		TYPE_ARRAY:
 			return (achievements[achievement]["value"][2] or achievements[achievement]["value"][0] >= achievements[achievement]["value"][1]);
+			
 	return false;
 	
 func get_achievement_info(achievement_name):
-		return {
-			"achievement_name": achievement_name,
-			"achievement_value": achievements[achievement_name]["value"],
-			"achievement_description": achievements[achievement_name]["description"],
-			"achievement_hide": achievements[achievement_name].get("secret achievement", false),
-			"achievement_special": achievements[achievement_name].get("special achievement", false),
-			"achievement_index": achievements[achievement_name]["achievement index"]
-		};
-		
+	return {
+		"achievement_name": achievement_name,
+		"achievement_value": achievements[achievement_name]["value"],
+		"achievement_description": achievements[achievement_name]["description"],
+		"achievement_hide": achievements[achievement_name].get("secret achievement", false),
+		"achievement_special": achievements[achievement_name].get("special achievement", false),
+		"achievement_ids": achievements[achievement_name].get("ids", []),
+		"achievement_index": achievements[achievement_name]["achievement index"]
+	};
+	
 func reset_achievements():
 	achievements = Global.load_json("assets/data/achievements");
 	save_achievements();

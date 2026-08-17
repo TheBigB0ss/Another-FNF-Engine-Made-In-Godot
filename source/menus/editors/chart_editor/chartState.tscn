@@ -231,9 +231,7 @@ title = "Help"
 initial_position = 2
 size = Vector2i(380, 343)
 visible = false
-unresizable = true
-maximize_disabled = true
-force_native = true
+exclusive = true
 script = ExtResource("11_xob0g")
 metadata/_custom_type_script = "uid://cvh168tg37tji"
 
@@ -267,9 +265,6 @@ title = "SFX"
 initial_position = 2
 size = Vector2i(240, 158)
 visible = false
-unresizable = true
-minimize_disabled = true
-maximize_disabled = true
 script = ExtResource("11_xob0g")
 metadata/_custom_type_script = "uid://cvh168tg37tji"
 
@@ -311,9 +306,6 @@ title = "Chart Data"
 initial_position = 2
 size = Vector2i(342, 402)
 visible = false
-unresizable = true
-minimize_disabled = true
-maximize_disabled = true
 script = ExtResource("11_xob0g")
 metadata/_custom_type_script = "uid://cvh168tg37tji"
 
@@ -459,9 +451,6 @@ title = "Section Data"
 initial_position = 2
 size = Vector2i(210, 299)
 visible = false
-unresizable = true
-minimize_disabled = true
-maximize_disabled = true
 script = ExtResource("11_xob0g")
 metadata/_custom_type_script = "uid://cvh168tg37tji"
 
@@ -536,9 +525,6 @@ title = "Notes Data"
 initial_position = 2
 size = Vector2i(236, 358)
 visible = false
-unresizable = true
-minimize_disabled = true
-maximize_disabled = true
 script = ExtResource("11_xob0g")
 metadata/_custom_type_script = "uid://cvh168tg37tji"
 
@@ -603,9 +589,6 @@ title = "Events Data"
 initial_position = 2
 size = Vector2i(387, 347)
 visible = false
-unresizable = true
-minimize_disabled = true
-maximize_disabled = true
 script = ExtResource("11_xob0g")
 metadata/_custom_type_script = "uid://cvh168tg37tji"
 
@@ -681,16 +664,13 @@ title = "enemy preview"
 position = Vector2i(187, 262)
 size = Vector2i(217, 244)
 visible = false
-unresizable = true
-minimize_disabled = true
-maximize_disabled = true
 script = ExtResource("11_xob0g")
 metadata/_custom_type_script = "uid://cvh168tg37tji"
 
 [node name="ChartEnemy" parent="chart_UI/chart_objs/chartTab/opponentPreviewWindow" unique_id=246031562 instance=ExtResource("7_w8f1m")]
 position = Vector2(100, 139)
 scale = Vector2(0.545, 0.545)
-frame = 6
+frame = 1
 offset = Vector2(5, -10)
 animation = 1
 
@@ -700,16 +680,13 @@ title = "player preview"
 position = Vector2i(982, 297)
 size = Vector2i(219, 221)
 visible = false
-unresizable = true
-minimize_disabled = true
-maximize_disabled = true
 script = ExtResource("11_xob0g")
 metadata/_custom_type_script = "uid://cvh168tg37tji"
 
 [node name="ChartBf" parent="chart_UI/chart_objs/chartTab/playerPreviewWindow" unique_id=145860512 instance=ExtResource("6_orogo")]
 position = Vector2(32, 141)
 scale = Vector2(0.765, 0.765)
-frame = 3
+frame = 5
 
 [node name="chart_inst" type="AudioStreamPlayer" parent="." unique_id=164621937]
 

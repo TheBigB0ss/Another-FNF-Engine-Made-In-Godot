@@ -192,9 +192,9 @@ func _ready():
 	
 	if SongData.isStoryMode && SongData.death_count <= 0 && !SongData.restartSong && !curSong.contains("-remix"):
 		match curSong:
-			"ugh": stage.ugh_intro();
-			"guns": stage.guns_intro();
-			"stress": stage.stress_intro();
+			#"ugh": stage.ugh_intro();
+			#"guns": stage.guns_intro();
+			#"stress": stage.stress_intro();
 			"thorns": stage.start_cutscene();
 			
 	if curSong == "ugh" or curSong == "guns" or curSong == "stress":
@@ -277,25 +277,29 @@ func _process(delta: float) -> void:
 		botplayTime += delta;
 		botplayText.modulate.a = ((1+sin(botplayTime*5))/2) if !SongData.isPixelStage else (round((1+sin(botplayTime*5))/2));
 		
-	var currentPosition = max(Conductor.getSongTime / 1000.0, 0.0)
-	
-	var curMinutes = str(int(currentPosition) / 60).pad_zeros(1);
-	var curSeconds = str(int(currentPosition) % 60).pad_zeros(2);
-	var maxMinutes = str(int(songLength) / 60).pad_zeros(1);
-	var maxSeconds = str(int(songLength) % 60).pad_zeros(2);
-	
-	var current_time = (curMinutes + ":" + curSeconds if Conductor.getSongTime >= 0 else "0:00");
-	
-	match GlobalOptions.timeBar_mode:
-		"default":
-			timeText.text = current_time + " / " + maxMinutes + ":" + maxSeconds;
-		"time elapsed":
-			timeText.text = current_time;
-		"time left":
-			var timeLeft = max(0, songLength - currentPosition);
-			timeText.text = str(int(timeLeft) / 60).pad_zeros(1) + ":" + str(int(timeLeft) % 60).pad_zeros(2);
-			
-	if floor(Conductor.getSongTime/1000) >= songLength && !finished_song:
+	if !finished_song:
+		var currentPosition = max(Conductor.getSongTime / 1000.0, 0.0);
+		
+		var curMinutes = str(int(currentPosition) / 60).pad_zeros(1);
+		var curSeconds = str(int(currentPosition) % 60).pad_zeros(2);
+		var maxMinutes = str(int(songLength) / 60).pad_zeros(1);
+		var maxSeconds = str(int(songLength) % 60).pad_zeros(2);
+		
+		var current_time = (curMinutes + ":" + curSeconds if Conductor.getSongTime >= 0 else "0:00");
+		
+		match GlobalOptions.timeBar_mode:
+			"default":
+				timeText.text = current_time + " / " + maxMinutes + ":" + maxSeconds;
+			"time elapsed":
+				timeText.text = current_time;
+			"time left":
+				var timeLeft = max(0, songLength - currentPosition);
+				timeText.text = str(int(timeLeft) / 60).pad_zeros(1) + ":" + str(int(timeLeft) % 60).pad_zeros(2);
+				
+	if (Conductor.getSongTime/1000) >= songLength && !finished_song:
+		inst.stop();
+		voices.stop();
+		
 		if curSong == "test":
 			AchievementPopUp.set_achievement('debug mode', true);
 			
@@ -309,7 +313,8 @@ func _process(delta: float) -> void:
 			AchievementPopUp.set_achievement('fucked up', true);
 			
 		if SongData.isStoryMode && playlist.size() == 1 && achievements_map.has(SongData.weekName):
-			AchievementPopUp.set_achievement(achievements_map[SongData.weekName][0][songDiff if songDiff != "" else "normal"], true);
+			var diffPrefix = songDiff if songDiff != "" else "normal";
+			AchievementPopUp.set_achievement(achievements_map[SongData.weekName][0][diffPrefix], true);
 			
 		if AchievementPopUp.achievements_fuck.is_empty():
 			finishSong();
@@ -697,6 +702,10 @@ func startSong():
 	
 func finishSong():
 	can_pause = false;
+	finished_song = true;
+	
+	inst.stop();
+	voices.stop();
 	
 	ScriptLoader.call_func("on_song_end");
 	
@@ -720,9 +729,6 @@ func finishSong():
 		HighScore.get_song_rank(playlist[0], diffSet, "???");
 		HighScore.get_song_percent(playlist[0], diffSet, 0.0);
 		
-	inst.stop();
-	voices.stop();
-	
 	if SongData.isStoryMode:
 		playlist.remove_at(0);
 		print(playlist);

@@ -7,7 +7,6 @@
 [ext_resource type="SpriteFrames" uid="uid://84f3hfjhrja8" path="res://assets/stages/week7/smokeRight.res" id="4_yp5t5"]
 [ext_resource type="SpriteFrames" uid="uid://djynje25un601" path="res://assets/stages/week7/smokeLeft.res" id="5_r28s8"]
 [ext_resource type="SpriteFrames" uid="uid://62w04maikhne" path="res://assets/stages/week7/tank0.res" id="6_8s6mx"]
-[ext_resource type="PackedScene" uid="uid://dkfjsi34abpcb" path="res://source/stages/battlefield/Cutscene.tscn" id="7_j7n64"]
 [ext_resource type="SpriteFrames" uid="uid://cl30yconcugj2" path="res://assets/stages/week7/tank1.res" id="7_mocah"]
 [ext_resource type="SpriteFrames" uid="uid://bcb0tfdgvr3tt" path="res://assets/stages/week7/tank2.res" id="8_4s4sm"]
 [ext_resource type="SpriteFrames" uid="uid://bhu1rnpwgc4tl" path="res://assets/stages/week7/tank3.res" id="9_ffwmn"]
@@ -97,8 +96,6 @@ autoplay = "SmokeBlurLeft instance 1"
 position = Vector2(675, 560)
 scale = Vector2(1.3, 1.3)
 texture = SubResource("CompressedTexture2D_evlji")
-
-[node name="Cutscene" parent="." unique_id=1181525979 instance=ExtResource("7_j7n64")]
 
 [node name="Soldiers" type="Node2D" parent="." unique_id=1876040288]
 z_index = 31

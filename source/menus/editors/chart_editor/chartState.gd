@@ -484,7 +484,25 @@ func _process(delta):
 	
 	selection.visible = grid.mouse_inside_grid();
 	
-	var mouse_inside_ui = get_viewport().gui_get_hovered_control() is TabBar or get_viewport().gui_get_hovered_control() is SpinBox or get_viewport().gui_get_hovered_control() is CheckBox or get_viewport().gui_get_hovered_control() is Button or get_viewport().gui_get_hovered_control() is OptionButton;
+	var mouse_inside_ui = (
+		get_viewport().gui_get_hovered_control() is TabBar 
+		or get_viewport().gui_get_hovered_control() is SpinBox 
+		or get_viewport().gui_get_hovered_control() is CheckBox 
+		or get_viewport().gui_get_hovered_control() is Button 
+		or get_viewport().gui_get_hovered_control() is OptionButton 
+		or get_viewport().gui_get_hovered_control() is ProgressBar
+		or get_viewport().gui_get_hovered_control() is Label
+		or get_viewport().gui_get_hovered_control() == $chart_UI/chart_objs/topBar 
+		or get_viewport().gui_get_hovered_control() == $chart_UI/chart_objs/bottomBar
+		or $chart_UI/chart_objs/chartTab/helpWindow.mouse_inside
+		or $chart_UI/chart_objs/chartTab/soundWindow.mouse_inside
+		or $chart_UI/chart_objs/chartTab/chartWindow.mouse_inside
+		or $chart_UI/chart_objs/chartTab/sectionWindow.mouse_inside
+		or $chart_UI/chart_objs/chartTab/notesWindow.mouse_inside
+		or $chart_UI/chart_objs/chartTab/eventsWindow.mouse_inside
+		or $chart_UI/chart_objs/chartTab/opponentPreviewWindow.mouse_inside
+		or $chart_UI/chart_objs/chartTab/playerPreviewWindow.mouse_inside
+	);
 	
 	if !mouse_inside_ui && !dialogs_open:
 		update_selected_notes();
@@ -557,7 +575,7 @@ func _process(delta):
 	var chartCurStep = (curSection*16) + floor(number_to_time(time_to_number(Conductor.getSongTime - section_start_time())) / chartStepCrochet);
 	var chartCurBeat = floor(chartCurStep / 4);
 	
-	chart_info.text = "Section: %s      Step: %s      Beat: %s                                                      %s        BPM: %s"%[curSection, int(chartCurStep), int(chartCurBeat), str(curMinutes, ":", curSeconds, " / ", maxMinutes, ":", maxSeconds), SongData.songBpm];
+	chart_info.text = "Section: %s      Step: %s      Beat: %s                                                      %s        BPM: %s"%[curSection, int(chartCurStep), int(chartCurBeat), str(curMinutes, ":", curSeconds, " / ", maxMinutes, ":", maxSeconds), %Bpm.value];
 	
 	if grid.mouse_inside_grid():
 		selection.global_position.x = grid.global_position.x + floor(grid.get_local_mouse_position().x / grid_size) * grid_size+20;

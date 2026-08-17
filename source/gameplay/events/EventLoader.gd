@@ -21,17 +21,21 @@ func _ready() -> void:
 	reload_events();
 	
 func reload_events():
-	if !SongData.songEvents.is_empty():
-		for i in SongData.songEvents:
-			array_events_notes.insert(0, [i[0], i[1], i[2], i[3], i[4]]);
-			
+	array_events_notes.clear();
+	for i in SongData.songEvents:
+		array_events_notes.insert(0, [i[0], i[1], i[2], i[3], i[4]]);
+		
+	array_events_notes.sort_custom(func(a, b): return a[0] < b[0]);
+	
 func _process(_delta: float) -> void:
-	if array_events_notes != [] or array_events_notes != null:
-		for i in array_events_notes:
-			if Conductor.getSongTime >= i[0]:
-				set_event(i[2], i[3], i[4]);
-				array_events_notes.erase(i);
-				
+	while !array_events_notes.is_empty():
+		var event = array_events_notes[0];
+		if Conductor.getSongTime < event[0]:
+			break;
+			
+		set_event(event[2], event[3], event[4]);
+		array_events_notes.pop_front();
+		
 func set_event(new_event, new_value1, new_value2):
 	var event = new_event;
 	var value1 = new_value1;
@@ -140,8 +144,9 @@ func changeChar(id, newCharacter):
 					main_scene.bf.camera_pos[i] *= -1;
 					
 			update_icon(main_scene.iconP1, newChar);
-			main_scene.healthBar.tint_progress = Color("#ff000f") if GlobalOptions.updated_hud == "classic hud" else newChar.healthBar_Color;
-			
+			if GlobalOptions.updated_hud != "classic hud":
+				main_scene.healthBar.tint_progress = newChar.healthBar_Color;
+				
 		"1", "dad":
 			main_scene.dad = newChar;
 			dad = newChar;
@@ -152,8 +157,9 @@ func changeChar(id, newCharacter):
 					main_scene.dad.camera_pos[i] *= -1;
 					
 			update_icon(main_scene.iconP2, newChar);
-			main_scene.healthBar.tint_under = Color("#ff000f") if GlobalOptions.updated_hud == "classic hud" else newChar.healthBar_Color;
-			
+			if GlobalOptions.updated_hud != "classic hud":
+				main_scene.healthBar.tint_under = newChar.healthBar_Color;
+				
 		"2", "gf":
 			main_scene.gf = newChar;
 			gf = newChar;
