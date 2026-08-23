@@ -55,10 +55,10 @@ label_settings = SubResource("LabelSettings_op38l")
 
 [node name="progressBar" type="TextureProgressBar" parent="description_stuff" unique_id=1249455122]
 layout_mode = 0
-offset_left = 2.0
-offset_top = 725.0
-offset_right = 402.0
-offset_bottom = 744.0
+offset_left = 364.0
+offset_top = 724.0
+offset_right = 764.0
+offset_bottom = 743.0
 texture_under = ExtResource("4_op38l")
 texture_progress = ExtResource("4_op38l")
 tint_under = Color(0, 0, 0, 1)
@@ -66,11 +66,11 @@ tint_under = Color(0, 0, 0, 1)
 [node name="progressText" type="Label" parent="description_stuff" unique_id=793770626]
 texture_filter = 1
 layout_mode = 0
-offset_left = 420.0
+offset_left = 2.0
 offset_top = 719.0
-offset_right = 2386.335
+offset_right = 24726.857
 offset_bottom = 1457.0
 scale = Vector2(0.035, 0.035)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-text = "100%"
+text = "achievement progress:                       100% "
 label_settings = SubResource("LabelSettings_op38l")

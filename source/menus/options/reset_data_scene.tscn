@@ -22,7 +22,7 @@ offset_bottom = 40.0
 [node name="ColorRect" type="ColorRect" parent="panel" unique_id=1584556663]
 layout_mode = 0
 offset_left = -182.0
-offset_top = -142.0
+offset_top = -134.0
 offset_right = 1432.0
 offset_bottom = 905.0
 color = Color(0, 0, 0, 0.4627451)
@@ -42,10 +42,10 @@ centred = true
 metadata/_custom_type_script = "uid://essfoa0h4nwy"
 
 [node name="AlphabetObject2" type="AnimatedSprite2D" parent="panel" unique_id=1824665914]
-position = Vector2(659, 212)
+position = Vector2(651, 212)
 scale = Vector2(0.48, 0.48)
 script = ExtResource("4_7husa")
-text = "(will also reset yout achievement progress)"
+text = "(This will also reset your achievement progress)"
 is_bold = false
 centred = true
 metadata/_custom_type_script = "uid://essfoa0h4nwy"

@@ -65,7 +65,7 @@ enabled=PackedStringArray("res://addons/atlas_sprite/plugin.cfg", "res://addons/
 folder_colors={
 "res://addons/": "yellow",
 "res://assets/": "green",
-"res://source/": "blue"
+"res://source/": "teal"
 }
 
 [filesystem]

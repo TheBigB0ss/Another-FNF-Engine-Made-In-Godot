@@ -126,8 +126,6 @@ func _process(delta):
 	icons_stuff.position.y = lerp(float(icons_stuff.position.y), float(350-coolOffset*cur_song), 1.0 - exp(-12.0 * delta));
 	$bg.modulate = lerp($bg.modulate, Color(bg_colors[cur_song][0], bg_colors[cur_song][1], bg_colors[cur_song][2]), 1.0 - exp(-6.0 * delta));
 	
-	cur_score = lerp(float(cur_score), float(score), delta * 20.0);
-	
 	var diff_id = cur_diff if cur_diff <= diffs.size() - 1 else 0;
 	var diff_name = diffs[diff_id].to_lower();
 	
@@ -137,6 +135,8 @@ func _process(delta):
 	score = HighScore.get_score(song, diff);
 	rank = HighScore.get_rank(song, diff);
 	percent = HighScore.get_percent(song, diff);
+	
+	cur_score = lerp(float(cur_score), float(score), delta * 20.0);
 	
 	$scoreText.text = "SCORE: %s\nRANK: %s\nACCURACY: %s"%[snapped(round(cur_score), 1), rank, str(float(percent), "%")];
 	

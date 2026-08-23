@@ -15,7 +15,7 @@ func _process(_delta: float) -> void:
 		var process_time = Performance.get_monitor(Performance.TIME_PROCESS);
 		var scene_name = get_tree().current_scene.scene_file_path.get_file().get_basename() if get_tree().current_scene != null else "";
 		
-		debugText.text = "FPS: %s\nVRAM: %s MB\nPROCESS: %s ms\nSCENE: %s\nGODOT Version: %s"%[fps, vram, process_time * 1000.0, scene_name, Engine.get_version_info()["string"]];
+		debugText.text = "FPS: %s\nVRAM: %s MB\nPROCESS: %s ms\nSCENE: %s"%[fps, vram, process_time * 1000.0, scene_name];
 	else:
 		debugText.text = "FPS: %s"%[fps];
 		

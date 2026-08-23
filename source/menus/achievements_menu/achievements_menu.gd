@@ -53,7 +53,7 @@ func _ready():
 	$description_stuff.add_child(achievementName);
 	
 	progressBar.value = Achievements.progress;
-	progressText.text = str(Achievements.progress, "%");
+	progressText.text = str("achievement progress:                        ", Achievements.progress, "%");
 	
 	change_achievement(Global.current_selected["achievements"]);
 	
@@ -139,14 +139,13 @@ func _process(delta):
 		
 	#return false;
 	
-var suffix = "";
 func update_achievement():
+	var suffix = "";
+	
 	if typeof(Achievements.get_achievement_info(achievements_list[cur_Achievement])["achievement_value"]) == TYPE_ARRAY:
 		var achievementValue = int(Achievements.get_achievement_info(achievements_list[cur_Achievement])["achievement_value"][0]);
 		var achievementMaxValue = int(Achievements.get_achievement_info(achievements_list[cur_Achievement])["achievement_value"][1]);
 		suffix = str(achievementValue, " / ", achievementMaxValue);
-	else:
-		suffix = "";
 		
 	descriptionText.text = str(Achievements.get_achievement_info(achievements_list[cur_Achievement])["achievement_description"], " ", suffix);
 	

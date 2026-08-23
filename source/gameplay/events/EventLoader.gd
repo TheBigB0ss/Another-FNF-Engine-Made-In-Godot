@@ -169,33 +169,9 @@ func update_icon(icon, character):
 		icon.reload_icon(character.curIcon);
 		
 	elif icon is AnimatedIcon:
-		icon.icon_frames = "assets/images/icons/animated/%s/%s.res" % [character.curIcon, character.curIcon];
+		icon.icon_frames = "assets/images/icons/animated/%s/%s.res"%[character.curIcon, character.curIcon];
 		icon.icon_char = character.curIcon;
 		
-func changeBg(newBg):
-	for i in main_scene.stageGrp.get_children():
-		main_scene.stageGrp.remove_child(i);
-		i.queue_free();
-		
-	main_scene.stage = load("res://source/stages/%s/%s.tscn"%[newBg, newBg]).instantiate();
-	if main_scene.stage is Stage:
-		main_scene.stage.init_game(main_scene);
-		
-	SongData.loadStageJson(newBg);
-	
-	main_scene.curStage = newBg.to_lower();
-	main_scene.stageGrp.add_child(main_scene.stage);
-	
-	main_scene.bf.position = SongData.player1StagePosition;
-	main_scene.bf.z_index = SongData.player1Zindex;
-	
-	if main_scene.gf != null:
-		main_scene.gf.position = SongData.gfStagePosition;
-		main_scene.gf.z_index = SongData.gfZindex;
-		
-	main_scene.dad.position = SongData.gfStagePosition if SongData.player2 == "gf" else SongData.player2StagePosition;
-	main_scene.dad.z_index = SongData.player2Zindex;
-	
 func characterPlayAnim(id, anim):
 	match id:
 		"0", "bf":
@@ -208,3 +184,30 @@ func characterPlayAnim(id, anim):
 			if SongData.gfPlayer != "" && main_scene.gf != null:
 				main_scene.gf._playAnim(anim, true);
 				
+func changeBg(newBg):
+	for i in main_scene.stageGrp.get_children():
+		i.queue_free();
+		
+	main_scene.stage = load("res://source/stages/%s/%s.tscn"%[newBg, newBg]).instantiate();
+	
+	if main_scene.stage is Stage:
+		main_scene.stage.init_game(main_scene);
+		
+	SongData.loadStageJson(newBg);
+	
+	main_scene.curStage = newBg.to_lower();
+	main_scene.stageGrp.add_child(main_scene.stage);
+	
+	update_stage_characters();
+	
+func update_stage_characters() -> void:
+	main_scene.bf.position = SongData.player1StagePosition;
+	main_scene.bf.z_index = SongData.player1Zindex;
+	
+	if main_scene.gf != null:
+		main_scene.gf.position = SongData.gfStagePosition;
+		main_scene.gf.z_index = SongData.gfZindex;
+		
+	main_scene.dad.position = (SongData.gfStagePosition if SongData.player2 == "gf" else SongData.player2StagePosition);
+	main_scene.dad.z_index = SongData.player2Zindex;
+	

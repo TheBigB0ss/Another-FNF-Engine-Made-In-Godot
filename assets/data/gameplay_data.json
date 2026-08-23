@@ -59,25 +59,21 @@
 	},
 	"rating_data":{
 		"Sick": {
-			"Ms": 45,
 			"Score": 250,
 			"Percent": 1,
 			"RatingID": 0
 		},
 		"Good": {
-			"Ms": 95,
 			"Score": 150,
 			"Percent": 0.80,
 			"RatingID": 1
 		},
 		"Bad": {
-			"Ms": 120,
 			"Score": 50,
 			"Percent": 0.40,
 			"RatingID": 2
 		},
 		"Shit": {
-			"Ms": 180,
 			"Score": 5,
 			"Percent": 0.10,
 			"RatingID": 3

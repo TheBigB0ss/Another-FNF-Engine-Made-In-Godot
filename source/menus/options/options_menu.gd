@@ -98,7 +98,6 @@ func _input(ev):
 					i.queue_free();
 					
 				$keys.hide();
-				GlobalOptions.updated_options = [];
 				
 			else:
 				is_on_key_mode = false;
@@ -112,93 +111,92 @@ func _input(ev):
 		if ev.keycode in [GlobalOptions.get_key("ui_up")] && !ev.echo && !is_on_key_mode:
 			change_new_option(-1);
 			
-		if GlobalOptions.updated_options != []:
-			var curSetting = settings.get_child(new_cur_option);
-			var category = options_array[cur_option];
-			var opt_name = curSetting.opt_name;
+		var curSetting = settings.get_child(new_cur_option);
+		if curSetting == null:
+			return;
 			
-			var rightKey = (ev.keycode == GlobalOptions.get_key("ui_right"));
-			var leftKey = (ev.keycode == GlobalOptions.get_key("ui_left"));
-			var enterKey = (ev.keycode == GlobalOptions.get_key("enter") or ev.keycode == KEY_KP_ENTER);
-			
-			match typeof(curSetting.opt_type):
-				TYPE_INT:
-					if is_on_key_mode:
-						return;
-						
-					var min_val = 30 if opt_name == "fps" else 0;
-					var max_val = 250 if opt_name == "fps" else 100;
-					var dir = int(rightKey) - int(leftKey);
+		var category = options_array[cur_option];
+		var opt_name = curSetting.opt_name;
+		
+		var rightKey = (ev.keycode == GlobalOptions.get_key("ui_right"));
+		var leftKey = (ev.keycode == GlobalOptions.get_key("ui_left"));
+		var enterKey = (ev.keycode == GlobalOptions.get_key("enter") or ev.keycode == KEY_KP_ENTER);
+		
+		match typeof(curSetting.opt_type):
+			TYPE_INT:
+				if is_on_key_mode:
+					return;
 					
-					if dir != 0:
-						GlobalOptions.change_int_opt(opt_name, category, int(dir), min_val, max_val);
-						curSetting.update_text(str("<", int(GlobalOptions.get_value(opt_name, category)), ">"), -80, false);
-						
-				TYPE_FLOAT:
-					if is_on_key_mode:
-						return;
-						
-					var dir = int(rightKey) - int(leftKey);
-					if dir != 0:
-						GlobalOptions.change_int_opt(opt_name, category, float(dir*0.1), 0.0, 1.0);
-						curSetting.update_text(str("<", GlobalOptions.get_value(opt_name, category), ">"), -80, false);
-						
-				TYPE_BOOL:
-					if is_on_key_mode:
-						return;
-						
-					if enterKey && !ev.echo:
-						GlobalOptions.change_bool_opt(opt_name, category);
-						curSetting.update_bool_spr(GlobalOptions.get_value(opt_name, category));
-						
-				TYPE_ARRAY:
-					if is_on_key_mode:
-						return;
-						
-					var dir = int(rightKey) - int(leftKey);
-					if dir != 0:
-						GlobalOptions.change_array_opt(opt_name, dir, category);
-						curSetting.update_text(str("<", GlobalOptions.get_option_value(opt_name), ">"), -20, false);
-						
-				TYPE_STRING:
-					if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo && !is_on_key_mode:
-						if curSetting.opt_name.ends_with("Key:"):
-							var coolID = GlobalOptions.keys_list[new_cur_option];
-							
-							$keys.show();
-							coolKeyText._creat_word("%s %s"%[curSetting.opt_name, GlobalOptions.keys[coolID][1]]);
-							is_on_key_mode = true;
-							ignore_key = true;
-							for i in [$settings/ColorRect, $settings/Label]:
-								i.hide();
-								
-					if !is_on_key_mode:
-						return;
-						
-					if ev.pressed:
-						if ignore_key:
-							ignore_key = false;
-							return;
-							
+				var dir = int(rightKey) - int(leftKey);
+				if dir != 0:
+					GlobalOptions.change_int_opt(opt_name, category, int(dir), curSetting.minVal, curSetting.maxVal);
+					curSetting.update_text("<%s>"%[int(GlobalOptions.get_value(opt_name, category))], -80, false);
+					
+			TYPE_FLOAT:
+				if is_on_key_mode:
+					return;
+					
+				var dir = int(rightKey) - int(leftKey);
+				if dir != 0:
+					GlobalOptions.change_int_opt(opt_name, category, float(dir*0.1), curSetting.minVal, curSetting.maxVal);
+					curSetting.update_text("<%s>"%[GlobalOptions.get_value(opt_name, category)], -80, false);
+					
+			TYPE_BOOL:
+				if is_on_key_mode:
+					return;
+					
+				if enterKey && !ev.echo:
+					GlobalOptions.change_bool_opt(opt_name, category);
+					curSetting.update_bool_spr(GlobalOptions.get_value(opt_name, category));
+					
+			TYPE_ARRAY:
+				if is_on_key_mode:
+					return;
+					
+				var dir = int(rightKey) - int(leftKey);
+				if dir != 0:
+					GlobalOptions.change_array_opt(opt_name, dir, category);
+					curSetting.update_text(str("<", GlobalOptions.get_option_value(opt_name), ">"), -20, false);
+					
+			TYPE_STRING:
+				if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo && !is_on_key_mode:
+					if curSetting.opt_name.ends_with("Key:"):
 						var coolID = GlobalOptions.keys_list[new_cur_option];
-						var new_code = OS.get_keycode_string(ev.keycode).to_lower();
-						if GlobalOptions.check_key_bind(ev.keycode, GlobalOptions.keys[coolID][2]):
-							Sound.playAudio("cancelMenu", false);
-							return;
-							
-						if InputMap.has_action("ui_%s"%[new_code]):
-							InputMap.erase_action("ui_%s"%[new_code]);
-							
-						InputMap.add_action("ui_%s"%[new_code]);
-						InputMap.action_add_event("ui_%s"%[new_code], ev);
 						
-						GlobalOptions.keys[coolID][0] = ev.keycode;
-						GlobalOptions.keys[coolID][1] = new_code;
-						
-						curSetting.update_text(GlobalOptions.keys[coolID][1]);
+						$keys.show();
 						coolKeyText._creat_word("%s %s"%[curSetting.opt_name, GlobalOptions.keys[coolID][1]]);
-						GlobalOptions.rebind_keys(coolID, GlobalOptions.keys[coolID][1], GlobalOptions.keys[coolID][0]);
+						is_on_key_mode = true;
+						ignore_key = true;
+						for i in [$settings/ColorRect, $settings/Label]:
+							i.hide();
+							
+				if !is_on_key_mode:
+					return;
+					
+				if ev.pressed:
+					if ignore_key:
+						ignore_key = false;
+						return;
 						
+					var coolID = GlobalOptions.keys_list[new_cur_option];
+					var new_code = OS.get_keycode_string(ev.keycode).to_lower();
+					if GlobalOptions.check_key_bind(ev.keycode, GlobalOptions.keys[coolID][2]):
+						Sound.playAudio("cancelMenu", false);
+						return;
+						
+					if InputMap.has_action("ui_%s"%[new_code]):
+						InputMap.erase_action("ui_%s"%[new_code]);
+						
+					InputMap.add_action("ui_%s"%[new_code]);
+					InputMap.action_add_event("ui_%s"%[new_code], ev);
+					
+					GlobalOptions.keys[coolID][0] = ev.keycode;
+					GlobalOptions.keys[coolID][1] = new_code;
+					
+					curSetting.update_text(GlobalOptions.keys[coolID][1]);
+					coolKeyText._creat_word("%s %s"%[curSetting.opt_name, GlobalOptions.keys[coolID][1]]);
+					GlobalOptions.rebind_keys(coolID, GlobalOptions.keys[coolID][1], GlobalOptions.keys[coolID][0]);
+					
 func choice_shit_opt(opt):
 	match opt:
 		"offset menu":
@@ -239,6 +237,8 @@ func update_options():
 		new_option.opt_type = options[options_array[cur_option]][i]["value"];
 		new_option.option_new_x = 190;
 		new_option.opt_id = id;
+		new_option.maxVal = options[options_array[cur_option]][i].get("max val", 1.0);
+		new_option.minVal = options[options_array[cur_option]][i].get("min val", 0.0);
 		new_option.cur_option = options[options_array[cur_option]][i].get("ID", null);
 		new_option.position.y += offSetShit;
 		new_option.scale = Vector2(0.8, 0.8);

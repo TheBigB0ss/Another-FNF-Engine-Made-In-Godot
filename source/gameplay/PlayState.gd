@@ -304,11 +304,9 @@ func _process(delta: float) -> void:
 			AchievementPopUp.set_achievement('debug mode', true);
 			
 		match rankName:
-			"SFC", "GFC":
-				AchievementPopUp.set_achievement('perfectionist', true);
-			"FC":
-				AchievementPopUp.set_achievement('combo master', true);
-				
+			"SFC", "GFC": AchievementPopUp.set_achievement('perfectionist', true);
+			"FC": AchievementPopUp.set_achievement('combo master', true);
+			
 		if health <= 15:
 			AchievementPopUp.set_achievement('fucked up', true);
 			
@@ -329,6 +327,7 @@ func _process(delta: float) -> void:
 func set_icon_anim():
 	var iconP1_Anim = "idle";
 	var iconP2_Anim = "idle";
+	
 	if health <= 15:
 		iconP1_Anim = "lose";
 		iconP2_Anim = "win";
@@ -356,11 +355,13 @@ func pressedNote(note):
 	if note.is_a_bad_note:
 		return;
 		
-	voices.volume_db = 0;
+	voices.stream.set_sync_stream_volume(0, 0.0);
 	
 	var ms = (note.strumTime - Conductor.getSongTime);
 	var strum = playerStrum.strumNode.get_child(note.noteData);
 	strum.strumPressed = true;
+	
+	var rating = Conductor.set_rating(ms);
 	
 	if GlobalOptions.isUsingBot:
 		return;
@@ -370,27 +371,28 @@ func pressedNote(note):
 	msText.position.x = rating_spr.position.x - msText.size.x*0.5;
 	msText.position.y = rating_spr.position.y + (msText.size.x*0.5)+20;
 	
-	for i in rating_data.keys():
-		if abs(ms) <= rating_data[i]["Ms"]:
-			notesPlayed += rating_data[i]["Percent"];
-			score += rating_data[i]["Score"]+randi_range(0, 15);
+	notesPlayed += rating_data[rating]["Percent"];
+	score += rating_data[rating]["Score"]+randi_range(0, 15);
+	
+	msText.modulate = ratingColors[rating];
+	match rating:
+		"Sick":
+			sicks += 1;
+		"Good":
+			goods += 1;
+		"Bad":
+			bads += 1;
+		"Shit":
+			shits += 1;
 			
-			msText.modulate = ratingColors[i];
-			match i:
-				"Sick": sicks += 1;
-				"Good": goods += 1;
-				"Bad": bads += 1;
-				"Shit": shits += 1;
-				
-			rating_spr.pop_up_rating(rating_data[i]["RatingID"]);
-			
-			if i == "Sick" && GlobalOptions.show_splashes:
-				splash_note(strum, ("note impact %s %s"%[randi_range(1, 2), note.noteAnim]) if !SongData.isPixelStage else "pixelsplashes%s %s"%[randi_range(1, 2), note.noteAnim]);
-				
-			totalHits += 1;
-			combo += 1;
-			break;
-			
+	rating_spr.pop_up_rating(rating_data[rating]["RatingID"]);
+	
+	if rating == "Sick" && GlobalOptions.show_splashes:
+		splash_note(strum, ("note impact %s %s"%[randi_range(1, 2), note.noteAnim]) if !SongData.isPixelStage else "pixelsplashes%s %s"%[randi_range(1, 2), note.noteAnim]);
+		
+	totalHits += 1;
+	combo += 1;
+	
 	if GlobalOptions.updated_hud != "classic hud":
 		nums_spr.pop_up_rating();
 		if combo >= 10:
@@ -438,7 +440,7 @@ func miss_note(note):
 		
 	updateScoreText();
 	
-	await get_tree().create_timer(0.3).timeout;
+	await get_tree().create_timer(0.20).timeout;
 	voices.stream.set_sync_stream_volume(0, 0.0);
 	
 func noteCreated(note):
@@ -514,7 +516,7 @@ func checkPlayerDead():
 	Global.changeScene("/gameplay/death_scene/death_scene", false, false);
 	
 var RANKS = [
-	{"Rank Condition": func(): return misses > 10, "RANK": "Clear"},
+	{"Rank Condition": func(): return misses >= 10, "RANK": "Clear"},
 	{"Rank Condition": func(): return misses > 0, "RANK": "SDCB"},
 	{"Rank Condition": func(): return bads > 0 or shits > 0, "RANK": "FC"},
 	{"Rank Condition": func(): return goods > 0, "RANK": "GFC"},
@@ -742,7 +744,6 @@ func finishSong():
 			MusicManager._play_song("freakyMenu", "music", true);
 			Global.changeScene("menus/story_mode/storyMode", true, false);
 			SongData.isPlaying = false;
-			
 		else:
 			await get_tree().create_timer(0.1 if curSong != "eggnog" else 1.5).timeout
 			

@@ -35,34 +35,3 @@ func start_song():
 	Global.is_on_video = false;
 	Global.emit_signal("end_cutscene");
 	
-var ghost_timer = 0.0;
-func _process(delta: float) -> void:
-	if !GlobalOptions.low_quality:
-		ghost_timer += delta;
-		if ghost_timer >= 0.04:
-			ghost_timer = 0.0;
-			creat_ghost_anim();
-			
-func creat_ghost_anim():
-	if !is_instance_valid(game.dad) && game.dad.curCharacter != "monsterChristmas":
-		return;
-		
-	var ghost = preload("res://source/stages/school_evil_remix/GhostAnim.tscn").instantiate();
-	ghost.global_position = game.dad.global_position;
-	if game.dad.character is AnimatedSprite2D:
-		var new_texture = game.dad.character.sprite_frames.get_frame_texture(game.dad.character.animation, game.dad.character.frame);
-		ghost.texture = new_texture;
-		ghost.offset = game.dad.character.offset;
-		
-	if game.dad.character is Sprite2D:
-		ghost.texture = game.dad.character.texture;
-		ghost.region_enabled = game.dad.character.region_enabled
-		ghost.region_rect = game.dad.character.region_rect
-		
-	ghost.scale = game.dad.character.scale;
-	ghost.flip_h = game.dad.character.flip_h;
-	ghost.flip_v = game.dad.character.flip_v;
-	ghost.z_index = game.dad.z_index+1;
-	ghost.texture_filter = Sprite2D.TEXTURE_FILTER_NEAREST;
-	ghost.modulate.a = 0.7;
-	add_child(ghost);

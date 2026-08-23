@@ -484,27 +484,7 @@ func _process(delta):
 	
 	selection.visible = grid.mouse_inside_grid();
 	
-	var mouse_inside_ui = (
-		get_viewport().gui_get_hovered_control() is TabBar 
-		or get_viewport().gui_get_hovered_control() is SpinBox 
-		or get_viewport().gui_get_hovered_control() is CheckBox 
-		or get_viewport().gui_get_hovered_control() is Button 
-		or get_viewport().gui_get_hovered_control() is OptionButton 
-		or get_viewport().gui_get_hovered_control() is ProgressBar
-		or get_viewport().gui_get_hovered_control() is Label
-		or get_viewport().gui_get_hovered_control() == $chart_UI/chart_objs/topBar 
-		or get_viewport().gui_get_hovered_control() == $chart_UI/chart_objs/bottomBar
-		or $chart_UI/chart_objs/chartTab/helpWindow.mouse_inside
-		or $chart_UI/chart_objs/chartTab/soundWindow.mouse_inside
-		or $chart_UI/chart_objs/chartTab/chartWindow.mouse_inside
-		or $chart_UI/chart_objs/chartTab/sectionWindow.mouse_inside
-		or $chart_UI/chart_objs/chartTab/notesWindow.mouse_inside
-		or $chart_UI/chart_objs/chartTab/eventsWindow.mouse_inside
-		or $chart_UI/chart_objs/chartTab/opponentPreviewWindow.mouse_inside
-		or $chart_UI/chart_objs/chartTab/playerPreviewWindow.mouse_inside
-	);
-	
-	if !mouse_inside_ui && !dialogs_open:
+	if !is_mouse_inside_ui() && !dialogs_open:
 		update_selected_notes();
 		update_selected_events();
 		
@@ -547,10 +527,12 @@ func _process(delta):
 			if Input.is_action_just_pressed("input_D"):
 				changeSection(1);
 				Conductor.getSongTime = section_start_time();
+				update_hud_position();
 				
 			if Input.is_action_just_pressed("input_A"):
 				changeSection(-1);
 				Conductor.getSongTime = section_start_time();
+				update_hud_position();
 				
 	if !editing_text && !dialogs_open:
 		if Input.is_action_pressed("input_S"):
@@ -559,12 +541,6 @@ func _process(delta):
 		if Input.is_action_pressed("input_W"):
 			update_song(-1);
 			
-	if selectionRect == Rect2():
-		if !grid.mouse_inside_grid():
-			Global.update_cursor("pointer" if mouse_inside_ui else "default");
-	else:
-		Global.update_cursor("crosshair");
-		
 	var currentPosition = max(Conductor.getSongTime / 1000.0, 0.0);
 	
 	var curMinutes = str(int(currentPosition) / 60).pad_zeros(1);
@@ -577,12 +553,14 @@ func _process(delta):
 	
 	chart_info.text = "Section: %s      Step: %s      Beat: %s                                                      %s        BPM: %s"%[curSection, int(chartCurStep), int(chartCurBeat), str(curMinutes, ":", curSeconds, " / ", maxMinutes, ":", maxSeconds), %Bpm.value];
 	
-	if grid.mouse_inside_grid():
+	if grid.mouse_inside_grid() && !is_mouse_inside_ui():
 		selection.global_position.x = grid.global_position.x + floor(grid.get_local_mouse_position().x / grid_size) * grid_size+20;
 		selection.position.y = (mouse_pos.y if free_Mouse else floor(mouse_pos.y/grid_size) * grid_size)-20;
-		if selectionRect == Rect2() && !mouse_inside_ui:
+		if selectionRect == Rect2():
 			Global.update_cursor("cell");
-			
+	else:
+		Global.update_cursor(("pointer" if is_mouse_inside_ui() else "default") if selectionRect == Rect2() else "crosshair");
+		
 	timeBar.value = Conductor.getSongTime/1000;
 	songPointer.position.x = lerp(pointer_starter.x, pointer_starter.x + 330, (timeBar.value / timeBar.max_value));
 	
@@ -616,10 +594,8 @@ func _process(delta):
 				
 		note.modulate.a = 0.5 if note.gotHit else 1.0;
 		
-func changeSection(sec, lastSec = false):
-	if lastSec:
-		curSection = SongData.songSections.size()-1;
-	elif sec == 0:
+func changeSection(sec):
+	if sec == 0:
 		curSection = 0;
 	else:
 		curSection += sec;
@@ -631,6 +607,31 @@ func changeSection(sec, lastSec = false):
 	
 	load_section();
 	update_chart_status();
+	
+func is_mouse_inside_ui():
+	var hovered = get_viewport().gui_get_hovered_control();
+	
+	if (hovered is TabBar or hovered is SpinBox or hovered is CheckBox or hovered is Button or hovered is OptionButton or hovered is TextureProgressBar or hovered is Label):
+		return true;
+		
+	if hovered == $chart_UI/chart_objs/topBar or hovered == $chart_UI/chart_objs/bottomBar:
+		return true;
+		
+	var windows = [
+		$chart_UI/chart_objs/chartTab/helpWindow,
+		$chart_UI/chart_objs/chartTab/soundWindow,
+		$chart_UI/chart_objs/chartTab/chartWindow,
+		$chart_UI/chart_objs/chartTab/sectionWindow,
+		$chart_UI/chart_objs/chartTab/notesWindow,
+		$chart_UI/chart_objs/chartTab/eventsWindow,
+		$chart_UI/chart_objs/chartTab/opponentPreviewWindow,
+		$chart_UI/chart_objs/chartTab/playerPreviewWindow
+	];
+	for window in windows:
+		if window.mouse_inside:
+			return true;
+			
+	return false;
 	
 func play_song():
 	is_playing = !is_playing;
@@ -1094,9 +1095,12 @@ func _on_next_section_pressed() -> void:
 	update_hud_position();
 	
 func _on_last_section_pressed() -> void:
-	changeSection(0, true);
-	Conductor.getSongTime = section_start_time();
+	curSection = SongData.songSections.size() - 1;
 	
+	load_section();
+	update_chart_status();
+	
+	Conductor.getSongTime = section_start_time();
 	update_hud_position();
 	
 func _on_first_section_pressed() -> void:

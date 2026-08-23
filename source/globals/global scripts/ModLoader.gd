@@ -43,21 +43,21 @@ func load_mod_file(file_name, mods_path):
 		
 	ProjectSettings.load_resource_pack(pck_path, true);
 	
-func load_json(path):
-	var mods_path = OS.get_executable_path().get_base_dir().path_join("mods");
-	var full_path = mods_path.path_join(path + ".json");
-	var file = FileAccess.open(full_path, FileAccess.READ);
-	if file == null:
-		return {
-			"name": "your mod name",
-			"discretion": "your mod discretion",
-			"version": "1.0",
-			"mod icon": "engine_icon",
-			"author": "your name"
-		};
-		
-	var json = JSON.new();
-	json.parse(file.get_as_text());
-	file.close();
-	
-	return json.get_data();
+#func load_json(path):
+	#var mods_path = OS.get_executable_path().get_base_dir().path_join("mods");
+	#var full_path = mods_path.path_join(path + ".json");
+	#var file = FileAccess.open(full_path, FileAccess.READ);
+	#if file == null:
+		#return {
+			#"name": "your mod name",
+			#"discretion": "your mod discretion",
+			#"version": "1.0",
+			#"mod icon": "engine_icon",
+			#"author": "your name"
+		#};
+		#
+	#var json = JSON.new();
+	#json.parse(file.get_as_text());
+	#file.close();
+	#
+	#return json.get_data();

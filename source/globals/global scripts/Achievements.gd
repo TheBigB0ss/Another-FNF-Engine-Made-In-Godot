@@ -25,16 +25,8 @@ func _ready():
 				achievementId1 = ids[0];
 				achievementId2 = ids[1];
 				
-			add_achievement(
-				i, 
-				defaultAchievements[i]["description"], 
-				defaultAchievements[i]["value"], 
-				defaultAchievements[i].get("special achievement", false),
-				defaultAchievements[i].get("secret achievement", false),
-				defaultAchievements[i]["achievement index"],
-				achievementId1,
-				achievementId2
-			);
+			add_achievement(i, defaultAchievements[i]["description"], defaultAchievements[i]["value"], defaultAchievements[i].get("special achievement", false), defaultAchievements[i].get("secret achievement", false), defaultAchievements[i]["achievement index"], achievementId1, achievementId2);
+			
 		else:
 			if achievements[i]["achievement index"] != defaultAchievements[i]["achievement index"]:
 				achievements[i]["achievement index"] = defaultAchievements[i]["achievement index"]
@@ -140,7 +132,7 @@ func add_achievement(achievement_name, description, value, special_achievement, 
 			"secret achievement": secret_achievement,
 			"achievement index": achievement_index
 		};
-		if achievementId1 > -1 && achievementId2 > -1:
+		if achievementId1 != -1 && achievementId2 != -1:
 			achievements[achievement_name]["ids"] = [achievementId1, achievementId2];
 			
 	save_achievements();

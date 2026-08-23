@@ -6,13 +6,23 @@
 [node name="steve" type="Node2D" unique_id=1680050652]
 script = ExtResource("1_wtfjv")
 json_path = "res://assets/data/characters/steve.json"
-anim_type = 3
+healthBar_Color = Color(1, 1, 1, 1)
+anims_timer = {
+"idle dance": [2, 5, false],
+"running": [2, 50, true],
+"singDown": [2, 5, false],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false]
+}
+anim_type = 1
 have_death_animation = false
 idle_type = 2
 texture = ExtResource("1_h8btb")
 xmlPath = "res://assets/stages/week7/remix/steve.xml"
-frame = 13
-fps = 19
+frame = 11
+fps = 22
 loop = false
-animation = 1
+offset = Vector2(-5, -21)
+animation = 0
 metadata/_custom_type_script = "uid://djpjx6srvhkd5"

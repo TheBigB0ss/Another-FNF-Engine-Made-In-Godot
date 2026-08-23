@@ -133,3 +133,13 @@ func update_position(time):
 	lastStep = curStep;
 	lastBeat = curBeat;
 	lastSection = curSection;
+	
+func set_rating(ms):
+	ms = abs(ms);
+	
+	var timingsList = [GlobalOptions.sickWindow, GlobalOptions.goodWindow, GlobalOptions.badWindow];
+	for i in timingsList.size():
+		if ms <= timingsList[i]:
+			return ["Sick", "Good", "Bad"][i];
+			
+	return "Shit";
