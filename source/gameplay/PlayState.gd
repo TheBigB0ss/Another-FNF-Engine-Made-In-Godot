@@ -550,53 +550,58 @@ func setPercent():
 			
 func _input(ev):
 	if !(ev is InputEventKey):
-		return;
-		
-	if !ev.pressed or ev.echo:
-		return;
-		
-	if ev.keycode == KEY_R && GlobalOptions.restart_action:
-		health = 0;
-		return;
-		
-	if ev.keycode == GlobalOptions.get_key("chartKey"):
-		SongData.week_songs = playlist[0];
-		SongData.isPlaying = false;
-		Global.changeScene("menus/editors/chart_editor/chartState", true, false);
-		
-		return;
-		
-	elif ev.keycode == GlobalOptions.get_key("offsetKey"):
-		SongData.characters = {"opponent": dad.curCharacter};
-		SongData.week_songs = playlist[0];
-		SongData.week_diffs = songDiff;
-		SongData.isPlaying = true;
-		Global.changeScene("menus/editors/offset_editor/offset_menu", true, false);
-		
-		return;
-		
-	elif ev.keycode == GlobalOptions.get_key("camEditorKey"):
-		SongData.week_songs = playlist[0];
-		SongData.week_diffs = songDiff;
-		SongData.isPlaying = true;
-		Global.changeScene("menus/editors/cam_editor/cam_editor", true, false);
-		
-		return;
-		
-	if can_pause && (ev.keycode == GlobalOptions.get_key("enter") or ev.keycode == KEY_KP_ENTER):
-		pause_menu.can_use = true;
-		pause_menu.visible = true;
-		
-		pause_menu._paused();
-		get_tree().paused = true;
-		
-		Discord.update_discord_info("pause", "Paused");
-		
-	if OS.is_debug_build():
-		match ev.keycode:
-			KEY_F1:
-				finishSong();
-				
+		if !ev.pressed or ev.echo:
+			return;
+			
+		if ev.keycode == KEY_R && GlobalOptions.restart_action:
+			health = 0;
+			return;
+			
+		if ev.keycode == GlobalOptions.get_key("chartKey"):
+			SongData.week_songs = playlist[0];
+			SongData.isPlaying = false;
+			Global.changeScene("menus/editors/chart_editor/chartState", true, false);
+			
+			return;
+			
+		elif ev.keycode == GlobalOptions.get_key("offsetKey"):
+			SongData.characters = {"opponent": dad.curCharacter};
+			SongData.week_songs = playlist[0];
+			SongData.week_diffs = songDiff;
+			SongData.isPlaying = true;
+			Global.changeScene("menus/editors/offset_editor/offset_menu", true, false);
+			
+			return;
+			
+		elif ev.keycode == GlobalOptions.get_key("camEditorKey"):
+			SongData.week_songs = playlist[0];
+			SongData.week_diffs = songDiff;
+			SongData.isPlaying = true;
+			Global.changeScene("menus/editors/cam_editor/cam_editor", true, false);
+			
+			return;
+			
+		if can_pause && (ev.keycode == GlobalOptions.get_key("enter") or ev.keycode == KEY_KP_ENTER):
+			pause();
+			
+		if OS.is_debug_build():
+			match ev.keycode:
+				KEY_F1:
+					finishSong();
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		pause();
+
+func pause():
+	pause_menu.can_use = true;
+	pause_menu.visible = true;
+	
+	pause_menu._paused();
+	get_tree().paused = true;
+	
+	Discord.update_discord_info("pause", "Paused");
+
 func startCountdown():
 	SongData.is_not_in_cutscene = true;
 	MusicManager._stop_music();
