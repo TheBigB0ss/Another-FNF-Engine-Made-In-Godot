@@ -45,8 +45,9 @@ func is_hovered():
 			return true;
 	return false;
 
-func _process(delta: float) -> void:
-	pressed = is_hovered();
+func _process(_delta: float) -> void:
+	if !Engine.is_editor_hint():
+		pressed = is_hovered();
 
 func _trigger(isPressed:bool):
 	var kp = GlobalOptions.get_key_input(inputs[inputs.find(key)]);
