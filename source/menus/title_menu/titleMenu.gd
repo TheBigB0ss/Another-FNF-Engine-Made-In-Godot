@@ -5,13 +5,14 @@ var no_spam = false;
 
 var coolOffset = 0;
 
-@onready var gf = $'tiltle stuff/Gf';
-@onready var logo = $'tiltle stuff/logo';
-@onready var new_logo = $'tiltle stuff/new logo';
-@onready var enterText = $'tiltle stuff/title';
-@onready var newGroundsLogo = $'tiltle stuff/NG Logo';
+@onready var gf = $'title stuff/Gf';
+@onready var logo = $'title stuff/logo';
+@onready var new_logo = $'title stuff/new logo';
+@onready var enterText = $'title stuff/title';
+@onready var enterTouch = $"title stuff/TitleTouch";
+@onready var newGroundsLogo = $'title stuff/NG Logo';
 @onready var alphabets = $'alphabet_grp';
-@onready var bambi = $"tiltle stuff/bnamb";
+@onready var bambi = $"title stuff/bnamb";
 
 var hasSkippedIntro = false;
 var gfDanceLeft = false;
@@ -37,6 +38,8 @@ func _ready():
 	
 	random_text_arr = [getTxt()];
 	
+	enterTouch.input_event.connect(_touch_input);
+
 func _process(delta):
 	new_logo.scale = lerp(new_logo.scale, Vector2(0.3, 0.3), 1.0 - exp(-8.0 * delta));
 	Conductor.getSongTime += delta*1000;
@@ -51,24 +54,34 @@ func hide_guys():
 	gf.hide();
 	new_logo.hide();
 	enterText.hide();
-	
+
+func _touch_input(_viewport:Node, ev:InputEvent, _shape_idx:int):
+	if ev is InputEventScreenTouch:
+		print(ev.pressed);
+		if ev.pressed && hasSkippedIntro && !no_spam:
+			pressed_Entered();
+
 func _input(ev):
 	if Global.finished_intro:
 		hasSkippedIntro = true;
 		
 	if hasSkippedIntro && !no_spam:
 		if ev is InputEventKey && ev.pressed && (ev.keycode in [KEY_ENTER] || ev.keycode in [KEY_KP_ENTER]):
-			no_spam = true;
-			enterText.play("ENTER PRESSED");
-			Sound.playAudio('confirmMenu', false);
-			Global.finished_intro = true;
-			
-			await get_tree().create_timer(1.5).timeout
-			Global.changeScene("menus/main_menu/MainMenu", true, false);
-			
+			pressed_Entered();
+		
+		
 	if ev is InputEventKey && ev.pressed && (ev.keycode in [KEY_ENTER] || ev.keycode in [KEY_KP_ENTER]) && !hasSkippedIntro && !Global.finished_intro:
 		skipIntro();
-		
+
+func pressed_Entered():
+	no_spam = true;
+	enterText.play("ENTER PRESSED");
+	Sound.playAudio('confirmMenu', false);
+	Global.finished_intro = true;
+	
+	await get_tree().create_timer(1.5).timeout
+	Global.changeScene("menus/main_menu/MainMenu", true, false);
+
 func skipIntro():
 	Flash.flashAppears(0.5);
 	hideText();
@@ -78,6 +91,9 @@ func skipIntro():
 	
 func getTxt():
 	var readTxt = FileAccess.open("res://assets/data/IntroTexts.txt", FileAccess.READ);
+	if readTxt == null:
+		push_error("can not open Intro texts (IntroTexts.txt): %s" % str(FileAccess.get_open_error()))
+		
 	var txtData = readTxt.get_as_text().split("\n");
 	var txtTexts = [];
 	
@@ -153,4 +169,3 @@ func beat_hit(beat):
 			16:
 				hideText();
 				skipIntro();
-				

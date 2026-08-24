@@ -8,22 +8,21 @@
 [ext_resource type="Texture2D" uid="uid://ccj3ms8w2db3p" path="res://assets/images/title menu/newgrounds_logo.png" id="5_xpfjh"]
 [ext_resource type="Texture2D" uid="uid://cimgau63behy0" path="res://assets/images/title menu/logo.png" id="6_8d6bu"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h45xw"]
+size = Vector2(1016, 80)
+
 [node name="TitleMenu" type="Node2D" unique_id=158830257]
 script = ExtResource("1_cn02s")
 
 [node name="Bg" type="ColorRect" parent="." unique_id=1297259027]
 offset_right = 1280.0
 offset_bottom = 720.0
+mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="tiltle stuff" type="Control" parent="." unique_id=305961515]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-metadata/_edit_use_anchors_ = true
+[node name="title stuff" type="Node2D" parent="." unique_id=1867437191]
 
-[node name="logo" type="AnimatedSprite2D" parent="tiltle stuff" unique_id=1134326357]
+[node name="logo" type="AnimatedSprite2D" parent="title stuff" unique_id=1134326357]
 visible = false
 position = Vector2(371, 294)
 scale = Vector2(1.00206, 0.991317)
@@ -32,27 +31,34 @@ animation = &"logo bumpin"
 frame = 14
 frame_progress = 1.0
 
-[node name="Gf" type="AnimatedSprite2D" parent="tiltle stuff" unique_id=288207091]
+[node name="Gf" type="AnimatedSprite2D" parent="title stuff" unique_id=288207091]
 position = Vector2(942, 408)
 scale = Vector2(0.9, 0.9)
 sprite_frames = ExtResource("3_kv7id")
 animation = &"dance_right"
 
-[node name="title" type="AnimatedSprite2D" parent="tiltle stuff" unique_id=1160828989]
+[node name="title" type="AnimatedSprite2D" parent="title stuff" unique_id=1160828989]
 position = Vector2(869, 668)
 sprite_frames = ExtResource("4_8d6bu")
 animation = &"Press Enter to Begin"
 
-[node name="bnamb" parent="tiltle stuff" unique_id=858818364 instance=ExtResource("5_xp1tq")]
+[node name="TitleTouch" type="Area2D" parent="title stuff" unique_id=1627701183]
+position = Vector2(869, 668)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="title stuff/TitleTouch" unique_id=1776971741]
+position = Vector2(-241, -4)
+shape = SubResource("RectangleShape2D_h45xw")
+
+[node name="bnamb" parent="title stuff" unique_id=858818364 instance=ExtResource("5_xp1tq")]
 visible = false
 position = Vector2(942, 413)
 
-[node name="NG Logo" type="Sprite2D" parent="tiltle stuff" unique_id=2122232487]
+[node name="NG Logo" type="Sprite2D" parent="title stuff" unique_id=2122232487]
 visible = false
 position = Vector2(612, 541)
 texture = ExtResource("5_xpfjh")
 
-[node name="new logo" type="Sprite2D" parent="tiltle stuff" unique_id=241346498]
+[node name="new logo" type="Sprite2D" parent="title stuff" unique_id=241346498]
 position = Vector2(354, 329)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("6_8d6bu")

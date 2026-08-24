@@ -91,7 +91,7 @@ func _ready() -> void:
 		
 	song_stuff.position.y = float(350-coolOffset*cur_song);
 	icons_stuff.position.y = float(350-coolOffset*cur_song);
-	$bg.modulate = Color(bg_colors[cur_song][0], bg_colors[cur_song][1], bg_colors[cur_song][2]);
+	$bgLayer/bg.modulate = Color(bg_colors[cur_song][0], bg_colors[cur_song][1], bg_colors[cur_song][2]);
 	
 	change_song(Global.current_selected["freeplay"]);
 	changeDiff(1);
@@ -124,7 +124,7 @@ func _process(delta):
 	
 	song_stuff.position.y = lerp(float(song_stuff.position.y), float(350-coolOffset*cur_song), 1.0 - exp(-12.0 * delta));
 	icons_stuff.position.y = lerp(float(icons_stuff.position.y), float(350-coolOffset*cur_song), 1.0 - exp(-12.0 * delta));
-	$bg.modulate = lerp($bg.modulate, Color(bg_colors[cur_song][0], bg_colors[cur_song][1], bg_colors[cur_song][2]), 1.0 - exp(-6.0 * delta));
+	$bgLayer/bg.modulate = lerp($bgLayer/bg.modulate, Color(bg_colors[cur_song][0], bg_colors[cur_song][1], bg_colors[cur_song][2]), 1.0 - exp(-6.0 * delta));
 	
 	var diff_id = cur_diff if cur_diff <= diffs.size() - 1 else 0;
 	var diff_name = diffs[diff_id].to_lower();
@@ -138,7 +138,7 @@ func _process(delta):
 	
 	cur_score = lerp(float(cur_score), float(score), delta * 20.0);
 	
-	$scoreText.text = "SCORE: %s\nRANK: %s\nACCURACY: %s"%[snapped(round(cur_score), 1), rank, str(float(percent), "%")];
+	$PlaySongLayer/Control/scoreText.text = "SCORE: %s\nRANK: %s\nACCURACY: %s"%[snapped(round(cur_score), 1), rank, str(float(percent), "%")];
 	
 	if GlobalOptions.low_quality:
 		return;
@@ -218,14 +218,14 @@ func change_song(change):
 func changeDiff(shit):
 	cur_diff += shit;
 	cur_diff = wrapi(cur_diff if diffs.size() > 1 else 0, 0, len(diffs));
-	$difficultyText.text = str("< ",diffs[cur_diff].to_upper()," >");
+	$PlaySongLayer/Control/difficultyText.text = str("< ",diffs[cur_diff].to_upper()," >");
 	
 func update_song():
 	diffs = ["easy", "normal", "hard"] if week_difficulties[cur_song] == [] else week_difficulties[cur_song];
 	if diffs == null or diffs == []:
 		diffs = ["easy", "normal", "hard"];
 		
-	$difficultyText.text = str("< ",diffs[cur_diff if !cur_diff > diffs.size()-1 else 0].to_upper()," >");
+	$PlaySongLayer/Control/difficultyText.text = str("< ",diffs[cur_diff if !cur_diff > diffs.size()-1 else 0].to_upper()," >");
 	
 	for j in songs.size():
 		icons_stuff.get_child(j).modulate.a = 1 if j == cur_song else 0.5;

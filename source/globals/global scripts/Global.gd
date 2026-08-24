@@ -57,7 +57,8 @@ var currentMainMenu = 0:
 			
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS;
-	
+
+
 func getTime():
 	var time = Time.get_time_dict_from_system();
 	return time;

@@ -1,7 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dtq31vi5heedw"]
+[gd_scene format=3 uid="uid://dtq31vi5heedw"]
 
-[ext_resource type="Script" uid="uid://cymbv2cj5e8sb" path="res://source/globals/global scenes/Flash.gd" id="1_2bwt5"]
+[ext_resource type="Script" uid="uid://bf3f4qyfp3twi" path="res://source/globals/global scenes/Flash.gd" id="1_2bwt5"]
 
-[node name="Flash" type="CanvasLayer"]
+[node name="Flash" type="CanvasLayer" unique_id=1740846540]
 layer = 2
 script = ExtResource("1_2bwt5")

@@ -6,7 +6,15 @@ func _init() -> void:
 	load_mods();
 	
 func load_mods() -> void:
-	var mods_path = OS.get_executable_path().get_base_dir().path_join("mods");
+	var mods_path:String;
+	
+	if Bootup.is_on_mobile:
+		mods_path = ProjectSettings.globalize_path("user://").get_base_dir();
+	else:
+		mods_path = OS.get_executable_path().get_base_dir();
+	
+	print(mods_path);
+	mods_path = mods_path.path_join("mods");
 	
 	if !DirAccess.dir_exists_absolute(mods_path):
 		var error = DirAccess.make_dir_recursive_absolute(mods_path);

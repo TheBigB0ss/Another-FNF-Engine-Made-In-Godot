@@ -4,6 +4,7 @@ var flash = ColorRect.new();
 
 func _ready() -> void:
 	flash.size = Vector2(1280, 720);
+	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE;
 	flash.modulate.a = 0;
 	add_child(flash);
 	

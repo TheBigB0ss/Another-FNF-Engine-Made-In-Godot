@@ -3,6 +3,13 @@
 [ext_resource type="Script" uid="uid://qimi8bkga723" path="res://source/menus/freeplay/freeplay_menu.gd" id="1_vy5cd"]
 [ext_resource type="Texture2D" uid="uid://ceq3mk0i6bngd" path="res://assets/images/menuBgs/menuDesat.png" id="2_br0bf"]
 [ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_in7ae"]
+[ext_resource type="Script" uid="uid://bpg0bj8mbgc1h" path="res://source/menus/MobileButton.gd" id="4_pelol"]
+[ext_resource type="Texture2D" uid="uid://dlfavtll5gv5o" path="res://assets/images/mobile/downButton.png" id="4_t301o"]
+[ext_resource type="Texture2D" uid="uid://dpoffah5gx305" path="res://assets/images/mobile/upButton.png" id="6_jt2fi"]
+[ext_resource type="Texture2D" uid="uid://drgpo26ke853b" path="res://assets/images/mobile/enterButton.png" id="7_f1h5x"]
+[ext_resource type="Texture2D" uid="uid://d2qkkk8hm6nsy" path="res://assets/images/mobile/rightButton.png" id="7_hkkcc"]
+[ext_resource type="Texture2D" uid="uid://dmd1442ci33ml" path="res://assets/images/mobile/leftButton.png" id="8_2hlv0"]
+[ext_resource type="Texture2D" uid="uid://bpqqwylqhx47n" path="res://assets/images/mobile/escButton.png" id="9_2hlv0"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_i3c0a"]
 font = ExtResource("3_in7ae")
@@ -18,74 +25,201 @@ shadow_color = Color(0, 0, 0, 1)
 [node name="FreeplayMenu" type="Node2D" unique_id=114305816]
 script = ExtResource("1_vy5cd")
 
-[node name="bg" type="Sprite2D" parent="." unique_id=2098578728]
-position = Vector2(640, 360)
-scale = Vector2(0.995334, 0.986301)
+[node name="bgLayer" type="CanvasLayer" parent="." unique_id=756096468]
+layer = -1
+
+[node name="bg" type="TextureRect" parent="bgLayer" unique_id=1213798559]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("2_br0bf")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PlaySongLayer" type="CanvasLayer" parent="." unique_id=59941038]
+
+[node name="Control" type="Control" parent="PlaySongLayer" unique_id=1875437788]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect2" type="ColorRect" parent="PlaySongLayer/Control" unique_id=734661211]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -402.0
+offset_right = -362.0
+offset_bottom = 43.09642
+grow_horizontal = 0
+scale = Vector2(10.0542, 2.57562)
+color = Color(0.21, 0.21, 0.21, 0.454902)
+
+[node name="difficultyText" type="Label" parent="PlaySongLayer/Control" unique_id=291280583]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -374.99994
+offset_top = 85.0
+offset_right = 195.0
+offset_bottom = 122.0
+grow_horizontal = 0
+scale = Vector2(0.6, 0.646)
+text = "<  >"
+label_settings = SubResource("LabelSettings_i3c0a")
+horizontal_alignment = 1
+
+[node name="scoreText" type="Label" parent="PlaySongLayer/Control" unique_id=157073158]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -400.0
+offset_top = 0.9999962
+offset_right = 266.66663
+offset_bottom = 118.0
+grow_horizontal = 0
+scale = Vector2(0.6, 0.645)
+text = "SCORE:
+RANK:
+ACCURACY:"
+label_settings = SubResource("LabelSettings_i3c0a")
+
+[node name="ControlsLayer" type="CanvasLayer" parent="." unique_id=789876892]
+
+[node name="Control" type="Control" parent="ControlsLayer" unique_id=849542713]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MobileButton" type="TextureButton" parent="ControlsLayer/Control" unique_id=321360305]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_top = -136.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("4_t301o")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("4_pelol")
+key = "ui_down"
+metadata/_custom_type_script = "uid://bpg0bj8mbgc1h"
+
+[node name="MobileButton2" type="TextureButton" parent="ControlsLayer/Control" unique_id=1977793420]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_top = -272.0
+offset_right = -8.0
+offset_bottom = -144.0
+grow_horizontal = 0
+grow_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("6_jt2fi")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("4_pelol")
+key = "ui_up"
+metadata/_custom_type_script = "uid://bpg0bj8mbgc1h"
+
+[node name="MobileButton6" type="TextureButton" parent="ControlsLayer/Control" unique_id=820342172]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_top = -408.0
+offset_right = -8.0
+offset_bottom = -280.0
+grow_horizontal = 0
+grow_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("7_f1h5x")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("4_pelol")
+metadata/_custom_type_script = "uid://bpg0bj8mbgc1h"
+
+[node name="MobileButton3" type="TextureButton" parent="ControlsLayer/Control" unique_id=1827112295]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 144.0
+offset_top = -136.0
+offset_right = 272.0
+offset_bottom = -8.0
+grow_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("7_hkkcc")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("4_pelol")
+key = "ui_right"
+metadata/_custom_type_script = "uid://bpg0bj8mbgc1h"
+
+[node name="MobileButton4" type="TextureButton" parent="ControlsLayer/Control" unique_id=1272516742]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -136.0
+offset_right = 136.0
+offset_bottom = -8.0
+grow_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("8_2hlv0")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("4_pelol")
+key = "ui_left"
+metadata/_custom_type_script = "uid://bpg0bj8mbgc1h"
+
+[node name="MobileButton5" type="TextureButton" parent="ControlsLayer/Control" unique_id=59656335]
+layout_mode = 1
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 136.0
+offset_bottom = 136.0
+action_mode = 0
+texture_normal = ExtResource("9_2hlv0")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("4_pelol")
+key = "escape"
+metadata/_custom_type_script = "uid://bpg0bj8mbgc1h"
 
 [node name="songs" type="Node2D" parent="." unique_id=1575774956]
 position = Vector2(75, 349)
 
 [node name="icons" type="Node2D" parent="." unique_id=1695617062]
 position = Vector2(0, 349)
-
-[node name="ColorRect" type="ColorRect" parent="." unique_id=734661211]
-offset_left = 878.0
-offset_right = 918.0
-offset_bottom = 43.09642
-scale = Vector2(10.0542, 2.57562)
-color = Color(0.21, 0.21, 0.21, 0.454902)
-metadata/_edit_use_anchors_ = true
-
-[node name="difficultyText" type="Label" parent="." unique_id=291280583]
-offset_left = 905.00006
-offset_top = 85.0
-offset_right = 1475.0
-offset_bottom = 122.0
-scale = Vector2(0.6, 0.646)
-text = "<  >"
-label_settings = SubResource("LabelSettings_i3c0a")
-horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
-
-[node name="scoreText" type="Label" parent="." unique_id=157073158]
-offset_left = 880.0
-offset_top = 0.9999962
-offset_right = 1024.0
-offset_bottom = 118.0
-scale = Vector2(0.6, 0.645)
-text = "SCORE:
-RANK:
-ACCURACY:"
-label_settings = SubResource("LabelSettings_i3c0a")
-metadata/_edit_use_anchors_ = true
-
-[node name="Control" type="Control" parent="." unique_id=1875437788]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-metadata/_edit_use_anchors_ = true
-
-[node name="ColorRect" type="ColorRect" parent="Control" unique_id=45730292]
-layout_mode = 0
-offset_top = 702.0
-offset_right = 1280.0
-offset_bottom = 720.0
-color = Color(0, 0, 0, 0.403922)
-
-[node name="Label" type="Label" parent="Control" unique_id=758440968]
-layout_mode = 0
-offset_left = 425.0
-offset_top = 700.0
-offset_right = 11641.0
-offset_bottom = 1281.0
-scale = Vector2(0.035, 0.035)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_in7ae")
-theme_override_font_sizes/font_size = 660
-text = "press SPACE to play song INST"
-horizontal_alignment = 1
 
 [node name="warning" type="Control" parent="." unique_id=598745301]
 visible = false

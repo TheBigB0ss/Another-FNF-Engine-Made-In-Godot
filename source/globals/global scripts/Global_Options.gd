@@ -145,11 +145,16 @@ func check_key_bind(key_id, key_index):
 			
 	return false;
 	
-func get_key(key_code):
+func get_key(key_code) -> int:
 	var ev = InputEventKey.new();
 	ev.keycode = keys[key_code][0];
 	return ev.keycode;
-	
+
+func get_key_input(key_code) -> InputEventKey:
+	var ev = InputEventKey.new();
+	ev.keycode = keys[key_code][0];
+	return ev;
+
 func get_option_value(opt_name):
 	return optionList["options"][opt_name]["list"][optionList["options"][opt_name]["index"]];
 	

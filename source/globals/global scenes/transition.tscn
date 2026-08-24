@@ -66,12 +66,13 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 metadata/_edit_lock_ = true
 
 [node name="transition" type="Sprite2D" parent="Control" unique_id=2077094427]
 visible = false
 position = Vector2(646, -935.00006)
-scale = Vector2(1.73, 1.73)
+scale = Vector2(7.3114758, 1.73)
 texture = ExtResource("2_mvcdl")
 
 [node name="Fade_anim" type="AnimationPlayer" parent="Control" unique_id=1834034888]

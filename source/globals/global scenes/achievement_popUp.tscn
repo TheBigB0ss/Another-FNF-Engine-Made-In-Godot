@@ -1,13 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://cn7cq3ole4vvf"]
+[gd_scene format=3 uid="uid://cn7cq3ole4vvf"]
 
-[ext_resource type="Script" uid="uid://cb7frcgryc42g" path="res://source/globals/global scenes/achievement_popUp.gd" id="1_gf811"]
+[ext_resource type="Script" uid="uid://ckfwx4wos6fik" path="res://source/globals/global scenes/achievement_popUp.gd" id="1_gf811"]
 
-[node name="AchievementPopUp" type="CanvasLayer"]
+[node name="AchievementPopUp" type="CanvasLayer" unique_id=859135036]
 layer = 5
 script = ExtResource("1_gf811")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=791570692]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2

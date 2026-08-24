@@ -1,10 +1,17 @@
 [gd_scene format=3 uid="uid://dovf83bjbhnsn"]
 
 [ext_resource type="Script" uid="uid://1ti2qhdtf1mm" path="res://source/menus/options/options_menu.gd" id="1_g3fsc"]
+[ext_resource type="Texture2D" uid="uid://dlfavtll5gv5o" path="res://assets/images/mobile/downButton.png" id="2_fym0w"]
 [ext_resource type="Texture2D" uid="uid://depqgg301j5px" path="res://assets/images/menuBgs/menuBGMagenta.png" id="2_gnd2s"]
 [ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_12ubm"]
+[ext_resource type="Script" uid="uid://bpg0bj8mbgc1h" path="res://source/menus/MobileButton.gd" id="3_je5na"]
 [ext_resource type="Script" uid="uid://essfoa0h4nwy" path="res://source/alphabet/alphabetObject.gd" id="4_5hxum"]
+[ext_resource type="Texture2D" uid="uid://dpoffah5gx305" path="res://assets/images/mobile/upButton.png" id="4_8o36d"]
 [ext_resource type="PackedScene" uid="uid://csjtlx65o4ol2" path="res://source/menus/options/reset_data_scene.tscn" id="4_ynts2"]
+[ext_resource type="Texture2D" uid="uid://drgpo26ke853b" path="res://assets/images/mobile/enterButton.png" id="5_soptl"]
+[ext_resource type="Texture2D" uid="uid://d2qkkk8hm6nsy" path="res://assets/images/mobile/rightButton.png" id="6_kmbt8"]
+[ext_resource type="Texture2D" uid="uid://dmd1442ci33ml" path="res://assets/images/mobile/leftButton.png" id="7_8pkfq"]
+[ext_resource type="Texture2D" uid="uid://bpqqwylqhx47n" path="res://assets/images/mobile/escButton.png" id="8_m3wyq"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_1y2sa"]
 font = ExtResource("3_12ubm")
@@ -14,6 +21,130 @@ shadow_color = Color(0, 0, 0, 1)
 
 [node name="Options_menu" type="Node2D" unique_id=320468640]
 script = ExtResource("1_g3fsc")
+
+[node name="ControlsLayer" type="CanvasLayer" parent="." unique_id=465431151]
+layer = 2
+
+[node name="Control" type="Control" parent="ControlsLayer" unique_id=1470353847]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MobileButton" type="TextureButton" parent="ControlsLayer/Control" unique_id=1883617532]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_top = -200.0
+offset_right = -8.0
+offset_bottom = -72.0
+grow_horizontal = 0
+grow_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("2_fym0w")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("3_je5na")
+key = "ui_down"
+metadata/_custom_type_script = "uid://bpg0bj8mbgc1h"
+
+[node name="MobileButton2" type="TextureButton" parent="ControlsLayer/Control" unique_id=969337040]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_top = -336.0
+offset_right = -8.0
+offset_bottom = -208.0
+grow_horizontal = 0
+grow_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("4_8o36d")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("3_je5na")
+key = "ui_up"
+metadata/_custom_type_script = "uid://bpg0bj8mbgc1h"
+
+[node name="MobileButton6" type="TextureButton" parent="ControlsLayer/Control" unique_id=992778810]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_top = -472.0
+offset_right = -8.0
+offset_bottom = -344.0
+grow_horizontal = 0
+grow_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("5_soptl")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("3_je5na")
+metadata/_custom_type_script = "uid://bpg0bj8mbgc1h"
+
+[node name="MobileButton3" type="TextureButton" parent="ControlsLayer/Control" unique_id=969632325]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 144.0
+offset_top = -200.0
+offset_right = 272.0
+offset_bottom = -72.0
+grow_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("6_kmbt8")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("3_je5na")
+key = "ui_right"
+metadata/_custom_type_script = "uid://bpg0bj8mbgc1h"
+
+[node name="MobileButton4" type="TextureButton" parent="ControlsLayer/Control" unique_id=1794375392]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -200.0
+offset_right = 136.0
+offset_bottom = -72.0
+grow_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("7_8pkfq")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("3_je5na")
+key = "ui_left"
+metadata/_custom_type_script = "uid://bpg0bj8mbgc1h"
+
+[node name="MobileButton5" type="TextureButton" parent="ControlsLayer/Control" unique_id=250203860]
+layout_mode = 1
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 136.0
+offset_bottom = 136.0
+action_mode = 0
+texture_normal = ExtResource("8_m3wyq")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("3_je5na")
+key = "escape"
+metadata/_custom_type_script = "uid://bpg0bj8mbgc1h"
 
 [node name="Bg" type="Sprite2D" parent="." unique_id=357058538]
 position = Vector2(640, 360)

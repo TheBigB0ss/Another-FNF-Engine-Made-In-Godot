@@ -31,6 +31,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 
 [node name="volume_button" type="Sprite2D" parent="Control" unique_id=1688586367]
 texture_filter = 1

@@ -2,8 +2,11 @@
 
 [ext_resource type="Script" uid="uid://cdlvrlqjngiph" path="res://source/gameplay/PlayState.gd" id="1_nlkw3"]
 [ext_resource type="Script" uid="uid://bylq1p6vnb3qd" path="res://source/gameplay/events/EventLoader.gd" id="2_4fsh2"]
+[ext_resource type="Script" uid="uid://p3rym21j1ros" path="res://source/gameplay/tileButton.gd" id="2_0054s"]
 [ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="2_ygq3c"]
+[ext_resource type="Texture2D" uid="uid://drgpo26ke853b" path="res://assets/images/mobile/enterButton.png" id="3_dv8g4"]
 [ext_resource type="Script" uid="uid://ov1a7ymw3c5l" path="res://source/gameplay/ratings/combo.gd" id="3_vbhv8"]
+[ext_resource type="Script" uid="uid://bpg0bj8mbgc1h" path="res://source/menus/MobileButton.gd" id="4_fgm2f"]
 [ext_resource type="Script" uid="uid://c1w1j8th2unar" path="res://source/gameplay/ratings/rating.gd" id="4_ujn4o"]
 [ext_resource type="Script" uid="uid://dl7m3sfamfd6h" path="res://source/gameplay/strums/PlayerStrum.gd" id="5_hjbjt"]
 [ext_resource type="FontFile" uid="uid://clifiya6s5xnf" path="res://assets/fonts/pixel.otf" id="5_pxn5x"]
@@ -14,7 +17,6 @@
 [ext_resource type="PackedScene" uid="uid://lmu4akqkj75l" path="res://source/gameplay/dialogue/Dialogue box.tscn" id="14_2bco5"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_2bi1b"]
-load_path = "res://.godot/imported/combo.png-ebb8e79407eb0da2dc0b63f708fa4e61.ctex"
 
 [sub_resource type="LabelSettings" id="LabelSettings_g4v7s"]
 font = ExtResource("5_pxn5x")
@@ -55,6 +57,75 @@ shadow_color = Color(0, 0, 0, 1)
 
 [node name="PlayState" type="Node2D" unique_id=530081182]
 script = ExtResource("1_nlkw3")
+
+[node name="MobileControl" type="CanvasLayer" parent="." unique_id=376779146]
+layer = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MobileControl" unique_id=846093313]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TileButton" type="ColorRect" parent="MobileControl/HBoxContainer" unique_id=1300966846]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.7193334, 0, 0.83, 0.12156863)
+script = ExtResource("2_0054s")
+normal_color = Color(0.7193334, 0, 0.83, 0.12156863)
+pressed_color = Color(0.7176471, 0, 0.83137256, 0.33333334)
+metadata/_custom_type_script = "uid://p3rym21j1ros"
+
+[node name="TileButton2" type="ColorRect" parent="MobileControl/HBoxContainer" unique_id=327848645]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0, 0.8666668, 1, 0.12156863)
+script = ExtResource("2_0054s")
+normal_color = Color(0, 0.8666668, 1, 0.12156863)
+pressed_color = Color(0, 0.8666668, 1, 0.21568628)
+key = "down"
+metadata/_custom_type_script = "uid://p3rym21j1ros"
+
+[node name="TileButton3" type="ColorRect" parent="MobileControl/HBoxContainer" unique_id=1351401876]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.16666675, 1, 0, 0.12156863)
+script = ExtResource("2_0054s")
+normal_color = Color(0.16666675, 1, 0, 0.12156863)
+pressed_color = Color(0.16666675, 1, 0, 0.21568628)
+key = "up"
+metadata/_custom_type_script = "uid://p3rym21j1ros"
+
+[node name="TileButton4" type="ColorRect" parent="MobileControl/HBoxContainer" unique_id=1806590061]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(1, 0, 0, 0.12156863)
+script = ExtResource("2_0054s")
+normal_color = Color(1, 0, 0, 0.12156863)
+pressed_color = Color(1, 0, 0, 0.21568628)
+key = "right"
+metadata/_custom_type_script = "uid://p3rym21j1ros"
+
+[node name="MobileButton6" type="TextureButton" parent="MobileControl" unique_id=866371818]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -72.0
+offset_top = -712.0
+offset_right = -8.0
+offset_bottom = -648.0
+grow_horizontal = 0
+grow_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("3_dv8g4")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("4_fgm2f")
+metadata/_custom_type_script = "uid://bpg0bj8mbgc1h"
 
 [node name="stage" type="Node2D" parent="." unique_id=1093992963]
 
