@@ -222,7 +222,10 @@ func _ready():
 		newSongCard.create_songBar(curSong);
 		hud.add_child(newSongCard);
 		hud.move_child(newSongCard, 8);
-		
+	
+	game_strums.offset.x = (get_viewport_rect().size.x - 1280) / 2;
+	hud.offset.x = (get_viewport_rect().size.x - 1280) / 2;
+	
 func start_dialogue():
 	SongData.is_not_in_cutscene = false;
 	dialogue_box.start();
@@ -408,10 +411,10 @@ func pressedNote(note):
 	updateScoreText();
 	
 func opponentNotePressed(note):
-	if note.isSustain && GlobalOptions.show_splashes:
+	if note.isSustain && GlobalOptions.show_splashes && !GlobalOptions.middle_scroll:
 		var splash = splash_note(opponentStrum.strumNode.get_child(note.noteData), "holdCover%s"%[note.noteAnim] if !SongData.isPixelStage else "holdpixelCover");
 		note.holdSplash = splash;
-		
+	
 	ScriptLoader.call_func("on_opponent_hit", [note]);
 	dad.characterScript.call_func("on_note_hit", [note]);
 	
@@ -549,7 +552,7 @@ func setPercent():
 			return "Perfect!!!";
 			
 func _input(ev):
-	if !(ev is InputEventKey):
+	if (ev is InputEventKey):
 		if !ev.pressed or ev.echo:
 			return;
 			

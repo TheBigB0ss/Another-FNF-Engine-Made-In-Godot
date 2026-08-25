@@ -33,7 +33,7 @@ func _ready():
 	else:
 		coolOptions.position.y = float((720/2.0)-(coolOffset*curOption));
 	
-	coolOptions.position.x = get_viewport_rect().size.x	/ 2.0;
+	coolOptions.position.x = 50 + get_viewport_rect().size.x	/ 2.0;
 	alphabet_object.position.x = coolOptions.position.x;
 
 func _create_option_hitbox(menu_opts:AnimatedSprite2D, index:int):
