@@ -7,10 +7,10 @@ extends Node2D
 @onready var option_suffix_stuff = $'settings/option_suffix';
 @onready var reset_menu = $reset_menu/reset_data_scene;
 
-var coolKeyText = Alphabet;
+var coolKeyText = Alphabet
 
 var offSetShit = 0;
-var coolOffset = 140;
+var coolOffset = 140;;
 
 var is_on_settings_mode = false;
 
@@ -156,7 +156,7 @@ func _input(ev):
 				var dir = int(rightKey) - int(leftKey);
 				if dir != 0:
 					GlobalOptions.change_array_opt(opt_name, dir, category);
-					curSetting.update_text(str("<", GlobalOptions.get_option_value(opt_name), ">"), -20, false);
+					curSetting.update_text("<%s>"%[GlobalOptions.get_option_value(opt_name)], -20, false);
 					
 			TYPE_STRING:
 				if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo && !is_on_key_mode:
@@ -277,13 +277,33 @@ func change_option(change):
 		if j == cur_option:
 			options_stuff.get_child(j).modulate.a = 1;
 			
+			
+var description_tween = null;
 func change_new_option(change):
 	Sound.playAudio("scrollMenu", false);
 	
+	description_text.modulate.a = 0.0;
+	description_text.position.y = 700;
+	$settings/ColorRect.modulate.a = 0.0;
+	$settings/ColorRect.position.y = 700;
+	
+	if description_tween && description_tween.is_valid():
+		description_tween.kill();
+		
 	new_cur_option += change;
 	new_cur_option = wrapi(new_cur_option, 0, len(new_options_array));
 	
 	description_text.text = options[options_array[cur_option]][new_options_array[new_cur_option]]["description"];
+	$settings/ColorRect.size = description_text.get_minimum_size();
+	$settings/ColorRect.position.x = description_text.position.x + (description_text.size.x - description_text.get_minimum_size().x) / 2.0;
+	
+	description_tween = create_tween();
+	description_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS);
+	description_tween.set_parallel(true);
+	description_tween.tween_property(description_text, "position:y", 670, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT);
+	description_tween.tween_property(description_text, "modulate:a", 1.0, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT);
+	description_tween.tween_property($settings/ColorRect, "position:y", 670, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT);
+	description_tween.tween_property($settings/ColorRect, "modulate:a", 1.0, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT);
 	
 	for j in new_options_array.size():
 		settings.get_child(j).modulate.a = 0.4;

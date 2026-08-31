@@ -45,6 +45,9 @@ func _process(delta: float) -> void:
 		zoom = lerp(zoom, SongData.stageZoom, t);
 		
 	for i in cameraEvents:
+		if useDefaultCamsEvent:
+			continue;
+			
 		if i["duration"] <= 0:
 			if Conductor.getSongTime >= i["strumTime"]:
 				global_position = Vector2(i["targetX"], i["targetY"]);
@@ -62,6 +65,9 @@ func _process(delta: float) -> void:
 			global_position = lerp(start_pos, Vector2(i["targetX"], i["targetY"]), t);
 			
 	for i in zoomEvents:
+		if useDefaultZoomEvent:
+			continue;
+			
 		if i["duration"] <= 0:
 			if Conductor.getSongTime >= i["strumTime"]:
 				zoom = Vector2.ONE * i["target"];

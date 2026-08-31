@@ -6,11 +6,8 @@
 [ext_resource type="Script" uid="uid://essfoa0h4nwy" path="res://source/alphabet/alphabetObject.gd" id="4_5hxum"]
 [ext_resource type="PackedScene" uid="uid://csjtlx65o4ol2" path="res://source/menus/options/reset_data_scene.tscn" id="4_ynts2"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_1y2sa"]
+[sub_resource type="LabelSettings" id="LabelSettings_g4v7s"]
 font = ExtResource("3_12ubm")
-font_size = 485
-shadow_size = 40
-shadow_color = Color(0, 0, 0, 1)
 
 [node name="Options_menu" type="Node2D" unique_id=320468640]
 script = ExtResource("1_g3fsc")
@@ -32,22 +29,19 @@ position = Vector2(-25, 479)
 
 [node name="ColorRect" type="ColorRect" parent="settings" unique_id=1235964037]
 visible = false
-offset_left = -10.0
-offset_top = 638.0
-offset_right = 30.0
-offset_bottom = 676.0
-scale = Vector2(32.8118, 2.20228)
-color = Color(0, 0, 0, 0.517647)
+offset_left = 583.0
+offset_top = 670.0
+offset_right = 585.52954
+offset_bottom = 679.5356
+color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="settings" unique_id=1657021667]
+[node name="Label" type="Label" parent="settings" unique_id=1112419134]
 texture_filter = 1
-offset_left = -1.0
-offset_top = 641.0
-offset_right = 1136.0
-offset_bottom = 1068.0
-scale = Vector2(0.081, 0.081)
-label_settings = SubResource("LabelSettings_1y2sa")
-metadata/_edit_use_anchors_ = true
+offset_top = 666.0
+offset_right = 1280.0
+offset_bottom = 689.0
+label_settings = SubResource("LabelSettings_g4v7s")
+horizontal_alignment = 1
 
 [node name="keys" type="Node2D" parent="." unique_id=1791194663]
 visible = false
@@ -77,6 +71,7 @@ centred = true
 metadata/_custom_type_script = "uid://essfoa0h4nwy"
 
 [node name="reset_menu" type="Control" parent="." unique_id=1216545783]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0

@@ -65,11 +65,9 @@ func beat_hit(_beat):
 func reload_icon(icon, playIconAnim = ""):
 	texture = load("res://assets/images/icons/icon-%s.png"%[icon]);
 	set_icon_hframes();
-	if playIconAnim == "":
-		return;
+	if playIconAnim != "":
+		play_icon_anim(playIconAnim);
 		
-	play_icon_anim(playIconAnim);
-	
 func get_icon_color():
 	if !texture:
 		return Color.WHITE;

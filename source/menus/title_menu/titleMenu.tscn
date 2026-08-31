@@ -16,11 +16,7 @@ offset_right = 1280.0
 offset_bottom = 720.0
 color = Color(0, 0, 0, 1)
 
-[node name="tiltle stuff" type="Control" parent="." unique_id=305961515]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="tiltle stuff" type="Node2D" parent="." unique_id=590955069]
 metadata/_edit_use_anchors_ = true
 
 [node name="logo" type="AnimatedSprite2D" parent="tiltle stuff" unique_id=1134326357]

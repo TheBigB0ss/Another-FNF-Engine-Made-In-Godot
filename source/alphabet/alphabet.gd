@@ -6,7 +6,7 @@ var letterAnim = [];
 var isBold = true;
 var isCentered = false;
 
-var global_anim = AnimatedSprite2D.new();
+var letters = [];
 
 func _creat_word(text = ""):
 	coolText = text;
@@ -99,15 +99,16 @@ func _create_a_letter(letter, isCentredLetter):
 		new_word.play(letter[i]);
 		add_child(new_word);
 		
-		global_anim.sprite_frames = new_word.sprite_frames;
-		global_anim.position.x = offSetShit;
-		global_anim.scale = new_word.scale;
-		global_anim.play(letter[i]);
-		
 		offSetShit += coolOffset;
 		
+		letters.append(new_word);
+		
+func get_letter(letterId):
+	return letters[letterId];
+	
 func _clear_word():
-	letterAnim = []
+	letters.clear();
+	letterAnim.clear();
 	for i in get_children():
 		remove_child(i);
 		i.queue_free();

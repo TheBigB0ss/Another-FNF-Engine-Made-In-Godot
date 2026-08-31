@@ -110,7 +110,7 @@ func _ready():
 	playlist = SongData.week_songs;
 	songDiff = SongData.week_diffs;
 	
-	for i in [rating_spr, combo_spr, nums_spr]:
+	for i in [rating_spr, combo_spr, nums_spr, msText]:
 		if GlobalOptions.rating_mode == "hud element":
 			i.reparent($rating/Rating_Layer, true);
 			
@@ -408,7 +408,7 @@ func pressedNote(note):
 	updateScoreText();
 	
 func opponentNotePressed(note):
-	if note.isSustain && GlobalOptions.show_splashes:
+	if note.isSustain && GlobalOptions.show_splashes && !GlobalOptions.middle_scroll:
 		var splash = splash_note(opponentStrum.strumNode.get_child(note.noteData), "holdCover%s"%[note.noteAnim] if !SongData.isPixelStage else "holdpixelCover");
 		note.holdSplash = splash;
 		
@@ -634,9 +634,11 @@ func startCountdown():
 		return;
 		
 	for i in [bf, dad, gf]:
-		if is_instance_valid(i):
-			i.back_to_idle(idleCounter);
+		if !is_instance_valid(i):
+			continue;
 			
+		i.back_to_idle(idleCounter);
+		
 	for i in 5:
 		await get_tree().create_timer(Conductor.crochet/1000).timeout;
 		
@@ -661,7 +663,7 @@ func startCountdown():
 			
 		Sound.playAudio(countdown_audios[i], SongData.isPixelStage);
 		if GlobalOptions.updated_hud == "classic hud" && i == 0:
-			continue;
+			continue;i
 			
 		set_contdownSpr(countdownPath, countdownset[countdownPath][i] + ratingPart);
 		

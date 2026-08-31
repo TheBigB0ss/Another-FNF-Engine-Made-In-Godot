@@ -7,6 +7,7 @@ var noSpam = false;
 @onready var coolOptions = $'options';
 @onready var new_bg = $'TextureRect';
 @onready var cool_bg = $'bg';
+@onready var achievementIcon = $achievement;
 
 var coolOffset = 145;
 var offSetShit = 0;
@@ -65,6 +66,14 @@ func _input(ev):
 var can_show_magenta = true;
 var magenta_time = 0.095;
 func _process(delta):
+	if mouse_inside(achievementIcon):
+		achievementIcon.scale = Vector2(1.15, 1.15);
+		if Input.is_action_just_pressed("mouse_click") && !noSpam:
+			noSpam = true;
+			Global.changeScene("/menus/achievements_menu/achievements_menu", true, false);
+			
+	achievementIcon.scale = lerp(achievementIcon.scale, Vector2(1.0, 1.0), 1.0 - exp(-12.0 * delta));
+	
 	coolOptions.position.y = lerp(coolOptions.position.y, (720/2.0)-(coolOffset*curOption), 1.0 - exp(-9.0 * delta));
 	if !choiced:
 		return;
@@ -86,3 +95,11 @@ func changeItem(change):
 	for j in options.size():
 		coolOptions.get_child(j).play(options[curOption] + " selected" if j == curOption else options[j] + " idle");
 		
+func mouse_inside(spr):
+	var mouse = get_global_mouse_position();
+	var size = spr.get_texture().get_size() * spr.scale;
+	if mouse.x > spr.global_position.x - size.x / 2 && mouse.x < spr.global_position.x + size.x / 2 && mouse.y > spr.global_position.y - size.y / 2 && mouse.y < spr.global_position.y + size.y / 2:
+		return true;
+		
+	return false;
+	

@@ -1,7 +1,7 @@
 extends Node2D
 
 @onready var rolling_tank = $rollingTankBg;
-@onready var cutsceneLoader = $Cutscene;
+#@onready var cutsceneLoader = $Cutscene;
 
 var tank_angle = 0;
 var pico_data = {};
@@ -13,12 +13,12 @@ const tankmanPreload = preload("res://source/stages/battlefield/TankmanSoldier.t
 signal end_tankman_cutscene;
 
 func _ready() -> void:
-	cutsceneLoader.connect("cutsceneEnding", start_song);
+	#cutsceneLoader.connect("cutsceneEnding", start_song);
 	
-	cutsceneLoader.bf_anim = get_tree().current_scene.get("bf");
-	cutsceneLoader.gf_anim = get_tree().current_scene.get("gf");
-	cutsceneLoader.opponent_anim = get_tree().current_scene.get("dad");
-	cutsceneLoader.camera = get_tree().current_scene.get("sectionCamera");
+	#cutsceneLoader.bf_anim = get_tree().current_scene.get("bf");
+	#cutsceneLoader.gf_anim = get_tree().current_scene.get("gf");
+	#cutsceneLoader.opponent_anim = get_tree().current_scene.get("dad");
+	#cutsceneLoader.camera = get_tree().current_scene.get("sectionCamera");
 	
 	Conductor.connect("new_beat", beat_hit);
 	MusicManager._stop_music();
@@ -26,7 +26,7 @@ func _ready() -> void:
 	if SongData.isPlaying:
 		song = SongData.week_songs[0].to_lower();
 		
-	cutsceneLoader.song = song;
+	#cutsceneLoader.song = song;
 	
 	if SongData.isPlaying:
 		if song == "stress":
@@ -90,22 +90,22 @@ func _process(delta):
 		for i in dead_tankmans:
 			pico_note_array.erase(i);
 			
-func ugh_intro():
-	set_hud(false);
-	cutsceneLoader.ugh_intro();
-	
-func guns_intro():
-	set_hud(false);
-	cutsceneLoader.guns_intro();
-	
-func stress_intro():
-	set_hud(false);
-	cutsceneLoader.stress_intro();
+#func ugh_intro():
+	#set_hud(false);
+	#cutsceneLoader.ugh_intro();
+	#
+#func guns_intro():
+	#set_hud(false);
+	#cutsceneLoader.guns_intro();
+	#
+#func stress_intro():
+	#set_hud(false);
+	#cutsceneLoader.stress_intro();
 	
 func start_song():
 	set_hud(true);
 	
-	cutsceneLoader.hide();
+	#cutsceneLoader.hide();
 	
 	MusicManager._stop_music();
 	SongData.is_not_in_cutscene = true;

@@ -33,14 +33,9 @@ size = Vector2i(515, 180)
 [node name="FileDialogEvents" type="FileDialog" parent="." unique_id=2098898722]
 size = Vector2i(348, 180)
 
-[node name="grid_objs" type="Control" parent="." unique_id=774991621]
+[node name="grid_objs" type="Node2D" parent="." unique_id=1645115678]
 z_index = -1
-layout_mode = 3
-anchors_preset = 0
-offset_left = 80.0
-offset_top = 67.0
-offset_right = 120.0
-offset_bottom = 107.0
+position = Vector2(80, 67)
 
 [node name="grid" type="Node2D" parent="grid_objs" unique_id=1572215888 node_paths=PackedStringArray("node", "camera")]
 position = Vector2(360, 80)
@@ -49,7 +44,6 @@ node = NodePath("../..")
 camera = NodePath("../../Camera2D")
 
 [node name="song_line" type="ColorRect" parent="grid_objs" unique_id=1212900564]
-layout_mode = 0
 offset_left = 360.0
 offset_top = 92.0
 offset_right = 410.0
@@ -84,16 +78,10 @@ metadata/_custom_type_script = "uid://l08oojy4jhie"
 [node name="chart_UI" type="CanvasLayer" parent="." unique_id=682108031]
 layer = 3
 
-[node name="chart_objs" type="Control" parent="chart_UI" unique_id=695606599]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 922.0
-offset_top = -174.0
-offset_right = 962.0
-offset_bottom = -134.0
+[node name="chart_objs" type="Node2D" parent="chart_UI" unique_id=1155276401]
+position = Vector2(922, -174)
 
 [node name="topBar" type="ColorRect" parent="chart_UI/chart_objs" unique_id=670165930]
-layout_mode = 0
 offset_left = -922.0
 offset_top = 174.0
 offset_right = 358.0
@@ -101,7 +89,6 @@ offset_bottom = 274.0
 color = Color(0.21720988, 0.21720988, 0.21720988, 1)
 
 [node name="bottomBar" type="ColorRect" parent="chart_UI/chart_objs" unique_id=415317761]
-layout_mode = 0
 offset_left = -922.0
 offset_top = 818.0
 offset_right = 358.0
@@ -109,6 +96,7 @@ offset_bottom = 894.0
 color = Color(0.21568628, 0.21568628, 0.21568628, 1)
 
 [node name="infos" type="Control" parent="chart_UI/chart_objs" unique_id=1503475982]
+layout_mode = 3
 anchors_preset = 0
 offset_left = -876.0
 offset_top = -407.0
@@ -183,6 +171,7 @@ offset_bottom = 1295.0
 text = "|<"
 
 [node name="chartTab" type="Control" parent="chart_UI/chart_objs" unique_id=1291020538 node_paths=PackedStringArray("mainScene")]
+layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -670,7 +659,7 @@ metadata/_custom_type_script = "uid://cvh168tg37tji"
 [node name="ChartEnemy" parent="chart_UI/chart_objs/chartTab/opponentPreviewWindow" unique_id=246031562 instance=ExtResource("7_w8f1m")]
 position = Vector2(100, 139)
 scale = Vector2(0.545, 0.545)
-frame = 1
+frame = 6
 offset = Vector2(5, -10)
 animation = 1
 

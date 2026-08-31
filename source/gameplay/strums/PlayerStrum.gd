@@ -58,6 +58,9 @@ func _ready() -> void:
 			
 	for i in SongData.playerNotes:
 		var noteData = [i[0], i[1], i[2], i[3], i[4], i[5]];
+		if typeof(noteData[3]) != TYPE_STRING:
+			noteData[3] = "";
+			
 		array_notes.insert(0, noteData);
 		
 	array_notes.sort_custom(func(a,b): return a[0]<b[0]);
@@ -88,6 +91,9 @@ func _process(delta):
 		note.modulate.a = strum.modulate.a;
 		note.scale = strum.scale;
 		
+		if note.holdSplash != null:
+			note.holdSplash.global_position = strumNode.get_child(note.noteData).global_position;
+			
 		if !note.is_pressing:
 			note.position.y = strumY + (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed) if GlobalOptions.down_scroll else strumY - (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed);
 		else:
@@ -124,15 +130,15 @@ func _process(delta):
 		playerInput();
 		
 	for i in 4:
-		var notes = strumArray[i];
+		var note = strumArray[i];
 		if GlobalOptions.isUsingBot:
-			if notes.reset_arrow_anim > 0:
-				notes.reset_arrow_anim = max(notes.reset_arrow_anim - 4 * delta, 0);
-			elif notes.reset_arrow_anim <= 0:
-				notes.play_note_anim("static");
+			if note.reset_arrow_anim > 0:
+				note.reset_arrow_anim = max(note.reset_arrow_anim - 4 * delta, 0);
+			elif note.reset_arrow_anim <= 0:
+				note.play_note_anim("static");
 				
 		var key = "ui_%s"%GlobalOptions.keys[GlobalOptions.keys_list[i]][1];
-		press_note(key, notes);
+		press_note(key, note);
 		
 	for i in notes_to_delete:
 		playerNotes.erase(i);

@@ -21,11 +21,8 @@ size = Vector2i(515, 180)
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1570823973]
 layer = 3
 
-[node name="timeLine" type="Control" parent="CanvasLayer" unique_id=1676353724]
-layout_mode = 3
-anchors_preset = 0
-offset_top = 650.0
-offset_bottom = 650.0
+[node name="timeLine" type="Node2D" parent="CanvasLayer" unique_id=265043170]
+position = Vector2(0, 650)
 script = ExtResource("2_0isqf")
 
 [node name="cam_events" type="Node2D" parent="CanvasLayer/timeLine" unique_id=119420539]

@@ -96,13 +96,7 @@ scale = Vector2(1.1, 1.1)
 text = "1.0ms"
 label_settings = SubResource("LabelSettings_g4v7s")
 
-[node name="strums" type="Control" parent="." unique_id=1616783029]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 170.0
-offset_top = 60.0
-offset_right = 170.0
-offset_bottom = 60.0
+[node name="strums" type="Node2D" parent="." unique_id=981628250]
 metadata/_edit_use_anchors_ = true
 
 [node name="Strum_Layer" type="CanvasLayer" parent="strums" unique_id=2037664863]
@@ -203,21 +197,13 @@ Bads:
 Shits:"
 label_settings = SubResource("LabelSettings_pxn5x")
 
-[node name="dialogue" type="Control" parent="." unique_id=456868802]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="dialogue" type="Node2D" parent="." unique_id=1305875798]
 
 [node name="DialogueBox" parent="dialogue" unique_id=536220967 instance=ExtResource("14_2bco5")]
 layer = 2
 visible = false
 
-[node name="pause" type="Control" parent="." unique_id=678990798]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="pause" type="Node2D" parent="." unique_id=556009405]
 
 [node name="Pause_Layer" parent="pause" unique_id=1801196698 instance=ExtResource("13_7gusd")]
 layer = 3

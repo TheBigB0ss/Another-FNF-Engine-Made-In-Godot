@@ -29,10 +29,10 @@ func _ready() -> void:
 		alphabetGrp.add_child(alphabet)
 		alphabetGrp.position.x = 70;
 		
-		var frame_texture = alphabet.global_anim.sprite_frames.get_frame_texture(alphabet.global_anim.animation, alphabet.global_anim.frame).get_width();
-		var frame_widht = frame_texture*alphabet.global_anim.sprite_frames.get_frame_count(alphabet.global_anim.animation);
+		var frame_texture = alphabet.get_letter(alphabet.letters.size()-1).sprite_frames.get_frame_texture(alphabet.get_letter(alphabet.letters.size()-1).animation, alphabet.get_letter(alphabet.letters.size()-1).frame).get_width();
+		var frame_widht = frame_texture*alphabet.get_letter(alphabet.letters.size()-1).sprite_frames.get_frame_count(alphabet.get_letter(alphabet.letters.size()-1).animation);
 		
-		suffix_x = alphabet.global_anim.position.x + frame_widht + 10;
+		suffix_x = alphabet.get_letter(alphabet.letters.size()-1).position.x + frame_widht + 10;
 		suffix_y = alphabet.position.y;
 		
 		match typeof(new_options[i].opt_type):
@@ -53,8 +53,6 @@ func _ready() -> void:
 				checkBoxGrp.add_child(check_sprite);
 				update_bool_spr(new_options[i].opt_type);
 				
-	GlobalOptions.updated_options = new_options;
-	
 func update_text(new_text, new_x = 0, is_bold = true):
 	for i in new_alphabetGrp.get_children():
 		new_alphabetGrp.remove_child(i);

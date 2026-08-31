@@ -67,6 +67,7 @@ func _ready():
 			
 		weeks.append(data);
 		
+	var changed = false;
 	for i in weeks:
 		var weekName = i["weekName"];
 		
@@ -76,28 +77,17 @@ func _ready():
 		weeksSpr.add_child(storySprite);
 		offSetShit += coolOffset;
 		
-	weeksSpr.position.y = float(480-coolOffset*curWeek);
-	
-	for i in ["easy", "normal", "hard", "remix"]:
-		diffTexs[i] = load("res://assets/images/story mode/difficulties/%s.png"%[i]);
-		
-	for i in weeks:
-		var weekName = i["weekName"];
-		
-		if !HighScore.week_status.has(weekName):
-			HighScore.week_status[weekName] = i["isLocked"];
-			HighScore.save_week_status();
-			
-	var changed = false;
-	for i in weeks:
-		var weekName = i["weekName"];
-		
 		if !HighScore.week_status.has(weekName):
 			HighScore.week_status[weekName] = i["isLocked"];
 			changed = true;
 			
 	if changed:
 		HighScore.save_week_status();
+		
+	weeksSpr.position.y = float(480-coolOffset*curWeek);
+	
+	for i in ["easy", "normal", "hard", "remix"]:
+		diffTexs[i] = load("res://assets/images/story mode/difficulties/%s.png"%[i]);
 		
 	SongData.weeks_data = weeks;
 	
@@ -243,7 +233,7 @@ func updateWeek():
 	
 	var is_unlocked = HighScore.unlockweek(weeks[curWeek]["lastWeek"], weeks[curWeek]["lastWeek"], weeks[curWeek]["weekName"], weeks[curWeek]["isLocked"]);
 	
-	diffs = ["easy", "normal", "hard"] if weeks[curWeek]["weekDifficulties"].is_empty() else weeks[curWeek]["weekDifficulties"]
+	diffs = ["easy", "normal", "hard"] if weeks[curWeek]["weekDifficulties"].is_empty() else weeks[curWeek]["weekDifficulties"];
 	diffSpr.texture = diffTexs[diffs[curDiff if !curDiff > diffs.size()-1 else 0]];
 	
 	locker.visible = !is_unlocked;

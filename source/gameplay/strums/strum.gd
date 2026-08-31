@@ -75,15 +75,18 @@ func _ready() -> void:
 				
 	elif chart.has("codenameChart"):
 		var types = chart["noteTypes"];
-		
 		for strum in chart["strumLines"]:
 			for note in strum["notes"]:
 				songNotes.append([note["time"], note["id"], note["sLen"], types[note["type"] - 1] if note["type"] > 0 else "", null, null]);
+				
 	else:
 		for note in chart["strums"][0]["opponent"]:
 			songNotes.append(note);
 			
 	for note in songNotes:
+		if typeof(note[3]) != TYPE_STRING:
+			note[3] = "";
+			
 		array_notes.append([note[0], note[1], note[2], note[3], note[4], note[5]]);
 		
 	array_notes.sort_custom(func(a, b): return a[0] < b[0])
@@ -170,11 +173,11 @@ func _process(delta):
 	notesList = notesList.filter(func(note): return note != null);
 	
 	for i in 4:
-		var notes = strumArray[i];
-		if notes.reset_arrow_anim > 0:
-			notes.reset_arrow_anim = max(notes.reset_arrow_anim - 4 * delta, 0);
-		elif notes.reset_arrow_anim <= 0:
-			notes.play_note_anim("static");
+		var note = strumArray[i];
+		if note.reset_arrow_anim > 0:
+			note.reset_arrow_anim = max(note.reset_arrow_anim - 4 * delta, 0);
+		elif note.reset_arrow_anim <= 0:
+			note.play_note_anim("static");
 			
 	for i in notes_to_delete:
 		notesList.erase(i);
@@ -188,11 +191,11 @@ func sort_notes(a, b):
 		return a.strumTime < b.strumTime;
 		
 func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
-	var note_data = int(noteData)%4;
+	var data = int(noteData)%4;
 	
 	var note = Note.new();
 	note.strumTime = strumTime;
-	note.noteData = note_data;
+	note.noteData = data;
 	note.sustainLength = lenght;
 	note.type = type;
 	note.isGfNote = (type == "gf sing");
