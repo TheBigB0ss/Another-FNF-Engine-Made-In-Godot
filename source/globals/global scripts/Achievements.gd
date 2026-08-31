@@ -76,7 +76,6 @@ func unlock_achievement(achievement):
 				update_achievement_progress(achievement, i, achievements[i]["ids"][0], achievements[i]["ids"][1]);
 				
 			achievements[achievement]["value"] = true;
-			achievements[achievement]["secret achievement"] = false;
 			
 	elif typeof(achievements[achievement]["value"]) == TYPE_ARRAY:
 		if achievements[achievement]["value"][0] < achievements[achievement]["value"][1]:
@@ -84,7 +83,6 @@ func unlock_achievement(achievement):
 			
 			if achievements[achievement]["value"][0] == achievements[achievement]["value"][1] && !achievements[achievement]["value"][2]:
 				achievements[achievement]["value"][2] = true;
-				achievements[achievement]["secret achievement"] = false;
 				AchievementPopUp.set_achievement(achievement, SongData.isPlaying);
 				
 	save_achievements();
@@ -95,7 +93,6 @@ func update_achievement_progress(achievement, new_achievement, min_val, max_val)
 		
 		if achievements[new_achievement]["value"][0] == achievements[new_achievement]["value"][1] && !achievements[new_achievement]["value"][2]:
 			achievements[new_achievement]["value"][2] = true;
-			achievements[new_achievement]["secret achievement"] = false;
 			AchievementPopUp.set_achievement(new_achievement, SongData.isPlaying);
 			
 func check_achievement_status(achievement):

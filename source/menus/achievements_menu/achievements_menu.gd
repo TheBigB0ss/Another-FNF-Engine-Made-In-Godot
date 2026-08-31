@@ -22,7 +22,11 @@ func _ready():
 	progressBar.max_value = 100;
 	
 	for i in Achievements.achievements.keys():
-		if !Achievements.get_achievement_info(i)["achievement_hide"]:
+		var showAchievement = true;
+		if Achievements.get_achievement_info(i)["achievement_hide"]:
+			showAchievement = Achievements.check_achievement_status(i);
+			
+		if showAchievement:
 			achievements_sorted_list.append([i, Achievements.get_achievement_info(i)["achievement_index"]]);
 			
 	achievements_sorted_list.sort_custom(func(a, b): return a[1] < b[1]);
@@ -32,7 +36,11 @@ func _ready():
 		
 	var id = 0;
 	for i in achievements_list:
-		if !Achievements.get_achievement_info(i)["achievement_hide"]:
+		var showAchievement = true;
+		if Achievements.get_achievement_info(i)["achievement_hide"]:
+			showAchievement = Achievements.check_achievement_status(i);
+			
+		if showAchievement:
 			var new_achievement = Achievements_icon.new();
 			new_achievement.cool_name = i;
 			new_achievement.achievement_ID = id;
