@@ -120,11 +120,14 @@ func get_json_text():
 	
 var dialogue_timer = 0;
 func _process(delta):
+	if SongData.is_not_in_cutscene && Global.is_on_video:
+		return;
+		
 	dialogue_timer += 1*delta;
 	
 	var textSpeed = 0.05 if !Input.is_action_pressed("ui_shift") else 0.01;
 	
-	if dialogue_timer >= textSpeed && !SongData.is_not_in_cutscene && !Global.is_on_video:
+	if dialogue_timer >= textSpeed:
 		if letterID <= len(dialogue):
 			box_text.text = dialogue.substr(0, letterID);
 			
@@ -136,7 +139,7 @@ func _process(delta):
 			
 			dialogue_timer = 0;
 			
-	if Input.is_action_just_pressed("ui_accept") && !SongData.is_not_in_cutscene:
+	if Input.is_action_just_pressed("ui_accept"):
 		if letterID - 1 < len(dialogue):
 			letterID = len(dialogue);
 			
@@ -180,18 +183,6 @@ func update_text(text, _char, char_spr):
 	for i in [opponentGrp, bfGrp, gfGrp]:
 		remove_chars(i);
 		
-	match char_spr:
-		"cowboy":
-			opponentGrp.position = Vector2(285, 280);
-			bfGrp.position = Vector2(1015, 280);
-			gfGrp.position = Vector2(585, 280);
-			
-		"evilLeafy":
-			opponentGrp.position = Vector2(285, 280);
-			bfGrp.position = Vector2(1015, 280);
-			gfGrp.position = Vector2(585, 280);
-			Sound.add_new_sound("evilLeafy");
-			
 	if is_pixel_box:
 		match curSong:
 			"roses":
@@ -231,10 +222,20 @@ func update_text(text, _char, char_spr):
 			bfGrp.hide();
 			opponentGrp.hide();
 			
-	dialogue = set_text(text);
-	
+	match char_spr:
+		"cowboy":
+			opponentGrp.position = Vector2(285, 280);
+			bfGrp.position = Vector2(1015, 280);
+			gfGrp.position = Vector2(585, 280);
+			
+		"evilLeafy":
+			opponentGrp.position = Vector2(285, 280);
+			Sound.add_new_sound("evilLeafy");
+			
 	letter_count = 0;
 	letterID = 0;
+	
+	dialogue = set_text(text);
 	
 func start_song():
 	MusicManager._stop_music();

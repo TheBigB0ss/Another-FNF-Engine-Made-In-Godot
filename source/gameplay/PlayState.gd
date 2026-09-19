@@ -188,20 +188,20 @@ func _ready():
 	setup_hud();
 	updateScoreText();
 	
-	if SongData.isStoryMode && SongData.death_count <= 0 && !SongData.restartSong && !curSong.contains("-remix"):
+	if SongData.isStoryMode && SongData.death_count <= 0 && !SongData.restartSong && songDiff != "remix":
 		match curSong:
 			#"ugh": stage.ugh_intro();
 			#"guns": stage.guns_intro();
 			#"stress": stage.stress_intro();
 			"thorns": stage.start_cutscene();
 			
-	if curSong == "ugh" or curSong == "guns" or curSong == "stress":
+	if (curSong == "ugh" or curSong == "guns" or curSong == "stress") && songDiff != "remix":
 		stage.connect("end_tankman_cutscene", startCountdown);
 		
 	if Global.has_dialogue():
 		SongData.is_not_in_cutscene = false;
 		
-		if SongData.death_count <= 0 && SongData.isStoryMode && !SongData.restartSong:
+		if SongData.death_count <= 0 && SongData.isStoryMode && !SongData.restartSong && songDiff != "remix":
 			match curSong:
 				"thorns":
 					stage.connect("end_senpai_cutscene", start_dialogue);
@@ -308,7 +308,7 @@ func _process(delta: float) -> void:
 		if health <= 15:
 			AchievementPopUp.set_achievement('fucked up', true);
 			
-		if SongData.isStoryMode && playlist.size() == 1 && achievements_map.has(SongData.weekName):
+		if SongData.isStoryMode && playlist.size() == 1 && achievements_map.has(SongData.weekName) && songDiff != "remix":
 			var diffPrefix = songDiff if songDiff != "" else "normal";
 			AchievementPopUp.set_achievement(achievements_map[SongData.weekName][0][diffPrefix], true);
 			

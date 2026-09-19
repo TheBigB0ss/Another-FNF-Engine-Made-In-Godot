@@ -553,8 +553,10 @@ func _process(delta):
 		
 	if !is_playing:
 		if !is_equal_approx(timeBar.value, last_timebar_value):
-			update_song(timeBar.value, true);
 			curSection = min(SongData.get_section(Conductor.getSongTime), SongData.songSections.size() - 1);
+			curSection = clamp(curSection, 0, SongData.songSections.size() - 1);
+			
+			update_song(timeBar.value, true);
 			load_section();
 			
 		last_timebar_value = timeBar.value;

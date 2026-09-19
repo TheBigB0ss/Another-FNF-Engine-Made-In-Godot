@@ -70,7 +70,10 @@ func _ready() -> void:
 				
 				add_song(new_song, new_icon, new_color, new_weekName, new_weekDifficult);
 				
-	for i in HighScore.unlockSongs:
+	var unlocked_songs = HighScore.unlockSongs.keys();
+	unlocked_songs.sort();
+	
+	for i in unlocked_songs:
 		var new_song = i;
 		var new_icon = HighScore.unlockSongs[i]["icon"];
 		var new_color = HighScore.unlockSongs[i]["color"];
