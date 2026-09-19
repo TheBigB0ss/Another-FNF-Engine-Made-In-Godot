@@ -1,6 +1,5 @@
 extends Sprite2D
 
-var ratings = ["sick", "good", "bad", "shit", "miss"];
 var ratingPart = "";
 var folderPart = "";
 
@@ -22,6 +21,8 @@ func _ready() -> void:
 		folderPart = "default";
 		
 	coolRatingPos = Vector2(GlobalOptions.ratings_positions["rating"][0], GlobalOptions.ratings_positions["rating"][1]);
+	global_position = coolRatingPos;
+	
 	hide();
 	
 func _process(delta):
@@ -38,7 +39,7 @@ func pop_up_rating(rating):
 	
 	global_position = coolRatingPos;
 	
-	texture = load("res://assets/images/hud/rating/%s/%s.png"%[folderPart, ratings[rating] + ratingPart]);
+	texture = load("res://assets/images/hud/rating/%s/%s.png"%[folderPart, ["sick", "good", "bad", "shit", "miss"][rating] + ratingPart]);
 	modulate.a = 20.0;
 	show();
 	

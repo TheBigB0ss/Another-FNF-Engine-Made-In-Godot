@@ -277,7 +277,6 @@ func change_option(change):
 		if j == cur_option:
 			options_stuff.get_child(j).modulate.a = 1;
 			
-			
 var description_tween = null;
 func change_new_option(change):
 	Sound.playAudio("scrollMenu", false);

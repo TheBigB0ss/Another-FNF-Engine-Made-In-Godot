@@ -66,13 +66,14 @@ func _input(ev):
 var can_show_magenta = true;
 var magenta_time = 0.095;
 func _process(delta):
+	var target_scale = Vector2.ONE
 	if mouse_inside(achievementIcon):
-		achievementIcon.scale = Vector2(1.15, 1.15);
+		target_scale = Vector2(1.15, 1.15);
 		if Input.is_action_just_pressed("mouse_click") && !noSpam:
 			noSpam = true;
 			Global.changeScene("/menus/achievements_menu/achievements_menu", true, false);
 			
-	achievementIcon.scale = lerp(achievementIcon.scale, Vector2(1.0, 1.0), 1.0 - exp(-12.0 * delta));
+	achievementIcon.scale = lerp(achievementIcon.scale, target_scale, 1.0 - exp(-12.0 * delta));
 	
 	coolOptions.position.y = lerp(coolOptions.position.y, (720/2.0)-(coolOffset*curOption), 1.0 - exp(-9.0 * delta));
 	if !choiced:

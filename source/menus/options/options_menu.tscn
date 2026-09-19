@@ -62,9 +62,9 @@ offset_bottom = 720.0
 color = Color(0, 0, 0, 0.415686)
 metadata/_edit_use_anchors_ = true
 
-[node name="AlphabetObject" type="AnimatedSprite2D" parent="reset" unique_id=1353327913]
-position = Vector2(659.00006, 689.00006)
-scale = Vector2(0.65, 0.65)
+[node name="AlphabetObject" type="AnimatedSprite2D" parent="reset" unique_id=552523075]
+position = Vector2(658, 690)
+scale = Vector2(0.72, 0.72)
 script = ExtResource("4_5hxum")
 text = "Hold R to return to default settings"
 centred = true

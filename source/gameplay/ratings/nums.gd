@@ -25,6 +25,7 @@ func _ready() -> void:
 		numScore.append(load("res://assets/images/hud/rating/%s/nums/num%s%s.png"%[folderPart, i, ratingPart]));
 		
 	coolNumsPos = Vector2(GlobalOptions.ratings_positions["nums"][0], GlobalOptions.ratings_positions["nums"][1]);
+	global_position = coolNumsPos;
 	
 	hide();
 	

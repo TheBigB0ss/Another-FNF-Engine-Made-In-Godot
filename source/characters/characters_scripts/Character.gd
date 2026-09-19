@@ -145,6 +145,7 @@ func _ready():
 	curIcon = charData.get("HealthIcon", "no_icon");
 	camera_pos = charData.get("cameraPos", [0,0]);
 	anim_type = charData.get("anim type", anim_type);
+	animatedIcon = charData.get("AnimatedIcon", animatedIcon);
 	
 	for i in charData["Poses"].size():
 		animList.append(charData["Poses"][i]["Anim"]);
@@ -174,7 +175,6 @@ func _ready():
 	
 var prevState = null;
 var curNote:Note = null;
-var animNote:Note = null;
 var sing_timer = 0;
 func update_character_state(delta):
 	prevState = characterState;
@@ -189,18 +189,12 @@ func update_character_state(delta):
 	if curNote.isSustain:
 		characterState = CHARACTER_STATES.HOLDING if (curNote.is_pressing && curNote.sustainLength > 0) else CHARACTER_STATES.IDLE;
 		
-		if is_instance_valid(animNote) && animNote.curNoteAnim != curNote.curNoteAnim && !animNote.isSustain:
-			sing_timer = 0.060;
-			characterState = CHARACTER_STATES.SINGING;
-			_playAnim(animNote.curNoteAnim);
-			
 		if sing_timer > 0:
 			sing_timer -= delta;
 			sing_timer = max(sing_timer, 0.0);
 			return;
 			
 		if characterState == CHARACTER_STATES.HOLDING && curAnim != curNote.curNoteAnim:
-			sing_timer = 0;
 			_playAnim(curNote.curNoteAnim);
 			
 func _process(delta):
@@ -244,9 +238,6 @@ func _playAnim(anim = "", special = false):
 	characterScript.call_func("on_sing", [anim]);
 	
 	for i in animList.size():
-		#if is_instance_valid(curNote) && characterState == CHARACTER_STATES.HOLDING && anim.begins_with("sing") && curNote.curNoteAnim != anim:
-		#	anim = curNote.curNoteAnim;
-			
 		if animList[i] != anim:
 			continue;
 			
@@ -257,6 +248,7 @@ func _playAnim(anim = "", special = false):
 		if special_anim or special:
 			characterState = CHARACTER_STATES.SPECIAL;
 		if curAnim == "idle dance":
+			sing_timer = 0;
 			characterState = CHARACTER_STATES.IDLE;
 		if animList[i].begins_with("sing") && is_instance_valid(curNote):
 			characterState = CHARACTER_STATES.SINGING;
@@ -271,6 +263,7 @@ func _playAnim(anim = "", special = false):
 					reset_anim();
 					
 				CHARACTER_STATES.SINGING, CHARACTER_STATES.SPECIAL:
+					sing_timer = 0.060;
 					reset_anim();
 					
 		if animList[i].begins_with("sing") or charData["Poses"][i].has("Anim Time") or characterState == CHARACTER_STATES.SPECIAL:

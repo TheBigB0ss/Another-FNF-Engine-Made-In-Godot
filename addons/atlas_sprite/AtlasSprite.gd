@@ -283,3 +283,33 @@ func _get_property_list():
 	});
 	
 	return properties;
+	
+func get_rect():
+	var rect = Rect2();
+	var found = false;
+	
+	for i in symbols_elements.values():
+		if !i.visible or i.texture == null:
+			continue;
+			
+		var local_rect = Rect2(
+			i.position,
+			i.texture.get_size() * abs(i.scale)
+		);
+		if !found:
+			rect = local_rect;
+			found = true;
+		else:
+			rect = rect.merge(local_rect);
+			
+	return rect if found else Rect2();
+	
+func get_symbol_info(symbol_name, only_visible = false):
+	for i in symbols_elements.values():
+		if only_visible && !i.visible:
+			continue;
+			
+		if i.name == symbol_name:
+			return i;
+			
+	return null;

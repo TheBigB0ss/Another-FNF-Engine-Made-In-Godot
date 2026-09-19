@@ -83,6 +83,7 @@ func _ready():
 			
 	if changed:
 		HighScore.save_week_status();
+		update_weekScore();
 		
 	weeksSpr.position.y = float(480-coolOffset*curWeek);
 	
@@ -91,7 +92,6 @@ func _ready():
 		
 	SongData.weeks_data = weeks;
 	
-	changeMenuCharacter();
 	changeDiff(1);
 	changeWeek(Global.current_selected["storyMode"]);
 	
@@ -130,10 +130,14 @@ func _input(ev):
 				
 var confirm_timer = 0.075;
 func _process(delta):
+	changeMenuCharacter();
+	
 	weeksSpr.position.y = lerp(float(weeksSpr.position.y), float(480-coolOffset*curWeek), 1.0 - exp(-12.0 * delta));
 	
 	leftArrow.position.x = lerp(leftArrow.position.x, diffSpr.position.x - diffSpr.texture.get_width() / 2.0 - leftArrow.texture.get_width() + 110, 1.0 - exp(-8.0 * delta));
 	rightArrow.position.x = lerp(rightArrow.position.x, diffSpr.position.x + diffSpr.texture.get_width() / 2.0 - 95, 1.0 - exp(-8.0 * delta));
+	
+	scoreText.text = "Week Score: %s"%[week_score];
 	
 	if !choiced:
 		return;
@@ -143,8 +147,6 @@ func _process(delta):
 		weeksSpr.get_child(curWeek).modulate = (Color.WHITE if weeksSpr.get_child(curWeek).modulate == Color.CYAN else Color.CYAN);
 		confirm_timer = 0.075;
 		
-	scoreText.text = "Week Score: %s"%[week_score];
-	
 func go_to_week():
 	var is_unlocked = HighScore.unlockweek(weeks[curWeek]["lastWeek"], weeks[curWeek]["lastWeek"], weeks[curWeek]["weekName"], weeks[curWeek]["isLocked"]);
 	
@@ -166,8 +168,9 @@ func go_to_week():
 	SongData.week_songs = songsList;
 	SongData.week_diffs = diffsList;
 	SongData.isStoryMode = storyMode;
-	SongData.weekName = weeks[curWeek]["weekName"];
-	SongData.week = weeks[curWeek]["weekName"] if curWeek < weeks.size() else ""
+	
+	SongData.weekName = weeks[curWeek]["weekName"] if curWeek < weeks.size() else "";
+	SongData.week = weeks[curWeek]["weekName"] if curWeek < weeks.size() else "";
 	
 	songPath = songsList[0];
 	SongData.loadJson(songPath, diffsList);
@@ -255,15 +258,15 @@ func updateWeek():
 			
 	weekTitle.text = "week locked" if !is_unlocked else weeks[curWeek]["weekDescription"];
 	
-	changeMenuCharacter();
 	update_weekScore();
 	
 	for i in [menu_gf, menu_bf, menu_opponent]:
-		if i.get_child(0) == null:
-			continue;
+		if i.get_child_count() > 0:
+			if i.get_child(0) == null:
+				continue;
+				
+			i.get_child(0).modulate = Color("#000000") if !is_unlocked else Color("#ffffff");
 			
-		i.get_child(0).modulate = Color("#000000") if !is_unlocked else Color("#ffffff");
-		
 func changeMenuCharacter():
 	var yellow_fellas = {
 		"bf": [menu_bf, 1],
@@ -276,9 +279,10 @@ func changeMenuCharacter():
 		var charName = weeks[curWeek]["weekCharacters"][yellow_fellas[i][1]];
 		
 		if charName == "":
-			if char_grp.get_child(0) != null:
-				char_grp.get_child(0).queue_free();
-				
+			if char_grp.get_child_count() > 0:
+				if char_grp.get_child(0) != null:
+					char_grp.get_child(0).queue_free();
+					
 			continue;
 			
 		if char_grp.get_child_count() > 0:

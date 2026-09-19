@@ -16,8 +16,12 @@ var opponent = null;
 var dialogue_spr = "";
 var box_pixel_part = "";
 var is_pixel_box = true;
+
 var curSong = "";
+
 var cur_dialogue = 0;
+var dialogue = "";
+var letterID = 0;
 
 var dialogue_array = [];
 var characters_array = [];
@@ -39,7 +43,6 @@ func start():
 			characters_spr_array.append(get_json_text()["structure"][i]["character"]);
 			dialogue_array.append(get_json_text()["structure"][i]["text"]);
 			
-	box_text.visible_characters = 0;
 	is_pixel_box = SongData.isPixelStage;
 	
 	if is_pixel_box:
@@ -49,7 +52,6 @@ func start():
 		the_box.texture_filter = AnimatedSprite2D.TEXTURE_FILTER_NEAREST;
 		box_pixel_part = "pixel";
 	else:
-		cool_hand.hide();
 		the_box.position = Vector2(650, 535);
 		box_text.position = Vector2(165, 490);
 		box_text.modulate = Color("#000000");
@@ -82,7 +84,6 @@ func start():
 				MusicManager._play_song("Lunchbox", "music", true);
 				
 		"thorns":
-			cool_hand.hide();
 			opponentGrp.position = Vector2(220, 240);
 			MusicManager._play_song("LunchboxScary", "music", true);
 		_:
@@ -96,10 +97,9 @@ func getTxt():
 	var txtData = [];
 	var txtTexts = [];
 	
-	match curSong:
-		"senpai", "roses", "thorns":
-			is_joke_dialogue = (randi_range(0, 3000) <= 5);
-			
+	if curSong in ["senpai", "roses", "thorns"]:
+		is_joke_dialogue = (randi_range(0, 3000) <= 5);
+		
 	var path_file = ("res://assets/songs/%s/chart/%sDialogue.txt"%[curSong, curSong]) if !is_joke_dialogue else ("res://assets/songs/%s/chart/%sDialogue-joke.txt"%[curSong, curSong]);
 	var readTxt = FileAccess.open(path_file, FileAccess.READ);
 	txtData = readTxt.get_as_text().split("\n");
@@ -111,51 +111,58 @@ func getTxt():
 	return txtTexts;
 	
 func get_json_text():
-	var dialogue_data = {};
-	
 	var path_file = "res://assets/songs/%s/chart/%sDialogue.json"%[curSong, curSong];
 	var jsonFile = FileAccess.open(path_file, FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
-	dialogue_data = jsonData.get_data();
-	jsonFile.close();
 	
-	return dialogue_data;
+	return jsonData.get_data();
 	
+var dialogue_timer = 0;
 func _process(delta):
 	dialogue_timer += 1*delta;
-	if dialogue_timer >= 0.05 && !SongData.is_not_in_cutscene && !Global.is_on_video:
-		if box_text.visible_characters <= len(box_text.text):
-			box_text.visible_characters += 1;
+	
+	var textSpeed = 0.05 if !Input.is_action_pressed("ui_shift") else 0.01;
+	
+	if dialogue_timer >= textSpeed && !SongData.is_not_in_cutscene && !Global.is_on_video:
+		if letterID <= len(dialogue):
+			box_text.text = dialogue.substr(0, letterID);
+			
+			if dialogue[letterID-1] != " ":
+				if characters_spr_array[cur_dialogue] != "evilLeafy":
+					Sound.playAudio("pixelText", false);
+					
+			letterID += 1;
+			
 			dialogue_timer = 0;
-			if characters_spr_array[cur_dialogue] != "evilLeafy":
-				Sound.playAudio("pixelText", false);
+			
+	if Input.is_action_just_pressed("ui_accept") && !SongData.is_not_in_cutscene:
+		if letterID - 1 < len(dialogue):
+			letterID = len(dialogue);
+			
+		elif letterID - 1 == len(dialogue):
+			cur_dialogue += 1;
+			Sound.playAudio("clickText", false);
+			
+			if !cur_dialogue > dialogue_array.size()-1:
+				update_text(dialogue_array[cur_dialogue], characters_array[cur_dialogue], characters_spr_array[cur_dialogue]);
+			else:
+				start_song();
 				
-		if is_pixel_box:
-			cool_hand.visible = (box_text.visible_characters >= len(box_text.text));
-			
-	if Input.is_action_just_pressed("ui_accept") && !SongData.is_not_in_cutscene && box_text.visible_characters-1 < len(box_text.text):
-		box_text.visible_characters = len(box_text.text);
+	if is_pixel_box:
+		cool_hand.visible = (letterID >= len(dialogue));
 		
-	if Input.is_action_just_pressed("ui_accept") && !SongData.is_not_in_cutscene && box_text.visible_characters-1 == len(box_text.text):
-		cur_dialogue += 1;
-		Sound.playAudio("clickText", false);
-		if !cur_dialogue > dialogue_array.size()-1:
-			update_text(dialogue_array[cur_dialogue], characters_array[cur_dialogue], characters_spr_array[cur_dialogue]);
-		else:
-			start_song();
-			
-var dialogue_timer = 0;
 var letter_count = 0;
-
 func set_text(text):
 	var new_text = "";
-	for i in text:
-		new_text += i;
-		letter_count += 1;
+	
+	while letter_count < len(text):
 		if letter_count % 44 == 0 && len(new_text) > 0:
 			new_text += "\n";
 			
+		new_text += text[letter_count];
+		letter_count += 1;
+		
 	return new_text;
 	
 var dialogue_path = {
@@ -170,13 +177,9 @@ func remove_chars(_char):
 		_char.remove_child(i);
 		
 func update_text(text, _char, char_spr):
-	box_text.text = "";
-	letter_count = 0;
-	
-	remove_chars(opponentGrp);
-	remove_chars(bfGrp);
-	remove_chars(gfGrp);
-	
+	for i in [opponentGrp, bfGrp, gfGrp]:
+		remove_chars(i);
+		
 	match char_spr:
 		"cowboy":
 			opponentGrp.position = Vector2(285, 280);
@@ -187,7 +190,7 @@ func update_text(text, _char, char_spr):
 			opponentGrp.position = Vector2(285, 280);
 			bfGrp.position = Vector2(1015, 280);
 			gfGrp.position = Vector2(585, 280);
-			Sound.playAudio("evilLeafy", false);
+			Sound.add_new_sound("evilLeafy");
 			
 	if is_pixel_box:
 		match curSong:
@@ -201,26 +204,19 @@ func update_text(text, _char, char_spr):
 	if dialogue_spr == "Ballon":
 		the_box.play(dialogue_path[_char]);
 		
+	var portrait = load("res://source/characters/characters_portraits/%s.tscn"%[char_spr]).instantiate();
 	match _char:
 		"dad":
-			opponent = load("res://source/characters/characters_portraits/%s.tscn"%[char_spr]).instantiate();
+			opponent = portrait;
 			opponentGrp.add_child(opponent);
 			
-			if char_spr == "spirit":
-				opponent.is_trans = is_joke_dialogue;
-				if opponent.is_trans:
-					opponent.reload();
-					
-			if curSong == "roses":
-				opponentGrp.visible = is_joke_dialogue;
-			else:
-				opponentGrp.show();
-				
+			opponentGrp.visible = curSong != "roses" or is_joke_dialogue;
+			
 			gfGrp.hide();
 			bfGrp.hide();
 			
 		"bf":
-			bf = load("res://source/characters/characters_portraits/%s.tscn"%[char_spr]).instantiate();
+			bf = portrait;
 			bfGrp.add_child(bf);
 			
 			gfGrp.hide();
@@ -228,15 +224,17 @@ func update_text(text, _char, char_spr):
 			opponentGrp.hide();
 			
 		"gf":
-			gf = load("res://source/characters/characters_portraits/%s.tscn"%[char_spr]).instantiate();
+			gf = portrait;
 			gfGrp.add_child(gf);
 			
 			gfGrp.show();
 			bfGrp.hide();
 			opponentGrp.hide();
 			
-	box_text.text = set_text(text);
-	box_text.visible_characters = 0;
+	dialogue = set_text(text);
+	
+	letter_count = 0;
+	letterID = 0;
 	
 func start_song():
 	MusicManager._stop_music();

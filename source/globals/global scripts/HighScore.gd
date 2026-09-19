@@ -65,20 +65,28 @@ func unlockweek(week, last_week, week_name, week_locked):
 func update_version():
 	var version = 1;
 	
-	if score_data.get("version", 0) != version: clearScore();
-	if rank_data.get("version", 0) != version: clearRank();
-	if percent_data.get("version", 0) != version: clearPercent();
-	
+	if score_data.get("version", 0) != version:
+		clearScore();
+	if rank_data.get("version", 0) != version:
+		clearRank();
+	if percent_data.get("version", 0) != version:
+		clearPercent();
+		
 	score_data["version"] = version;
 	rank_data["version"] = version;
 	percent_data["version"] = version;
 	
-func save_score(): saveJson("Score", score_data);
-func save_rank(): saveJson("RankList", rank_data);
-func save_percent(): saveJson("SongsPercent", percent_data);
-func save_song(): saveJson("UnlockedSongsList", unlockSongs);
-func save_week_status(): saveJson("WeekStatus", week_status);
-
+func save_score():
+	saveJson("Score", score_data);
+func save_rank():
+	saveJson("RankList", rank_data);
+func save_percent():
+	saveJson("SongsPercent", percent_data);
+func save_song():
+	saveJson("UnlockedSongsList", unlockSongs);
+func save_week_status():
+	saveJson("WeekStatus", week_status);
+	
 func clearRank(): rank_data = {}; save_rank();
 func clearPercent(): percent_data = {}; save_percent();
 func clearScore(): score_data = {}; save_score();

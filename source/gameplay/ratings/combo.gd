@@ -22,6 +22,8 @@ func _ready() -> void:
 		
 	texture = load("res://assets/images/hud/rating/%s/combo%s.png"%[folderPart, ratingPart]);
 	coolComboPos = Vector2(GlobalOptions.ratings_positions["combo"][0], GlobalOptions.ratings_positions["combo"][1]);
+	global_position = coolComboPos;
+	
 	hide();
 	
 func _process(delta):

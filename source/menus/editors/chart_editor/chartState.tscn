@@ -3,18 +3,21 @@
 [ext_resource type="Script" uid="uid://bsv6b7kj5cykg" path="res://source/menus/editors/chart_editor/chartState.gd" id="1_0k01q"]
 [ext_resource type="Texture2D" uid="uid://dxeyulpuj8hm0" path="res://assets/images/menuBgs/chartBg.png" id="2_xob0g"]
 [ext_resource type="Script" uid="uid://g5ydanm2cc3t" path="res://source/menus/editors/chart_editor/grid.gd" id="3_nvrt8"]
-[ext_resource type="Texture2D" uid="uid://d0yc6533ni5yr" path="res://assets/images/editors/chart preview/select_box.png" id="4_qx6eb"]
+[ext_resource type="Texture2D" uid="uid://d0yc6533ni5yr" path="res://assets/images/editors/chart_editor/select_box.png" id="4_qx6eb"]
 [ext_resource type="Script" uid="uid://l08oojy4jhie" path="res://source/gameplay/icons/icon.gd" id="5_orogo"]
 [ext_resource type="PackedScene" uid="uid://cw7psh2l04k68" path="res://source/menus/editors/chart_editor/characters/chart_bf.tscn" id="6_orogo"]
-[ext_resource type="Texture2D" uid="uid://butl2egj5i38n" path="res://assets/images/hud/timeBar.png" id="6_w8f1m"]
-[ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="7_hu1bj"]
-[ext_resource type="Texture2D" uid="uid://b23ynj36pxt2r" path="res://assets/images/editors/offset_ui/ui_pointer.png" id="7_qx6eb"]
+[ext_resource type="FontFile" uid="uid://csh7nfehf3sav" path="res://assets/fonts/Symtext.ttf" id="7_aeui8"]
+[ext_resource type="Script" uid="uid://bbfxkbn26igir" path="res://source/menus/editors/chart_editor/slider.gd" id="7_mqlbf"]
 [ext_resource type="PackedScene" uid="uid://duifqca5v1vo3" path="res://source/menus/editors/chart_editor/characters/enemy_chart.tscn" id="7_w8f1m"]
+[ext_resource type="Texture2D" uid="uid://b2uttpoy8n807" path="res://assets/images/editors/chart_editor/pause.png" id="9_eeujy"]
 [ext_resource type="Script" uid="uid://i4swiwalnw7t" path="res://source/menus/editors/chart_editor/chartTab.gd" id="10_hab41"]
+[ext_resource type="Texture2D" uid="uid://ba5hywog5tb4" path="res://assets/images/editors/chart_editor/play.png" id="10_ucusq"]
+[ext_resource type="Texture2D" uid="uid://cmr180oaja7g7" path="res://assets/images/editors/chart_editor/forward.png" id="11_48go5"]
 [ext_resource type="Script" uid="uid://cvh168tg37tji" path="res://source/menus/editors/chart_editor/chartWindow.gd" id="11_xob0g"]
+[ext_resource type="Texture2D" uid="uid://bdrowk7vc6nh4" path="res://assets/images/editors/chart_editor/backwards.png" id="12_6rgof"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_xob0g"]
-font = ExtResource("7_hu1bj")
+font = ExtResource("7_aeui8")
 
 [node name="ChartState" type="Node2D" unique_id=1858587677]
 script = ExtResource("1_0k01q")
@@ -90,7 +93,7 @@ color = Color(0.21720988, 0.21720988, 0.21720988, 1)
 
 [node name="bottomBar" type="ColorRect" parent="chart_UI/chart_objs" unique_id=415317761]
 offset_left = -922.0
-offset_top = 818.0
+offset_top = 806.0
 offset_right = 358.0
 offset_bottom = 894.0
 color = Color(0.21568628, 0.21568628, 0.21568628, 1)
@@ -103,72 +106,78 @@ offset_top = -407.0
 offset_right = -836.0
 offset_bottom = -367.0
 
-[node name="timeBar" type="TextureProgressBar" parent="chart_UI/chart_objs/infos" unique_id=882178308]
-layout_mode = 0
-offset_left = 378.0
-offset_top = 1239.0
-offset_right = 778.0
-offset_bottom = 1258.0
-max_value = 1.0
-texture_under = ExtResource("6_w8f1m")
-texture_progress = ExtResource("6_w8f1m")
-tint_under = Color(0, 0, 0, 1)
-
 [node name="chart_info" type="Label" parent="chart_UI/chart_objs/infos" unique_id=1099617167]
 layout_mode = 0
 offset_left = -42.0
-offset_top = 1269.0
-offset_right = 999.0
-offset_bottom = 1284.0
-text = "Section: %s        Step: %s        Beat: %s                                               0:00/0:00        BPM: "
+offset_top = 1247.0
+offset_right = 912.0
+offset_bottom = 1271.0
+text = "Section: %s        Step: %s        Beat: %s                                                                  0:00/0:00"
 label_settings = SubResource("LabelSettings_xob0g")
-
-[node name="songPointer" type="Sprite2D" parent="chart_UI/chart_objs/infos" unique_id=889107405]
-visible = false
-texture_filter = 1
-position = Vector2(382, 1231)
-scale = Vector2(0.185, 0.185)
-texture = ExtResource("7_qx6eb")
 
 [node name="play" type="Button" parent="chart_UI/chart_objs/infos" unique_id=232379909]
 layout_mode = 0
-offset_left = 537.0
-offset_top = 1264.0
-offset_right = 602.0
-offset_bottom = 1295.0
-text = "play"
+offset_left = 547.0
+offset_top = 1217.2301
+offset_right = 594.0
+offset_bottom = 1286.2301
+scale = Vector2(0.67, 0.67)
+icon = ExtResource("9_eeujy")
+flat = true
 
 [node name="previousSection" type="Button" parent="chart_UI/chart_objs/infos" unique_id=1838673618]
 layout_mode = 0
-offset_left = 494.0
-offset_top = 1264.0
-offset_right = 535.0
-offset_bottom = 1295.0
-text = "<<"
+offset_left = 542.0
+offset_top = 1263.23
+offset_right = 578.0
+offset_bottom = 1332.23
+rotation = 3.1415927
+scale = Vector2(0.67, 0.67)
+icon = ExtResource("10_ucusq")
+flat = true
+icon_alignment = 2
 
 [node name="nextSection" type="Button" parent="chart_UI/chart_objs/infos" unique_id=1792249074]
 layout_mode = 0
-offset_left = 604.0
-offset_top = 1264.0
-offset_right = 645.0
-offset_bottom = 1295.0
-text = ">>"
+offset_left = 584.0
+offset_top = 1217.0
+offset_right = 620.0
+offset_bottom = 1286.0
+scale = Vector2(0.67, 0.67)
+icon = ExtResource("10_ucusq")
+flat = true
+icon_alignment = 1
 
 [node name="lastSection" type="Button" parent="chart_UI/chart_objs/infos" unique_id=2045088267]
 layout_mode = 0
-offset_left = 647.0
-offset_top = 1264.0
-offset_right = 688.0
-offset_bottom = 1295.0
-text = ">|"
+offset_left = 605.0
+offset_top = 1228.0
+offset_right = 646.0
+offset_bottom = 1265.0
+scale = Vector2(0.67, 0.67)
+icon = ExtResource("11_48go5")
+flat = true
 
 [node name="firstSection" type="Button" parent="chart_UI/chart_objs/infos" unique_id=962223753]
 layout_mode = 0
-offset_left = 451.0
-offset_top = 1264.0
-offset_right = 492.0
-offset_bottom = 1295.0
-text = "|<"
+offset_left = 495.0
+offset_top = 1228.0
+offset_right = 536.0
+offset_bottom = 1265.0
+scale = Vector2(0.67, 0.67)
+icon = ExtResource("12_6rgof")
+flat = true
+icon_alignment = 1
+
+[node name="BarSlider" type="Control" parent="chart_UI/chart_objs/infos" unique_id=1246936284]
+anchors_preset = 0
+offset_left = 441.00003
+offset_top = 1278.0
+offset_right = 481.00003
+offset_bottom = 1318.0
+scale = Vector2(0.695, 0.695)
+script = ExtResource("7_mqlbf")
+metadata/_custom_type_script = "uid://bbfxkbn26igir"
 
 [node name="chartTab" type="Control" parent="chart_UI/chart_objs" unique_id=1291020538 node_paths=PackedStringArray("mainScene")]
 layout_mode = 3
@@ -659,7 +668,7 @@ metadata/_custom_type_script = "uid://cvh168tg37tji"
 [node name="ChartEnemy" parent="chart_UI/chart_objs/chartTab/opponentPreviewWindow" unique_id=246031562 instance=ExtResource("7_w8f1m")]
 position = Vector2(100, 139)
 scale = Vector2(0.545, 0.545)
-frame = 6
+frame = 1
 offset = Vector2(5, -10)
 animation = 1
 
@@ -675,7 +684,7 @@ metadata/_custom_type_script = "uid://cvh168tg37tji"
 [node name="ChartBf" parent="chart_UI/chart_objs/chartTab/playerPreviewWindow" unique_id=145860512 instance=ExtResource("6_orogo")]
 position = Vector2(32, 141)
 scale = Vector2(0.765, 0.765)
-frame = 5
+frame = 0
 
 [node name="chart_inst" type="AudioStreamPlayer" parent="." unique_id=164621937]
 

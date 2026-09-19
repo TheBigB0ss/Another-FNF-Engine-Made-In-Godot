@@ -186,8 +186,6 @@ func _ready():
 	
 	startSong();
 	setup_hud();
-	setup_hud_scroll();
-	setup_classic_hud();
 	updateScoreText();
 	
 	if SongData.isStoryMode && SongData.death_count <= 0 && !SongData.restartSong && !curSong.contains("-remix"):
@@ -368,8 +366,7 @@ func pressedNote(note):
 		
 	msText.modulate.a = 1.0;
 	msText.text = str(snapped(ms, 0.01), "Ms");
-	msText.position.x = rating_spr.position.x - msText.size.x*0.5;
-	msText.position.y = rating_spr.position.y + (msText.size.x*0.5)+20;
+	msText.position = Vector2(rating_spr.position.x - msText.size.x*0.5, rating_spr.position.y + (msText.size.x*0.5)+20);
 	
 	notesPlayed += rating_data[rating]["Percent"];
 	score += rating_data[rating]["Score"]+randi_range(0, 15);
@@ -522,7 +519,7 @@ var RANKS = [
 	{"Rank Condition": func(): return goods > 0, "RANK": "GFC"},
 	{"Rank Condition": func(): return sicks > 0, "RANK": "SFC"},
 ];
-func newRank():
+func getRank():
 	for i in RANKS:
 		if i["Rank Condition"].call():
 			return i["RANK"];
@@ -604,7 +601,6 @@ func startCountdown():
 	is_on_intro = true;
 	start_song = true;
 	
-	var countdown_audios = ["intro3", "intro2", "intro1", "introGo"];
 	var countdownPath = "default" if !SongData.isPixelStage else "pixel";
 	var idleCounter = 0;
 	
@@ -661,9 +657,9 @@ func startCountdown():
 			
 			continue;
 			
-		Sound.playAudio(countdown_audios[i], SongData.isPixelStage);
+		Sound.playAudio(["intro3", "intro2", "intro1", "introGo"][i], SongData.isPixelStage);
 		if GlobalOptions.updated_hud == "classic hud" && i == 0:
-			continue;i
+			continue;
 			
 		set_contdownSpr(countdownPath, countdownset[countdownPath][i] + ratingPart);
 		
@@ -769,7 +765,7 @@ func splash_note(strum, anim):
 	
 func updateScoreText():
 	ratingName = setPercent();
-	rankName = newRank();
+	rankName = getRank();
 	accuracyPercent = snapped(float(notesPlayed/totalHits)*100, 0.01) if totalHits > 0 else 0.0;
 	
 	if GlobalOptions.isUsingBot:
@@ -807,39 +803,35 @@ func setup_hud():
 		i.visible = GlobalOptions.timeBar_mode != "disable";
 		
 	if GlobalOptions.hide_hud:
-		for i in [$hud/Hud_Layer/healthBar, $hud/Hud_Layer/icons, $hud/Hud_Layer/scoreLabel, $hud/Hud_Layer/timeLabel, $hud/Hud_Layer/timeBar]:
+		for i in [healthBar, iconP1, iconP2, scoreText, timeText, timeBar]:
 			i.hide();
 			
 	ratingText.visible = GlobalOptions.show_ratingLabel;
 	msText.visible = GlobalOptions.showMsText;
 	
-func setup_hud_scroll():
 	if GlobalOptions.middle_scroll:
 		playerStrum.position.x = 478;
 		opponentStrum.hide();
 		
 	if GlobalOptions.down_scroll:
-		$hud/Hud_Layer/healthBar.position.y = 60;
-		$hud/Hud_Layer/timeBar.position.y = 680;
-		$hud/Hud_Layer/scoreLabel.position.y = 85;
-		$hud/Hud_Layer/timeLabel.position.y = 675;
+		healthBar.position.y = 60;
+		timeBar.position.y = 680;
+		scoreText.position.y = 85;
+		timeText.position.y = 675;
 		
 		for i in [playerStrum, opponentStrum]:
 			i.position.y = 620;
 		for i in [iconP1, iconP2]:
 			i.position.y = 65;
 			
-func setup_classic_hud():
-	if GlobalOptions.updated_hud != "classic hud":
-		return;
+	if GlobalOptions.updated_hud == "classic hud":
+		if !GlobalOptions.middle_scroll:
+			playerStrum.position.x -= 80;
+			
+		scoreText.text = "Score: %s"%[int(score)];
+		scoreText.position = Vector2(620, 90 if GlobalOptions.down_scroll else 680);
+		scoreText.scale = Vector2.ONE * 0.03;
 		
-	if !GlobalOptions.middle_scroll:
-		playerStrum.position.x -= 80;
-		
-	scoreText.text = "Score: %s"%[int(score)];
-	scoreText.position = Vector2(620, 90 if GlobalOptions.down_scroll else 680);
-	scoreText.scale = Vector2.ONE * 0.03;
-	
 func step_hit(_step):
 	if SongData.songSections[Conductor.curSection]["changeBPM"]:
 		Conductor.changeBpm(SongData.songSections[Conductor.curSection]["bpm"]);

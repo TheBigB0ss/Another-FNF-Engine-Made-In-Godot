@@ -59,7 +59,7 @@ func _ready():
 	fileTab.get_popup().add_item("save events", 2);
 	
 	helpTab.get_popup().add_item("about", 0);
-	helpTab.get_popup().add_item("sfx", 1);
+	helpTab.get_popup().add_item("audio", 1);
 	
 	chartTab.get_popup().add_item("song meta", 0);
 	chartTab.get_popup().add_item("section meta", 1);

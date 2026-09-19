@@ -305,6 +305,7 @@ func convert_codenameChart(songChart, songName, eventsPath = ""):
 	
 	var metaData = {};
 	var metaPath = "res://assets/songs/%s/chart/meta.json"%[songName];
+	
 	if FileAccess.file_exists(metaPath):
 		var metaJsonFile = FileAccess.open(eventsPath, FileAccess.READ);
 		var metaJsonData = JSON.new();

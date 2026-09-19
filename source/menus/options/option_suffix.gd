@@ -29,10 +29,12 @@ func _ready() -> void:
 		alphabetGrp.add_child(alphabet)
 		alphabetGrp.position.x = 70;
 		
-		var frame_texture = alphabet.get_letter(alphabet.letters.size()-1).sprite_frames.get_frame_texture(alphabet.get_letter(alphabet.letters.size()-1).animation, alphabet.get_letter(alphabet.letters.size()-1).frame).get_width();
-		var frame_widht = frame_texture*alphabet.get_letter(alphabet.letters.size()-1).sprite_frames.get_frame_count(alphabet.get_letter(alphabet.letters.size()-1).animation);
+		var last_letter = alphabet.get_last_letter();
 		
-		suffix_x = alphabet.get_letter(alphabet.letters.size()-1).position.x + frame_widht + 10;
+		var frame_texture = last_letter.sprite_frames.get_frame_texture(last_letter.animation, last_letter.frame).get_width();
+		var frame_widht = frame_texture * last_letter.sprite_frames.get_frame_count(last_letter.animation);
+		
+		suffix_x = last_letter.position.x + frame_widht + 10;
 		suffix_y = alphabet.position.y;
 		
 		match typeof(new_options[i].opt_type):
@@ -48,7 +50,7 @@ func _ready() -> void:
 				
 			TYPE_BOOL:
 				var check_sprite = AnimatedSprite2D.new();
-				check_sprite.sprite_frames = load("res://assets/images/options menu/checkboxThingie.res");
+				check_sprite.sprite_frames = preload("res://assets/images/checkboxThingie.res");
 				check_sprite.position = Vector2(suffix_x, suffix_y);
 				checkBoxGrp.add_child(check_sprite);
 				update_bool_spr(new_options[i].opt_type);

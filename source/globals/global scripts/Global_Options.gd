@@ -71,10 +71,8 @@ func _ready():
 	#reset_settings();
 	load_settings();
 	
-	for i in range(0, 1):
-		for j in keys.keys():
-			keys_list.append(j);
-			
+	keys_list = keys.keys();
+	
 	var defaultList = get_option_list();
 	
 	for i in defaultList:
@@ -541,7 +539,7 @@ func get_option_list():
 				"index": 0
 			},
 			"icon type": {
-				"list": ["default", "disabled"],
+				"list": ["default", "kade icon", "funny icon", "disabled"],
 				"index": 0
 			},
 			"rating mode": {

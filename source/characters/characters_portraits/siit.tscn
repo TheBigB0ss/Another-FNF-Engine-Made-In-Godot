@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://cimqmas8671y5"]
+
+[ext_resource type="Texture2D" uid="uid://bok87s7wqpv05" path="res://assets/images/portraits/characters/siit.png" id="1_83iwh"]
+[ext_resource type="Script" uid="uid://essfoa0h4nwy" path="res://source/alphabet/alphabetObject.gd" id="2_vh32r"]
+
+[node name="siit" type="Sprite2D" unique_id=1743516393]
+texture_filter = 1
+scale = Vector2(5.4, 5.4)
+texture = ExtResource("1_83iwh")
+
+[node name="AlphabetObject" type="AnimatedSprite2D" parent="." unique_id=897603921]
+position = Vector2(9.536743e-07, 23.518517)
+scale = Vector2(0.06, 0.06)
+script = ExtResource("2_vh32r")
+text = "hi my name is siit :D"
+centred = true
+metadata/_custom_type_script = "uid://essfoa0h4nwy"
+
+[node name="AlphabetObject2" type="AnimatedSprite2D" parent="." unique_id=145642090]
+position = Vector2(-10.925925, -15.555554)
+rotation = -0.47822022
+scale = Vector2(0.11, 0.11)
+script = ExtResource("2_vh32r")
+text = "bow"
+centred = true
+metadata/_custom_type_script = "uid://essfoa0h4nwy"

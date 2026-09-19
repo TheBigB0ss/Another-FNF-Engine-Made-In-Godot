@@ -188,3 +188,20 @@ func play(anim):
 	timer = 0;
 	frame = 0;
 	queue_redraw();
+	
+func get_rect():
+	if frames.is_empty():
+		return Rect2();
+		
+	var currentFrame = get_frame_info(frames[animation])[frame];
+	var size = Vector2(
+		currentFrame["frameWidth"],
+		currentFrame["frameHeight"]
+	) * abs(scale);
+	
+	var pos = global_position;
+	
+	if sprite_centered:
+		pos -= size / 2.0;
+		
+	return Rect2(pos, size);

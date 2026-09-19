@@ -10,9 +10,12 @@ func on_note_hit(_note:Note):
 	velocity = Vector2(-randi_range(0, 10),-randi_range(140, 175));
 	
 	var opponent = get_game_var("dad");
+	
+	var funny_directions = [":left:", ":down:", ":up:", ":right:"] if randi_range(0, 100) <= 46 else ["left!", "down!", "up!", "right!"]
+	
 	if get_game_var("curSong") == "tutorial":
 		var directionText = Alphabet.new();
-		directionText._creat_word(["left!", "down!", "up!", "right!"][_note.noteData]);
+		directionText._creat_word(funny_directions[_note.noteData]);
 		directionText.position = Vector2(opponent.position.x-randi_range(-120, 200), opponent.position.y-randi_range(180, 290));
 		directionText.z_index = opponent.z_index+1;
 		directionText.modulate.a = 3.5;

@@ -5,12 +5,9 @@ extends Node2D
 @onready var cur_anim_text = $"offset_layer/TabContainer/anim settings/current_anim";
 @onready var cur_frame_text = $"offset_layer/TabContainer/anim settings/current_frame";
 @onready var pos_cross = $cross;
-@onready var frame_pointer = $"offset_layer/TabContainer/anim settings/frames_ui/pointer";
-@onready var frame_bar = $"offset_layer/TabContainer/anim settings/frames_ui/TextureProgressBar";
-@onready var frame_arrow_left = $"offset_layer/TabContainer/anim settings/frames_ui/last_frame";
-@onready var frame_arrow_right = $"offset_layer/TabContainer/anim settings/frames_ui/next_frame";
-@onready var frame_arrow_leftWall = $"offset_layer/TabContainer/anim settings/frames_ui/arrow_wall_left";
-@onready var frame_arrow_rightWall = $"offset_layer/TabContainer/anim settings/frames_ui/arrow_wall_right";
+
+@onready var frame_slider = $"offset_layer/TabContainer/anim settings/frames_ui/AnimationSlider";
+
 @onready var camera = $Camera2D;
 
 @onready var ratingSpr = $rating_layer/rating;
@@ -29,16 +26,14 @@ var characterJson = {};
 var characterData = [];
 var offset_count = 0;
 
-var pointer_starter = Vector2.ZERO;
-
 var charScale = Vector2.ONE;
 
 func _ready():
-	pointer_starter = frame_pointer.position;
-	
 	Discord.update_discord_info("offset menu", "Is in menus");
 	SongData.isOnDeathScreen = false;
 	MusicManager._play_song(GlobalOptions.updated_pause_music, "music", true);
+	
+	frame_slider.value_changed.connect(change_character_frame);
 	
 	if GlobalOptions.rating_mode == "hud element":
 		for i in [ratingSpr, comboSpr, numsSpr]:
@@ -178,8 +173,8 @@ func set_rating_pos():
 		$character.show();
 		$cross.show();
 		
-func mouse_inside(spr, texture):
-	var size = texture.get_size() * spr.scale
+func mouse_inside(spr):
+	var size = spr.texture.get_size() * spr.scale
 	var mouse = spr.get_global_mouse_position();
 	if mouse.x > spr.global_position.x - size.x / 2 && mouse.x < spr.global_position.x + size.x / 2 && mouse.y > spr.global_position.y - size.y / 2 && mouse.y < spr.global_position.y + size.y / 2:
 		return true;
@@ -187,28 +182,32 @@ func mouse_inside(spr, texture):
 	return false;
 	
 var char_scale = Vector2.ZERO;
-func mouse_inside_character(spr, offset):
+func mouse_inside_character(spr):
 	var mouse = get_global_mouse_position();
-	var size = null;
+	var rect = Rect2();
 	
-	if spr is AtlasCharacter or spr is SparrowCharacter or spr is DeadSparrowCharacter or spr is DeadAtlasCharacter:
+	if spr is AnimatedSprite2D:
+		var size = spr.sprite_frames.get_frame_texture(spr.animation, spr.frame).get_size() * spr.scale;
+		rect = Rect2(spr.global_position - size / 2.0, size);
+		char_scale = spr.scale;
+		
+	elif spr is Sprite2D:
+		var size = spr.get_texture().get_size() * spr.scale;
+		rect = Rect2(spr.global_position - size / 2.0, size);
+		char_scale = spr.scale;
+		
+	elif spr is SparrowCharacter or spr is DeadSparrowCharacter:
+		rect = spr.get_rect();
+		char_scale = abs(spr.scale);
+		
+	elif spr is AtlasCharacter or spr is DeadAtlasCharacter:
+		rect = spr.get_rect();
+		char_scale = abs(spr.scale);
+		
+	else:
 		return false;
 		
-	if spr is AnimatedSprite2D:
-		size = spr.sprite_frames.get_frame_texture(spr.animation, spr.frame).get_size() * spr.scale;
-		char_scale = spr.scale;
-		
-	if spr is Sprite2D:
-		size = spr.get_texture().get_size() * spr.scale;
-		char_scale = spr.scale;
-		
-	if (mouse.x > spr.global_position.x - size.x / offset 
-	&& mouse.x < spr.global_position.x + size.x / offset 
-	&& mouse.y > spr.global_position.y - size.y / offset 
-	&& mouse.y < spr.global_position.y + size.y / offset):
-		return true;
-		
-	return false;
+	return rect.has_point(mouse);
 	
 var block_grab = false;
 var pos_change_value = 0;
@@ -289,44 +288,31 @@ func change_anim(change):
 			update_offset_value(offset_array[cur_pose][0], offset_array[cur_pose][1]);
 			play_anim();
 			
-func change_character_frame(frame = 1, instant = false):
-	var character = null
-	var max_frames = null;
+func change_character_frame(frame):
+	var value = clamp(frame, 0.0, float(frame_slider.newMaxVal));
 	
 	for i in characterGrp.get_children():
+		var character = i.character;
+		
 		if i.character is Sprite2D:
-			character = i.character_anim;
-			max_frames = character.get_animation(i.posesList[cur_pose]).length;
-			
-			var val = abs((max_frames if frame > 0 else 0.0) if instant else character.current_animation_position+(frame/60.0));
-			character.seek(clamp(val, 0.0, max_frames), true);
+			i.character_anim.pause();
+			var anim = i.character_anim.get_animation(i.posesList[cur_pose]);
+			i.character_anim.seek(value * anim.step, true);
 			
 		elif i.character is AnimatedSprite2D:
-			character = i.character;
-			max_frames = character.sprite_frames.get_frame_count(i.posesList[cur_pose]);
-			
-			var val = (max_frames if frame > 0 else 0.0) if instant else character.frame+frame;
-			character.frame = clamp(val, 0.0, max_frames);
+			character.stop();
+			i.character.frame = int(value);
 			
 		elif i.character is SparrowCharacter or i.character is DeadSparrowCharacter:
-			character = i.character;
-			max_frames = character.get_anim_length(i.posesList[cur_pose])-1;
 			character.playing = false;
-			
-			var val = (max_frames if frame > 0 else 0.0) if instant else character.frame+frame;
-			character.timer = clamp(val, 0.0, max_frames);
-			character.frame = int(character.timer);
-			character.queue_redraw();
+			i.character.timer = value;
+			i.character.frame = int(i.character.timer);
+			i.character.queue_redraw();
 			
 		elif i.character is AtlasSprite or i.character is DeadAtlasCharacter:
-			character = i.character;
-			max_frames = int(abs(character.start_frame-character.limit));
 			character.playing = false;
-			
-			var val = (max_frames if frame > 0 else 0.0) if instant else (character.frame-character.start_frame)+frame;
-			val = clamp(val, 0.0, max_frames);
-			character.timer = character.start_frame + val;
-			character.frame = int(character.timer);
+			i.character.timer = i.character.start_frame + value;
+			i.character.frame = int(i.character.timer);
 			
 var rating_status = null;
 enum RatingState {
@@ -377,40 +363,11 @@ func _process(_delta: float) -> void:
 			frame = int(round(i.character_anim.current_animation_position / i.character_anim.get_animation(i.posesList[cur_pose]).step));
 			total_frames = int(round(i.character_anim.get_animation(i.posesList[cur_pose]).length / i.character_anim.get_animation(i.posesList[cur_pose]).step))+1;
 			
-		var frame_position = (frame/float(total_frames-1))*100;
-		
 		cur_frame_text.text = "frame: "+str(frame+1, " / ", total_frames);
-		frame_pointer.position.x = pointer_starter.x+frame_position*2.5;
 		
-		frame_bar.value = float(frame);
-		frame_bar.max_value = total_frames-1;
+		frame_slider.value = frame;
+		frame_slider.newMaxVal = total_frames-1;
 		
-	if Input.is_action_just_pressed("mouse_click"):
-		if mouse_inside(frame_arrow_left, frame_arrow_left.texture):
-			change_character_frame(-1); return;
-		elif mouse_inside(frame_arrow_right, frame_arrow_right.texture): 
-			change_character_frame(1); return;
-		elif mouse_inside(frame_arrow_leftWall, frame_arrow_leftWall.texture): 
-			change_character_frame(-1, true); return;
-		elif mouse_inside(frame_arrow_rightWall, frame_arrow_rightWall.texture): 
-			change_character_frame(1, true); return;
-			
-	var direction = 0;
-	if get_viewport().get_mouse_position().x > last_mouse_x: direction = 1;
-	elif get_viewport().get_mouse_position().x < last_mouse_x: direction = -1;
-	last_mouse_x = get_viewport().get_mouse_position().x;
-	
-	if mouse_inside(frame_pointer, frame_pointer.texture):
-		if Input.is_action_just_released("mouse_click"):
-			return;
-			
-		if Input.is_action_pressed("mouse_click"):
-			frame_pointer.position.x += direction * 5;
-			frame_pointer.position.x = clamp(frame_pointer.position.x, pointer_starter.x, pointer_starter.x + 250);
-			change_character_frame(direction);
-			
-			return;
-			
 	if !adjusting_rating && !%FileDialog.visible:
 		if Input.is_action_pressed("mouse_click"):
 			block_grab = false;
@@ -418,7 +375,7 @@ func _process(_delta: float) -> void:
 				update_cross(get_global_mouse_position().x - characterGrp.get_child(0).global_position.x, get_global_mouse_position().y - characterGrp.get_child(0).global_position.y);
 				return;
 				
-			if mouse_inside_character(characterGrp.get_child(0).character, (2 if characterGrp.get_child(0).character is AnimatedSprite2D else 14)):
+			if mouse_inside_character(characterGrp.get_child(0).character):
 				dragging_character = true;
 				
 	if Input.is_action_just_released("mouse_click"):
@@ -434,11 +391,11 @@ func _process(_delta: float) -> void:
 		var mouse = get_viewport().get_mouse_position();
 		
 		if Input.is_action_just_pressed("mouse_click"):
-			if mouse_inside(comboSpr, comboSpr.texture):
+			if mouse_inside(comboSpr):
 				rating_status = RatingState.COMBO;
-			elif mouse_inside(numsSpr, numsSpr.shit_spr.texture):
+			elif mouse_inside(numsSpr):
 				rating_status = RatingState.NUMS;
-			elif mouse_inside(ratingSpr, ratingSpr.texture):
+			elif mouse_inside(ratingSpr):
 				rating_status = RatingState.RATING;
 				
 		elif Input.is_action_pressed("mouse_click") && rating_status != null:
@@ -446,9 +403,11 @@ func _process(_delta: float) -> void:
 				RatingState.COMBO:
 					%combo_x.value = mouse.x;
 					%combo_y.value = mouse.y;
+					
 				RatingState.NUMS:
 					%nums_x.value = mouse.x;
 					%nums_y.value = mouse.y;
+					
 				RatingState.RATING:
 					%rating_x.value = mouse.x;
 					%rating_y.value = mouse.y;

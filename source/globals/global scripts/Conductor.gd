@@ -85,10 +85,10 @@ func reset():
 	curBeat = 0;
 	curStep = 0;
 	curSection = 0;
+	getSongTime = 0;
 	
 	crochet = (60.0 / bpm) * 1000.0;
 	stepCrochet = crochet / 4.0;
-	getSongTime = 0;
 	
 	seekTime = 0;
 	

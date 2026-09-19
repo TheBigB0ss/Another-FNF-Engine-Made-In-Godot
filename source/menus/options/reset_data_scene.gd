@@ -16,7 +16,7 @@ func _ready() -> void:
 		alphabet.position.y = 425;
 		alphabet.position.x = 330;
 		alphabet.position.x += offSetShit
-		alphabet.centered = true;
+		alphabet.isCentered = true;
 		alphabetGroup.add_child(alphabet);
 		
 		offSetShit += coolOffset;
@@ -38,14 +38,14 @@ func _input(ev):
 						Sound.playAudio("confirmMenu", false);
 						HighScore.clear_data();
 						Achievements.reset_achievements();
-						self.visible = false;
 					"no":
 						Sound.playAudio("cancelMenu", false);
-						self.visible = false;
 						
+				self.visible = false;
+				
 func change_opt(change):
 	cur_opt += change;
-	cur_opt = clamp(cur_opt, 0, len(opt)-1);
+	cur_opt = wrapi(cur_opt, 0, len(opt));
 	Sound.add_new_sound("scrollMenu");
 	
 	for i in opt.size():

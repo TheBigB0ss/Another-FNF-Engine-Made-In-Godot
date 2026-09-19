@@ -2,17 +2,12 @@
 
 [ext_resource type="Script" uid="uid://y1n73jvmvg2n" path="res://source/menus/editors/offset_editor/offset_menu.gd" id="1_vft5f"]
 [ext_resource type="PackedScene" uid="uid://ci7s7lxw8p2bl" path="res://source/stages/stage/stage.tscn" id="2_l24p0"]
-[ext_resource type="Texture2D" uid="uid://b23ynj36pxt2r" path="res://assets/images/editors/offset_ui/ui_pointer.png" id="3_hopd8"]
 [ext_resource type="Texture2D" uid="uid://dl8ob6uqlxroc" path="res://assets/images/hud/rating/default/sick.png" id="3_n322e"]
 [ext_resource type="Texture2D" uid="uid://cj6lp01iqfivo" path="res://assets/images/hud/rating/default/combo.png" id="3_v3n4i"]
 [ext_resource type="Texture2D" uid="uid://duy7maeuccjue" path="res://assets/images/editors/offset_ui/cross.png" id="4_i0ff4"]
 [ext_resource type="Script" uid="uid://et1x2odfrswb" path="res://source/menus/editors/offset_editor/offsetNums.gd" id="4_qyjxo"]
-[ext_resource type="Texture2D" uid="uid://80xkslengvv2" path="res://assets/images/editors/offset_ui/ui_bar.png" id="4_xty76"]
-[ext_resource type="Texture2D" uid="uid://p62e8iawbjv5" path="res://assets/images/editors/offset_ui/UI_RIGHT.png" id="5_bn4vb"]
 [ext_resource type="Script" uid="uid://essfoa0h4nwy" path="res://source/alphabet/alphabetObject.gd" id="6_v3n4i"]
-[ext_resource type="Texture2D" uid="uid://c4iv46257vg3j" path="res://assets/images/editors/offset_ui/UI_LEFT.png" id="6_wtymh"]
-[ext_resource type="Texture2D" uid="uid://ckkrwrljw3sjd" path="res://assets/images/editors/offset_ui/UI_LEFT_WALL.png" id="7_o6sf4"]
-[ext_resource type="Texture2D" uid="uid://cj2xlr6n2atcu" path="res://assets/images/editors/offset_ui/UI_RIGHT_WALL.png" id="8_125xj"]
+[ext_resource type="Script" uid="uid://o5t5hx8kb2aq" path="res://source/menus/editors/offset_editor/animation_slider.gd" id="9_npw2b"]
 [ext_resource type="Script" uid="uid://l08oojy4jhie" path="res://source/gameplay/icons/icon.gd" id="10_npw2b"]
 [ext_resource type="Texture2D" uid="uid://butl2egj5i38n" path="res://assets/images/hud/timeBar.png" id="10_r5tmy"]
 
@@ -32,10 +27,11 @@ offset_left = 807.0
 offset_top = 23.0
 offset_right = 1234.0
 offset_bottom = 467.0
-current_tab = 0
+current_tab = 2
 tab_focus_mode = 0
 
 [node name="help" type="TabBar" parent="offset_layer/TabContainer" unique_id=751837879]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -244,7 +240,6 @@ offset_bottom = 151.0
 text = "use icon color"
 
 [node name="anim settings" type="TabBar" parent="offset_layer/TabContainer" unique_id=1814175706]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -254,48 +249,15 @@ offset_left = 7.0
 offset_right = 47.0
 offset_bottom = 40.0
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="offset_layer/TabContainer/anim settings/frames_ui" unique_id=1023720238]
-texture_filter = 1
-layout_mode = 0
-offset_left = 64.57501
-offset_top = 295.0
-offset_right = 693.575
-offset_bottom = 404.0
-scale = Vector2(0.45, 0.45)
-max_value = 1.0
-texture_under = ExtResource("4_xty76")
-texture_progress = ExtResource("4_xty76")
-tint_under = Color(0, 0, 0, 1)
-
-[node name="pointer" type="Sprite2D" parent="offset_layer/TabContainer/anim settings/frames_ui" unique_id=869257152]
-texture_filter = 1
-position = Vector2(81, 281)
-scale = Vector2(0.45, 0.45)
-texture = ExtResource("3_hopd8")
-
-[node name="last_frame" type="Sprite2D" parent="offset_layer/TabContainer/anim settings/frames_ui" unique_id=869771568]
-texture_filter = 1
-position = Vector2(46, 322)
-scale = Vector2(0.275, 0.275)
-texture = ExtResource("5_bn4vb")
-
-[node name="next_frame" type="Sprite2D" parent="offset_layer/TabContainer/anim settings/frames_ui" unique_id=2043957510]
-texture_filter = 1
-position = Vector2(364, 322)
-scale = Vector2(0.275, 0.275)
-texture = ExtResource("6_wtymh")
-
-[node name="arrow_wall_left" type="Sprite2D" parent="offset_layer/TabContainer/anim settings/frames_ui" unique_id=1640347938]
-texture_filter = 1
-position = Vector2(18, 319.99997)
-scale = Vector2(0.275, 0.275)
-texture = ExtResource("7_o6sf4")
-
-[node name="arrow_wall_right" type="Sprite2D" parent="offset_layer/TabContainer/anim settings/frames_ui" unique_id=180851452]
-texture_filter = 1
-position = Vector2(393, 320)
-scale = Vector2(0.275, 0.275)
-texture = ExtResource("8_125xj")
+[node name="AnimationSlider" type="Control" parent="offset_layer/TabContainer/anim settings/frames_ui" unique_id=1767342441]
+anchors_preset = 0
+offset_left = 90.99999
+offset_top = 280.0
+offset_right = 131.0
+offset_bottom = 320.0
+scale = Vector2(0.36, 0.36)
+script = ExtResource("9_npw2b")
+metadata/_custom_type_script = "uid://o5t5hx8kb2aq"
 
 [node name="current_anim" type="Label" parent="offset_layer/TabContainer/anim settings" unique_id=1734959117]
 layout_mode = 0

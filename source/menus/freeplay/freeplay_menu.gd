@@ -28,17 +28,7 @@ var coolOffset = 140;
 
 var dont_have_chart = false;
 
-var weekJson = {
-	"songs": [[]],
-	"hideFromFreeplay": false,
-	"hideFromStoryMode": false,
-	"isLocked": false,
-	"weekName": "",
-	"lastWeek": "",
-	"weekDescription": "",
-	"weekCharacters": [],
-	"weekDifficulties": []
-}
+var weekJson = {};
 
 func get_week_files():
 	var file = [];
@@ -178,7 +168,7 @@ func _input(ev):
 					go_to_song(songs[cur_song], diffs[cur_diff if !cur_diff > diffs.size()-1 else 0]);
 					
 			if ev.keycode in [KEY_SPACE] && !ev.echo:
-				MusicManager._play_song("/Inst%s"%["" if diffs[cur_diff] != "remix" else "-remix"], "songs/%s/song"%[songs[cur_song].to_lower()], true);
+				MusicManager._play_song("/Inst%s"%["" if diffs[cur_diff if !cur_diff > diffs.size()-1 else 0] != "remix" else "-remix"], "songs/%s/song"%[songs[cur_song].to_lower()], true);
 				
 func go_to_song(song, diff_path):
 	SongData.loadJson(song, diff_path);
@@ -188,14 +178,11 @@ func go_to_song(song, diff_path):
 		SongData.week_songs = song;
 		SongData.week_diffs = diff_path;
 		SongData.isStoryMode = false;
-		SongData.weekName = cool_weeks[cur_song];
 		MusicManager._stop_music();
 		
-		if !cur_song > cool_weeks.size()-1:
-			SongData.week = cool_weeks[cur_song];
-		else:
-			SongData.week = "";
-			
+		SongData.weekName = cool_weeks[cur_song] if !cur_song > cool_weeks.size()-1 else "";
+		SongData.week = cool_weeks[cur_song] if !cur_song > cool_weeks.size()-1 else "";
+		
 		await get_tree().create_timer(0.6).timeout;
 		Global.changeScene("gameplay/PlayState", true, false);
 	else:

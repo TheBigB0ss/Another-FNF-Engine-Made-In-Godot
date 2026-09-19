@@ -305,8 +305,6 @@ func pressed(new_character = null):
 		
 	emitPress(false);
 	if sustainLength <= 0:
-		new_character.animNote = self;
-		
 		if is_a_bad_note:
 			miss_note();
 			
@@ -334,7 +332,6 @@ func opponent_pressed(new_character = null):
 	emitPress(true);
 	
 	if sustainLength <= 0:
-		new_character.animNote = self;
 		destroy_note();
 		
 	main_scene.playCharacterAnim(self, new_character);
@@ -393,9 +390,7 @@ func destroy_note():
 	queue_free();
 	
 func swap_sing_anims(pos1, pos2):
-	if curNoteAnim == pos1:
-		return pos2;
-	if curNoteAnim == pos2:
-		return pos1;
-		
-	return curNoteAnim;
+	return {
+		pos1: pos2,
+		pos2: pos1
+	}.get(curNoteAnim, curNoteAnim);

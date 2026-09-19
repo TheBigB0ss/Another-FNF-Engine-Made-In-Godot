@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0yc6533ni5yr"
-path="res://.godot/imported/select_box.png-825fd37597c4c5005e4f3b46f83f870c.ctex"
+uid="uid://ba5hywog5tb4"
+path="res://.godot/imported/play.png-d64b32125bf169c5adcf0248bc6309b2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/editors/chart preview/select_box.png"
-dest_files=["res://.godot/imported/select_box.png-825fd37597c4c5005e4f3b46f83f870c.ctex"]
+source_file="res://assets/images/editors/chart_editor/play.png"
+dest_files=["res://.godot/imported/play.png-d64b32125bf169c5adcf0248bc6309b2.ctex"]
 
 [params]
 
