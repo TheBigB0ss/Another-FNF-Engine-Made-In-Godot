@@ -120,14 +120,11 @@ func get_json_text():
 	
 var dialogue_timer = 0;
 func _process(delta):
-	if SongData.is_not_in_cutscene && Global.is_on_video:
-		return;
-		
 	dialogue_timer += 1*delta;
 	
 	var textSpeed = 0.05 if !Input.is_action_pressed("ui_shift") else 0.01;
 	
-	if dialogue_timer >= textSpeed:
+	if dialogue_timer >= textSpeed && !SongData.is_not_in_cutscene:
 		if letterID <= len(dialogue):
 			box_text.text = dialogue.substr(0, letterID);
 			
@@ -139,12 +136,13 @@ func _process(delta):
 			
 			dialogue_timer = 0;
 			
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_pressed("ui_accept") && !SongData.is_not_in_cutscene:
 		if letterID - 1 < len(dialogue):
 			letterID = len(dialogue);
 			
 		elif letterID - 1 == len(dialogue):
 			cur_dialogue += 1;
+			
 			Sound.playAudio("clickText", false);
 			
 			if !cur_dialogue > dialogue_array.size()-1:

@@ -167,19 +167,9 @@ func reload_scene(songName):
 	dad = dad.init_character(self, SongData.gfStagePosition if SongData.player2 == "gf" else SongData.player2StagePosition, SongData.player2Zindex, SongData.player2, 3);
 	gf = gf.init_character(self, SongData.gfStagePosition, SongData.gfZindex, SongData.gfPlayer, 1);
 	
-	if bf.character != null:
-		bf.character.flip_h = !bf.is_player;
-	if dad.character != null:
-		dad.character.flip_h = dad.is_player;
-		
-	if dad.is_player:
-		for i in dad.camera_pos.size()-1:
-			dad.camera_pos[i] *= -1;
-			
-	if !bf.is_player:
-		for i in bf.camera_pos.size()-1:
-			bf.camera_pos[i] *= -1;
-			
+	if is_instance_valid(bf): bf.update_character_side(true);
+	if is_instance_valid(dad): dad.update_character_side(false);
+	
 	camera.global_position = (dad.global_position + Vector2(dad.camera_pos[0], dad.camera_pos[1]));
 	positionCross.global_position = (dad.global_position + Vector2(dad.camera_pos[0], dad.camera_pos[1]));
 	

@@ -191,23 +191,28 @@ func mouse_inside_character(spr):
 		rect = Rect2(spr.global_position - size / 2.0, size);
 		char_scale = spr.scale;
 		
+		return rect.has_point(mouse);
+		
 	elif spr is Sprite2D:
 		var size = spr.get_texture().get_size() * spr.scale;
 		rect = Rect2(spr.global_position - size / 2.0, size);
 		char_scale = spr.scale;
 		
+		return rect.has_point(mouse);
+		
 	elif spr is SparrowCharacter or spr is DeadSparrowCharacter:
 		rect = spr.get_rect();
 		char_scale = abs(spr.scale);
+		
+		return rect.has_point(mouse);
 		
 	elif spr is AtlasCharacter or spr is DeadAtlasCharacter:
 		rect = spr.get_rect();
 		char_scale = abs(spr.scale);
 		
-	else:
-		return false;
+		return rect.has_point(spr.to_local(mouse));
 		
-	return rect.has_point(mouse);
+	return false;
 	
 var block_grab = false;
 var pos_change_value = 0;

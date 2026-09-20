@@ -4,10 +4,12 @@ extends Node2D
 @onready var timeText = $'hud/Hud_Layer/timeLabel';
 @onready var ratingText = $'hud/Hud_Layer/ratingLabel'
 @onready var scoreText = $'hud/Hud_Layer/scoreLabel';
-@onready var timeBar = $"hud/Hud_Layer/timeBar";
 @onready var countdownSprite = $'hud/Hud_Layer/countdown';
+@onready var sectionCamera = $"Camera2D";
+@onready var botplayText = $'hud/Hud_Layer/botplayLabel';
 
 @onready var healthBar = $'hud/Hud_Layer/healthBar';
+@onready var timeBar = $"hud/Hud_Layer/timeBar";
 
 @onready var voices = $voices;
 @onready var inst = $inst;
@@ -75,14 +77,6 @@ var curSong = "";
 var playlist = [];
 var songDiff = [];
 
-@onready var sectionCamera = $"Camera2D";
-
-var camera_position = Vector2();
-var camera_focus = false;
-var camera_on_Bf = false;
-var gf_is_singing = false;
-
-@onready var botplayText = $'hud/Hud_Layer/botplayLabel';
 var botplayTime = 0;
 
 var countdownset = {};
@@ -148,23 +142,13 @@ func _ready():
 	dad = dad.init_character(self, SongData.gfStagePosition if SongData.player2 == "gf" else SongData.player2StagePosition, SongData.player2Zindex, SongData.player2, 3);
 	gf = gf.init_character(self, SongData.gfStagePosition, SongData.gfZindex, SongData.gfPlayer, 1);
 	
+	if is_instance_valid(bf): bf.update_character_side(true);
+	if is_instance_valid(dad): dad.update_character_side(false);
+	
 	stageGrp.add_child(stage);
 	
-	if bf.character != null:
-		bf.character.flip_h = !bf.is_player;
-	if dad.character != null:
-		dad.character.flip_h = dad.is_player;
-		
-	if dad.is_player:
-		for i in dad.camera_pos.size()-1:
-			dad.camera_pos[i] *= -1;
-			
-	if !bf.is_player:
-		for i in bf.camera_pos.size()-1:
-			bf.camera_pos[i] *= -1;
-			
 	if SongData.isPixelStage:
-		countdownSprite.scale = Vector2(8,8);
+		countdownSprite.scale = Vector2.ONE * 8;
 		for i in [countdownSprite, rating_spr, combo_spr, nums_spr]:
 			i.texture_filter = Sprite2D.TEXTURE_FILTER_NEAREST;
 			
@@ -188,29 +172,32 @@ func _ready():
 	setup_hud();
 	updateScoreText();
 	
-	if SongData.isStoryMode && SongData.death_count <= 0 && !SongData.restartSong && songDiff != "remix":
+	if SongData.isStoryMode && SongData.death_count <= 0 && !SongData.restartSong:
 		match curSong:
 			#"ugh": stage.ugh_intro();
 			#"guns": stage.guns_intro();
 			#"stress": stage.stress_intro();
 			"thorns": stage.start_cutscene();
 			
-	if (curSong == "ugh" or curSong == "guns" or curSong == "stress") && songDiff != "remix":
-		stage.connect("end_tankman_cutscene", startCountdown);
+	#if (curSong == "ugh" or curSong == "guns" or curSong == "stress"):
+	#	stage.connect("end_tankman_cutscene", startCountdown);
 		
 	if Global.has_dialogue():
 		SongData.is_not_in_cutscene = false;
 		
-		if SongData.death_count <= 0 && SongData.isStoryMode && !SongData.restartSong && songDiff != "remix":
+		if SongData.death_count <= 0 && SongData.isStoryMode && !SongData.restartSong:
 			match curSong:
 				"thorns":
 					stage.connect("end_senpai_cutscene", start_dialogue);
 				_:
 					start_dialogue();
 		else:
+			Global.is_on_video = false;
 			startCountdown();
 	else:
 		SongData.is_not_in_cutscene = true;
+		Global.is_on_video = false;
+		startCountdown();
 		
 	if SongData.is_not_in_cutscene && !Global.is_on_video:
 		startCountdown();
@@ -364,12 +351,15 @@ func pressedNote(note):
 	if GlobalOptions.isUsingBot:
 		return;
 		
-	msText.modulate.a = 1.0;
 	msText.text = str(snapped(ms, 0.01), "Ms");
-	msText.position = Vector2(rating_spr.position.x - msText.size.x*0.5, rating_spr.position.y + (msText.size.x*0.5)+20);
+	msText.position = Vector2(
+		rating_spr.position.x - msText.size.x * 0.5,
+		rating_spr.position.y + (msText.size.x * 0.5) + 25
+	);
+	msText.modulate.a = 1.0;
 	
 	notesPlayed += rating_data[rating]["Percent"];
-	score += rating_data[rating]["Score"]+randi_range(0, 15);
+	score += rating_data[rating]["Score"] + randi_range(0, 15);
 	
 	msText.modulate = ratingColors[rating];
 	match rating:
@@ -424,7 +414,7 @@ func miss_note(note):
 	
 	misses += 1;
 	health -= 4;
-	notesPlayed = max(notesPlayed-0.8, 0.0);
+	notesPlayed = max(notesPlayed - 0.8, 0.0);
 	score -= randi_range(50, 80);
 	
 	if combo > 10 && gf != null && SongData.gfPlayer != "none":
@@ -590,10 +580,9 @@ func _input(ev):
 		Discord.update_discord_info("pause", "Paused");
 		
 	if OS.is_debug_build():
-		match ev.keycode:
-			KEY_F1:
-				finishSong();
-				
+		if ev.keycode == KEY_F1:
+			finishSong();
+			
 func startCountdown():
 	SongData.is_not_in_cutscene = true;
 	MusicManager._stop_music();
@@ -789,6 +778,7 @@ func setTimePos(time):
 	
 	for i in note_splashes.get_children():
 		i.queue_free();
+		note_splashes.remove_child(i);
 		
 	Conductor.seekTime = time;
 	Conductor.update_position(time);
@@ -821,6 +811,7 @@ func setup_hud():
 		
 		for i in [playerStrum, opponentStrum]:
 			i.position.y = 620;
+			
 		for i in [iconP1, iconP2]:
 			i.position.y = 65;
 			

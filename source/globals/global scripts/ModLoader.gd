@@ -1,7 +1,5 @@
 extends Node
 
-var mods = [];
-
 func _init() -> void:
 	load_mods();
 	
@@ -9,12 +7,9 @@ func load_mods() -> void:
 	var mods_path = OS.get_executable_path().get_base_dir().path_join("mods");
 	
 	if !DirAccess.dir_exists_absolute(mods_path):
-		var error = DirAccess.make_dir_recursive_absolute(mods_path);
-		if error != OK:
+		if DirAccess.make_dir_recursive_absolute(mods_path) != OK:
 			return;
 			
-		return;
-		
 	var dir = DirAccess.open(mods_path);
 	
 	if dir == null:
@@ -29,7 +24,11 @@ func load_mods() -> void:
 			file_name = dir.get_next();
 			continue;
 			
-		if !dir.current_is_dir() && file_name.get_extension().to_lower() == "pck":
+		var path = mods_path.path_join(file_name);
+		
+		if dir.current_is_dir():
+			load_mod_folder(path);
+		elif file_name.get_extension().to_lower() == "pck":
 			load_mod_file(file_name, mods_path);
 			
 		file_name = dir.get_next();
@@ -43,21 +42,25 @@ func load_mod_file(file_name, mods_path):
 		
 	ProjectSettings.load_resource_pack(pck_path, true);
 	
-#func load_json(path):
-	#var mods_path = OS.get_executable_path().get_base_dir().path_join("mods");
-	#var full_path = mods_path.path_join(path + ".json");
-	#var file = FileAccess.open(full_path, FileAccess.READ);
-	#if file == null:
-		#return {
-			#"name": "your mod name",
-			#"discretion": "your mod discretion",
-			#"version": "1.0",
-			#"mod icon": "engine_icon",
-			#"author": "your name"
-		#};
-		#
-	#var json = JSON.new();
-	#json.parse(file.get_as_text());
-	#file.close();
-	#
-	#return json.get_data();
+func load_mod_folder(folder_path):
+	var dir = DirAccess.open(folder_path);
+	
+	if dir == null:
+		return;
+		
+	dir.list_dir_begin();
+	
+	var file_name = dir.get_next();
+	
+	while file_name != "":
+		if file_name == "." or file_name == "..":
+			file_name = dir.get_next();
+			continue;
+			
+		if !dir.current_is_dir() && file_name.get_extension().to_lower() == "pck":
+			load_mod_file(file_name, folder_path);
+			
+		file_name = dir.get_next();
+		
+	dir.list_dir_end();
+	

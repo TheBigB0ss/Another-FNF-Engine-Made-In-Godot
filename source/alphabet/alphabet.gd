@@ -1,12 +1,13 @@
 class_name Alphabet extends Node2D
 
-var wordArray = [];
 var coolText = "";
+var wordArray = [];
+
 var letterAnim = [];
+var letters = [];
+
 var isBold = true;
 var isCentered = false;
-
-var letters = [];
 
 func _creat_word(text = ""):
 	coolText = text;

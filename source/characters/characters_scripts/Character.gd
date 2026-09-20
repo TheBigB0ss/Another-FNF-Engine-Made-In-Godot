@@ -38,6 +38,7 @@ var special_anim = false;
 
 var anim_offset = [];
 var camera_pos = [];
+var base_camera_pos = [];
 
 var idleTimer = 0;
 
@@ -143,9 +144,11 @@ func _ready():
 	is_player = charData.get("isPlayer", is_player);
 	cam_follow_pos = charData.get("camera follow pos", cam_follow_pos);
 	curIcon = charData.get("HealthIcon", "no_icon");
-	camera_pos = charData.get("cameraPos", [0,0]);
 	anim_type = charData.get("anim type", anim_type);
 	animatedIcon = charData.get("AnimatedIcon", animatedIcon);
+	
+	camera_pos = charData.get("cameraPos", [0,0]);
+	base_camera_pos = camera_pos.duplicate();
 	
 	for i in charData["Poses"].size():
 		animList.append(charData["Poses"][i]["Anim"]);
@@ -362,3 +365,15 @@ func reset_anim():
 		character.frame = 0;
 	else:
 		character_anim.seek(0.0);
+		
+func update_character_side(isPlayer) -> void:
+	var invert = isPlayer != is_player;
+	
+	if character != null:
+		character.flip_h = invert;
+		
+	camera_pos = base_camera_pos.duplicate();
+	
+	if invert:
+		camera_pos[0] = -camera_pos[0];
+		

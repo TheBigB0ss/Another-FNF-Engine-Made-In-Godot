@@ -11,7 +11,7 @@ func on_process(_delta):
 		creat_ghost_anim();
 		
 func creat_ghost_anim():
-	var ghost = preload("res://source/stages/school_evil_remix/GhostAnim.tscn").instantiate();
+	var ghost = preload("res://source/characters/GhostAnim.tscn").instantiate();
 	ghost.global_position = game.dad.global_position;
 	
 	var new_texture = game.dad.character.sprite_frames.get_frame_texture(game.dad.character.animation, game.dad.character.frame);

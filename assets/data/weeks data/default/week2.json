@@ -17,6 +17,6 @@
 	"weekName": "week2",
 	"lastWeek": "",
 	"weekDescription": "Spooky Month",
-	"weekDifficulties": ["easy", "normal", "hard", "remix"],
+	"weekDifficulties": [],
 	"weekCharacters": ["Spooky_Kids", "BF", "GF"]
 }

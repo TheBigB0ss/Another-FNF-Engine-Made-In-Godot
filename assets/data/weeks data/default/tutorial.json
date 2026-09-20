@@ -12,6 +12,6 @@
 	"weekName": "tutorial",
 	"lastWeek": "",
 	"weekDescription": "tutorial",
-	"weekDifficulties": ["easy", "normal", "hard", "remix"],
+	"weekDifficulties": [],
 	"weekCharacters": ["", "BF", "GF"]
 }

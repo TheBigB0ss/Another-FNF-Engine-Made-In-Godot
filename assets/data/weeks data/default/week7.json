@@ -22,6 +22,6 @@
 	"weekName": "week7",
 	"lastWeek": "",
 	"weekDescription": "Tankman",
-	"weekDifficulties": ["easy", "normal", "hard", "remix"],
+	"weekDifficulties": [],
 	"weekCharacters": ["Tankman", "BF", "GF"]
 }

@@ -10,19 +10,22 @@ extends Control
 func onFilePress(id):
 	match id:
 		0:
+			Conductor.reset();
+			Conductor.changeBpm(SongData.songBpm);
+			
 			mainScene.loadJson(%song_name.text, %song_difficulty.text);
+			mainScene.set_audio();
 			
 			%Bpm.value = SongData.songBpm;
 			%is_pixel_stage.button_pressed = SongData.isPixelStage;
 			%song_speed.value = SongData.songSpeed;
 			
 			mainScene.changeSection(0);
-			Conductor.reset();
-			Conductor.changeBpm(SongData.songBpm);
+			Conductor.getSongTime = mainScene.section_start_time();
+			mainScene.update_hud_position();
 			
-			mainScene.load_section();
 			mainScene.is_playing = false;
-			mainScene.set_audio();
+			mainScene.load_section();
 		1:
 			mainScene.cool_file_save.popup_centered();
 		2:
@@ -30,29 +33,21 @@ func onFilePress(id):
 			
 func onHelpPress(id):
 	match id:
-		0:
-			$helpWindow.popup();
-		1:
-			$soundWindow.popup();
-			
+		0: $helpWindow.popup();
+		1: $soundWindow.popup();
+		
 func onChartPress(id):
 	match id:
-		0:
-			$chartWindow.popup();
-		1:
-			$sectionWindow.popup();
-		2:
-			$notesWindow.popup();
-		3:
-			$eventsWindow.popup();
-			
+		0: $chartWindow.popup();
+		1: $sectionWindow.popup();
+		2: $notesWindow.popup();
+		3: $eventsWindow.popup();
+		
 func onPreviewPress(id):
 	match id:
-		0:
-			$opponentPreviewWindow.popup();
-		1:
-			$playerPreviewWindow.popup();
-			
+		0: $opponentPreviewWindow.popup();
+		1: $playerPreviewWindow.popup();
+		
 func _ready():
 	fileTab.get_popup().add_item("open file", 0);
 	fileTab.get_popup().add_item("save file", 1);
