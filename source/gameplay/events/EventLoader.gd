@@ -137,12 +137,9 @@ func changeChar(id, newCharacter):
 		"0", "bf":
 			main_scene.bf = newChar
 			bf = newChar;
-			main_scene.bf.character.flip_h = !main_scene.bf.is_player;
 			
-			if !main_scene.bf.is_player:
-				for i in main_scene.bf.camera_pos.size()-1:
-					main_scene.bf.camera_pos[i] *= -1;
-					
+			bf.update_character_side(true);
+			
 			update_icon(main_scene.iconP1, newChar);
 			if GlobalOptions.updated_hud != "classic hud":
 				main_scene.healthBar.tint_progress = newChar.healthBar_Color;
@@ -150,12 +147,9 @@ func changeChar(id, newCharacter):
 		"1", "dad":
 			main_scene.dad = newChar;
 			dad = newChar;
-			main_scene.dad.character.flip_h = main_scene.dad.is_player;
 			
-			if main_scene.dad.is_player:
-				for i in main_scene.dad.camera_pos.size()-1:
-					main_scene.dad.camera_pos[i] *= -1;
-					
+			dad.update_character_side(false);
+			
 			update_icon(main_scene.iconP2, newChar);
 			if GlobalOptions.updated_hud != "classic hud":
 				main_scene.healthBar.tint_under = newChar.healthBar_Color;

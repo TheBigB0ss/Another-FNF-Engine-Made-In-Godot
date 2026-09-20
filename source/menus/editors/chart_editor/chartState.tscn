@@ -69,6 +69,7 @@ scale = Vector2(0.398, 0.398)
 flip_h = true
 script = ExtResource("5_orogo")
 enable = false
+flip_h = true
 metadata/_custom_type_script = "uid://l08oojy4jhie"
 
 [node name="icon_opponent" type="Sprite2D" parent="grid_objs/icons" unique_id=30461593]
@@ -668,7 +669,7 @@ metadata/_custom_type_script = "uid://cvh168tg37tji"
 [node name="ChartEnemy" parent="chart_UI/chart_objs/chartTab/opponentPreviewWindow" unique_id=246031562 instance=ExtResource("7_w8f1m")]
 position = Vector2(100, 139)
 scale = Vector2(0.545, 0.545)
-frame = 1
+frame = 5
 offset = Vector2(5, -10)
 animation = 1
 
@@ -684,7 +685,7 @@ metadata/_custom_type_script = "uid://cvh168tg37tji"
 [node name="ChartBf" parent="chart_UI/chart_objs/chartTab/playerPreviewWindow" unique_id=145860512 instance=ExtResource("6_orogo")]
 position = Vector2(32, 141)
 scale = Vector2(0.765, 0.765)
-frame = 0
+frame = 5
 
 [node name="chart_inst" type="AudioStreamPlayer" parent="." unique_id=164621937]
 

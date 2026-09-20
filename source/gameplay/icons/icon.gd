@@ -1,14 +1,13 @@
 class_name Icon extends Node2D
 
 @export var enable = true;
+@export var flip_h = false;
 
 var cur_iconAnim = "";
 
 var icon_frames = "";
 var icon_char = "";
 var end_transition = false;
-
-var flip_h = false;
 
 var icon_data = {};
 var iconAnimList = [];

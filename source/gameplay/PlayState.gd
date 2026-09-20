@@ -177,8 +177,10 @@ func _ready():
 			#"ugh": stage.ugh_intro();
 			#"guns": stage.guns_intro();
 			#"stress": stage.stress_intro();
-			"thorns": stage.start_cutscene();
-			
+			"thorns":
+				if stage && stage.has_method("start_cutscene"):
+					stage.start_cutscene()
+					
 	#if (curSong == "ugh" or curSong == "guns" or curSong == "stress"):
 	#	stage.connect("end_tankman_cutscene", startCountdown);
 		
@@ -535,7 +537,11 @@ func setPercent():
 		if float(percent) >= 1.0:
 			return "Perfect!!!";
 			
+var changing_scenes = false;
 func _input(ev):
+	if changing_scenes:
+		return;
+		
 	if !(ev is InputEventKey):
 		return;
 		
@@ -543,29 +549,42 @@ func _input(ev):
 		return;
 		
 	if ev.keycode == KEY_R && GlobalOptions.restart_action:
+		changing_scenes = true;
 		health = 0;
+		
 		return;
 		
 	if ev.keycode == GlobalOptions.get_key("chartKey"):
+		changing_scenes = true;
+		
 		SongData.week_songs = playlist[0];
 		SongData.isPlaying = false;
+		
 		Global.changeScene("menus/editors/chart_editor/chartState", true, false);
 		
 		return;
 		
 	elif ev.keycode == GlobalOptions.get_key("offsetKey"):
-		SongData.characters = {"opponent": dad.curCharacter};
+		changing_scenes = true;
+		
+		SongData.characters = {
+			"opponent": dad.curCharacter
+		};
 		SongData.week_songs = playlist[0];
 		SongData.week_diffs = songDiff;
 		SongData.isPlaying = true;
+		
 		Global.changeScene("menus/editors/offset_editor/offset_menu", true, false);
 		
 		return;
 		
 	elif ev.keycode == GlobalOptions.get_key("camEditorKey"):
+		changing_scenes = true;
+		
 		SongData.week_songs = playlist[0];
 		SongData.week_diffs = songDiff;
 		SongData.isPlaying = true;
+		
 		Global.changeScene("menus/editors/cam_editor/cam_editor", true, false);
 		
 		return;
