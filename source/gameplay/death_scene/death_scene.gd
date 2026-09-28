@@ -2,12 +2,26 @@ extends Node2D
 
 @onready var camera = $Camera2D;
 
+@onready var shader = $CanvasLayer/ColorRect;
+
 var death_anim = null;
 var song = "";
 
 func _ready():
 	Conductor.reset();
 	
+	shader.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);
+	shader.mouse_filter = Control.MOUSE_FILTER_IGNORE;
+	
+	var use_stage_shader = SongData.stage_shader != null && GlobalOptions.use_shader;
+	
+	shader.visible = use_stage_shader;
+	
+	if use_stage_shader:
+		shader.material = SongData.stage_shader;
+	else:
+		shader.material = null;
+		
 	song = SongData.week_songs[0];
 	
 	death_anim = load("res://source/characters/characters_scenes/Bf dead.tscn" if SongData.characters["bf"][3] == null or !SongData.characters["bf"][4] else SongData.characters["bf"][3]).instantiate();

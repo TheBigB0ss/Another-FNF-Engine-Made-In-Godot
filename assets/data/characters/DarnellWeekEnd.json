@@ -7,76 +7,76 @@
 	"Poses": [
 		{
 			"Anim": "idle dance",
-			"Anim Time": 5,
+			"Anim Time": 5.0,
 			"Name": "Idle",
 			"Offset": [
-				238.0,
-				82.0
+				15.0,
+				18.0
 			],
-			"anim beat": 2,
+			"anim beat": 2.0,
 			"special anim": false
 		},
 		{
 			"Anim": "singLeft",
-			"Anim Time": 5,
+			"Anim Time": 5.0,
 			"Name": "Pose Left",
 			"Offset": [
-				240.0,
-				81.0
+				-11.0,
+				13.0
 			],
-			"anim beat": 2,
+			"anim beat": 2.0,
 			"special anim": false
 		},
 		{
 			"Anim": "singDown",
-			"Anim Time": 5,
+			"Anim Time": 5.0,
 			"Name": "Pose Down",
 			"Offset": [
-				241.0,
-				99.0
+				45.0,
+				40.0
 			],
-			"anim beat": 2,
+			"anim beat": 2.0,
 			"special anim": false
 		},
 		{
 			"Anim": "singUp",
-			"Anim Time": 5,
+			"Anim Time": 5.0,
 			"Name": "Pose Up",
 			"Offset": [
-				227.0,
-				79.0
+				-24.0,
+				-16.0
 			],
-			"anim beat": 2,
+			"anim beat": 2.0,
 			"special anim": false
 		},
 		{
 			"Anim": "singRight",
-			"Anim Time": 5,
+			"Anim Time": 5.0,
 			"Name": "Pose Right",
 			"Offset": [
-				240.0,
-				80.0
+				41.0,
+				15.0
 			],
-			"anim beat": 2,
+			"anim beat": 2.0,
 			"special anim": false
 		},
 		{
 			"Anim": "singLaugh",
-			"Anim Time": 5,
+			"Anim Time": 5.0,
 			"Name": "Laugh",
 			"Offset": [
-				234.0,
-				82.0
+				21.0,
+				19.0
 			],
-			"anim beat": 2,
+			"anim beat": 2.0,
 			"special anim": false
 		}
 	],
-	"anim type": 2,
+	"anim type": 2.0,
 	"camera follow pos": false,
 	"cameraPos": [
-		-50.0,
-		-110.0
+		210.0,
+		-60.0
 	],
 	"isPlayer": false,
 	"scale": [

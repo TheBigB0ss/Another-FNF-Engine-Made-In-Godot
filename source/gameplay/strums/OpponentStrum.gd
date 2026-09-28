@@ -68,7 +68,9 @@ func _ready() -> void:
 var spawnId = 0;
 var notes_to_delete = [];
 func _process(delta):
+	var scroll_direction = 1.0 if GlobalOptions.down_scroll else -1.0;
 	var distance_offset = 4000 if GlobalOptions.down_scroll else 2200;
+	
 	while spawnId < array_notes.size():
 		var distance = (array_notes[spawnId][0] - Conductor.getSongTime)*Conductor.songSpeed;
 		
@@ -80,81 +82,78 @@ func _process(delta):
 		spawnId += 1;
 		
 	for note in notesList:
-		if note == null:
-			continue
+		if !is_instance_valid(note):
+			continue;
 			
 		var strum = strumArray[note.noteData];
 		var strum_pos = strum.position;
-		var strumY = strum_pos.y;
 		
 		note.position.x = strum_pos.x;
 		note.rotation = strum.rotation;
 		note.modulate.a = strum.modulate.a;
 		note.scale = strum.scale;
 		
-		if note.holdSplash != null:
+		if is_instance_valid(note.holdSplash):
 			note.holdSplash.global_position = strumNode.get_child(note.noteData).global_position;
 			
-		if !note.is_pressing or note.missedLongNote or note.missed:
-			note.position.y = strumY + (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed) if GlobalOptions.down_scroll else strumY - (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed);
-		else:
-			note.position.y = strumY;
-			
+		var note_y = strum_pos.y + (Conductor.getSongTime - note.strumTime) * 0.45 * Conductor.songSpeed * scroll_direction;
+		note.position.y = strum_pos.y if note.is_pressing else note_y;
+		
 		if note.isPlayer:
-			continue;
-			
-		if Conductor.seekTime >= 0 && note.strumTime < Conductor.seekTime:
-			notes_to_delete.append(note);
 			continue;
 			
 		if note.sustainLength <= 0:
 			if Conductor.getSongTime > note.strumTime + 320:
 				notes_to_delete.append(note);
-		else:
-			if !note.is_pressing && Conductor.getSongTime > note.strumTime + note.ogSustain + 335:
-				notes_to_delete.append(note);
+			elif !note.is_pressing && Conductor.getSongTime > note.strumTime + note.ogSustain + 335:
+				notes_to_delete.append(note)
 				
 	for note in opponentNotes:
-		if note == null or note.isPlayer or note.is_a_bad_note or note.ignoreNote:
+		if (!is_instance_valid(note) or note.isPlayer or note.is_a_bad_note or note.ignoreNote):
 			continue;
 			
-		if Conductor.getSongTime >= note.strumTime:
-			note.opponent_pressed();
+		if Conductor.seekTime >= 0.0 && note.strumTime < Conductor.seekTime:
+			notes_to_delete.append(note);
+			continue;
 			
-			if note.manyHits > 0:
-				continue;
-				
-			if note.sustainLength == 0:
-				opponentNotes.erase(note);
-				notesList.erase(note);
-			else:
-				if note.note != null:
-					note.note.queue_free();
-					
-				note.is_pressing = true;
-				if note.sustainLength <= 0:
-					note.is_pressing = false;
-					opponentNotes.erase(note);
-					notesList.erase(note);
-					
+		if Conductor.getSongTime < note.strumTime:
+			continue;
+			
+		note.opponent_pressed();
+		
+		if note.manyHits > 0:
+			continue
+			
+		if note.sustainLength <= 0:
+			note.is_pressing = false;
+			notes_to_delete.append(note);
+			continue;
+			
+		if is_instance_valid(note.note):
+			note.note.queue_free();
+			note.note = null;
+			
+		note.is_pressing = true;
+		
 	notesList = notesList.filter(func(note): return note != null);
 	
 	for i in 4:
 		var note = strumArray[i];
 		if note.reset_arrow_anim > 0:
-			note.reset_arrow_anim = max(note.reset_arrow_anim - 4 * delta, 0);
-		elif note.reset_arrow_anim <= 0:
+			note.reset_arrow_anim = max(note.reset_arrow_anim - 4.0 * delta, 0.0);
+		else:
 			note.play_note_anim("static");
 			
-	for i in notes_to_delete:
-		opponentNotes.erase(i);
-		notesList.erase(i);
-		
-		if i == null:
+	for note in notes_to_delete:
+		if !is_instance_valid(note):
 			continue;
 			
-		i.queue_free();
+		opponentNotes.erase(note);
+		notesList.erase(note);
+		note.queue_free();
 		
+	notes_to_delete.clear();
+	
 func notesAppears():
 	for i in 4:
 		var strumNote = strumArray[i];

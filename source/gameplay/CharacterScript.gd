@@ -13,6 +13,10 @@ func _init() -> void:
 static func init_character_script(character, parent):
 	var current_script = null;
 	var script_path = "res://assets/data/characters/%s.gd"%[character];
+	
+	if !ResourceLoader.exists(script_path):
+		return CharacterScript.new();
+		
 	var script = ResourceLoader.load(script_path);
 	
 	if script == null:

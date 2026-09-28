@@ -6,7 +6,13 @@ extends CanvasLayer
 @onready var timeText = $panel/timeText;
 
 var paused = false;
-var opts = ['RESUME', 'RESTART', 'BOTPLAY', 'OPTIONS', 'EXIT TO MENU'];
+var opts = [
+	'RESUME',
+	'RESTART',
+	'BOTPLAY',
+	'OPTIONS', 
+	'EXIT TO MENU'
+];
 var cur_option = 0;
 var can_use = false;
 var is_paused = false;
@@ -53,7 +59,7 @@ func _ready():
 	process_mode = 2;
 	
 func _process(delta):
-	MusicManager.volume_db = lerp(MusicManager.volume_db, 0.0, 1.0 - exp(-3.0 * delta));
+	MusicManager.volume_db = lerp(MusicManager.volume_db, 0.0, 1.0 - exp(-0.35 * delta));
 	options_grp.position.y = lerp(float(options_grp.position.y), float(480-coolOffset*cur_option), 1.0 - exp(-9.0 * delta));
 	
 	if Global.can_use_menus:
@@ -64,10 +70,10 @@ func _process(delta):
 		if Input.is_action_just_released("ui_accept"):
 			is_paused = false;
 			
-	var curMinutes = str(int(curTime/1000) / 60).pad_zeros(1);
-	var curSeconds = str(int(curTime/1000) % 60).pad_zeros(2);
-	var maxMinutes = str(int(main_scene.inst.stream.get_length()) / 60).pad_zeros(1);
-	var maxSeconds = str(int(main_scene.inst.stream.get_length()) % 60).pad_zeros(2);
+	var curMinutes = str(int(curTime / 1000) / 60).pad_zeros(1);
+	var curSeconds = str(int(curTime / 1000) % 60).pad_zeros(2);
+	var maxMinutes = str(int(main_scene.songLength) / 60).pad_zeros(1);
+	var maxSeconds = str(int(main_scene.songLength) % 60).pad_zeros(2);
 	
 	timeText.position = Vector2(options_grp.get_child(cur_option).position.x + 550, options_grp.get_child(cur_option).position.y + 80);
 	timeText.visible = opts[cur_option] == "SKIP TIME";
@@ -94,7 +100,7 @@ func _input(ev):
 					var dir = int(rightKey) - int(leftKey);
 					if dir != 0:
 						curTime += dir*1000;
-						curTime = clamp(curTime, 0, main_scene.inst.stream.get_length()*1000);
+						curTime = clamp(curTime, 0, main_scene.songLength*1000);
 						
 func change_opt(opt):
 	cur_option += opt;
@@ -130,34 +136,34 @@ func _choice_pause_opts():
 			SongData.isPlaying = false;
 			
 		"SKIP TIME":
-			if curTime < main_scene.inst.get_playback_position()*1000:
+			var currentPosition = max(Conductor.getSongTime, 0.0);
+			
+			can_use = false;
+			
+			if curTime < currentPosition:
 				Conductor.startTime = curTime;
 				Global.reloadScene(true, false);
-			else:
-				_resume();
-				can_use = false;
-				for i in main_scene.game_strums.get_children():
-					if i.name == "Splashes":
-						continue;
-						
-					for j in i.noteNode.get_children():
-						j.queue_free();
-						
-				for note in main_scene.playerStrum.notesList:
-					if is_instance_valid(note.holdSplash):
-						note.holdSplash.queue_free();
-					note.holdSplash = null;
-					
-				for note in main_scene.opponentStrum.notesList:
-					if is_instance_valid(note.holdSplash):
-						note.holdSplash.queue_free();
-					note.holdSplash = null;
-					
-				main_scene.playerStrum.playerNotes.clear();
-				main_scene.opponentStrum.opponentNotes.clear();
+				return;
 				
-				main_scene.setTimePos(curTime);
-				
+			for strum in main_scene.game_strums.get_children():
+				if strum.name == "Splashes":
+					continue;
+					
+				for note in strum.noteNode.get_children():
+					if note is Note:
+						note.missed = false;
+						note.is_pressing = false;
+						note.pressed_emit = false;
+						note.holdSplash = null;
+						
+					note.queue_free();
+					
+			clear_notes();
+			
+			main_scene.setTimePos(curTime);
+			
+			_resume();
+			
 		"BOTPLAY":
 			GlobalOptions.isUsingBot = !GlobalOptions.isUsingBot;
 			for j in opts.size():
@@ -203,8 +209,8 @@ func stop_shit():
 	main_scene.voices.stop();
 	
 func _paused():
-	if curTime != main_scene.inst.get_playback_position():
-		curTime = main_scene.inst.get_playback_position()*1000;
+	if curTime != Conductor.getSongTime:
+		curTime = Conductor.getSongTime;
 		
 	MusicManager._play_song(GlobalOptions.updated_pause_music, "music", true, -80.0);
 	paused = true;
@@ -215,4 +221,32 @@ func _resume():
 	paused = false;
 	pause_panel.visible = false;
 	get_tree().paused = false;
+	
+func clear_notes():
+	if is_instance_valid(main_scene.note_splashes):
+		for i in main_scene.note_splashes.get_children():
+			main_scene.note_splashes.remove_child(i);
+			i.queue_free();
+			
+	for i in main_scene.game_strums.get_children():
+		var splashes = i.get_node_or_null("Splashes");
+		
+		if splashes:
+			for splash in splashes.get_children():
+				splash.queue_free();
+				
+	for note in main_scene.playerStrum.notesList:
+		if is_instance_valid(note.holdSplash):
+			note.holdSplash.queue_free();
+			
+		note.holdSplash = null;
+		
+	for note in main_scene.opponentStrum.notesList:
+		if is_instance_valid(note.holdSplash):
+			note.holdSplash.queue_free();
+			
+		note.holdSplash = null;
+		
+	main_scene.playerStrum.playerNotes.clear();
+	main_scene.opponentStrum.opponentNotes.clear();
 	

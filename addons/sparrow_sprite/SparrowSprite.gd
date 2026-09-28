@@ -3,34 +3,56 @@ class_name SparrowSprite extends Node2D
 
 var atlasTexture:AtlasTexture = AtlasTexture.new();
 
+@export_group("animation path", "")
 @export var texture:Texture2D:
 	set(value):
 		texture = value;
 		atlasTexture.atlas = texture;
-		xmlPath = str(texture.resource_path.substr(0, len(texture.resource_path)-3), "xml");
+		
+		var json_path = value.resource_path.get_basename() + ".json";
+		var xml_path = value.resource_path.get_basename() + ".xml";
+		
+		if FileAccess.file_exists(json_path):
+			data_path = json_path;
+		elif FileAccess.file_exists(xml_path):
+			data_path = xml_path;
+			
 		queue_redraw();
 		
-@export_file_path("*.xml") var xmlPath = "":
+@export_file_path var data_path = "":
 	set(value):
-		xmlPath = value;
+		data_path = value;
 		reload();
 		
+@export_group("playback")
 @export var frame = 0;
+@export var fps = 16:
+	set(value):
+		value = abs(value);
+		fps = value;
+		
+@export var loop = true;
 @export var playing = true:
 	set(val):
 		if playing != val:
 			playing = val;
+			frame = 0.0;
 			timer = 0.0;
 			
-@export var fps = 16;
-@export var loop = true;
+@export_group("transform")
+@export var sprite_centered = true;
 
-@export var sprite_centered:bool = true;
-@export var offset = Vector2.ZERO;
-
+@export_enum("DEFAULT:0", "ASEPRITE:1")
+var center_mode:int = 0:
+	set(value):
+		center_mode = value;
+		queue_redraw();
+		
+@export var offset:Vector2 = Vector2.ZERO;
 @export var flip_h = false;
 @export var flip_v = false;
 
+@export_group("set animation")
 var animation = 0:
 	set(value):
 		animation = value;
@@ -43,11 +65,20 @@ func reload():
 	frames.clear();
 	xmlList.clear();
 	
+	if data_path.get_extension().to_lower() == "json":
+		convert_json();
+	else:
+		convert_xml();
+		
+	notify_property_list_changed();
+	queue_redraw();
+	
+func convert_xml():
 	var fileParser = XMLParser.new();
-	fileParser.open(xmlPath);
+	fileParser.open(data_path);
 	
 	if fileParser.read() != OK:
-		print("error in %s.xml"%[xmlPath]);
+		print("error in ", data_path);
 		return;
 		
 	while fileParser.read() == OK:
@@ -89,9 +120,58 @@ func reload():
 			if !frames.has(curFrame):
 				frames.append(curFrame);
 				
-	notify_property_list_changed();
-	queue_redraw();
+func convert_json():
+	var file = FileAccess.open(data_path, FileAccess.READ);
 	
+	if file == null:
+		print("error in ", data_path);
+		return;
+		
+	var data = JSON.parse_string(file.get_as_text());
+	
+	if typeof(data) == TYPE_DICTIONARY:
+		var frame_data = data.get("frames", {});
+		var meta = data.get("meta", {});
+		var frame_tags = meta.get("frameTags", []);
+		
+		var frame_names = frame_data.keys();
+		
+		for i in frame_tags:
+			var anim_name = str(i.get("name", ""));
+			var from_frame = int(i.get("from", 0));
+			var to_frame = int(i.get("to", 0));
+			
+			if anim_name.is_empty():
+				continue;
+				
+			if !xmlList.has(anim_name):
+				xmlList[anim_name] = [];
+				
+			for j in range(from_frame, to_frame + 1):
+				if j >= frame_names.size():
+					continue;
+					
+				var sprite_frame = frame_data[frame_names[j]].get("frame", {});
+				var sprite_source = frame_data[frame_names[j]].get("spriteSourceSize", {});
+				var source_size = frame_data[frame_names[j]].get("sourceSize", {});
+				
+				var list = {
+					"x": int(sprite_frame.get("x", 0)),
+					"y": int(sprite_frame.get("y", 0)),
+					"width": int(sprite_frame.get("w", 0)),
+					"height": int(sprite_frame.get("h", 0)),
+					"frameX": int(sprite_source.get("x", 0)),
+					"frameY": int(sprite_source.get("y", 0)),
+					"frameWidth": int(source_size.get("w", sprite_frame.get("w", 0))),
+					"frameHeight": int(source_size.get("h", sprite_frame.get("h", 0))),
+					"rotated": bool(frame_data[frame_names[j]].get("rotated", false)),
+					"duration": float(frame_data[frame_names[j]].get("duration", 100))
+				};
+				
+				xmlList[anim_name].append(list);
+				
+			frames.append(anim_name);
+			
 var timer = 0.0;
 func _process(delta: float) -> void:
 	scale.x = abs(scale.x) * (-1 if flip_h else 1);
@@ -101,28 +181,44 @@ func _process(delta: float) -> void:
 		return;
 		
 	if playing:
-		timer += delta*fps;
-		if timer > get_anim_length(frames[animation])-1:
-			timer = 0 if loop else get_anim_length(frames[animation])-1;
+		timer += delta*1000;
+		while timer >= get_frame_duration():
+			timer -= get_frame_duration();
+			frame += 1;
 			
-		frame = int(timer);
+			if frame >= get_anim_length(frames[animation]):
+				frame = 0 if loop else get_anim_length(frames[animation])-1;
+				
 		queue_redraw();
 		
-func get_frame_info(anim) -> Array:
-	if xmlList.has(anim):
-		return xmlList[anim];
+func get_frame_info(anim):
+	var anim_frames = xmlList.get(anim, []);
+	
+	if anim_frames.is_empty():
+		return {};
 		
-	return [];
+	frame = clamp(frame, 0, anim_frames.size() - 1);
+	return anim_frames[frame];
+	
+func get_anim_info(anim):
+	return xmlList.get(anim, []);
 	
 func get_anim_length(anim):
-	if xmlList.has(anim):
-		return len(xmlList[anim]);
+	return xmlList.get(anim, []).size();
+	
+func get_frame_duration():
+	var duration = float(get_frame_info(frames[animation]).get("duration", 0.0));
+	
+	if duration <= 0.0:
+		return 1000.0 / fps;
 		
+	return duration * (10.0 / fps);
+	
 func _draw() -> void:
 	if frames.is_empty():
 		return;
 		
-	var currentFrame = get_frame_info(frames[animation])[frame];
+	var currentFrame = get_frame_info(frames[animation]);
 	
 	var rect = Rect2(
 		Vector2(currentFrame["x"], currentFrame["y"]),
@@ -153,12 +249,26 @@ func _draw() -> void:
 	if atlasTexture.margin.size.y < abs(atlasTexture.margin.position.y):
 		atlasTexture.margin.size.y = abs(atlasTexture.margin.position.y);
 		
-	var draw_pos = offset;
+	var draw_pos:Vector2 = offset;
 	if sprite_centered:
-		draw_pos -= Vector2(
-			currentFrame["frameWidth"] / 2.0,
-			currentFrame["frameHeight"] / 2.0
+		var source_size = Vector2(
+			currentFrame["frameWidth"],
+			currentFrame["frameHeight"]
 		);
+		
+		if center_mode == 0:
+			draw_pos -= source_size / 2.0;
+		else:
+			draw_pos -= Vector2(
+				currentFrame["width"],
+				currentFrame["height"]
+			) / 2.0;
+			
+			draw_pos += Vector2(
+				currentFrame["frameX"],
+				currentFrame["frameY"]
+			);
+			
 	if currentFrame["rotated"]:
 		draw_set_transform(draw_pos + Vector2(0, currentFrame["frameHeight"] - currentFrame["frameY"]), -PI / 2.0, Vector2.ONE);
 		draw_texture(atlasTexture, Vector2.ZERO);
@@ -166,6 +276,16 @@ func _draw() -> void:
 	else:
 		draw_texture(atlasTexture, draw_pos);
 		
+func play(anim):
+	if !xmlList.has(anim):
+		return;
+		
+	animation = xmlList.keys().find(anim);
+	playing = true;
+	timer = 0;
+	frame = 0;
+	queue_redraw();
+	
 func _get_property_list():
 	var properties: Array[Dictionary] = [];
 	
@@ -179,21 +299,11 @@ func _get_property_list():
 	
 	return properties;
 	
-func play(anim):
-	if !xmlList.has(anim):
-		return;
-		
-	animation = xmlList.keys().find(anim);
-	playing = true;
-	timer = 0;
-	frame = 0;
-	queue_redraw();
-	
 func get_rect():
 	if frames.is_empty():
 		return Rect2();
 		
-	var currentFrame = get_frame_info(frames[animation])[frame];
+	var currentFrame = get_frame_info(frames[animation]);
 	var size = Vector2(
 		currentFrame["frameWidth"],
 		currentFrame["frameHeight"]

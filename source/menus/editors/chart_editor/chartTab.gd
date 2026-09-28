@@ -7,6 +7,8 @@ extends Control
 @onready var chartTab = $chart;
 @onready var previewTab = $preview;
 
+const FONT = preload("res://assets/fonts/Symtext.ttf");
+
 func onFilePress(id):
 	match id:
 		0:
@@ -41,7 +43,11 @@ func onChartPress(id):
 		0: $chartWindow.popup();
 		1: $sectionWindow.popup();
 		2: $notesWindow.popup();
-		3: $eventsWindow.popup();
+		3: 
+			if mainScene.events_button.item_count > 0:
+				mainScene.eventsChange(0);
+				
+			$eventsWindow.popup();
 		
 func onPreviewPress(id):
 	match id:
@@ -49,6 +55,17 @@ func onPreviewPress(id):
 		1: $playerPreviewWindow.popup();
 		
 func _ready():
+	var menus = [
+		fileTab.get_popup(),
+		helpTab.get_popup(),
+		chartTab.get_popup(),
+		previewTab.get_popup()
+	];
+	
+	for i in menus:
+		i.add_theme_font_override("font", FONT);
+		i.add_theme_font_size_override("font_size", 16);
+		
 	fileTab.get_popup().add_item("open file", 0);
 	fileTab.get_popup().add_item("save file", 1);
 	fileTab.get_popup().add_item("save events", 2);

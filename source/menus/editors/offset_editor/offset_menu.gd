@@ -15,12 +15,12 @@ extends Node2D
 @onready var numsSpr = $rating_layer/nums;
 
 @onready var charIcon = $offset_layer/Icon;
+@onready var animationLabel = $offset_layer/animations;
 @onready var charBarColor = $offset_layer/colorBar;
 
 var cur_pose = 0;
 var character_list = [];
 var offset_array = [];
-var replaced = "";
 
 var characterJson = {};
 var characterData = [];
@@ -29,28 +29,23 @@ var offset_count = 0;
 var charScale = Vector2.ONE;
 
 func _ready():
-	Discord.update_discord_info("offset menu", "Is in menus");
 	SongData.isOnDeathScreen = false;
+	
+	Discord.update_discord_info("offset menu", "Is in menus");
+	
 	MusicManager._play_song(GlobalOptions.updated_pause_music, "music", true);
 	
 	frame_slider.value_changed.connect(change_character_frame);
 	
-	if GlobalOptions.rating_mode == "hud element":
-		for i in [ratingSpr, comboSpr, numsSpr]:
-			i.reparent($rating_layer, true);
-	elif GlobalOptions.rating_mode == "game element":
-		for i in [ratingSpr, comboSpr, numsSpr]:
-			i.reparent($rating_node, true);
-			
 	for i in addCharToList():
 		if i.contains(".json"):
-			replaced = i.replace(".json", "");
+			i = i.replace(".json", "");
 			
-		if replaced == "none":
+		if i == "none":
 			continue;
 			
-		character_list.append(replaced);
-		characters_options.add_item(replaced);
+		character_list.append(i);
+		characters_options.add_item(i);
 		
 	characters_options.connect("item_selected",change_character);
 	
@@ -59,57 +54,98 @@ func _ready():
 	numsSpr.position = Vector2(GlobalOptions.ratings_positions["nums"][0], GlobalOptions.ratings_positions["nums"][1]);
 	
 	characters_options.select(0 if !SongData.isPlaying else character_list.find(SongData.characters["opponent"]));
+	
+	setup_rating_mode();
 	change_character();
 	play_anim();
 	
 var adjusting_rating = false;
-func get_char_json(character, cur_offset, option):
-	var offset = {};
+func get_char_json(character):
+	character = character.trim_suffix(".tscn");
 	
-	if character.contains(".tscn"):
-		character = character.replace(".tscn", "");
-		
-	var jsonFile = FileAccess.open("res://assets/data/characters/%s.json"%[character],FileAccess.READ);
-	var jsonData = JSON.new();
-	jsonData.parse(jsonFile.get_as_text());
-	offset = jsonData.get_data();
-	jsonFile.close();
-	return offset["Poses"][cur_offset][option];
+	var path = "res://assets/data/characters/%s.json"%[character];
+	var file = FileAccess.open(path, FileAccess.READ);
+	var data = JSON.parse_string(file.get_as_text());
+	return data.get("Poses", []);
 	
+func setup_rating_mode():
+	if GlobalOptions.rating_mode == "hud element":
+		for element in [ratingSpr, comboSpr, numsSpr]:
+			element.reparent($rating_layer, true);
+			
+	elif GlobalOptions.rating_mode == "game element":
+		for element in [ratingSpr, comboSpr, numsSpr]:
+			element.reparent($rating_node, true);
+			
 func change_character(_char = 0):
 	for i in characterGrp.get_children():
-		characterGrp.remove_child(i);
 		i.queue_free();
 		
-	offset_array = [];
-	offset_count = 0;
 	cur_pose = 0;
-	characterData = [];
-	characterJson = {};
+	offset_count = 0;
 	
-	var character = load("res://source/characters/characters_scenes/%s.tscn"%[character_list[characters_options.selected]]).instantiate();
+	offset_array.clear();
+	characterData.clear();
+	characterJson.clear();
+	
+	var character_name = character_list[characters_options.selected];
+	
+	var character = load("res://source/characters/characters_scenes/%s.tscn"%[character_name]).instantiate()
 	characterGrp.add_child(character);
+	
+	var poses = get_char_json(character_name);
 	
 	for i in characterGrp.get_children():
 		%color_text.color = Color(i.charData["HealthBarColor"]).to_html();
+		
 		%icon_text.text = i.curIcon;
 		%x_scale.value = i.charData["scale"][0];
 		%y_scale.value = i.charData["scale"][1];
 		%camera_X.value = i.charData["cameraPos"][0];
 		%camera_Y.value = i.charData["cameraPos"][1];
+		
 		%flipX.button_pressed = i.charData["FlipX"];
 		%flipY.button_pressed = i.charData["FlipY"];
 		%is_player.button_pressed = i.charData["isPlayer"];
 		%anim_time.value = i.anim_time;
 		%cam_follow_poses.button_pressed = i.cam_follow_pos;
-		%animType.selected = i.anim_type-1;
+		%animType.selected = i.anim_type - 1;
 		
-		update_cross(i.charData["cameraPos"][0], i.charData["cameraPos"][1]);
+		update_cross(i.charData["cameraPos"][0], i.charData["cameraPos"][1])
 		update_scale_value(i.charData["scale"][0], i.charData["scale"][1]);
 		flip_char(i.charData["FlipX"], i.charData["FlipY"]);
 		
+		while offset_count < character.animList.size():
+			var pose = {};
+			
+			if offset_count < poses.size():
+				pose = poses[offset_count];
+				
+			var offset = pose.get("Offset", [0, 0]);
+			
+			var anim_time = pose.get("Anim Time", 5);
+			var anim_beat = pose.get("anim beat", 2);
+			var special_anim = pose.get("special anim", false);
+			
+			offset_array.append(offset.duplicate());
+			animTimes.append(anim_time);
+			animBeats.append(anim_beat);
+			specialAnims.append(special_anim);
+			
+			characterData.append({
+				"Name": character.posesList[offset_count],
+				"Anim": character.animList[offset_count],
+				"Offset": offset.duplicate(),
+				"anim beat": anim_beat,
+				"Anim Time": anim_time,
+				"special anim": special_anim
+			});
+			
+			offset_count += 1;
+			
 	change_anim(0);
 	set_rating_pos();
+	update_anim_label();
 	
 func update_offset_value(x = 0, y = 0):
 	for i in characterGrp.get_children():
@@ -120,6 +156,8 @@ func update_offset_value(x = 0, y = 0):
 		if i.character is Sprite2D or i.character is AtlasCharacter or i.character is DeadAtlasCharacter:
 			i.character.position = i.base_position + Vector2(x, y);
 			
+	update_anim_label();
+	
 func update_cross(x, y):
 	var midpoint = characterGrp.get_child(0).global_position;
 	$cross_position.position = Vector2(midpoint.x + x, midpoint.y + y);
@@ -214,7 +252,6 @@ func mouse_inside_character(spr):
 		
 	return false;
 	
-var block_grab = false;
 var pos_change_value = 0;
 
 const CAM_KEYS = {
@@ -296,29 +333,28 @@ func change_anim(change):
 func change_character_frame(frame):
 	var value = clamp(frame, 0.0, float(frame_slider.newMaxVal));
 	
-	for i in characterGrp.get_children():
-		var character = i.character;
+	var character_data = characterGrp.get_child(0);
+	var character = character_data.character;
+	
+	if character is Sprite2D:
+		character_data.character_anim.pause();
+		var anim = character_data.character_anim.get_animation(character_data.posesList[cur_pose]);
+		character_data.character_anim.seek(value * anim.step, true);
 		
-		if i.character is Sprite2D:
-			i.character_anim.pause();
-			var anim = i.character_anim.get_animation(i.posesList[cur_pose]);
-			i.character_anim.seek(value * anim.step, true);
-			
-		elif i.character is AnimatedSprite2D:
-			character.stop();
-			i.character.frame = int(value);
-			
-		elif i.character is SparrowCharacter or i.character is DeadSparrowCharacter:
-			character.playing = false;
-			i.character.timer = value;
-			i.character.frame = int(i.character.timer);
-			i.character.queue_redraw();
-			
-		elif i.character is AtlasSprite or i.character is DeadAtlasCharacter:
-			character.playing = false;
-			i.character.timer = i.character.start_frame + value;
-			i.character.frame = int(i.character.timer);
-			
+	elif character is AnimatedSprite2D:
+		character.stop();
+		character.frame = int(value);
+		
+	elif character is SparrowCharacter or character is DeadSparrowCharacter:
+		character.playing = false;
+		character.frame = int(value);
+		character.queue_redraw();
+		
+	elif character is AtlasSprite or character is DeadAtlasCharacter:
+		character.playing = false;
+		character.timer = character.start_frame + value;
+		character.frame = int(character.timer);
+		
 var rating_status = null;
 enum RatingState {
 	RATING = 0,
@@ -332,8 +368,6 @@ var animTimes = [];
 var animBeats = [];
 var specialAnims = [];
 
-var last_mouse_x = 0;
-
 var last_icon = "";
 var new_icon = "";
 func _process(_delta: float) -> void:
@@ -346,49 +380,31 @@ func _process(_delta: float) -> void:
 	charBarColor.tint_under = %color_text.color;
 	
 	update_scale_value(charScale.x, charScale.y);
+	update_character_frame();
+	
 	pos_change_value = 1 if !Input.is_action_pressed("ui_shift") else 10;
 	
-	for i in characterGrp.get_children():
-		var frame = 0;
-		var total_frames = 0;
-		
-		if i.character is AnimatedSprite2D:
-			frame = i.character.frame;
-			total_frames = i.character.sprite_frames.get_frame_count(i.posesList[cur_pose]);
+	var character_data = characterGrp.get_child(0);
+	if Input.is_action_pressed("mouse_click") && !$FileDialog.visible:
+		if Input.is_action_pressed("ui_shift"):
+			var mouse = get_global_mouse_position();
+			var character_pos = character_data.global_position;
 			
-		elif i.character is AtlasCharacter or i.character is DeadAtlasCharacter:
-			frame = int(i.character.frame-i.character.start_frame);
-			total_frames = int(abs(i.character.start_frame-i.character.limit))+1;
+			update_cross(mouse.x - character_pos.x, mouse.y - character_pos.y);
 			
-		elif i.character is SparrowCharacter or i.character is DeadSparrowCharacter:
-			frame = int(i.character.timer);
-			total_frames = int(i.character.get_anim_length(i.posesList[cur_pose]));
+			return;
 			
-		elif i.character is Sprite2D:
-			frame = int(round(i.character_anim.current_animation_position / i.character_anim.get_animation(i.posesList[cur_pose]).step));
-			total_frames = int(round(i.character_anim.get_animation(i.posesList[cur_pose]).length / i.character_anim.get_animation(i.posesList[cur_pose]).step))+1;
+		if Input.is_action_just_pressed("mouse_click") && mouse_inside_character(character_data.character):
+			dragging_character = true;
 			
-		cur_frame_text.text = "frame: "+str(frame+1, " / ", total_frames);
-		
-		frame_slider.value = frame;
-		frame_slider.newMaxVal = total_frames-1;
-		
-	if !adjusting_rating && !%FileDialog.visible:
-		if Input.is_action_pressed("mouse_click"):
-			block_grab = false;
-			if Input.is_action_pressed("ui_shift"):
-				update_cross(get_global_mouse_position().x - characterGrp.get_child(0).global_position.x, get_global_mouse_position().y - characterGrp.get_child(0).global_position.y);
-				return;
-				
-			if mouse_inside_character(characterGrp.get_child(0).character):
-				dragging_character = true;
-				
 	if Input.is_action_just_released("mouse_click"):
 		dragging_character = false;
 		
-	if dragging_character:
-		%x_offset.value = characterGrp.to_local(get_global_mouse_position()).x/char_scale.x;
-		%y_offset.value = characterGrp.to_local(get_global_mouse_position()).y/char_scale.y;
+	if dragging_character && !$FileDialog.visible:
+		var mouse = characterGrp.to_local(get_global_mouse_position());
+		
+		%x_offset.value = mouse.x / char_scale.x;
+		%y_offset.value = mouse.y / char_scale.y;
 		
 		return;
 		
@@ -440,62 +456,62 @@ func _process(_delta: float) -> void:
 			
 	Global.update_cursor("pointer" if get_viewport().gui_get_hovered_control() is TabBar or get_viewport().gui_get_hovered_control() is SpinBox or get_viewport().gui_get_hovered_control() is CheckBox or get_viewport().gui_get_hovered_control() is Button or get_viewport().gui_get_hovered_control() is OptionButton else "default");
 	
-	for i in characterGrp.get_children():
-		if !offset_count > i.animList.size()-1:
-			offset_array.append(get_char_json(character_list[characters_options.selected if !SongData.isPlaying else character_list.find(SongData.characters["opponent"])], offset_count, "Offset"));
-			animTimes.append(5);
-			animBeats.append(2);
-			specialAnims.append(false);
-			
-			characterData.append({
-				"Name": i.posesList[offset_count],
-				"Anim": i.animList[offset_count],
-				"Offset": [0, 0],
-				"anim beat": 2,
-				"Anim Time": 5,
-				"special anim": false
-			});
-			
-			characterData[offset_count]["Offset"] = [
-				offset_array[offset_count][0],
-				offset_array[offset_count][1]
-			];
-			
-			characterData[offset_count]["anim beat"] = int(animBeats[offset_count]);
-			characterData[offset_count]["Anim Time"] = int(animTimes[offset_count]);
-			characterData[offset_count]["special anim"] = specialAnims[offset_count];
-			
-			offset_count += 1;
-			
-		characterData[cur_pose]["Offset"] = [
-			offset_array[cur_pose][0],
-			offset_array[cur_pose][1]
-		];
-		
-		characterData[cur_pose]["anim beat"] = int(animBeats[cur_pose]);
-		characterData[cur_pose]["Anim Time"] = int(animTimes[cur_pose]);
-		characterData[cur_pose]["special anim"] = specialAnims[cur_pose];
-		
-		characterJson = {
-			"Poses": characterData,
-			"HealthBarColor": str("#", %color_text.color.to_html()),
-			"HealthIcon": %icon_text.text,
-			"FlipX": %flipX.button_pressed,
-			"FlipY": %flipY.button_pressed,
-			"isPlayer": %is_player.button_pressed,
-			"AnimatedIcon": %animated_icon.button_pressed,
-			"scale": [%x_scale.value, %y_scale.value],
-			"cameraPos": [%camera_X.value, %camera_Y.value],
-			"camera follow pos": %cam_follow_poses.button_pressed,
-			"anim type": [1, 2, 3][%animType.selected]
-		};
-		
 	%x_offset.value = offset_array[cur_pose][0];
 	%y_offset.value = offset_array[cur_pose][1];
 	%beat_time.value = animBeats[cur_pose];
 	%anim_time.value = animTimes[cur_pose];
 	%is_special.button_pressed = specialAnims[cur_pose];
 	
+func update_character_frame():
+	var frame = 0;
+	var total_frames = 0;
+	
+	if offset_array.is_empty():
+		return;
+		
+	var character_data = characterGrp.get_child(0);
+	var character = character_data.character;
+	
+	if character is AnimatedSprite2D:
+		frame = character.frame;
+		total_frames = character.sprite_frames.get_frame_count(character_data.posesList[cur_pose]);
+		
+	elif character is AtlasCharacter or character is DeadAtlasCharacter:
+		frame = int(character.frame - character.start_frame);
+		total_frames = int(abs(character.start_frame - character.limit) + 1);
+		
+	elif character is SparrowCharacter or character is DeadSparrowCharacter:
+		frame = int(character.frame);
+		total_frames = int(character.get_anim_length(character_data.posesList[cur_pose]));
+		
+	elif character is Sprite2D:
+		var animation = character_data.character_anim.get_animation(character_data.posesList[cur_pose]);
+		
+		frame = int(round(character_data.character_anim.current_animation_position / animation.step));
+		total_frames = int(round(animation.length / animation.step)) + 1;
+		
+	if total_frames <= 0:
+		return;
+		
+	frame = clamp(frame, 0, total_frames - 1);
+	
+	cur_frame_text.text = "frame: %d / %d" % [frame + 1, total_frames];
+	
+	frame_slider.value = frame;
+	frame_slider.newMaxVal = total_frames-1;
+	
+func update_anim_label():
+	animationLabel.text = "";
+	if offset_array.is_empty():
+		return;
+		
+	for i in characterGrp.get_children():
+		for j in i.animList.size():
+			if j >= offset_array.size():
+				continue;
+				
+			animationLabel.text += "%s: (%s, %s)\n" % [i.animList[j], offset_array[j][0], offset_array[j][1]];
+			
 func change_zoom(val):
 	var last = get_global_mouse_position();
 	camera.zoom += Vector2.ONE * val;
@@ -505,7 +521,7 @@ func change_zoom(val):
 	
 func addCharToList():
 	var charList = [];
-	for i in getFolderShit("assets/data/characters/"):
+	for i in Global.get_folder("assets/data/characters/"):
 		if i == "none.json":
 			continue;
 			
@@ -514,22 +530,24 @@ func addCharToList():
 			
 	return charList;
 	
-func getFolderShit(folder):
-	var file = [];
-	var coolFolder = DirAccess.open("res://%s"%[folder]);
-	if coolFolder:
-		coolFolder.list_dir_begin();
-		var nameShit = coolFolder.get_next();
-		while nameShit != "":
-			file.append(nameShit);
-			nameShit = coolFolder.get_next();
-			
-	return file;
-	
 func save_file() -> void:
 	$FileDialog.popup_centered();
 	
 func _on_file_dialog_file_selected(json):
+	characterJson = {
+		"Poses": characterData,
+		"HealthBarColor": str("#", %color_text.color.to_html()),
+		"HealthIcon": %icon_text.text,
+		"FlipX": %flipX.button_pressed,
+		"FlipY": %flipY.button_pressed,
+		"isPlayer": %is_player.button_pressed,
+		"AnimatedIcon": %animated_icon.button_pressed,
+		"scale": [%x_scale.value, %y_scale.value],
+		"cameraPos": [%camera_X.value, %camera_Y.value],
+		"camera follow pos": %cam_follow_poses.button_pressed,
+		"anim type": [1, 2, 3][%animType.selected]
+	};
+	
 	var new_jsonFile = FileAccess.open(json, FileAccess.WRITE);
 	new_jsonFile.store_string(JSON.stringify(characterJson, "\t"));
 	new_jsonFile.close();

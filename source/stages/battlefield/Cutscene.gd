@@ -41,7 +41,7 @@ func ugh_intro():
 	
 	bf_anim.hide();
 	opponent_anim.hide();
-	SongData.is_not_in_cutscene = false;
+	SongData.is_in_cutscene = true;
 	Global.is_on_video = true;
 	
 	#$AnimationPlayer.play("ugh");
@@ -83,7 +83,8 @@ func guns_intro():
 	
 	cutSceneBf.hide();
 	opponent_anim.hide();
-	SongData.is_not_in_cutscene = false;
+	
+	SongData.is_in_cutscene = true;
 	Global.is_on_video = true;
 	
 	#$AnimationPlayer.play("guns");
@@ -111,7 +112,7 @@ func stress_intro():
 	tankmanCutscene.frame = 507;
 	tankmanCutscene.limit = 913;
 	
-	SongData.is_not_in_cutscene = false;
+	SongData.is_in_cutscene = true;
 	Global.is_on_video = true;
 	
 	pico_anim.frame = 0;

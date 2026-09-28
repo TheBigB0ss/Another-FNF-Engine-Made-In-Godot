@@ -130,6 +130,7 @@ func _ready():
 	if stage is Stage:
 		stage.init_game(self);
 		
+	SongData.stage_shader = SongData.get_stage_shader(stage);
 	SongData.loadStageJson(SongData.stage);
 	
 	curSong = SongData.song;
@@ -172,36 +173,20 @@ func _ready():
 	setup_hud();
 	updateScoreText();
 	
-	if SongData.isStoryMode && SongData.death_count <= 0 && !SongData.restartSong:
-		match curSong:
-			#"ugh": stage.ugh_intro();
-			#"guns": stage.guns_intro();
-			#"stress": stage.stress_intro();
-			"thorns":
-				if stage && stage.has_method("start_cutscene"):
-					stage.start_cutscene()
-					
-	#if (curSong == "ugh" or curSong == "guns" or curSong == "stress"):
-	#	stage.connect("end_tankman_cutscene", startCountdown);
-		
-	if Global.has_dialogue():
-		SongData.is_not_in_cutscene = false;
-		
-		if SongData.death_count <= 0 && SongData.isStoryMode && !SongData.restartSong:
-			match curSong:
-				"thorns":
-					stage.connect("end_senpai_cutscene", start_dialogue);
-				_:
-					start_dialogue();
+	if Global.has_dialogue() && SongData.death_count <= 0 && SongData.isStoryMode && !SongData.restartSong:
+		if curSong == "thorns" && stage.has_method("start_cutscene"):
+			if !stage.end_senpai_cutscene.is_connected(start_dialogue):
+				stage.end_senpai_cutscene.connect(start_dialogue);
+				
+			stage.start_cutscene();
 		else:
-			Global.is_on_video = false;
-			startCountdown();
+			SongData.is_in_cutscene = true;
+			start_dialogue();
 	else:
-		SongData.is_not_in_cutscene = true;
+		SongData.is_in_cutscene = false;
 		Global.is_on_video = false;
-		startCountdown();
 		
-	if SongData.is_not_in_cutscene && !Global.is_on_video:
+	if !SongData.is_in_cutscene && !Global.is_on_video:
 		startCountdown();
 		
 	if GlobalOptions.show_songCard:
@@ -211,7 +196,7 @@ func _ready():
 		hud.move_child(newSongCard, 8);
 		
 func start_dialogue():
-	SongData.is_not_in_cutscene = false;
+	SongData.is_in_cutscene = true;
 	dialogue_box.start();
 	dialogue_box.show();
 	dialogue_box.pause_song();
@@ -262,7 +247,12 @@ func _process(delta: float) -> void:
 	
 	if GlobalOptions.isUsingBot:
 		botplayTime += delta;
-		botplayText.modulate.a = ((1+sin(botplayTime*5))/2) if !SongData.isPixelStage else (round((1+sin(botplayTime*5))/2));
+		var alpha = (1.0 + sin(botplayTime * 5.0)) * 0.5;
+		
+		if SongData.isPixelStage:
+			alpha = round(alpha);
+			
+		botplayText.modulate.a = alpha;
 		
 	if !finished_song:
 		var currentPosition = max(Conductor.getSongTime / 1000.0, 0.0);
@@ -283,28 +273,29 @@ func _process(delta: float) -> void:
 				var timeLeft = max(0, songLength - currentPosition);
 				timeText.text = str(int(timeLeft) / 60).pad_zeros(1) + ":" + str(int(timeLeft) % 60).pad_zeros(2);
 				
-	if (Conductor.getSongTime/1000) >= songLength && !finished_song:
-		inst.stop();
-		voices.stop();
-		
-		if curSong == "test":
-			AchievementPopUp.set_achievement('debug mode', true);
+		if currentPosition >= songLength:
+			inst.stop();
+			voices.stop();
 			
-		match rankName:
-			"SFC", "GFC": AchievementPopUp.set_achievement('perfectionist', true);
-			"FC": AchievementPopUp.set_achievement('combo master', true);
-			
-		if health <= 15:
-			AchievementPopUp.set_achievement('fucked up', true);
-			
-		if SongData.isStoryMode && playlist.size() == 1 && achievements_map.has(SongData.weekName) && songDiff != "remix":
-			var diffPrefix = songDiff if songDiff != "" else "normal";
-			AchievementPopUp.set_achievement(achievements_map[SongData.weekName][0][diffPrefix], true);
-			
-		if AchievementPopUp.achievements_fuck.is_empty():
-			finishSong();
-			
-		finished_song = true;
+			if curSong == "test":
+				AchievementPopUp.set_achievement("debug mode", true);
+				
+			if rankName == "SFC" or rankName == "GFC":
+				AchievementPopUp.set_achievement("perfectionist", true);
+			elif rankName == "FC":
+				AchievementPopUp.set_achievement("combo master", true);
+				
+			if health <= 15:
+				AchievementPopUp.set_achievement("fucked up", true);
+				
+			if (SongData.isStoryMode && playlist.size() == 1 && achievements_map.has(SongData.weekName) && songDiff != "remix"):
+				var diff_prefix = songDiff if songDiff != "" else "normal"
+				AchievementPopUp.set_achievement(achievements_map[SongData.weekName][0][diff_prefix], true);
+				
+			if AchievementPopUp.achievements_fuck.is_empty():
+				finishSong();
+				
+			finished_song = true;
 		
 	checkPlayerDead();
 	set_icon_anim();
@@ -603,7 +594,10 @@ func _input(ev):
 			finishSong();
 			
 func startCountdown():
-	SongData.is_not_in_cutscene = true;
+	if changing_scenes:
+		return;
+		
+	SongData.is_in_cutscene = false;
 	MusicManager._stop_music();
 	
 	is_on_intro = true;
@@ -620,6 +614,8 @@ func startCountdown():
 		
 		Conductor.startTime = 0;
 		Conductor.seekTime = 0;
+		
+		countdownSprite.queue_free();
 		
 		return;
 		
@@ -638,11 +634,9 @@ func startCountdown():
 		return;
 		
 	for i in [bf, dad, gf]:
-		if !is_instance_valid(i):
-			continue;
+		if is_instance_valid(i):
+			i.back_to_idle(idleCounter);
 			
-		i.back_to_idle(idleCounter);
-		
 	for i in 5:
 		await get_tree().create_timer(Conductor.crochet/1000).timeout;
 		
@@ -795,10 +789,6 @@ func setTimePos(time):
 		voices.play(time/1000);
 	inst.play(time/1000);
 	
-	for i in note_splashes.get_children():
-		i.queue_free();
-		note_splashes.remove_child(i);
-		
 	Conductor.seekTime = time;
 	Conductor.update_position(time);
 	

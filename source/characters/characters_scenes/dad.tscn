@@ -14,11 +14,13 @@ anims_timer = {
 "singRight": [2, 5, false],
 "singUp": [2, 5, false]
 }
-anim_type = 3
+animation = 0
+anim_type = 2
 have_death_animation = false
 idle_type = 2
+frame_count = 2.4
 texture = ExtResource("2_k052l")
-xmlPath = "res://assets/images/characters/daddyDearest.xml"
+data_path = "res://assets/images/characters/daddyDearest.xml"
 frame = 13
 fps = 20
 loop = false

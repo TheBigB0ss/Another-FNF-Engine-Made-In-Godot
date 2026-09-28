@@ -3,6 +3,7 @@ class_name AtlasSprite extends Node2D
 
 var spriteStuff = {};
 
+@export_group("animation path", "")
 @export_dir var path = "":
 	set(value):
 		path = value;
@@ -13,17 +14,34 @@ var spriteStuff = {};
 		};
 		reload();
 		
-@export_range(0.1, 5.0, 0.001) var speed = 1.0;
+@export_group("playback")
 @export var frame = 0;
-@export var playing = true;
 @export var loop = false;
+@export var playing = true;
+@export_range(0.1, 5.0, 0.001) var speed = 1.0;
+
+@export_group("limits")
 @export var limit = 0;
 @export var start_frame = 0;
-@export var animate_symbols = false;
 
+@export_group("transform")
 @export var flip_h = false;
 @export var flip_v = false;
-
+@export var centered = true:
+	set(value):
+		centered = value;
+		symbol_centered = false;
+		if centered:
+			center_symbols();
+		else:
+			symbol_position = Vector2.ZERO;
+			set_symbols_position();
+			
+@export var symbol_offset = Vector2.ZERO:
+	set(value):
+		symbol_offset = value;
+		set_symbols_position();
+		
 var atlas = {};
 var animationData = {};
 var spriteData = {};
@@ -33,22 +51,35 @@ var symbols_elements = {};
 var total_frames = 0;
 var spriteZIndex = 0;
 
+@export_group("set animation")
 var animation = 0:
 	set(value):
 		animation = value;
+		symbol_centered = false;
 		if !animationList.is_empty():
 			play(animationList[animation]);
 			
 var animationList = [];
 
+var symbols_root:Node2D;
+
+var symbol_centered = false;
+var symbol_position = Vector2.ZERO;
+
 func reload():
+	symbol_centered = false;
+	symbol_position = Vector2.ZERO;
+	symbol_offset = Vector2.ZERO;
+	
 	total_frames = 0;
 	spriteZIndex = 0;
+	
 	symbols_elements.clear();
 	symbol_data.clear();
 	animationData.clear();
 	spriteData.clear();
 	atlas.clear();
+	
 	animationList.clear();
 	animationList.append("NONE");
 	
@@ -56,6 +87,10 @@ func reload():
 		i.queue_free();
 		self.remove_child(i);
 		
+	symbols_root = Node2D.new();
+	symbols_root.name = "Symbols";
+	add_child(symbols_root);
+	
 	animationData = getJsonData(spriteStuff["animation"]);
 	spriteData = getJsonData(spriteStuff["spriteMap"]);
 	
@@ -84,10 +119,13 @@ func reload():
 		
 	notify_property_list_changed();
 	
-func draw_symbol(element, layer, index, elementTransform, key = "atlas"):
+func draw_symbol(element, layer, index, elementTransform, key = " ", current_frame = frame, starter_frame = start_frame):
 	var elementData = element.get("SI", element.get("ASI"));
+	
+	var blendId = int(elementData.get("B", 10));
+	var symbolColor = elementData.get("C", null);
 	var symbolID = symbol_data[elementData["SN"]];
-	var keyID = "%s/%s/%d"%[key, symbolID["SN"], index];
+	var keyID = str(key, "/", symbolID["SN"], "/", layer, "/", index);
 	
 	var trans = Transform2D.IDENTITY;
 	if elementData.has("M3D"):
@@ -116,13 +154,12 @@ func draw_symbol(element, layer, index, elementTransform, key = "atlas"):
 			symbol_total_frames = max(symbol_total_frames, int(fr["I"]) + int(fr["DU"]));
 			
 	var ff = int(elementData.get("FF", 0));
-	match elementData.get("LP", "SF"):
+	var loop_mode = elementData.get("LP", "SF");
+	match loop_mode:
 		"LP":
-			if animate_symbols:
-				symbol_frame = wrapi(ff + (frame - start_frame), 0, symbol_total_frames);
+			symbol_frame = wrapi(ff + (current_frame - starter_frame), 0, symbol_total_frames);
 		"PO":
-			if animate_symbols:
-				symbol_frame = min(ff + (frame - start_frame), int(elementData.get("LF", ff)));
+			symbol_frame = min(ff + (current_frame - starter_frame), int(elementData.get("LF", ff)));
 		"SF":
 			symbol_frame = ff;
 		_:
@@ -142,15 +179,15 @@ func draw_symbol(element, layer, index, elementTransform, key = "atlas"):
 				for e in fr.get("E", []):
 					var data = e.get("SI", e.get("ASI"));
 					if data.has("N"):
-						create_sprite(data, keyID, newId, finalTrans);
+						create_sprite(data, keyID, newId, finalTrans, blendId, symbolColor);
 						
 					elif data.has("SN"):
-						draw_symbol(e, layer, newId, finalTrans, keyID);
+						draw_symbol(e, layer, newId, finalTrans, keyID, symbol_frame, ff);
 						
 					newId += 1;
 					
-func create_sprite(data, keyID, index, spriteTransform):
-	var id = "%s/%s"%[keyID, data["N"]];
+func create_sprite(data, keyID, index, spriteTransform, blendID = 0, color = null):
+	var id = "%s-%s-%d-%d"%[keyID, data["N"], index, spriteZIndex];
 	
 	var imgId = data["N"];
 	var rect = atlas[imgId]["sprite_rect"];
@@ -160,15 +197,19 @@ func create_sprite(data, keyID, index, spriteTransform):
 		var symbolSprite = Sprite2D.new();
 		symbolSprite.centered = false;
 		symbolSprite.name = id;
-		add_child(symbolSprite);
+		symbols_root.add_child(symbolSprite);
 		symbols_elements[id] = symbolSprite;
 		
 	var spr = symbols_elements[id];
+	spr.z_as_relative = true;
 	spr.visible = true;
+	spr.z_index = 0;
+	
+	spr.material = apply_blend(blendID);
+	spr.modulate = set_symbol_color(color);
 	
 	var textureFrame = AtlasTexture.new();
 	textureFrame.atlas = load(spriteStuff["sprite"]);
-	textureFrame.region = rect;
 	textureFrame.region = rect;
 	
 	spr.texture = textureFrame;
@@ -197,7 +238,8 @@ func create_sprite(data, keyID, index, spriteTransform):
 		finalTrans = finalTrans * rotatedTransform;
 		
 	spr.transform = finalTrans;
-	spr.z_index = spriteZIndex;
+	
+	symbols_root.move_child(spr, spriteZIndex);
 	spriteZIndex += 1;
 	
 func _process(delta: float) -> void:
@@ -242,9 +284,15 @@ func atlas_process(delta: float) -> void:
 			if frame >= fr["I"] && frame < fr["I"] + fr["DU"]:
 				var id = 0;
 				for e in fr.get("E", []):
-					draw_symbol(e, i, id, Transform2D.IDENTITY);
+					draw_symbol(e, i, id, Transform2D.IDENTITY, " ", frame, fr["I"]);
 					id += 1;
 					
+	if centered:
+		center_symbols();
+	else:
+		symbol_position = Vector2.ZERO;
+		set_symbols_position();
+		
 func getJsonData(data):
 	var new_animationFile = FileAccess.open(data, FileAccess.READ);
 	var jsonData = JSON.new();
@@ -260,8 +308,14 @@ func play(anim):
 		frame = 0;
 		limit = 0;
 		
+		symbol_centered = false;
+		symbol_position = Vector2.ZERO;
+		
+		set_symbols_position();
+		
 		return;
 		
+	symbol_centered = false;
 	playing = true;
 	for j in animationData["AN"]["TL"]["L"]:
 		for k in j["FR"]:
@@ -271,6 +325,14 @@ func play(anim):
 				frame = k["I"];
 				limit = (k["I"] + k["DU"])-1;
 				
+func set_symbols_position():
+	if is_instance_valid(symbols_root):
+		symbols_root.position = symbol_position + symbol_offset;
+		
+func set_symbol_offset(value):
+	symbol_offset = value;
+	set_symbols_position();
+	
 func _get_property_list():
 	var properties: Array[Dictionary] = [];
 	
@@ -304,6 +366,67 @@ func get_rect():
 			
 	return rect if found else Rect2();
 	
+func center_symbols():
+	if symbol_centered:
+		return;
+		
+	var rect = Rect2();
+	var found = false;
+	
+	for i in symbols_elements.values():
+		if !i.visible or i.texture == null:
+			continue;
+			
+		var local_rect = i.get_rect();
+		var points = [
+			i.transform * local_rect.position,
+			i.transform * Vector2(local_rect.end.x, local_rect.position.y),
+			i.transform * Vector2(local_rect.position.x, local_rect.end.y),
+			i.transform * local_rect.end
+		];
+		
+		for j in points:
+			if !found:
+				rect = Rect2(j, Vector2.ZERO);
+				found = true;
+			else:
+				rect = rect.expand(j);
+				
+	symbol_position = -rect.get_center() if found else Vector2.ZERO;
+	set_symbols_position();
+	
+	symbol_centered = true;
+	
+var blend_materials = {};
+const BLEND_SHADER = preload("res://addons/atlas_sprite/blends/blend_modes.gdshader");
+func apply_blend(blend_id):
+	if blend_id == 10:
+		return null;
+		
+	if blend_materials.has(blend_id):
+		return blend_materials[blend_id];
+		
+	var symbolMaterial = ShaderMaterial.new();
+	symbolMaterial.shader = BLEND_SHADER;
+	symbolMaterial.set_shader_parameter("blend_mode", blend_id);
+	
+	blend_materials[blend_id] = symbolMaterial;
+	return symbolMaterial;
+	
+func set_symbol_color(color):
+	if color is Dictionary:
+		return Color.WHITE;
+		
+	if color != null:
+		return Color(
+			float(color[0]),
+			float(color[1]),
+			float(color[2]),
+			float(color[3])
+		);
+		
+	return Color.WHITE;
+	
 func get_symbol_info(symbol_name, only_visible = false):
 	for i in symbols_elements.values():
 		if only_visible && !i.visible:
@@ -313,3 +436,4 @@ func get_symbol_info(symbol_name, only_visible = false):
 			return i;
 			
 	return null;
+	

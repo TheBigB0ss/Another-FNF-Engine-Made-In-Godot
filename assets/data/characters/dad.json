@@ -61,7 +61,7 @@
 			"special anim": false
 		}
 	],
-	"anim type": 3,
+	"anim type": 2,
 	"camera follow pos": false,
 	"cameraPos": [
 		160.0,

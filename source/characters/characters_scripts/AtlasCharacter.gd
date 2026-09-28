@@ -212,7 +212,7 @@ func character_process(delta):
 	if (curAnim.begins_with("sing") or curAnim.contains("sing") or special_anim) && characterState != CHARACTER_STATES.HOLDING:
 		idleTimer += delta;
 		
-	if SongData.is_not_in_cutscene && !Global.is_on_video:
+	if !SongData.is_in_cutscene && !Global.is_on_video:
 		if idleTimer >= Conductor.stepCrochet * anim_time * 0.001:
 			if curAnim.contains("sing") or special_anim:
 				dance();
@@ -291,10 +291,16 @@ func _playAnim(anim = "", special = false):
 	curAnim = anim;
 	
 func set_offset(animID):
-	var pose_offset = Vector2(charData["Poses"][animID]["Offset"][0], charData["Poses"][animID]["Offset"][1]) if charData["Poses"][animID].has("Offset") else Vector2.ZERO;
+	var pose_offset = Vector2.ZERO;
 	
+	if charData["Poses"][animID].has("Offset"):
+		pose_offset = Vector2(
+			charData["Poses"][animID]["Offset"][0], 
+			charData["Poses"][animID]["Offset"][1]
+		);
+		
 	if !Engine.is_editor_hint():
-		character.position = (base_position + pose_offset);
+		set_symbol_offset(pose_offset);
 		
 func loop_anim():
 	if characterState != CHARACTER_STATES.HOLDING:
@@ -310,8 +316,8 @@ func loop_anim():
 				frame = newFrame;
 				timer = newFrame;
 				
-func _get_property_list():
-	var properties: Array[Dictionary] = [];
+func _get_property_list() -> Array[Dictionary]:
+	var properties: Array[Dictionary] = super._get_property_list();
 	
 	properties.append({
 		"name": "anim_type",

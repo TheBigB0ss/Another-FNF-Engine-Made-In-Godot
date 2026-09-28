@@ -108,7 +108,7 @@ func start_song():
 	#cutsceneLoader.hide();
 	
 	MusicManager._stop_music();
-	SongData.is_not_in_cutscene = true;
+	SongData.is_in_cutscene = false;
 	Global.is_on_video = false;
 	self.emit_signal("end_tankman_cutscene");
 	

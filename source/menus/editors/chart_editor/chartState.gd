@@ -17,9 +17,7 @@ var songLength = 0.0;
 
 @onready var song_line = $'grid_objs/song_line';
 @onready var selection = $'grid_objs/selection_box';
-
 @onready var notes = $'grid_objs/notes';
-@onready var sustain_notes = $'grid_objs/sustain_notes';
 
 @onready var player1Options = $chart_UI/chart_objs/chartTab/chartWindow/player1;
 @onready var player2Options = $chart_UI/chart_objs/chartTab/chartWindow/player2;
@@ -127,6 +125,9 @@ func _ready():
 	chart_cam.position.y = grid.position.y;
 	chart_bg.position.y = grid.position.y;
 	
+	for i in [player1Options, player2Options, gfOptions, stageOptions, notesEvents, note_type_button]:
+		i.fit_to_longest_item = false;
+		
 	SongData.isOnChartMode = true;
 	Discord.update_discord_info("chart menu", "Is in menus");
 	
@@ -325,6 +326,10 @@ func _input(ev):
 				
 			KEY_ESCAPE, KEY_ENTER, KEY_KP_ENTER:
 				if !ev.echo:
+					changeSection(0);
+					Conductor.getSongTime = section_start_time();
+					update_hud_position();
+					
 					Global.update_cursor("default");
 					load_chart_stuff();
 					
@@ -541,7 +546,7 @@ func _process(delta):
 	var chartCurStep = (curSection*16) + floor(number_to_time(time_to_number(Conductor.getSongTime - section_start_time())) / chartStepCrochet);
 	var chartCurBeat = floor(chartCurStep / 4);
 	
-	chart_info.text = "Section: %s      Step: %s      Beat: %s                                                                 %s        BPM: %s"%[curSection, int(chartCurStep), int(chartCurBeat), str(curMinutes, ":", curSeconds, " / ", maxMinutes, ":", maxSeconds), %Bpm.value];
+	chart_info.text = "Section: %s      Step: %s      Beat: %s                                                                 %s        BPM: %s"%[curSection, int(chartCurStep), int(chartCurBeat), str(curMinutes, ":", curSeconds, " / ", maxMinutes, ":", maxSeconds), get_section_bpm(curSection)];
 	
 	if grid.mouse_inside_grid() && !is_mouse_inside_ui():
 		selection.global_position.x = grid.global_position.x + floor(grid.get_local_mouse_position().x / grid_size) * grid_size+20;
@@ -614,6 +619,12 @@ func is_mouse_inside_ui():
 	if hovered == $chart_UI/chart_objs/topBar or hovered == $chart_UI/chart_objs/bottomBar:
 		return true;
 		
+	var option_buttons = [player1Options, player2Options, gfOptions, stageOptions, notesEvents, note_type_button, events_button];
+	
+	for i in option_buttons:
+		if i.get_popup().visible:
+			return true;
+			
 	var windows = [
 		$chart_UI/chart_objs/chartTab/helpWindow,
 		$chart_UI/chart_objs/chartTab/soundWindow,
@@ -664,7 +675,7 @@ func load_new_section(sec):
 		"event": []
 	};
 	
-	for note_data in SongData.get_character_section_notes(sec, SongData.playerNotes):
+	for note_data in SongData.player_section_notes[sec]:
 		var strumTime = note_data[0];
 		var noteTime = strumTime - section_start_time();
 		
@@ -675,7 +686,7 @@ func load_new_section(sec):
 		var new_note = spawn_note(noteTime, lane, note_data[2], floor(time_to_number(noteTime)), note_data[3]);
 		loadSec[sec]["notes"].append(new_note);
 		
-	for note_data in SongData.get_character_section_notes(sec, SongData.opponentNotes):
+	for note_data in SongData.opponent_section_notes[sec]:
 		var strumTime = note_data[0];
 		var noteTime = strumTime - section_start_time();
 		
@@ -686,7 +697,7 @@ func load_new_section(sec):
 		var new_note = spawn_note(noteTime, lane, note_data[2], floor(time_to_number(noteTime)), note_data[3]);
 		loadSec[sec]["notes"].append(new_note);
 		
-	for note_data in SongData.get_character_section_notes(sec, SongData.songEvents):
+	for note_data in SongData.section_events[sec]:
 		var strumTime = note_data[0];
 		var noteTime = strumTime - section_start_time();
 		
@@ -765,7 +776,6 @@ func add_event_note(strumtime, noteData):
 		
 	SongData.reload_section();
 	load_section();
-	print(curselected_event);
 	
 func add_note(strumtime, noteData, _sustain, type):
 	var note_strumtime = number_to_time(strumtime) + section_start_time();
@@ -806,7 +816,6 @@ func add_note(strumtime, noteData, _sustain, type):
 		
 	SongData.reload_section();
 	load_section();
-	print(curselected_note);
 	
 func delete_note(strumtime, noteData):
 	var notes_deleted = [];
@@ -977,7 +986,7 @@ func copy_section(cool_array):
 		if i == null:
 			continue;
 			
-		copyNotes.append([i.strumTime, i.noteData, i.sustainLength, i.type]);
+		copyNotes.append([i.strumTime, i.noteData, i.sustainLength, "", null, null]);
 		
 func paste_section():
 	if copyNotes == []:
@@ -986,9 +995,6 @@ func paste_section():
 	var side = grid.get_side();
 	for i in copyNotes:
 		var note = i.duplicate();
-		note.append(null);
-		note.append(null);
-		
 		note[0] += section_start_time();
 		
 		var ogLane = int(note[1]);
@@ -1128,10 +1134,26 @@ func _on_add_event_pressed() -> void:
 			notesEvents.add_item(SongData.songEvents[i][2]);
 			notesEvents.set_item_metadata(notesEvents.item_count - 1, i);
 			
+	if notesEvents.item_count > 0:
+		var id = notesEvents.item_count - 1;
+		notesEvents.select(id);
+		eventsChange(id);
+		
+	notesEvents.fit_to_longest_item = false;;
+	
 var event_index = -1;
 func eventsChange(index):
-	event_index = notesEvents.get_item_metadata(index);
+	if index < 0 or index >= notesEvents.item_count:
+		event_index = -1;
+		return;
+		
+	var metadata = notesEvents.get_item_metadata(index);
+	event_index = metadata if metadata != null else -1;
 	
+	if event_index < 0 or event_index >= SongData.songEvents.size():
+		event_index = -1;
+		return;
+		
 	events_button.select(event_text_array.find(SongData.songEvents[event_index][2]));
 	%"value 1".text = SongData.songEvents[event_index][3];
 	%"value 2".text = SongData.songEvents[event_index][4];

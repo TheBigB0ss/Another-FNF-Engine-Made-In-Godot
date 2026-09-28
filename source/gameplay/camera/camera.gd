@@ -36,11 +36,11 @@ func _ready() -> void:
 		
 	zoom = SongData.stageZoom;
 	
-	if SongData.is_not_in_cutscene && main_scene.is_on_intro:
+	if !SongData.is_in_cutscene && main_scene.is_on_intro:
 		target_position = main_scene.dad.global_position + Vector2(main_scene.dad.camera_pos[0], main_scene.dad.camera_pos[1]);
 		
 func _process(delta: float) -> void:
-	if (SongData.is_not_in_cutscene && !Global.is_on_video) or useDefaultZoomEvent:
+	if (!SongData.is_in_cutscene && !Global.is_on_video) or useDefaultZoomEvent:
 		var t = 1.0 - exp(-8.0 * delta);
 		zoom = lerp(zoom, SongData.stageZoom, t);
 		
@@ -128,5 +128,15 @@ var cam_offset_values = {
 	"singRight": Vector2.RIGHT
 };
 func cam_follow_poses(new_char):
-	camOffset = cam_offset_values.get(new_char.curAnim, Vector2.ZERO)*25;
+	var anim = new_char.curAnim;
 	
+	if (new_char.is_player && new_char.curCharacter != "tankman" && new_char.curCharacter != "pico") or (!new_char.is_player):
+		anim = swap_sing_anim(anim);
+		
+	camOffset = cam_offset_values.get(anim, Vector2.ZERO)*25;
+	
+func swap_sing_anim(anim):
+	return {
+		"singLeft": "singRight",
+		"singRight": "singLeft"
+	}.get(anim, anim);

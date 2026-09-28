@@ -1,8 +1,7 @@
 extends Sprite2D
 
 func _process(delta: float) -> void:
-	self.modulate.a = lerp(self.modulate.a, 0.0, 0.08)
+	modulate.a = lerp(modulate.a, 0.0, 1.0 - exp(-5.0 * delta));
 	
-	if self.modulate.a <= 0:
-		self.queue_free();
-		
+	if modulate.a <= 0.01:
+		queue_free()

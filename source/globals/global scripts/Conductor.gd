@@ -26,6 +26,8 @@ signal new_beat(beat);
 signal new_step(step);
 signal change_section(section);
 
+signal time_changed(time);
+
 func _process(_delta):
 	var last_change = [0, 0.0, bpm];
 	for i in bpmChangeMap:
@@ -111,6 +113,8 @@ func mapBPMChanges():
 		totalPos += ((60.0 / curBPM) * 1000.0 / 4.0) * sectionLength;
 		
 func update_position(time):
+	self.emit_signal("time_changed", time);
+	
 	getSongTime = time;
 	var last_change = [0, 0.0, bpm];
 	for i in bpmChangeMap:
@@ -137,7 +141,11 @@ func update_position(time):
 func set_rating(ms):
 	ms = abs(ms);
 	
-	var timingsList = [GlobalOptions.sickWindow, GlobalOptions.goodWindow, GlobalOptions.badWindow];
+	var timingsList = [
+		GlobalOptions.sickWindow, 
+		GlobalOptions.goodWindow, 
+		GlobalOptions.badWindow
+	];
 	for i in timingsList.size():
 		if ms <= timingsList[i]:
 			return ["Sick", "Good", "Bad"][i];

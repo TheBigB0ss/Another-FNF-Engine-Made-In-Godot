@@ -102,6 +102,7 @@ func _input(ev):
 						
 					if i == curselected_cam_event:
 						curselected_cam_event = null;
+						
 					delete_event(i["strumTime"], camera_events);
 					
 				for i in zoomsEventsToDelete:
@@ -110,6 +111,7 @@ func _input(ev):
 						
 					if i == curselected_zoom_event:
 						curselected_zoom_event = null;
+						
 					delete_event(i["strumTime"], zoom_events);
 					
 				zoomsEventsToDelete.clear();

@@ -279,9 +279,11 @@ func _process(delta: float) -> void:
 		if missTimer > 0.13:
 			can_press = false;
 			is_pressing = false;
+			
 			if is_instance_valid(holdSplash):
 				holdSplash.queue_free();
 				holdSplash = null;
+				
 			miss_note();
 			
 func play_note_anim(anim):

@@ -6,10 +6,16 @@
 [ext_resource type="Texture2D" uid="uid://cj6lp01iqfivo" path="res://assets/images/hud/rating/default/combo.png" id="3_v3n4i"]
 [ext_resource type="Texture2D" uid="uid://duy7maeuccjue" path="res://assets/images/editors/offset_ui/cross.png" id="4_i0ff4"]
 [ext_resource type="Script" uid="uid://et1x2odfrswb" path="res://source/menus/editors/offset_editor/offsetNums.gd" id="4_qyjxo"]
+[ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="6_bn4vb"]
 [ext_resource type="Script" uid="uid://essfoa0h4nwy" path="res://source/alphabet/alphabetObject.gd" id="6_v3n4i"]
 [ext_resource type="Script" uid="uid://o5t5hx8kb2aq" path="res://source/menus/editors/offset_editor/animation_slider.gd" id="9_npw2b"]
 [ext_resource type="Script" uid="uid://l08oojy4jhie" path="res://source/gameplay/icons/icon.gd" id="10_npw2b"]
 [ext_resource type="Texture2D" uid="uid://butl2egj5i38n" path="res://assets/images/hud/timeBar.png" id="10_r5tmy"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_g4v7s"]
+line_spacing = 4.05
+font = ExtResource("6_bn4vb")
+shadow_color = Color(0, 0, 0, 1)
 
 [node name="OffsetMenu" type="Node2D" unique_id=720753676]
 script = ExtResource("1_vft5f")
@@ -412,6 +418,15 @@ position = Vector2(426, 581)
 script = ExtResource("10_npw2b")
 metadata/_custom_type_script = "uid://l08oojy4jhie"
 
+[node name="animations" type="Label" parent="offset_layer" unique_id=148634994]
+texture_filter = 1
+offset_left = 6.0
+offset_top = 89.0
+offset_right = 175.0
+offset_bottom = 138.0
+scale = Vector2(1.155, 1.155)
+label_settings = SubResource("LabelSettings_g4v7s")
+
 [node name="rating_node" type="Control" parent="." unique_id=1025969622]
 visible = false
 layout_mode = 3
@@ -578,6 +593,7 @@ scale = Vector2(0.54, 0.53)
 script = ExtResource("6_v3n4i")
 text = "press TAB to switch"
 centred = true
+visible_letters = 19
 metadata/_custom_type_script = "uid://essfoa0h4nwy"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=219531676]

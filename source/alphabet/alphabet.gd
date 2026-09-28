@@ -8,35 +8,45 @@ var letters = [];
 
 var isBold = true;
 var isCentered = false;
+var useSymbols = true;
 
-func _creat_word(text = ""):
-	coolText = text;
-	if text != "":
-		coolText = text.to_upper();
+const ALPHABET_FRAMES = preload("res://assets/images/alphabet/alphabet.res");
+
+var visible_characters:
+	set(val):
+		val = clamp(val, 0, coolText.length());
+		visible_characters = val;
+		
+		visible = visible_characters > 0;
 		
 		_clear_word();
 		do_a_word();
 		
+func _creat_word(text = ""):
+	coolText = text.to_upper();
+	visible_characters = len(coolText);
+	
+	_clear_word();
+	do_a_word();
+	
 func do_a_word():
-	wordArray = coolText.split("");
+	if coolText.is_empty():
+		return;
+		
+	var visible_letters = coolText.substr(0, visible_characters);
+	wordArray = visible_letters.split("");
 	
 	var letter_index = 0;
 	
 	while letter_index < wordArray.size():
 		if letter_index+1 < wordArray.size():
 			if wordArray[letter_index] == "\\" && wordArray[letter_index+1] == "N":
-				letterAnim.append("new_line");
+				letterAnim.append("\\n");
 				letter_index += 2;
 				
 				continue;
 				
-		if wordArray[letter_index] == "\\":
-			letterAnim.append("\\");
-			letter_index += 1;
-			
-			continue;
-			
-		if wordArray[letter_index] == ":":
+		if wordArray[letter_index] == ":" && useSymbols:
 			var symbol_end = wordArray.find(":", letter_index + 1);
 			if symbol_end != -1:
 				var symbolName = coolText.substr(letter_index + 1, symbol_end - letter_index - 1);
@@ -48,7 +58,7 @@ func do_a_word():
 				continue;
 				
 		if wordArray[letter_index] == " ":
-			letterAnim.append("space");
+			letterAnim.append(" ");
 			letter_index += 1;
 			continue;
 			
@@ -111,18 +121,18 @@ func set_letter(letter):
 func _create_a_letter(letter, isCentredLetter):
 	var letter_width = 50;
 	var line_height = 70;
-	var space = 45;
+	var space = 35;
 	
 	var line_total_width = 0;
 	var lines_total_width = [];
 	
 	if isCentredLetter:
 		for i in letter.size():
-			if letter[i] == "new_line":
+			if letter[i] == "\\n":
 				lines_total_width.append(line_total_width);
 				line_total_width = 0;
 				
-			elif letter[i] == "space":
+			elif letter[i] == " ":
 				line_total_width += space;
 				
 			else:
@@ -138,7 +148,9 @@ func _create_a_letter(letter, isCentredLetter):
 		offsetX = -lines_total_width[line_id] / 2;
 		
 	for i in letter.size():
-		if letter[i] == "new_line":
+		var character = letter[i];
+		
+		if character == "\\n":
 			line_id += 1;
 			
 			offsetY += line_height;
@@ -149,19 +161,20 @@ func _create_a_letter(letter, isCentredLetter):
 				
 			continue;
 			
-		elif letter[i] == "space":
+		elif character == " ":
 			offsetX += space;
 			
 			continue;
 			
-		var character = letter[i] if letter[i] != "\\" else "forward slash";
-		
 		var new_word = AnimatedSprite2D.new();
-		new_word.sprite_frames = preload("res://assets/images/alphabet/alphabet.res");
-		new_word.name = letter[i];
+		new_word.sprite_frames = ALPHABET_FRAMES;
+		new_word.name = character;
 		new_word.position = Vector2(offsetX, offsetY);
-		new_word.flip_h = letter[i] == "\\";
-		new_word.play(character);
+		new_word.visible = ALPHABET_FRAMES.has_animation(character);
+		
+		if ALPHABET_FRAMES.has_animation(character):
+			new_word.play(character);
+			
 		add_child(new_word);
 		
 		offsetX += letter_width;

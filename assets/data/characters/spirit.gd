@@ -2,7 +2,7 @@ extends CharacterScript
 
 var ghost_timer = 0.0;
 func on_process(_delta):
-	if GlobalOptions.low_quality or game== null:
+	if GlobalOptions.low_quality or game == null:
 		return;
 		
 	ghost_timer += _delta;

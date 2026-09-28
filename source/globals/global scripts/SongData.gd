@@ -52,7 +52,7 @@ var stageZoomBeat = Vector2.ZERO;
 var death_count = 0;
 var isStoryMode = false;
 var restartSong = false;
-var is_not_in_cutscene = true;
+var is_in_cutscene = false;
 var isPixelStage = false;
 var needVoice = true;
 
@@ -60,6 +60,8 @@ var isOnPauseMode = false;
 var isOnChartMode = false;
 var isPlaying = false;
 var isOnDeathScreen = false;
+
+var stage_shader:ShaderMaterial = null;
 
 var songNotes = [];
 
@@ -363,6 +365,14 @@ func convert_codenameChart(songChart, songName, eventsPath = ""):
 					var newNote = [note["time"], note["id"], note["sLen"], songChart["noteTypes"][note["type"]-1] if note["type"] > 0 else "", null, null];
 					opponentNotes.append(newNote);
 					
+func get_stage_shader(_stage):
+	for i in _stage.get_children():
+		for j in i.get_children():
+			if j is ColorRect && j.material != null && j.material is ShaderMaterial:
+				return j.material.duplicate();
+				
+	return null;
+	
 #just for chart editor
 
 var player_section_notes = {};
@@ -391,16 +401,6 @@ func reload_section():
 		var sec = get_section(event[0])
 		section_events[sec].append(event);
 		
-func get_character_section_notes(section, notesArr):
-	if notesArr == playerNotes:
-		return player_section_notes.get(section, []);
-	if notesArr == opponentNotes:
-		return opponent_section_notes.get(section, []);
-	if notesArr == songEvents:
-		return section_events.get(section, []);
-		
-	return [];
-	
 func get_section_notes(section):
 	var notes = [];
 	for note in playerNotes:
@@ -446,5 +446,7 @@ func get_section(time):
 	var crochet = (60.0 / last_change[2]) * 1000.0;
 	var stepCrochet = crochet / 4.0;
 	var step = last_change[0] + floor((time - last_change[1]) / stepCrochet);
-	return int(floor(step/16));
+	var curSection = int(floor(step / 16));
+	
+	return curSection;
 	

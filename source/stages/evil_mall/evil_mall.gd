@@ -3,7 +3,7 @@ extends Stage
 #you know what, fuck this cutscene
 func winterHorrorland_cutscene():
 	set_hud(false);
-	SongData.is_not_in_cutscene = false;
+	SongData.is_in_cutscene = true;
 	Global.is_on_video = true;
 	
 	var camera = get_tree().current_scene.get("sectionCamera");
@@ -31,7 +31,7 @@ func set_hud(_is_visible):
 func start_song():
 	set_hud(true);
 	MusicManager._stop_music();
-	SongData.is_not_in_cutscene = true;
+	SongData.is_in_cutscene = false;
 	Global.is_on_video = false;
 	Global.emit_signal("end_cutscene");
 	

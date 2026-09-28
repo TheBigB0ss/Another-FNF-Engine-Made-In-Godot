@@ -7,15 +7,17 @@
 script = ExtResource("1_q3iyv")
 json_path = "res://assets/data/characters/monsterChristmas.json"
 healthBar_Color = Color(1, 0.9411765, 0, 1)
-animTimes = {
-"idle dance": [2, 5],
-"singDown": [2, 5],
-"singLeft": [2, 5],
-"singRight": [2, 5],
-"singUp": [2, 5]
+anims_timer = {
+"idle dance": [2, 5, false],
+"singDown": [2, 5, false],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false]
 }
-anim_type = 3
+anim_type = 2
 have_death_animation = false
+idle_type = 1
+frame_count = 2.4
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=15430078]
 sprite_frames = ExtResource("2_uuj8m")

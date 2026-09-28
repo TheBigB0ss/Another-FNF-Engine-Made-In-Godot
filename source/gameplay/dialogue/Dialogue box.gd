@@ -45,6 +45,9 @@ func start():
 			
 	is_pixel_box = SongData.isPixelStage;
 	
+	dialogue = "";
+	box_text.text = "";
+	
 	if is_pixel_box:
 		the_box.position = Vector2(640, 415);
 		box_text.position = Vector2(195, 465);
@@ -71,6 +74,15 @@ func start():
 	the_box.sprite_frames = load("res://assets/images/portraits/dialogue box/%s/%s.res"%[box_pixel_part, dialogue_spr]);
 	
 	if !dialogue_array.is_empty() && !characters_array.is_empty() && !characters_spr_array.is_empty():
+		if is_pixel_box:
+			match curSong:
+				"roses":
+					the_box.play("SENPAI ANGRY IMPACT SPEECH instance 1" if !is_joke_dialogue else "Text Box Appear instance 1");
+				"thorns":
+					the_box.play("Spirit Textbox spawn instance 1");
+				_:
+					the_box.play("Text Box Appear instance 1");
+					
 		update_text(dialogue_array[cur_dialogue], characters_array[cur_dialogue], characters_spr_array[cur_dialogue]);
 		
 	match curSong:
@@ -120,23 +132,25 @@ func get_json_text():
 	
 var dialogue_timer = 0;
 func _process(delta):
+	if !SongData.is_in_cutscene:
+		return;
+		
 	dialogue_timer += 1*delta;
 	
 	var textSpeed = 0.05 if !Input.is_action_pressed("ui_shift") else 0.01;
 	
-	if dialogue_timer >= textSpeed && !SongData.is_not_in_cutscene:
-		if letterID <= len(dialogue):
-			box_text.text = dialogue.substr(0, letterID);
-			
-			if dialogue[letterID-1] != " ":
-				if characters_spr_array[cur_dialogue] != "evilLeafy":
-					Sound.playAudio("pixelText", false);
-					
-			letterID += 1;
-			
-			dialogue_timer = 0;
-			
-	if Input.is_action_just_pressed("ui_accept") && !SongData.is_not_in_cutscene:
+	if dialogue_timer >= textSpeed && letterID <= len(dialogue):
+		box_text.text = dialogue.substr(0, letterID);
+		
+		if dialogue[letterID-1] != " ":
+			if characters_spr_array[cur_dialogue] != "evilLeafy":
+				Sound.playAudio("pixelText", false);
+				
+		letterID += 1;
+		
+		dialogue_timer = 0;
+		
+	if Input.is_action_just_pressed("ui_accept"):
 		if letterID - 1 < len(dialogue):
 			letterID = len(dialogue);
 			
@@ -181,16 +195,7 @@ func update_text(text, _char, char_spr):
 	for i in [opponentGrp, bfGrp, gfGrp]:
 		remove_chars(i);
 		
-	if is_pixel_box:
-		match curSong:
-			"roses":
-				the_box.play("SENPAI ANGRY IMPACT SPEECH instance 1" if !is_joke_dialogue else "Text Box Appear instance 1");
-			"thorns":
-				the_box.play("Spirit Textbox spawn instance 1");
-			_:
-				the_box.play("Text Box Appear instance 1");
-				
-	if dialogue_spr == "Ballon":
+	if dialogue_spr == "Ballon" && !is_pixel_box:
 		the_box.play(dialogue_path[_char]);
 		
 	var portrait = load("res://source/characters/characters_portraits/%s.tscn"%[char_spr]).instantiate();
@@ -237,7 +242,7 @@ func update_text(text, _char, char_spr):
 	
 func start_song():
 	MusicManager._stop_music();
-	SongData.is_not_in_cutscene = true;
+	SongData.is_in_cutscene = false;
 	Global.emit_signal("end_dialogue");
 	get_tree().paused = false;
 	self.hide();

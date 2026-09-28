@@ -72,7 +72,7 @@ func closeGame():
 func changeScene(scene, useTransition = true, use_stickers = true):
 	if useTransition:
 		Transition._is_in_transition(use_stickers);
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(1.0).timeout;
 		get_tree().change_scene_to_file("res://source/%s.tscn"%[scene]);
 	else:
 		get_tree().change_scene_to_file("res://source/%s.tscn"%[scene]);
@@ -92,12 +92,11 @@ func has_dialogue():
 	var base = "res://assets/songs/%s/chart/%sDialogue"%[SongData.song, SongData.song];
 	return (FileAccess.file_exists(base + ".txt") || FileAccess.file_exists(base + ".json"));
 	
-func load_json(path = ""):
-	var jsonFile = FileAccess.open("res://"+path+".json", FileAccess.READ);
-	var json = JSON.new();
-	json.parse(jsonFile.get_as_text());
-	jsonFile.close();
-	return json.get_data();
+func load_json(json_path):
+	var path = "res://%s.json"%[json_path];
+	var file = FileAccess.open(path, FileAccess.READ);
+	var data = JSON.parse_string(file.get_as_text());
+	return data;
 	
 func get_folder(folder, onlyDirs = false):
 	var file = [];
@@ -114,5 +113,6 @@ func get_folder(folder, onlyDirs = false):
 			nameShit = coolFolder.get_next();
 			
 		coolFolder.list_dir_end();
+		
 	return file;
 	

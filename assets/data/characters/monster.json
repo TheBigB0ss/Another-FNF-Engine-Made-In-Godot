@@ -2,54 +2,70 @@
 	"AnimatedIcon": false,
 	"FlipX": false,
 	"FlipY": false,
-	"HealthBarColor": "#fff000",
+	"HealthBarColor": "#fff000ff",
 	"HealthIcon": "monster",
-	"LoopAnim": true,
 	"Poses": [
 		{
 			"Anim": "idle dance",
+			"Anim Time": 5,
 			"Name": "monster idle",
 			"Offset": [
 				-85.0,
 				-50.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singLeft",
+			"Anim Time": 5,
 			"Name": "Monster Right note",
 			"Offset": [
 				-78.0,
 				-59.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singDown",
+			"Anim Time": 5,
 			"Name": "monster down",
 			"Offset": [
 				-39.0,
 				-11.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singUp",
+			"Anim Time": 5,
 			"Name": "monster up note",
 			"Offset": [
 				-88.0,
 				-97.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		},
 		{
 			"Anim": "singRight",
+			"Anim Time": 5,
 			"Name": "Monster left note",
 			"Offset": [
 				-59.0,
 				-54.0
-			]
+			],
+			"anim beat": 2,
+			"special anim": false
 		}
 	],
+	"anim type": 2,
+	"camera follow pos": false,
 	"cameraPos": [
-		80.0,
-		0.0
+		120.0,
+		-170.0
 	],
 	"isPlayer": false,
 	"scale": [

@@ -123,59 +123,64 @@ offset_top = 1217.2301
 offset_right = 594.0
 offset_bottom = 1286.2301
 scale = Vector2(0.67, 0.67)
+focus_mode = 0
 icon = ExtResource("9_eeujy")
 flat = true
 
 [node name="previousSection" type="Button" parent="chart_UI/chart_objs/infos" unique_id=1838673618]
 layout_mode = 0
-offset_left = 542.0
-offset_top = 1263.23
-offset_right = 578.0
-offset_bottom = 1332.23
+offset_left = 540.0
+offset_top = 1262.9999
+offset_right = 576.0
+offset_bottom = 1331.9999
 rotation = 3.1415927
 scale = Vector2(0.67, 0.67)
+focus_mode = 0
 icon = ExtResource("10_ucusq")
 flat = true
 icon_alignment = 2
 
 [node name="nextSection" type="Button" parent="chart_UI/chart_objs/infos" unique_id=1792249074]
 layout_mode = 0
-offset_left = 584.0
+offset_left = 586.0
 offset_top = 1217.0
-offset_right = 620.0
+offset_right = 622.0
 offset_bottom = 1286.0
 scale = Vector2(0.67, 0.67)
+focus_mode = 0
 icon = ExtResource("10_ucusq")
 flat = true
 icon_alignment = 1
 
 [node name="lastSection" type="Button" parent="chart_UI/chart_objs/infos" unique_id=2045088267]
 layout_mode = 0
-offset_left = 605.0
+offset_left = 612.0
 offset_top = 1228.0
-offset_right = 646.0
+offset_right = 653.0
 offset_bottom = 1265.0
 scale = Vector2(0.67, 0.67)
+focus_mode = 0
 icon = ExtResource("11_48go5")
 flat = true
 
 [node name="firstSection" type="Button" parent="chart_UI/chart_objs/infos" unique_id=962223753]
 layout_mode = 0
-offset_left = 495.0
+offset_left = 489.0
 offset_top = 1228.0
-offset_right = 536.0
+offset_right = 530.0
 offset_bottom = 1265.0
 scale = Vector2(0.67, 0.67)
+focus_mode = 0
 icon = ExtResource("12_6rgof")
 flat = true
 icon_alignment = 1
 
 [node name="BarSlider" type="Control" parent="chart_UI/chart_objs/infos" unique_id=1246936284]
 anchors_preset = 0
-offset_left = 441.00003
-offset_top = 1278.0
-offset_right = 481.00003
-offset_bottom = 1318.0
+offset_left = 432.0
+offset_top = 1277.0
+offset_right = 472.0
+offset_bottom = 1317.0
 scale = Vector2(0.695, 0.695)
 script = ExtResource("7_mqlbf")
 metadata/_custom_type_script = "uid://bbfxkbn26igir"
@@ -190,39 +195,39 @@ mainScene = NodePath("../../..")
 
 [node name="file" type="MenuButton" parent="chart_UI/chart_objs/chartTab" unique_id=2127950474]
 layout_mode = 0
-offset_left = -911.0
+offset_left = -913.0
 offset_top = 239.0
-offset_right = -879.0
-offset_bottom = 270.0
+offset_right = -865.0
+offset_bottom = 271.0
+theme_override_fonts/font = ExtResource("7_aeui8")
 text = "file"
-flat = false
 
 [node name="help" type="MenuButton" parent="chart_UI/chart_objs/chartTab" unique_id=1170281317]
 layout_mode = 0
-offset_left = -878.0
+offset_left = -869.0
 offset_top = 239.0
-offset_right = -836.0
-offset_bottom = 270.0
+offset_right = -814.0
+offset_bottom = 271.0
+theme_override_fonts/font = ExtResource("7_aeui8")
 text = "help"
-flat = false
 
 [node name="chart" type="MenuButton" parent="chart_UI/chart_objs/chartTab" unique_id=1684964338]
 layout_mode = 0
-offset_left = -835.0
+offset_left = -818.0
 offset_top = 239.0
-offset_right = -786.0
-offset_bottom = 270.0
+offset_right = -749.0
+offset_bottom = 271.0
+theme_override_fonts/font = ExtResource("7_aeui8")
 text = "chart"
-flat = false
 
 [node name="preview" type="MenuButton" parent="chart_UI/chart_objs/chartTab" unique_id=826427069]
 layout_mode = 0
-offset_left = -785.0
+offset_left = -753.0
 offset_top = 239.0
-offset_right = -715.0
-offset_bottom = 270.0
+offset_right = -667.0
+offset_bottom = 271.0
+theme_override_fonts/font = ExtResource("7_aeui8")
 text = "preview"
-flat = false
 
 [node name="helpWindow" type="Window" parent="chart_UI/chart_objs/chartTab" unique_id=1639786086]
 oversampling_override = 1.0
@@ -652,9 +657,9 @@ text = "add event"
 
 [node name="note_events" type="OptionButton" parent="chart_UI/chart_objs/chartTab/eventsWindow" unique_id=1797640138]
 offset_left = 267.0
-offset_top = 54.0
+offset_top = 58.0
 offset_right = 381.0
-offset_bottom = 85.0
+offset_bottom = 89.0
 disabled = true
 
 [node name="opponentPreviewWindow" type="Window" parent="chart_UI/chart_objs/chartTab" unique_id=1316713624]
@@ -669,7 +674,8 @@ metadata/_custom_type_script = "uid://cvh168tg37tji"
 [node name="ChartEnemy" parent="chart_UI/chart_objs/chartTab/opponentPreviewWindow" unique_id=246031562 instance=ExtResource("7_w8f1m")]
 position = Vector2(100, 139)
 scale = Vector2(0.545, 0.545)
-frame = 5
+data_path = "res://assets/images/editors/chart preview/enemy/enemy_chart.xml"
+frame = 2
 offset = Vector2(5, -10)
 animation = 1
 
@@ -685,7 +691,8 @@ metadata/_custom_type_script = "uid://cvh168tg37tji"
 [node name="ChartBf" parent="chart_UI/chart_objs/chartTab/playerPreviewWindow" unique_id=145860512 instance=ExtResource("6_orogo")]
 position = Vector2(32, 141)
 scale = Vector2(0.765, 0.765)
-frame = 5
+data_path = "res://assets/images/editors/chart preview/bf/chart-bf.xml"
+frame = 0
 
 [node name="chart_inst" type="AudioStreamPlayer" parent="." unique_id=164621937]
 

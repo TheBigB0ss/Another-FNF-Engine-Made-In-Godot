@@ -10,7 +10,12 @@ func init_script(newGame, song = "", diff = ""):
 			
 	game = newGame
 	var script_path = "res://assets/songs/%s/chart/script%s.gd"%[song, str("-",diff) if diff != "" else ""];
+	
+	if !ResourceLoader.exists(script_path):
+		return FunkinScript.new();
+		
 	var script = ResourceLoader.load(script_path);
+	
 	if script == null:
 		return FunkinScript.new();
 		

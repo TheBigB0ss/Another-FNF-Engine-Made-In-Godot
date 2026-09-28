@@ -61,15 +61,17 @@ func _ready() -> void:
 		loadJson(i);
 		
 		for j in weekJson["songs"]:
-			if !weekJson["hideFromFreeplay"]:
-				var new_song = j[0];
-				var new_icon = j[1];
-				var new_color = j[2];
-				var new_weekName = weekJson["weekName"];
-				var new_weekDifficult = weekJson["weekDifficulties"];
+			if weekJson["hideFromFreeplay"]:
+				continue;
 				
-				add_song(new_song, new_icon, new_color, new_weekName, new_weekDifficult);
-				
+			var new_song = j[0];
+			var new_icon = j[1];
+			var new_color = j[2];
+			var new_weekName = weekJson["weekName"];
+			var new_weekDifficult = weekJson["weekDifficulties"];
+			
+			add_song(new_song, new_icon, new_color, new_weekName, new_weekDifficult);
+			
 	var unlocked_songs = HighScore.unlockSongs.keys();
 	unlocked_songs.sort();
 	

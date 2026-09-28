@@ -213,7 +213,7 @@ func _process(delta):
 	if (curAnim.begins_with("sing") or curAnim.contains("sing") or special_anim) && characterState != CHARACTER_STATES.HOLDING:
 		idleTimer += delta;
 		
-	if SongData.is_not_in_cutscene && !Global.is_on_video:
+	if !SongData.is_in_cutscene && !Global.is_on_video:
 		if idleTimer >= Conductor.stepCrochet * anim_time * 0.001:
 			if curAnim.contains("sing") or special_anim:
 				dance();

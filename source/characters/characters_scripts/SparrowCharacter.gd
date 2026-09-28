@@ -207,7 +207,7 @@ func character_process(delta):
 	if (curAnim.begins_with("sing") or curAnim.contains("sing") or special_anim) && characterState != CHARACTER_STATES.HOLDING:
 		idleTimer += delta;
 		
-	if SongData.is_not_in_cutscene && !Global.is_on_video:
+	if !SongData.is_in_cutscene && !Global.is_on_video:
 		if idleTimer >= Conductor.stepCrochet * anim_time * 0.001:
 			if curAnim.contains("sing") or special_anim:
 				dance();
@@ -281,11 +281,11 @@ func loop_anim():
 			frame = 0;
 			
 		CHARACTER_ANIM_TYPE.REPEAT:
-			if timer >= frame_count:
-				timer = 0
+			if frame >= frame_count:
+				frame = 0;
 				
-func _get_property_list():
-	var properties: Array[Dictionary] = [];
+func _get_property_list() -> Array[Dictionary]:
+	var properties: Array[Dictionary] = super._get_property_list();
 	
 	properties.append({
 		"name": "anim_type",
@@ -293,13 +293,13 @@ func _get_property_list():
 		"hint": PROPERTY_HINT_ENUM,
 		"hint_string": "FREEZE:1,REPEAT:2,NONE:3",
 		"usage": PROPERTY_USAGE_DEFAULT
-	});
+	})
 	
 	properties.append({
 		"name": "have_death_animation",
 		"type": TYPE_BOOL,
 		"usage": PROPERTY_USAGE_DEFAULT
-	});
+	})
 	
 	properties.append({
 		"name": "idle_type",
@@ -307,15 +307,15 @@ func _get_property_list():
 		"hint": PROPERTY_HINT_ENUM,
 		"hint_string": "DEFAULT:1,BEAT:2,STEP:3",
 		"usage": PROPERTY_USAGE_DEFAULT
-	});
+	})
 	
 	if anim_type == CHARACTER_ANIM_TYPE.REPEAT:
 		properties.append({
 			"name": "frame_count",
 			"type": TYPE_FLOAT,
 			"usage": PROPERTY_USAGE_DEFAULT
-		});
-		
+		})
+	
 	if have_death_animation:
 		properties.append({
 			"name": "death_scene",
@@ -323,9 +323,9 @@ func _get_property_list():
 			"hint": PROPERTY_HINT_FILE,
 			"hint_string": "*.tscn",
 			"usage": PROPERTY_USAGE_DEFAULT
-		});
-		
-	return properties;
+		})
+	
+	return properties
 	
 func back_to_idle(idle_timer):
 	if (idle_timer % int(anim_beat) == 0) && !curAnim.begins_with("sing") && !special_anim:
