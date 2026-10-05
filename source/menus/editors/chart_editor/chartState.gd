@@ -265,6 +265,9 @@ func _input(ev):
 		match ev.button_index:
 			MOUSE_BUTTON_LEFT:
 				if is_mouse_inside_ui():
+					isHolding = false;
+					selectionRect = Rect2();
+					queue_redraw();
 					return;
 					
 				if ev.pressed:
@@ -292,14 +295,18 @@ func _input(ev):
 			
 		match ev.keycode:
 			KEY_DELETE:
-				for i in SongData.get_section_notes(curSection).size():
-					for j in selected_notes:
-						if j == null:
-							continue;
-							
-						delete_note(j.strumTime + section_start_time(), j.noteData);
-						selected_notes.erase(j);
+				var notes_to_delete = selected_notes.duplicate();
+				
+				for note in notes_to_delete:
+					if !is_instance_valid(note):
+						continue;
 						
+					var lane = int(note.noteData) % 4;
+					for i in SongData.get_note_array(note.noteData):
+						if is_equal_approx(note.strumTime + section_start_time(), i[0]) && int(i[1]) == lane:
+							delete_note(note.noteData, i);
+							
+				selected_notes.clear();
 				SongData.reload_section();
 				load_section();
 				
@@ -484,16 +491,33 @@ func _process(delta):
 		update_selected_notes();
 		update_selected_events();
 		
+		var strumTime = number_to_time(selection.position.y-20) + section_start_time();
+		var note_pos = floor(grid.get_local_mouse_position().x / grid_size);
+		
+		if note_pos < 0 or note_pos > 8:
+			return;
+			
 		if Input.is_action_just_pressed("mouse_click") && grid.mouse_inside_grid() && !grab_notes:
-			var note_pos = floor(grid.get_local_mouse_position().x / grid_size);
-			if note_pos < 0:
-				return;
-				
 			if note_pos < 8:
-				add_note(selection.position.y - 20, note_pos, 0, note_types[note_type_button.selected]);
+				var lane = int(note_pos) % 4;
+				var found = false;
+				for i in SongData.get_note_array(int(note_pos)):
+					if is_equal_approx(i[0], strumTime) && int(i[1]) == int(lane):
+						delete_note(note_pos, i);
+						found = true;
+						
+				if !found:
+					add_note(selection.position.y - 20, note_pos, 0, note_types[note_type_button.selected]);
 			else:
-				add_event_note(selection.position.y - 20, note_pos);
-				
+				var found = false;
+				for i in SongData.songEvents:
+					if is_equal_approx(i[0], strumTime) && int(i[1]) == int(note_pos):
+						delete_event_note(i);
+						found = true;
+						
+				if !found:
+					add_event_note(selection.position.y - 20, note_pos);
+					
 	%add_event.disabled = curselected_event.is_empty();
 	notesEvents.disabled = curselected_event.is_empty();
 	
@@ -622,9 +646,8 @@ func is_mouse_inside_ui():
 	var option_buttons = [player1Options, player2Options, gfOptions, stageOptions, notesEvents, note_type_button, events_button];
 	
 	for i in option_buttons:
-		if i.get_popup().visible:
-			return true;
-			
+		return i.get_popup().visible;
+		
 	var windows = [
 		$chart_UI/chart_objs/chartTab/helpWindow,
 		$chart_UI/chart_objs/chartTab/soundWindow,
@@ -762,18 +785,8 @@ func add_event_note(strumtime, noteData):
 	
 	var new_note = [note_strumtime, note_data];
 	
-	var exists = false;
-	
-	for i in SongData.songEvents:
-		if is_equal_approx(i[0], note_strumtime) && int(i[1]) == int(note_data):
-			exists = true;
-			
-	if exists:
-		delete_event_note(note_strumtime, int(note_data));
-	else:
-		SongData.songEvents.append(new_note);
-		curselected_event = new_note;
-		
+	SongData.songEvents.append(new_note);
+	curselected_event = new_note;
 	SongData.reload_section();
 	load_section();
 	
@@ -791,58 +804,36 @@ func add_note(strumtime, noteData, _sustain, type):
 		new_note.append(null);
 		new_note.append(null);
 		
-	var exists = false;
-	
-	for i in SongData.get_note_array(noteData):
-		var lane = noteData;
-		if lane > 3:
-			lane -= 4;
-			
-		if is_equal_approx(i[0], note_strumtime) && int(i[1]) == int(lane):
-			exists = true;
-			break;
-			
-	if exists:
-		delete_note(note_strumtime, int(note_data));
-	else:
-		SongData.get_note_array(noteData).append(new_note);
-		if duet_notes:
-			var duet = new_note.duplicate(true);
-			duet[1] = int(duet[1] + 4)%8;
-			SongData.get_note_array(duet[1]).append(new_note);
-			
-		curselected_note = new_note;
-		%note_sustain_lenght.value = curselected_note[2];
+	SongData.get_note_array(noteData).append(new_note);
+	if duet_notes:
+		var duet = new_note.duplicate(true);
+		duet[1] = int(duet[1] + 4)%8;
+		SongData.get_note_array(duet[1]).append(new_note);
 		
+	curselected_note = new_note;
+	%note_sustain_lenght.value = curselected_note[2];
+	
 	SongData.reload_section();
 	load_section();
 	
-func delete_note(strumtime, noteData):
-	var notes_deleted = [];
-	for i in SongData.get_note_array(noteData):
-		var lane = noteData;
-		if lane > 3:
-			lane -= 4;
-			
-		if int(i[0]) == int(strumtime) && i[1] == int(lane):
-			notes_deleted.append(i);
-			if i == curselected_note:
-				curselected_note = [];
-				
-	for i in notes_deleted:
-		SongData.get_note_array(noteData).erase(i);
+func delete_note(noteData, note):
+	if note == curselected_note:
+		curselected_note = [];
 		
-func delete_event_note(strumtime, noteData):
-	var notes_deleted = [];
-	for i in SongData.songEvents:
-		if int(i[0]) == int(strumtime) && i[1] == int(noteData):
-			notes_deleted.append(i);
-			if i == curselected_event:
-				curselected_event = [];
-				
-	for i in notes_deleted:
-		SongData.songEvents.erase(i);
+	SongData.get_note_array(noteData).erase(note);
+	
+	SongData.reload_section();
+	load_section();
+	
+func delete_event_note(note):
+	if note == curselected_note:
+		curselected_note = [];
 		
+	SongData.songEvents.erase(note);
+	
+	SongData.reload_section();
+	load_section();
+	
 func loadJson(song, difficulty = "", new_chart = null):
 	var difficultyPath = ("res://assets/songs/%s/chart/%s.json"%[song, song]) if difficulty == "" or difficulty == "normal" else ("res://assets/songs/%s/chart/%s-%s.json"%[song, song, difficulty]);
 	var jsonFile = FileAccess.open(difficultyPath, FileAccess.READ);

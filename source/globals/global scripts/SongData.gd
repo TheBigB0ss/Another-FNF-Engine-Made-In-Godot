@@ -67,7 +67,6 @@ var songNotes = [];
 
 var playerNotes = [];
 var opponentNotes = [];
-var extraOpponentNotes = [];
 
 var songSections = [];
 var songEvents = [];
@@ -123,7 +122,6 @@ func loadStageJson(new_stage):
 func loadJson(new_song, difficulty = "", new_chart = null):
 	playerNotes.clear();
 	opponentNotes.clear();
-	extraOpponentNotes.clear();
 	songSections.clear();
 	
 	characters.clear();
@@ -163,7 +161,6 @@ func set_stage_null_var(cool_var, new_value):
 func set_chart(songChart, eventsPath = ""):
 	playerNotes.clear();
 	opponentNotes.clear();
-	extraOpponentNotes.clear();
 	songSections.clear();
 	
 	stage = songChart["meta"]["stage"];
@@ -211,7 +208,6 @@ func set_chart(songChart, eventsPath = ""):
 func convert_pyschChart(songChart, eventsPath = ""):
 	playerNotes.clear();
 	opponentNotes.clear();
-	extraOpponentNotes.clear();
 	songSections.clear();
 	
 	var templateChart = {
@@ -302,7 +298,6 @@ func convert_pyschChart(songChart, eventsPath = ""):
 func convert_codenameChart(songChart, songName, eventsPath = ""):
 	playerNotes.clear();
 	opponentNotes.clear();
-	extraOpponentNotes.clear();
 	songSections.clear();
 	
 	var metaData = {};

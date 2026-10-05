@@ -1,5 +1,3 @@
-#I took the inspiration of this code from Rubicon Engine, created by legole0 (https://x.com/legole0)
-
 class_name ExtraStrum extends Node2D
 
 var notes = ["left", "down", "up", "right"];
@@ -28,6 +26,7 @@ var chart = {}
 var notesList = [];
 var array_notes = [];
 var songNotes = [];
+var opponentNotes = [];
 
 signal pressed_note(char);
 
@@ -105,6 +104,7 @@ func _process(delta):
 	if !enable:
 		return;
 		
+	var scroll_direction = 1.0 if GlobalOptions.down_scroll else -1.0;
 	var distance_offset = 4000 if GlobalOptions.down_scroll else 2200;
 	while spawnId < array_notes.size():
 		var distance = (array_notes[spawnId][0] - Conductor.getSongTime)*Conductor.songSpeed;
@@ -117,59 +117,59 @@ func _process(delta):
 		spawnId += 1;
 		
 	for note in notesList:
-		if note == null:
-			continue
+		if !is_instance_valid(note):
+			continue;
 			
 		var strum = strumArray[note.noteData];
 		var strum_pos = strum.position;
-		var strumY = strum_pos.y;
 		
 		note.position.x = strum_pos.x;
 		note.rotation = strum.rotation;
 		note.modulate.a = strum.modulate.a;
 		note.scale = strum.scale;
 		
-		if !note.is_pressing or note.missedLongNote or note.missed:
-			note.position.y = strumY + (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed) if GlobalOptions.down_scroll else strumY - (Conductor.getSongTime - note.strumTime) * (0.45 * Conductor.songSpeed);
-		else:
-			note.position.y = strumY;
+		if is_instance_valid(note.holdSplash):
+			note.holdSplash.global_position = strumNode.get_child(note.noteData).global_position;
 			
+		var note_y = strum_pos.y + (Conductor.getSongTime - note.strumTime) * 0.45 * Conductor.songSpeed * scroll_direction;
+		note.position.y = strum_pos.y if note.is_pressing else note_y;
+		
 		if note.isPlayer:
-			continue;
-			
-		if Conductor.seekTime >= 0 && note.strumTime < Conductor.seekTime:
-			notes_to_delete.append(note);
 			continue;
 			
 		if note.sustainLength <= 0:
 			if Conductor.getSongTime > note.strumTime + 320:
 				notes_to_delete.append(note);
-		else:
-			if !note.is_pressing && Conductor.getSongTime > note.strumTime + note.ogSustain + 335:
+			elif !note.is_pressing && Conductor.getSongTime > note.strumTime + note.ogSustain + 335:
 				notes_to_delete.append(note);
 				
-		if note.is_a_bad_note or note.ignoreNote:
+	for note in opponentNotes:
+		if (!is_instance_valid(note) or note.isPlayer or note.is_a_bad_note or note.ignoreNote):
 			continue;
 			
-		if Conductor.getSongTime >= note.strumTime && notesList.size() > 0:
-			note.opponent_pressed(strum_char);
-			play_strum_anim(note, 0.40);
-			self.emit_signal("pressed_note", strum_char);
+		if Conductor.seekTime >= 0.0 && note.strumTime < Conductor.seekTime:
+			notes_to_delete.append(note);
+			continue;
 			
-			if note.manyHits > 0:
-				continue;
-				
-			if note.sustainLength == 0:
-				notesList.erase(note);
-			else:
-				if note.note != null:
-					note.note.queue_free();
-					
-				note.is_pressing = true;
-				if note.sustainLength <= 0:
-					note.is_pressing = false;
-					notesList.erase(note);
-					
+		if Conductor.getSongTime < note.strumTime:
+			continue;
+			
+		opponentNotePressed(note);
+		
+		if note.manyHits > 0:
+			continue
+			
+		if note.sustainLength <= 0:
+			note.is_pressing = false;
+			notes_to_delete.append(note);
+			continue;
+			
+		if is_instance_valid(note.note):
+			note.note.queue_free();
+			note.note = null;
+			
+		note.is_pressing = true;
+		
 	notesList = notesList.filter(func(note): return note != null);
 	
 	for i in 4:
@@ -179,13 +179,16 @@ func _process(delta):
 		elif note.reset_arrow_anim <= 0:
 			note.play_note_anim("static");
 			
-	for i in notes_to_delete:
-		notesList.erase(i);
-		if i == null:
+	for note in notes_to_delete:
+		if !is_instance_valid(note):
 			continue;
 			
-		i.queue_free();
+		opponentNotes.erase(note);
+		notesList.erase(note);
+		note.queue_free();
 		
+	notes_to_delete.clear();
+	
 func sort_notes(a, b):
 	if a != null && b != null:
 		return a.strumTime < b.strumTime;
@@ -221,11 +224,30 @@ func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
 	if note.note:
 		note.note.offset = strum.note.offset;
 		
+	opponentNotes.append(note);
 	notesList.append(note);
 	notesList.sort_custom(Callable(self, "sort_notes"));
 	
 	noteNode.add_child(note);
 	
-func play_strum_anim(note = null, timer = 0.0):
+func play_strum_anim(note:Note, timer = 0.0):
 	strumNode.get_child(note.noteData).reset_arrow_anim = timer;
 	strumNode.get_child(note.noteData).play_note_anim("confirm");
+	
+func opponentNotePressed(note:Note):
+	if note.isSustain && GlobalOptions.show_splashes:
+		if !is_instance_valid(note.holdSplash):
+			var strum = strumArray[note.noteData];
+			var splash = splash_note(strum, "holdCover%s"%[note.noteAnim] if !SongData.isPixelStage else "holdpixelCover");
+			note.holdSplash = splash;
+			
+	note.opponent_pressed(strum_char);
+	play_strum_anim(note, 0.40);
+	self.emit_signal("pressed_note", strum_char);
+	
+func splash_note(strum, anim):
+	var splash = preload("res://source/arrows/splashes/noteSplashes.tscn").instantiate();
+	splash.play_splash(strum.global_position.x, strum.global_position.y, anim);
+	splash.scale = Vector2.ONE * 0.60;
+	add_child(splash);
+	return splash;

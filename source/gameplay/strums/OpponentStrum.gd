@@ -55,8 +55,7 @@ func _ready() -> void:
 		for i in strumNode.get_children():
 			i.modulate.a = 1;
 			
-	var notesArray = SongData.opponentNotes if !is_secondary_strum else SongData.extraOpponentNotes;
-	for i in notesArray:
+	for i in SongData.opponentNotes:
 		var noteData = [i[0], i[1], i[2], i[3], i[4], i[5]];
 		if typeof(noteData[3]) != TYPE_STRING:
 			noteData[3] = "";
