@@ -117,7 +117,7 @@ func init_character(parent, char_position, char_zIndex, char_path, child_id):
 	
 func _ready():
 	reload();
-	notify_property_list_changed();
+	
 	curCharacter = json_path.get_file();
 	curCharacter = curCharacter.replace(".json", "");
 	
@@ -293,13 +293,13 @@ func _get_property_list() -> Array[Dictionary]:
 		"hint": PROPERTY_HINT_ENUM,
 		"hint_string": "FREEZE:1,REPEAT:2,NONE:3",
 		"usage": PROPERTY_USAGE_DEFAULT
-	})
+	});
 	
 	properties.append({
 		"name": "have_death_animation",
 		"type": TYPE_BOOL,
 		"usage": PROPERTY_USAGE_DEFAULT
-	})
+	});
 	
 	properties.append({
 		"name": "idle_type",
@@ -307,15 +307,15 @@ func _get_property_list() -> Array[Dictionary]:
 		"hint": PROPERTY_HINT_ENUM,
 		"hint_string": "DEFAULT:1,BEAT:2,STEP:3",
 		"usage": PROPERTY_USAGE_DEFAULT
-	})
+	});
 	
 	if anim_type == CHARACTER_ANIM_TYPE.REPEAT:
 		properties.append({
 			"name": "frame_count",
 			"type": TYPE_FLOAT,
 			"usage": PROPERTY_USAGE_DEFAULT
-		})
-	
+		});
+		
 	if have_death_animation:
 		properties.append({
 			"name": "death_scene",
@@ -323,9 +323,9 @@ func _get_property_list() -> Array[Dictionary]:
 			"hint": PROPERTY_HINT_FILE,
 			"hint_string": "*.tscn",
 			"usage": PROPERTY_USAGE_DEFAULT
-		})
-	
-	return properties
+		});
+		
+	return properties;
 	
 func back_to_idle(idle_timer):
 	if (idle_timer % int(anim_beat) == 0) && !curAnim.begins_with("sing") && !special_anim:

@@ -14,7 +14,6 @@
 [ext_resource type="PackedScene" uid="uid://lmu4akqkj75l" path="res://source/gameplay/dialogue/Dialogue box.tscn" id="14_2bco5"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_2bi1b"]
-load_path = "res://.godot/imported/combo.png-ebb8e79407eb0da2dc0b63f708fa4e61.ctex"
 
 [sub_resource type="LabelSettings" id="LabelSettings_g4v7s"]
 font = ExtResource("5_pxn5x")
@@ -105,6 +104,7 @@ layer = 2
 [node name="Player Notes" type="Node2D" parent="strums/Strum_Layer" unique_id=1701820447]
 position = Vector2(840, 95)
 script = ExtResource("5_hjbjt")
+note_data = null
 
 [node name="Opponent Notes" type="Node2D" parent="strums/Strum_Layer" unique_id=1741890682]
 position = Vector2(110, 95)

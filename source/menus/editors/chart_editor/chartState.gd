@@ -31,7 +31,7 @@ var songLength = 0.0;
 @onready var cool_events_save = $'FileDialogEvents';
 
 @onready var chartBf = $chart_UI/chart_objs/chartTab/playerPreviewWindow/ChartBf;
-@onready var chartEnemy = $chart_UI/chart_objs/chartTab/opponentPreviewWindow/ChartEnemy;
+@onready var chartEnemy = $chart_UI/chart_objs/chartTab/opponentPreviewWindow/EnemyChart;
 
 @onready var chart_info = $chart_UI/chart_objs/infos/chart_info;
 @onready var timeBar = $chart_UI/chart_objs/infos/BarSlider;
@@ -327,8 +327,6 @@ func _input(ev):
 				duet_notes = true;
 				
 			KEY_SPACE:
-				selectionRect = Rect2();
-				queue_redraw();
 				play_song();
 				
 			KEY_ESCAPE, KEY_ENTER, KEY_KP_ENTER:
@@ -411,6 +409,8 @@ func update_song(scroll, update_time = false):
 	else:
 		Conductor.getSongTime += scroll;
 		
+	Conductor.getSongTime = clamp(Conductor.getSongTime, 0.0, songLength*1000.0);
+	
 	var new_section = SongData.get_section(Conductor.getSongTime);
 	
 	if new_section != curSection:
@@ -505,6 +505,7 @@ func _process(delta):
 					if is_equal_approx(i[0], strumTime) && int(i[1]) == int(lane):
 						delete_note(note_pos, i);
 						found = true;
+						break;
 						
 				if !found:
 					add_note(selection.position.y - 20, note_pos, 0, note_types[note_type_button.selected]);
@@ -514,6 +515,7 @@ func _process(delta):
 					if is_equal_approx(i[0], strumTime) && int(i[1]) == int(note_pos):
 						delete_event_note(i);
 						found = true;
+						break;
 						
 				if !found:
 					add_event_note(selection.position.y - 20, note_pos);
@@ -669,6 +671,9 @@ func play_song():
 	inst.stream_paused = !is_playing;
 	voices.stream_paused = !is_playing;
 	
+	selectionRect = Rect2();
+	queue_redraw();
+	
 func load_section():
 	chartBpm = get_section_bpm(curSection);
 	chartCrochet = (60.0 / chartBpm) * 1000.0;
@@ -682,10 +687,13 @@ func load_section():
 			
 	change_icons(0);
 	
-	for sec in loadSec.keys():
+	for sec in loadSec.keys().duplicate():
 		unload_section(sec);
 		
-	for sec in range(max(curSection - 2, 0), min(curSection + 2, SongData.songSections.size() - 1) + 1):
+	var start_sec = max(curSection - 2, 0);
+	var end_sec = min(curSection + 2, SongData.songSections.size() - 1);
+	
+	for sec in range(start_sec, end_sec + 1):
 		load_new_section(sec);
 		
 var loadSec = {};
@@ -693,51 +701,57 @@ func load_new_section(sec):
 	if loadSec.has(sec):
 		return;
 		
-	loadSec[sec] = {
+	var section_data = {
 		"notes": [],
 		"event": []
 	};
 	
+	loadSec[sec] = section_data;
+	
+	var section_start = section_start_time();
+	
 	for note_data in SongData.player_section_notes[sec]:
-		var strumTime = note_data[0];
-		var noteTime = strumTime - section_start_time();
-		
+		var strumTime = note_data[0] - section_start;
 		var lane = int(note_data[1]);
+		
 		if lane < 4:
 			lane += 4;
 			
-		var new_note = spawn_note(noteTime, lane, note_data[2], floor(time_to_number(noteTime)), note_data[3]);
-		loadSec[sec]["notes"].append(new_note);
+		var new_note = spawn_note(strumTime, lane, note_data[2], floor(time_to_number(strumTime)), note_data[3]);
+		
+		section_data["notes"].append(new_note);
 		
 	for note_data in SongData.opponent_section_notes[sec]:
-		var strumTime = note_data[0];
-		var noteTime = strumTime - section_start_time();
-		
+		var strumTime = note_data[0] - section_start;
 		var lane = int(note_data[1]);
+		
 		if lane > 3:
 			lane -= 4;
 			
-		var new_note = spawn_note(noteTime, lane, note_data[2], floor(time_to_number(noteTime)), note_data[3]);
-		loadSec[sec]["notes"].append(new_note);
+		var new_note = spawn_note(strumTime, lane, note_data[2], floor(time_to_number(strumTime)), note_data[3]);
 		
-	for note_data in SongData.section_events[sec]:
-		var strumTime = note_data[0];
-		var noteTime = strumTime - section_start_time();
+		section_data["notes"].append(new_note);
 		
-		var new_event_note = spawn_event_note(noteTime, note_data[1], floor(time_to_number(noteTime)));
-		loadSec[sec]["event"].append(new_event_note);
+	for event_data in SongData.section_events[sec]:
+		var strumTime = event_data[0] - section_start;
+		
+		var new_event = spawn_event_note(strumTime, event_data[1], floor(time_to_number(strumTime)));
+		
+		section_data["event"].append(new_event);
 		
 func unload_section(sec):
 	if !loadSec.has(sec):
 		return;
 		
-	for note in loadSec[sec]["notes"]:
+	var section_data = loadSec[sec];
+	
+	for note in section_data["notes"]:
 		arrayNotes.erase(note);
 		note.queue_free();
 		
-	for note in loadSec[sec]["event"]:
-		arrayEventNotes.erase(note);
-		note.queue_free();
+	for event in section_data["event"]:
+		arrayEventNotes.erase(event);
+		event.queue_free();
 		
 	loadSec.erase(sec);
 	
@@ -769,16 +783,12 @@ func creat_note(event_note = false, strumtime = 0.0, noteData = 0, sustain = 0, 
 	spawn_sustain(newNote);
 	return newNote;
 	
-func spawn_sustain(note):
-	if note.noteLine != null:
-		if note.noteLine.get_point_count() == 0:
-			note.noteLine.add_point(Vector2.ZERO);
-			note.noteLine.add_point(Vector2.ZERO);
-			
-		note.noteLine.set_point_position(0, Vector2.ZERO);
-		note.noteLine.set_point_position(1, Vector2(0, note.sustainLength));
-		note.noteEnd.position.y = note.sustainLength;
+func spawn_sustain(note:Note):
+	if !is_instance_valid(note.noteLine):
+		return;
 		
+	note.noteLine.length = maxf(note.sustainLength, 0.0)
+	
 func add_event_note(strumtime, noteData):
 	var note_strumtime = number_to_time(strumtime) + section_start_time();
 	var note_data = noteData;
@@ -1130,7 +1140,7 @@ func _on_add_event_pressed() -> void:
 		notesEvents.select(id);
 		eventsChange(id);
 		
-	notesEvents.fit_to_longest_item = false;;
+	notesEvents.fit_to_longest_item = false;
 	
 var event_index = -1;
 func eventsChange(index):

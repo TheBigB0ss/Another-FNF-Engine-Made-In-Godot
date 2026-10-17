@@ -386,14 +386,26 @@ func reload_section():
 		
 	for note in playerNotes:
 		var sec = get_section(note[0]);
+		
+		if !player_section_notes.has(sec):
+			player_section_notes[sec] = [];
+			
 		player_section_notes[sec].append(note);
 		
 	for note in opponentNotes:
-		var sec = get_section(note[0])
+		var sec = get_section(note[0]);
+		
+		if !opponent_section_notes.has(sec):
+			opponent_section_notes[sec] = [];
+			
 		opponent_section_notes[sec].append(note);
 		
 	for event in songEvents:
-		var sec = get_section(event[0])
+		var sec = get_section(event[0]);
+		
+		if !section_events.has(sec):
+			section_events[sec] = [];
+			
 		section_events[sec].append(event);
 		
 func get_section_notes(section):
@@ -424,7 +436,7 @@ func get_section(time):
 	
 	for section in songSections:
 		if section["changeBPM"]:
-			curBPM = section["bpm"];
+			curBPM = max(float(section["bpm"]), 1.0);
 			bpmChangeMap.append([totalSteps, totalPos, curBPM]);
 			
 		var sectionLength = section["lengthInSteps"];
@@ -443,5 +455,5 @@ func get_section(time):
 	var step = last_change[0] + floor((time - last_change[1]) / stepCrochet);
 	var curSection = int(floor(step / 16));
 	
-	return curSection;
+	return clamp(curSection, 0, songSections.size() - 1);
 	

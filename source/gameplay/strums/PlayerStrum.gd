@@ -1,6 +1,5 @@
 extends Node2D
 
-@onready var main_scene = get_tree().current_scene;
 var notes = ["left", "down", "up", "right"];
 var strumArray = [];
 var offSetShit = 0;
@@ -20,11 +19,14 @@ var array_notes = [];
 var playerNotes = [];
 var notes_to_delete = [];
 
-var appearNOW = false;
+var skipIntro = false;
+
+signal noteCreated(note, isOpponent);
+signal noteHit(note, isOpponent);
+
+signal healthChange(health);
 
 func _ready() -> void:
-	appearNOW = main_scene.skipIntro;
-	
 	strumNode = Node2D.new();
 	add_child(strumNode);
 	
@@ -50,7 +52,7 @@ func _ready() -> void:
 		
 		strumNote.strumNote.play(notes[i] + " static");
 		
-	if !main_scene.skipIntro:
+	if !skipIntro:
 		notesAppears();
 	else:
 		for i in strumNode.get_children():
@@ -114,12 +116,15 @@ func _process(delta):
 			note.miss_note();
 			
 		if !note.isSustain:
-			var delete_time = note.strumTime + 320;
-			if note.ogSustain > 0:
-				delete_time = note.strumTime + note.ogSustain + 335;
-				
+			var delete_time = note.strumTime + note.ogSustain + 335 if note.ogSustain > 0 else note.strumTime + 320;
+			
 			if Conductor.getSongTime > delete_time && (note.missed or note.ignoreNote):
 				notes_to_delete.append(note);
+				
+		if note.sustainLength > 0:
+			if note.is_pressing && note.missTimer <= 0:
+				self.emit_signal("noteHit", note, false);
+				self.emit_signal("healthChange", note.healthPerHolding * delta);
 				
 	playerNotes = playerNotes.filter(func(note): return note != null);
 	notesList = notesList.filter(func(note): return note != null);
@@ -208,20 +213,15 @@ func press_note(key_to_press, strumNote):
 	if GlobalOptions.isUsingBot:
 		return;
 		
-	var just_pressed = Input.is_action_just_pressed(key_to_press);
-	var pressed = Input.is_action_pressed(key_to_press);
-	
-	if just_pressed && !SongData.is_in_cutscene:
+	if Input.is_action_just_pressed(key_to_press) && !SongData.is_in_cutscene:
 		if !strumNote.strumPressed:
 			strumNote.play_note_anim("press");
 			
 			if strumNote.tap:
+				strumNote.curNoteAnim = strumNote.NOTES_ANIM[strumNote.noteData];
 				GlobalOptions.emit_signal("ghost_tapping_miss", strumNote);
 				
-				strumNote.curNoteAnim = strumNote.NOTES_ANIM[strumNote.noteData];
-				main_scene.playBfMissAnim(strumNote);
-				
-	if !pressed:
+	if !Input.is_action_pressed(key_to_press):
 		strumNote.strumPressed = false;
 		strumNote.play_note_anim("static");
 		strumNote.tap = !GlobalOptions.ghost_tapping;
@@ -245,10 +245,8 @@ func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
 		note.manyHits = value1;
 		note.amount = value2;
 		
-	note.notePressed.connect(main_scene.pressedNote);
-	note.noteMissed.connect(main_scene.miss_note);
-	note.longNoteMissed.connect(main_scene.miss_note);
-	note.noteCreated.connect(main_scene.noteCreated);
+	self.emit_signal("noteCreated", note, false);
+	
 	note.emit_signal("noteCreated", note);
 	
 	var strum = strumArray[note.noteData];
@@ -291,7 +289,7 @@ func delete_note(note_direction):
 	if !is_instance_valid(new_note):
 		return;
 		
-	new_note.pressed();
+	self.emit_signal("noteHit", new_note, false);
 	
 	if new_note.manyHits > 0:
 		return;

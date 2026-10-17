@@ -17,7 +17,7 @@ var icon_scale = Vector2.ZERO;
 
 var is_animated = false;
 var icon_sprite:Sprite2D;
-var icon_animated:AnimatedSprite2D;
+var icon_animated:SparrowSprite;
 
 func init_icon(parent, path, is_opponent, animated, icon_position):
 	var new_icon = Icon.new();
@@ -27,7 +27,7 @@ func init_icon(parent, path, is_opponent, animated, icon_position):
 	new_icon.flip_h = !is_opponent;
 	
 	if animated:
-		new_icon.icon_frames = "assets/images/icons/animated/%s/%s.res"%[path, path];
+		new_icon.icon_frames = "assets/images/icons/animated/%s/%s"%[path, path];
 		new_icon.icon_char = path;
 		new_icon.reload_animated_icon();
 	else:
@@ -69,11 +69,13 @@ func play_icon_anim(anim):
 			
 		cur_iconAnim = anim;
 		
-		for i in iconAnimList.size():
-			if iconAnimList[i] == cur_anim:
-				icon_animated.play(iconPosesList[i]);
-				break;
-				
+		var pose_name = get_icon_animation(cur_anim);
+		
+		if icon_animated.current_animation == pose_name && icon_animated.playing:
+			return;
+			
+		icon_animated.play(pose_name);
+		
 		return;
 		
 	if !icon_sprite.texture:
@@ -145,20 +147,16 @@ func reload_animated_icon(playIconAnim = ""):
 		icon_sprite = null;
 		
 	if icon_animated == null:
-		icon_animated = AnimatedSprite2D.new();
+		icon_animated = SparrowSprite.new();
 		add_child(icon_animated);
 		
-		icon_animated.animation_finished.connect(func():
-			var transition_anim = get_icon_animation("transition");
-			
-			if transition_anim != "" && icon_animated.animation == transition_anim:
-				end_transition = true;
-				play_icon_anim(cur_iconAnim);
-		);
-		
 	icon_animated.flip_h = flip_h;
-	icon_animated.sprite_frames = load("res://%s"%[icon_frames]);
+	icon_animated.texture = load("res://%s.png"%[icon_frames]);
+	icon_animated.data_path = "res://%s.xml"%[icon_frames];
 	
+	if !icon_animated.animation_finished.is_connected(_on_icon_animation_finished):
+		icon_animated.animation_finished.connect(_on_icon_animation_finished);
+		
 	var jsonFile = FileAccess.open("res://assets/images/icons/animated/%s/%s.json"%[icon_char, icon_char], FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
@@ -222,15 +220,17 @@ func get_icon_color():
 	
 func get_rect():
 	if is_animated:
-		if icon_animated == null or icon_animated.sprite_frames == null:
+		if icon_animated == null or icon_animated.texture == null or icon_animated.data_path == "":
 			return Rect2();
 			
-		var frame_texture = icon_animated.sprite_frames.get_frame_texture(icon_animated.animation, icon_animated.frame);
-		if frame_texture == null:
-			return Rect2();
+		#var frame_texture = icon_animated.sprite_frames.get_frame_texture(icon_animated.animation, icon_animated.frame);
+		#if frame_texture == null:
+			#return Rect2();
 			
-		var size = frame_texture.get_size();
-		return Rect2(-size / 2.0, size);
+		#var size = frame_texture.get_size();
+		#return Rect2(-size / 2.0, size);
+		
+		return icon_animated.get_rect();
 	else:
 		if icon_sprite == null or icon_sprite.texture == null:
 			return Rect2();
@@ -239,3 +239,17 @@ func get_rect():
 		#return Rect2(-size / 2.0, size);
 		
 		return icon_sprite.get_rect();
+		
+func _on_icon_animation_finished() -> void:
+	if !is_instance_valid(icon_animated):
+		return;
+		
+	var transition_anim = get_icon_animation("transition");
+	
+	if transition_anim == "":
+		return;
+		
+	if icon_animated.current_animation == transition_anim:
+		end_transition = true;
+		play_icon_anim(cur_iconAnim);
+		

@@ -13,11 +13,11 @@ func _ready():
 		for i in 5:
 			var dancers:SparrowSprite = SparrowSprite.new();
 			dancers.texture = preload("res://assets/stages/week4/limoDancer.png");
-			dancers.xmlPath = "res://assets/stages/week4/limoDancer.xml";
+			dancers.data_path = "res://assets/stages/week4/limoDancer.xml";
 			dancers.position.x = 245+(370*i);
 			dancers.position.y = -290;
 			dancers.loop = false;
-			dancers.fps = 25;
+			dancers.fps = 23;
 			dancers.scale = Vector2(1.25, 1.25);
 			$dancers.add_child(dancers);
 			
@@ -42,7 +42,7 @@ func fastCarZOOOOOOOOOOOOOOOOOOMMMMMMMMMMM():
 	tw.tween_property(coolCar, "position:x", -4000, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT);
 	
 func beat_hit(beat):
-	if beat % 2 == 0:
+	if beat % 4 == 0:
 		trigger_dancers();
 		
 	if beat % 6 == 0 && randf_range(0, 40) <= 10 && !get_tree().current_scene.get("is_on_intro"):

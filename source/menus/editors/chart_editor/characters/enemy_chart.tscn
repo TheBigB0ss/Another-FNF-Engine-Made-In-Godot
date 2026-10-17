@@ -15,7 +15,15 @@ material = SubResource("ShaderMaterial_uj4ou")
 script = ExtResource("1_nj2ef")
 path = "enemy-chart"
 texture = ExtResource("2_vqf0j")
-xmlPath = "res://assets/images/editors/chart preview/enemy/enemy_chart.xml"
+data_path = "res://assets/images/editors/chart preview/enemy/enemy_chart.xml"
 fps = 20
-animation = 3
+offset = Vector2(5, -10)
+anim_looped = {
+"down": false,
+"idle": true,
+"left": false,
+"right": false,
+"up": false
+}
+animation = 1
 metadata/_custom_type_script = "uid://cithgl1w0skdv"

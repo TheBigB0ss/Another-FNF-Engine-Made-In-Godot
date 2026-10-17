@@ -74,8 +74,25 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(760, 478)
 script = ExtResource("2_w5ivh")
 texture = ExtResource("3_n5ntm")
-data_path = null
-center_mode = null
+data_path = "res://assets/images/story mode/ui/arrows.xml"
+anims_data = {
+"leftConfirm": {
+"fps": 16.0,
+"loop": true
+},
+"leftIdle": {
+"fps": 16.0,
+"loop": true
+},
+"rightConfirm": {
+"fps": 16.0,
+"loop": true
+},
+"rightIdle": {
+"fps": 16.0,
+"loop": true
+}
+}
 animation = 0
 metadata/_custom_type_script = "uid://dk0iqkss82o73"
 
@@ -83,10 +100,27 @@ metadata/_custom_type_script = "uid://dk0iqkss82o73"
 position = Vector2(1121, 478)
 script = ExtResource("2_w5ivh")
 texture = ExtResource("3_n5ntm")
-data_path = null
-center_mode = null
+data_path = "res://assets/images/story mode/ui/arrows.xml"
 flip_h = null
 flip_v = null
+anims_data = {
+"leftConfirm": {
+"fps": 16.0,
+"loop": true
+},
+"leftIdle": {
+"fps": 16.0,
+"loop": true
+},
+"rightConfirm": {
+"fps": 16.0,
+"loop": true
+},
+"rightIdle": {
+"fps": 16.0,
+"loop": true
+}
+}
 animation = 1
 metadata/_custom_type_script = "uid://dk0iqkss82o73"
 

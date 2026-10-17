@@ -671,13 +671,10 @@ visible = false
 script = ExtResource("11_xob0g")
 metadata/_custom_type_script = "uid://cvh168tg37tji"
 
-[node name="ChartEnemy" parent="chart_UI/chart_objs/chartTab/opponentPreviewWindow" unique_id=246031562 instance=ExtResource("7_w8f1m")]
-position = Vector2(100, 139)
-scale = Vector2(0.545, 0.545)
-data_path = "res://assets/images/editors/chart preview/enemy/enemy_chart.xml"
-frame = 2
-offset = Vector2(5, -10)
-animation = 1
+[node name="EnemyChart" parent="chart_UI/chart_objs/chartTab/opponentPreviewWindow" unique_id=246031562 instance=ExtResource("7_w8f1m")]
+position = Vector2(90, 131)
+scale = Vector2(0.63, 0.63)
+frame = 7
 
 [node name="playerPreviewWindow" type="Window" parent="chart_UI/chart_objs/chartTab" unique_id=1397538122]
 oversampling_override = 1.0
@@ -689,10 +686,9 @@ script = ExtResource("11_xob0g")
 metadata/_custom_type_script = "uid://cvh168tg37tji"
 
 [node name="ChartBf" parent="chart_UI/chart_objs/chartTab/playerPreviewWindow" unique_id=145860512 instance=ExtResource("6_orogo")]
-position = Vector2(32, 141)
-scale = Vector2(0.765, 0.765)
-data_path = "res://assets/images/editors/chart preview/bf/chart-bf.xml"
-frame = 0
+position = Vector2(34, 131)
+scale = Vector2(0.805, 0.805)
+frame = 2
 
 [node name="chart_inst" type="AudioStreamPlayer" parent="." unique_id=164621937]
 

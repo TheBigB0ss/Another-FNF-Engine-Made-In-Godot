@@ -37,6 +37,8 @@ func _ready() -> void:
 	noteNode = Node2D.new();
 	add_child(noteNode);
 	
+	self.scale = strumScale;
+	
 	for i in notes.size():
 		var strumNote = Note.new();
 		strumNote.modulate.a = 1;
@@ -55,9 +57,6 @@ func _ready() -> void:
 		strumArray.append(strumNote);
 		
 		strumNote.strumNote.play(notes[i] + " static");
-		
-	for i in strumNode.get_children():
-		i.scale = strumScale;
 		
 	notesAppears();
 	
@@ -126,7 +125,6 @@ func _process(delta):
 		note.position.x = strum_pos.x;
 		note.rotation = strum.rotation;
 		note.modulate.a = strum.modulate.a;
-		note.scale = strum.scale;
 		
 		if is_instance_valid(note.holdSplash):
 			note.holdSplash.global_position = strumNode.get_child(note.noteData).global_position;
@@ -206,16 +204,16 @@ func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
 	note.no_anim = (type == "No Animation");
 	note.is_hey_note = (type == "Hey!");
 	note.must_press = note.isPlayer;
-	note.secondary_opponent_note = true;
 	
 	if value1 != null && value2 != null && note.type == "Echo Note":
 		note.manyHits = value1;
 		note.amount = value2;
 		
+	note.characterNotePressed.connect(playCharacterAnim);
+	
 	note.emit_signal("noteCreated", note);
 	
 	var strum = strumArray[note.noteData];
-	note.scale = strum.scale;
 	note.rotation = strum.rotation;
 	note.modulate.a = strum.modulate.a;
 	note.strum_positions.y = strumNode.position.y + strum.position.y;
@@ -230,20 +228,39 @@ func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
 	
 	noteNode.add_child(note);
 	
-func play_strum_anim(note:Note, timer = 0.0):
-	strumNode.get_child(note.noteData).reset_arrow_anim = timer;
-	strumNode.get_child(note.noteData).play_note_anim("confirm");
-	
 func opponentNotePressed(note:Note):
 	if note.isSustain && GlobalOptions.show_splashes:
-		if !is_instance_valid(note.holdSplash):
+		if !is_instance_valid(note.holdSplash) && is_instance_valid(note.noteLine):
 			var strum = strumArray[note.noteData];
 			var splash = splash_note(strum, "holdCover%s"%[note.noteAnim] if !SongData.isPixelStage else "holdpixelCover");
 			note.holdSplash = splash;
 			
 	note.opponent_pressed(strum_char);
-	play_strum_anim(note, 0.40);
+	play_strum_anim(note, 0.45);
 	self.emit_signal("pressed_note", strum_char);
+	
+func playCharacterAnim(curNote:Note, new_char):
+	if curNote.no_anim:
+		return;
+		
+	var noteAnim = curNote.curNoteAnim;
+	var altAnim = "-alt" if (curNote.is_altAnim or SongData.songSections[Conductor.curSection]["altAnim"]) && new_char.animList.has(noteAnim + "-alt") else "";
+	
+	if curNote.note_pressed:
+		return;
+		
+	if curNote.is_hey_note:
+		new_char._playAnim("hey");
+		return;
+		
+	if !curNote.isGfNote && !curNote.is_hey_note:
+		new_char._playAnim(noteAnim+altAnim);
+		
+	curNote.note_pressed = true;
+	
+func play_strum_anim(note:Note, timer = 0.0):
+	strumNode.get_child(note.noteData).reset_arrow_anim = timer;
+	strumNode.get_child(note.noteData).play_note_anim("confirm");
 	
 func splash_note(strum, anim):
 	var splash = preload("res://source/arrows/splashes/noteSplashes.tscn").instantiate();
@@ -251,3 +268,4 @@ func splash_note(strum, anim):
 	splash.scale = Vector2.ONE * 0.60;
 	add_child(splash);
 	return splash;
+	

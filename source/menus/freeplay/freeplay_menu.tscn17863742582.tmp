@@ -1,0 +1,111 @@
+[gd_scene format=3 uid="uid://brktim07ow51i"]
+
+[ext_resource type="Script" uid="uid://qimi8bkga723" path="res://source/menus/freeplay/freeplay_menu.gd" id="1_vy5cd"]
+[ext_resource type="Texture2D" uid="uid://ceq3mk0i6bngd" path="res://assets/images/menuBgs/menuDesat.png" id="2_br0bf"]
+[ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_in7ae"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_i3c0a"]
+font = ExtResource("3_in7ae")
+font_size = 41
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_br0bf"]
+font = ExtResource("3_in7ae")
+font_size = 930
+shadow_size = 90
+shadow_color = Color(0, 0, 0, 1)
+
+[node name="FreeplayMenu" type="Node2D" unique_id=114305816]
+script = ExtResource("1_vy5cd")
+
+[node name="bg" type="Sprite2D" parent="." unique_id=2098578728]
+position = Vector2(640, 360)
+scale = Vector2(0.995334, 0.986301)
+texture = ExtResource("2_br0bf")
+
+[node name="songs" type="Node2D" parent="." unique_id=1575774956]
+position = Vector2(75, 349)
+
+[node name="icons" type="Node2D" parent="." unique_id=1695617062]
+position = Vector2(0, 349)
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=734661211]
+offset_left = 878.0
+offset_right = 918.0
+offset_bottom = 43.09642
+scale = Vector2(10.0542, 2.57562)
+color = Color(0.21, 0.21, 0.21, 0.454902)
+metadata/_edit_use_anchors_ = true
+
+[node name="difficultyText" type="Label" parent="." unique_id=291280583]
+offset_left = 905.00006
+offset_top = 85.0
+offset_right = 1475.0
+offset_bottom = 122.0
+scale = Vector2(0.6, 0.646)
+text = "<  >"
+label_settings = SubResource("LabelSettings_i3c0a")
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="scoreText" type="Label" parent="." unique_id=157073158]
+offset_left = 880.0
+offset_top = 0.9999962
+offset_right = 1024.0
+offset_bottom = 118.0
+scale = Vector2(0.6, 0.645)
+text = "SCORE:
+RANK:
+ACCURACY:"
+label_settings = SubResource("LabelSettings_i3c0a")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="." unique_id=1875437788]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="Control" unique_id=45730292]
+layout_mode = 0
+offset_top = 702.0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.403922)
+
+[node name="Label" type="Label" parent="Control" unique_id=758440968]
+layout_mode = 0
+offset_left = 425.0
+offset_top = 700.0
+offset_right = 11641.0
+offset_bottom = 1281.0
+scale = Vector2(0.035, 0.035)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_in7ae")
+theme_override_font_sizes/font_size = 660
+text = "press SPACE to play song INST"
+horizontal_alignment = 1
+
+[node name="warning" type="Control" parent="." unique_id=598745301]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="warning" unique_id=755106830]
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.592)
+
+[node name="Label" type="Label" parent="warning" unique_id=303276979]
+layout_mode = 0
+offset_left = 37.0
+offset_top = 186.0
+offset_right = 35151.0
+offset_bottom = 14415.0
+scale = Vector2(0.035, 0.035)
+label_settings = SubResource("LabelSettings_br0bf")
+horizontal_alignment = 1

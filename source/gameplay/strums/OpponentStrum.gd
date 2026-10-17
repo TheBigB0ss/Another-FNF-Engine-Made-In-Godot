@@ -1,10 +1,8 @@
 extends Node2D
 
-@onready var main_scene = get_tree().current_scene;
 var notes = ["left", "down", "up", "right"];
 var strumArray = [];
 var offSetShit = 105;
-@export var is_secondary_strum = false;
 @export var note_data: Dictionary = {
 	"Texture Folder": "default",
 	"Note Texture": "notes",
@@ -19,11 +17,12 @@ var notesList = [];
 var array_notes = [];
 var opponentNotes = [];
 
-var appearNOW = false;
+var skipIntro = false;
+
+signal noteCreated(note, isOpponent);
+signal noteHit(note, isOpponent);
 
 func _ready() -> void:
-	appearNOW = main_scene.skipIntro;
-	
 	strumNode = Node2D.new();
 	add_child(strumNode);
 	
@@ -49,7 +48,7 @@ func _ready() -> void:
 		
 		strumNote.strumNote.play(notes[i] + " static");
 		
-	if !main_scene.skipIntro:
+	if !skipIntro:
 		notesAppears();
 	else:
 		for i in strumNode.get_children():
@@ -118,7 +117,7 @@ func _process(delta):
 		if Conductor.getSongTime < note.strumTime:
 			continue;
 			
-		note.opponent_pressed();
+		self.emit_signal("noteHit", note, true);
 		
 		if note.manyHits > 0:
 			continue
@@ -174,11 +173,10 @@ func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
 	note.no_anim = (type == "No Animation");
 	note.is_hey_note = (type == "Hey!");
 	note.must_press = note.isPlayer;
-	note.secondary_opponent_note = is_secondary_strum;
 	note.visible = !GlobalOptions.middle_scroll;
 	
-	note.opponentNotePressed.connect(main_scene.opponentNotePressed);
-	note.noteCreated.connect(main_scene.noteCreated);
+	self.emit_signal("noteCreated", note, true);
+	
 	note.emit_signal("noteCreated", note);
 	
 	if value1 != null && value2 != null && note.type == "Echo Note":

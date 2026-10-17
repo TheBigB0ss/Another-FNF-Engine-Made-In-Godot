@@ -161,7 +161,7 @@ func changeChar(id, newCharacter):
 func update_icon(icon, character):
 	if icon is Icon:
 		if icon.is_animated:
-			icon.icon_frames = "assets/images/icons/animated/%s/%s.res"%[character.curIcon, character.curIcon];
+			icon.icon_frames = "assets/images/icons/animated/%s/%s"%[character.curIcon, character.curIcon];
 			icon.icon_char = character.curIcon;
 			icon.reload_animated_icon();
 		else:

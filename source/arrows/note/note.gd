@@ -4,10 +4,7 @@ class_name Note extends Sprite2D
 @onready var strumNote = AnimatedSprite2D.new();
 @onready var line = AnimatedSprite2D.new();
 
-@onready var noteLine = Line2D.new();
-@onready var noteEnd = Sprite2D.new();
-
-@onready var main_scene = get_tree().current_scene;
+@onready var noteLine = SustainLine.new();
 
 var note_dir = "left";
 var custom_note_dir = KEY_LEFT;
@@ -19,13 +16,12 @@ var fileType = "res";
 var type = "note";
 var noteAnim = "purple";
 
-var note_type = 'default';
+var note_type = "default";
 var note_skin = "notes";
 var note_strum = "StrumlineNotes";
 var note_lines = "NOTE_hold_assets";
 
 var isPlayer = false;
-var secondary_opponent_note = false;
 
 var must_press = false;
 var is_pressing = false;
@@ -75,6 +71,9 @@ signal noteMissed(note);
 signal longNoteMissed(note);
 
 signal noteCreated(note);
+
+signal characterNotePressed(note, character);
+signal playStrumAnim(note, is_opponent, anim_time, isCPU);
 
 func reload_note_type():
 	match type:
@@ -128,7 +127,6 @@ func reload_note():
 		note.texture_filter = AnimatedSprite2D.TEXTURE_FILTER_NEAREST;
 		strumNote.texture_filter = AnimatedSprite2D.TEXTURE_FILTER_NEAREST;
 		noteLine.texture_filter = Line2D.TEXTURE_FILTER_NEAREST;
-		noteEnd.texture_filter = Sprite2D.TEXTURE_FILTER_NEAREST;
 		
 		note_type = "pixel/default";
 		note_skin = "notes";
@@ -149,21 +147,12 @@ func reload_note():
 				"blue":
 					noteLine.position.x -= 1.5;
 					
-	note.sprite_frames = set_note_texture("res://assets/images/arrows/%s/%s.%s"%[note_type, note_skin, fileType]);
-	strumNote.sprite_frames = set_note_texture("res://assets/images/arrows/%s/%s.%s"%[note_type, note_strum, fileType]);
-	line.sprite_frames = set_note_texture("res://assets/images/arrows/%s/%s.%s"%[note_type, note_lines, fileType]);
+	note.sprite_frames = load("res://assets/images/arrows/%s/%s.%s"%[note_type, note_skin, fileType]);
+	strumNote.sprite_frames = load("res://assets/images/arrows/%s/%s.%s"%[note_type, note_strum, fileType]);
+	line.sprite_frames = load("res://assets/images/arrows/%s/%s.%s"%[note_type, note_lines, fileType]);
 	
-	var newSustainSpr = SustainNote.new();
-	noteLine.texture = newSustainSpr.draw_sustain_line(line.sprite_frames.get_frame_texture("%s hold piece"%[noteAnim], 0));
-	noteEnd.texture = line.sprite_frames.get_frame_texture("%s hold end"%[noteAnim], 0);
-	
-	noteLine.texture_mode = Line2D.LINE_TEXTURE_TILE;
-	
-var spriteFrames = {};
-func set_note_texture(path):
-	if !spriteFrames.has(path):
-		spriteFrames[path] = load(path);
-	return spriteFrames[path];
+	noteLine.lineTex = line.sprite_frames.get_frame_texture("%s hold piece"%[noteAnim], 0);
+	noteLine.noteEndTex = line.sprite_frames.get_frame_texture("%s hold end"%[noteAnim], 0);
 	
 func set_note_scale(parent_scale, pixelNote):
 	var new_noteScale = parent_scale;
@@ -183,19 +172,14 @@ func _ready():
 	add_child(strumNote);
 	add_child(noteLine);
 	add_child(note);
-	noteLine.add_child(noteEnd);
-	
-	noteLine.width = 50;
 	
 	isSustain = (sustainLength > 0.0);
 	
 	if isSustain:
-		noteLine.add_point(Vector2.ZERO);
-		noteLine.add_point(Vector2(0, sustainLength));
+		noteLine.length = sustainLength;
 		
 	note.visible = !isStrumNote;
 	noteLine.visible = !isStrumNote;
-	noteEnd.visible = !isStrumNote && isSustain;
 	strumNote.visible = isStrumNote;
 	
 	reload_note_data();
@@ -214,7 +198,6 @@ func _ready():
 		noteAlpha = 0.5;
 		
 	noteLine.modulate.a = noteAlpha;
-	noteEnd.modulate.a = 1.0 if noteAlpha == 1 else 0.9;
 	
 func _process(delta: float) -> void:
 	if isChartNote:
@@ -228,30 +211,18 @@ func _process(delta: float) -> void:
 		self.modulate.a = 0.3;
 		
 	if isSustain && is_instance_valid(noteLine):
-		noteLine.set_point_position(1, Vector2(0, sustainLength));
+		noteLine.length = sustainLength;
 		
 		noteLine.scale.y = Conductor.songSpeed/1.5;
 		if GlobalOptions.down_scroll:
 			noteLine.scale.y *= -1;
 			
-		if noteEnd != null:
-			noteEnd.scale = set_note_scale(noteEnd.get_parent().scale, SongData.isPixelStage);
-			noteEnd.position.y = sustainLength + noteEnd.texture.get_size().y * noteEnd.scale.y / 2.0;
-			
 	if is_pressing:
-		sustainLength = max(ogSustain - max(Conductor.getSongTime - strumTime, 0.0), 0.0);
-		
-		if isSustain && noteLine != null && noteEnd != null:
-			noteEnd.scale.y = abs(min(sustainLength*Conductor.songSpeed / noteEnd.texture.get_size().y, noteEnd.scale.y));
-			noteEnd.position.y = sustainLength + noteEnd.texture.get_size().y * noteEnd.scale.y / 2.0;
-			
-			noteLine.set_point_position(1, Vector2(0, sustainLength));
+		sustainLength = maxf(ogSustain - max(Conductor.getSongTime - strumTime, 0.0), 0.0);
+		if isSustain && noteLine != null:
+			noteLine.length = sustainLength;
 			
 			if isPlayer:
-				pressed();
-				if missTimer <= 0:
-					main_scene.health = min(main_scene.health+healthPerHolding*delta, 100.0);
-					
 				if sustainLength <= 0 && GlobalOptions.show_splashes:
 					if is_instance_valid(holdSplash):
 						if GlobalOptions.isUsingBot:
@@ -261,7 +232,6 @@ func _process(delta: float) -> void:
 							
 						holdSplash = null;
 			else:
-				opponent_pressed();
 				if sustainLength <= 0:
 					if is_instance_valid(holdSplash):
 						holdSplash.queue_free();
@@ -269,7 +239,6 @@ func _process(delta: float) -> void:
 						
 			if sustainLength <= 0:
 				missed = false;
-				noteEnd.queue_free();
 				noteLine.queue_free();
 				
 	if missedLongNote:
@@ -290,21 +259,17 @@ func play_note_anim(anim):
 	strumNote.play(str(note_dir, " ", anim));
 	
 var pressed_emit = false;
-func pressed(new_character = null):
+func pressed(character = null):
 	if missed:
 		return;
 		
 	curNoteAnim = NOTES_ANIM[noteData];
-	new_character = main_scene.bf if !is_instance_valid(new_character) else new_character;
 	
-	if !new_character.is_player or new_character.curCharacter == "tankman":
+	if !character.is_player or character.curCharacter == "tankman":
 		curNoteAnim = swap_sing_anims("singLeft", "singRight");
 		
-	new_character.curNote = self;
+	character.curNote = self;
 	
-	if !is_a_bad_note && !pressed_emit:
-		main_scene.health = min(main_scene.health+healthPerHit, 100.0);
-		
 	emitPress(false);
 	if sustainLength <= 0:
 		if is_a_bad_note:
@@ -319,27 +284,25 @@ func pressed(new_character = null):
 		return;
 		
 	var anim_time = 0.45 if GlobalOptions.isUsingBot else 0.0;
-	main_scene.playCharacterAnim(self, new_character);
-	main_scene.play_strum_anim(self, false, anim_time, true);
+	characterNotePressed.emit(self, character);
+	playStrumAnim.emit(self, false, anim_time, GlobalOptions.isUsingBot);
 	
-func opponent_pressed(new_character = null):
+func opponent_pressed(character = null):
 	curNoteAnim = NOTES_ANIM[noteData];
-	new_character = main_scene.dad if !is_instance_valid(new_character) else new_character;
 	
-	if new_character.is_player && new_character.curCharacter != "tankman" && new_character.curCharacter != "pico":
+	if character.is_player && character.curCharacter != "tankman" && character.curCharacter != "pico":
 		curNoteAnim = swap_sing_anims("singLeft", "singRight");
 		
-	new_character.curNote = self;
+	character.curNote = self;
 	
 	emitPress(true);
 	
 	if sustainLength <= 0:
 		destroy_note();
 		
-	main_scene.playCharacterAnim(self, new_character);
-	if !secondary_opponent_note:
-		main_scene.play_strum_anim(self, true, 0.45, true);
-		
+	characterNotePressed.emit(self, character);
+	playStrumAnim.emit(self, true, 0.45, true);
+	
 func emitPress(is_opponent):
 	if pressed_emit:
 		return;
@@ -363,14 +326,12 @@ func miss_note():
 		return;
 		
 	curNoteAnim = NOTES_ANIM[noteData];
-	main_scene.health = max(main_scene.health - 4, 0.0);
 	
 	if isSustain:
 		emit_signal("longNoteMissed", self);
 	else:
 		emit_signal("noteMissed", self);
 		
-	main_scene.playBfMissAnim(self);
 	missed = true;
 	emit_miss = true;
 	

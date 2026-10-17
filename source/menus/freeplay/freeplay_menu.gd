@@ -30,20 +30,8 @@ var dont_have_chart = false;
 
 var weekJson = {};
 
-func get_week_files():
-	var file = [];
-	var coolFolder = DirAccess.open("res://assets/data/weeks data/%s"%[SongData.week_folder_path]);
-	if coolFolder:
-		coolFolder.list_dir_begin();
-		var nameShit = coolFolder.get_next();
-		while nameShit != "":
-			file.append(nameShit.replace(".json", ""));
-			nameShit = coolFolder.get_next();
-			
-	return file;
-	
 func loadJson(week):
-	var jsonFile = FileAccess.open("res://assets/data/weeks data/%s/%s.json"%[SongData.week_folder_path, week],FileAccess.READ);
+	var jsonFile = FileAccess.open("res://assets/data/weeks data/%s/%s"%[SongData.week_folder_path, week],FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());
 	weekJson = jsonData.get_data();
@@ -56,7 +44,7 @@ func _ready() -> void:
 	
 	Discord.update_discord_info("freeplay menu", "Is in menus");
 	
-	weeks = get_week_files();
+	weeks = Global.get_folder("assets/data/weeks data/%s"%[SongData.week_folder_path]);
 	for i in weeks:
 		loadJson(i);
 		

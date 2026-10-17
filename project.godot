@@ -24,6 +24,10 @@ boot_splash/image="uid://b4qpppwqxh1d5"
 config/icon="res://engine_icon.png"
 run/vsync/vsync_mode=0
 
+[audio]
+
+buses/default_bus_layout=""
+
 [autoload]
 
 ScriptLoader="*uid://dec4v1x2qktab"

@@ -3,27 +3,39 @@
 [ext_resource type="Script" uid="uid://djpjx6srvhkd5" path="res://source/characters/characters_scripts/SparrowCharacter.gd" id="1_k052l"]
 [ext_resource type="Texture2D" uid="uid://34a7m6jn5ac5" path="res://assets/images/characters/daddyDearest.png" id="2_k052l"]
 
-[node name="Dad" type="Node2D" unique_id=845032738]
+[node name="dad" type="Node2D" unique_id=13144803]
 script = ExtResource("1_k052l")
 json_path = "res://assets/data/characters/dad.json"
-healthBar_Color = Color(0.6862745, 0.4, 0.80784315, 1)
-anims_timer = {
-"idle dance": [2, 5, false],
-"singDown": [2, 5, false],
-"singLeft": [2, 5, false],
-"singRight": [2, 5, false],
-"singUp": [2, 5, false]
-}
-animation = 0
-anim_type = 2
+animation = 1
+anim_type = 1
 have_death_animation = false
 idle_type = 2
-frame_count = 2.4
 texture = ExtResource("2_k052l")
 data_path = "res://assets/images/characters/daddyDearest.xml"
-frame = 13
-fps = 20
+frame = 15
+fps = 21.0
 loop = false
-offset = Vector2(-75, -110)
-animation = 0
+anims_data = {
+"idle": {
+"fps": 21.0,
+"loop": false
+},
+"singDOWN": {
+"fps": 21.0,
+"loop": false
+},
+"singLEFT": {
+"fps": 21.0,
+"loop": false
+},
+"singRIGHT": {
+"fps": 21.0,
+"loop": false
+},
+"singUP": {
+"fps": 21.0,
+"loop": false
+}
+}
+animation = 1
 metadata/_custom_type_script = "uid://djpjx6srvhkd5"

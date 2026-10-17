@@ -13,7 +13,6 @@ func _process(_delta: float) -> void:
 	if GlobalOptions.debugTextMode == "complex":
 		var vram = round((Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 104857.6)) / 10;
 		var process_time = Performance.get_monitor(Performance.TIME_PROCESS);
-		var scene_name = get_tree().current_scene.scene_file_path.get_file().get_basename() if get_tree().current_scene != null else "";
 		
 		debugText.text = "FPS: %s\nVRAM: %s MB\nPROCESS: %s ms"%[fps, vram, process_time * 1000.0];
 	else:

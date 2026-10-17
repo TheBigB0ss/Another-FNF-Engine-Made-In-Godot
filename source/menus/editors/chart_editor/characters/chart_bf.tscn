@@ -15,8 +15,14 @@ material = SubResource("ShaderMaterial_h3sli")
 script = ExtResource("1_h3sli")
 path = "bf-chart"
 texture = ExtResource("2_ly5gl")
-xmlPath = "res://assets/images/editors/chart preview/bf/chart-bf.xml"
-frame = 6
+data_path = "res://assets/images/editors/chart preview/bf/chart-bf.xml"
 offset = Vector2(116, -19)
+anim_looped = {
+"down": false,
+"idle": true,
+"left": false,
+"right": false,
+"up": false
+}
 animation = 1
 metadata/_custom_type_script = "uid://cithgl1w0skdv"

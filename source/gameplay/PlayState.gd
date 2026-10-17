@@ -20,9 +20,6 @@ var iconP1 = Icon.new();
 var iconP2 = Icon.new();
 @onready var iconGrp = $'hud/Hud_Layer/icons';
 
-var ratingPart = "";
-var ratings = ["sick", "good", "bad", "shit", "miss"];
-
 @onready var msText = $rating/Rating_Layer/ms_text;
 
 @onready var rating_spr = $'rating/Rating_Layer/rating';
@@ -41,6 +38,9 @@ var can_pause = false;
 
 var health = 50.0;
 
+var totalHits = 0;
+var notesPlayed = 0;
+
 var sicks = 0;
 var goods = 0;
 var bads = 0;
@@ -49,13 +49,12 @@ var shits = 0;
 var combo = 0;
 var score = 0;
 var misses = 0;
+
 var ratingName = '';
 var rankName = '';
-var accuracyPercent = 0.0;
 
-var totalHits = 0;
-var notesPlayed = 0;
 var percent = 0;
+var accuracyPercent = 0.0;
 
 var isDead = false;
 
@@ -124,6 +123,15 @@ func _ready():
 	Global.connect("end_dialogue", startCountdown);
 	Global.connect("end_cutscene", startCountdown);
 	
+	playerStrum.connect("healthChange", set_health);
+	playerStrum.connect("noteCreated", set_note);
+	playerStrum.connect("noteHit", set_noteHit);
+	playerStrum.skipIntro = skipIntro;
+	
+	opponentStrum.connect("noteCreated", set_note);
+	opponentStrum.connect("noteHit", set_noteHit);
+	opponentStrum.skipIntro = skipIntro;
+	
 	eventLoader.connect("event_emit", eventEmit);
 	
 	stage = load("res://source/stages/%s/%s.tscn"%[SongData.stage, SongData.stage]).instantiate();
@@ -153,8 +161,6 @@ func _ready():
 		for i in [countdownSprite, rating_spr, combo_spr, nums_spr]:
 			i.texture_filter = Sprite2D.TEXTURE_FILTER_NEAREST;
 			
-		ratingPart = '-pixel';
-		
 	healthBar.tint_under = Color("#ff000f") if GlobalOptions.updated_hud == "classic hud" else dad.healthBar_Color;
 	healthBar.tint_progress = Color("#00ff06") if GlobalOptions.updated_hud == "classic hud" else bf.healthBar_Color;
 	
@@ -289,14 +295,14 @@ func _process(delta: float) -> void:
 				AchievementPopUp.set_achievement("fucked up", true);
 				
 			if (SongData.isStoryMode && playlist.size() == 1 && achievements_map.has(SongData.weekName) && songDiff != "remix"):
-				var diff_prefix = songDiff if songDiff != "" else "normal"
+				var diff_prefix = songDiff if songDiff != "" else "normal";
 				AchievementPopUp.set_achievement(achievements_map[SongData.weekName][0][diff_prefix], true);
 				
 			if AchievementPopUp.achievements_fuck.is_empty():
 				finishSong();
 				
 			finished_song = true;
-		
+			
 	checkPlayerDead();
 	set_icon_anim();
 	
@@ -322,7 +328,7 @@ var ratingColors = {
 	"Bad": Color.DARK_RED,
 	"Shit": Color.DARK_RED
 };
-func pressedNote(note):
+func pressedNote(note:Note):
 	if note.isSustain && GlobalOptions.show_splashes:
 		var splash = splash_note(playerStrum.strumNode.get_child(note.noteData), "holdCover%s"%[note.noteAnim] if !SongData.isPixelStage else "holdpixelCover");
 		note.holdSplash = splash;
@@ -334,6 +340,8 @@ func pressedNote(note):
 		return;
 		
 	voices.stream.set_sync_stream_volume(0, 0.0);
+	
+	health = min(health + note.healthPerHit, 100.0);
 	
 	var ms = (note.strumTime - Conductor.getSongTime);
 	var strum = playerStrum.strumNode.get_child(note.noteData);
@@ -387,7 +395,7 @@ func pressedNote(note):
 			
 	updateScoreText();
 	
-func opponentNotePressed(note):
+func opponentNotePressed(note:Note):
 	if note.isSustain && GlobalOptions.show_splashes && !GlobalOptions.middle_scroll:
 		var splash = splash_note(opponentStrum.strumNode.get_child(note.noteData), "holdCover%s"%[note.noteAnim] if !SongData.isPixelStage else "holdpixelCover");
 		note.holdSplash = splash;
@@ -395,7 +403,7 @@ func opponentNotePressed(note):
 	ScriptLoader.call_func("on_opponent_hit", [note]);
 	dad.characterScript.call_func("on_note_hit", [note]);
 	
-func miss_note(note):
+func miss_note(note:Note):
 	ScriptLoader.call_func("on_note_miss", [note]);
 	bf.characterScript.call_func("on_miss", [note]);
 	
@@ -403,10 +411,12 @@ func miss_note(note):
 		Sound.playAudio("miss_sounds/missnote%s"%[randi_range(1, 3)], false);
 		Sound.audio.volume_db = -8;
 		
+	playBfMissAnim(note);
+	
 	voices.stream.set_sync_stream_volume(0, -80.0);
 	
 	misses += 1;
-	health -= 4;
+	health = max(health - 4, 0.0);
 	notesPlayed = max(notesPlayed - 0.8, 0.0);
 	score -= randi_range(50, 80);
 	
@@ -461,17 +471,15 @@ func playCharacterAnim(curNote:Note, new_char):
 		
 	curNote.note_pressed = true;
 	
-func play_strum_anim(note = null, is_opponent = false, timer = 0.0, isCPU = false):
-	var taget_key = "player";
+func play_strum_anim(note:Note, is_opponent = false, timer = 0.0, isCPU = false):
+	var taget_key = "player" if !is_opponent else "opponent";
 	var target = {
 		"player": playerStrum,
 		"opponent": opponentStrum
 	};
 	
-	if is_opponent:
-		taget_key = "opponent";
-		
 	var strum_target = target[taget_key];
+	
 	if isCPU:
 		strum_target.strumNode.get_child(note.noteData).reset_arrow_anim = timer;
 		
@@ -663,7 +671,7 @@ func startCountdown():
 		if GlobalOptions.updated_hud == "classic hud" && i == 0:
 			continue;
 			
-		set_contdownSpr(countdownPath, countdownset[countdownPath][i] + ratingPart);
+		set_contdownSpr(countdownPath, str(countdownset[countdownPath][i], "-pixel" if SongData.isPixelStage else ""));
 		
 		idleCounter += 1;
 		
@@ -838,3 +846,25 @@ func step_hit(_step):
 		
 func beat_hit(_beat):
 	pass;
+	
+func set_note(note:Note, isOpponent):
+	if !isOpponent:
+		note.notePressed.connect(pressedNote);
+		note.noteMissed.connect(miss_note);
+		note.longNoteMissed.connect(miss_note);
+	else:
+		note.opponentNotePressed.connect(opponentNotePressed);
+		
+	note.characterNotePressed.connect(playCharacterAnim);
+	note.playStrumAnim.connect(play_strum_anim);
+	note.noteCreated.connect(noteCreated);
+	
+func set_noteHit(note:Note, isOpponent):
+	if !isOpponent:
+		note.pressed(bf);
+	else:
+		note.opponent_pressed(dad);
+		
+func set_health(amount):
+	health = clampf(health + amount, 0.0, 100.0);
+	

@@ -16,7 +16,14 @@ var spriteStuff = {};
 		
 @export_group("playback")
 @export var frame = 0;
-@export var loop = false;
+@export var loop = false:
+	set(value):
+		loop = value
+		
+		anim_looped[current_animation] = value;
+		
+		notify_property_list_changed();
+		
 @export var playing = true;
 @export_range(0.1, 5.0, 0.001) var speed = 1.0;
 
@@ -48,6 +55,8 @@ var spriteData = {};
 var symbol_data = {};
 var symbols_elements = {};
 
+var current_animation = "";
+
 var total_frames = 0;
 var spriteZIndex = 0;
 
@@ -57,14 +66,23 @@ var animation = 0:
 		animation = value;
 		symbol_centered = false;
 		if !animationList.is_empty():
+			current_animation = animationList[animation];
+			
 			play(animationList[animation]);
 			
+			loop = get_animation_loop(current_animation);
+			
+@export var anim_looped = {};
+
 var animationList = [];
 
 var symbols_root:Node2D;
 
 var symbol_centered = false;
 var symbol_position = Vector2.ZERO;
+
+signal animation_finished;
+signal animation_change(anim);
 
 func reload():
 	symbol_centered = false;
@@ -113,6 +131,9 @@ func reload():
 			var animName = fr.get("N", "");
 			if !animationList.has(animName) && animName != "":
 				animationList.append(animName);
+				
+			if !anim_looped.has(animName):
+				anim_looped[animName] = loop;
 				
 	for i in animationData["SD"]["S"]:
 		symbol_data[i["SN"]] = i;
@@ -258,13 +279,12 @@ func atlas_process(delta: float) -> void:
 		
 		var loopLimit = limit if limit > 0 else total_frames;
 		if timer > loopLimit:
-			timer = start_frame if loop else loopLimit;
+			animation_finished.emit();
+			timer = start_frame if get_animation_loop(current_animation) else loopLimit;
 			
 		frame = int(timer);
 		
-	frame = (
-		wrapi(frame, 0, total_frames - 1) if loop else clamp(frame, 0, total_frames - 1) if (limit == null or limit == 0) else wrapi(frame, 0, limit) if loop else clamp(frame, 0, limit)
-	);
+	frame = (wrapi(frame, 0, total_frames - 1) if get_animation_loop(current_animation) else clamp(frame, 0, total_frames - 1) if (limit == null or limit == 0) else wrapi(frame, 0, limit) if get_animation_loop(current_animation) else clamp(frame, 0, limit));
 	
 	spriteZIndex = 0;
 	
@@ -315,8 +335,15 @@ func play(anim):
 		
 		return;
 		
+	animation_change.emit(anim);
+	
+	current_animation = anim;
+	
+	loop = get_animation_loop(anim);
+	
 	symbol_centered = false;
 	playing = true;
+	
 	for j in animationData["AN"]["TL"]["L"]:
 		for k in j["FR"]:
 			if k.get("N", "") == anim:
@@ -345,6 +372,12 @@ func _get_property_list():
 	});
 	
 	return properties;
+	
+func set_animation_loop(anim_name, value):
+	anim_looped[anim_name] = value;
+	
+func get_animation_loop(anim):
+	return anim_looped.get(anim, loop);
 	
 func get_rect():
 	var rect = Rect2();
