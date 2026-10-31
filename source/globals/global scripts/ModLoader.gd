@@ -4,7 +4,7 @@ func _init() -> void:
 	load_mods();
 	
 func get_mods_path():
-	if Global.is_on_mobile:
+	if OS.get_name() == "Android" or OS.get_name() == "iOS":
 		return OS.get_user_data_dir().path_join("mods");
 		
 	return OS.get_executable_path().get_base_dir().path_join("mods");

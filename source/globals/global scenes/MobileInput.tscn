@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://bw0baetfhlrwe" path="res://assets/images/hud/mobile/up.png" id="2_wjhqe"]
 [ext_resource type="Texture2D" uid="uid://cwwvyotmtyldl" path="res://assets/images/hud/mobile/left.png" id="3_os15u"]
 [ext_resource type="Texture2D" uid="uid://dy0mgjeo3jey7" path="res://assets/images/hud/mobile/right.png" id="4_iiauq"]
-[ext_resource type="Texture2D" uid="uid://5fwkty4ar3r6" path="res://assets/images/hud/mobile/enter.png" id="5_os15u"]
-[ext_resource type="Texture2D" uid="uid://c2xa75a3ghsrq" path="res://assets/images/hud/mobile/esc.png" id="6_iiauq"]
+[ext_resource type="Texture2D" uid="uid://buk1yalfqdytt" path="res://assets/images/hud/mobile/pause.png" id="5_os15u"]
+[ext_resource type="Texture2D" uid="uid://ksu64ejyrf7s" path="res://assets/images/hud/mobile/exit.png" id="6_iiauq"]
 
 [sub_resource type="GDScript" id="GDScript_7avee"]
 resource_name = "MobileInput"
@@ -146,7 +146,7 @@ size = Vector2(150, 150)
 size = Vector2(150, 150)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_os15u"]
-size = Vector2(150, 150)
+size = Vector2(205, 205)
 
 [node name="MobileInput" type="CanvasLayer" unique_id=782822476]
 layer = 40
@@ -192,7 +192,7 @@ scale = Vector2(0.9999998, 0.9999998)
 
 [node name="Enter" type="TouchScreenButton" parent="Controlls/Others" unique_id=1782149330]
 unique_name_in_owner = true
-position = Vector2(1462.5002, -727.50006)
+position = Vector2(1466.2502, -728.75006)
 scale = Vector2(0.8, 0.8)
 texture_normal = ExtResource("5_os15u")
 shape = SubResource("RectangleShape2D_4kf73")
