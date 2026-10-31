@@ -10,7 +10,7 @@ var finished_intro = false;
 var can_use_menus = true;
 var is_on_video = false;
 
-var is_on_mobile = false:
+var is_on_mobile:bool:
 	get:
 		return OS.get_name() == "Android" or OS.get_name() == "iOS";
 		
