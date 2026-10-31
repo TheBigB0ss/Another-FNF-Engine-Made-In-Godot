@@ -99,7 +99,11 @@ func _ready():
 	save_settings();
 	apply_changes();
 	
-	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if GlobalOptions.full_screen else DisplayServer.WINDOW_MODE_WINDOWED);
+	if Global.is_on_mobile:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN);
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if GlobalOptions.full_screen else DisplayServer.WINDOW_MODE_WINDOWED);
+		
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if GlobalOptions.vsync else DisplayServer.VSYNC_DISABLED);
 	
 func update_vsync(toggle):
