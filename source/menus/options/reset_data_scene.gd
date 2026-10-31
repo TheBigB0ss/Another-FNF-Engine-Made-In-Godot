@@ -35,11 +35,11 @@ func _input(ev):
 			if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo:
 				match opt[cur_opt]:
 					"yes":
-						Sound.playAudio("confirmMenu", false);
+						Sound.playAudio("confirmMenu");
 						HighScore.clear_data();
 						Achievements.reset_achievements();
 					"no":
-						Sound.playAudio("cancelMenu", false);
+						Sound.playAudio("cancelMenu");
 						
 				self.visible = false;
 				

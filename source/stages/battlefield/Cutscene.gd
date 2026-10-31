@@ -51,7 +51,7 @@ func ugh_intro():
 	
 	await get_tree().create_timer(0.1).timeout;
 	tankmanCutscene.playing = true;
-	Sound.playAudio("week7_cutscene_voices/wellWellWell", false);
+	Sound.playAudio("week7_cutscene_voices/wellWellWell");
 	
 	await get_tree().create_timer(3.6).timeout
 	tankmanCutscene.playing = false;
@@ -59,7 +59,7 @@ func ugh_intro():
 	
 	await get_tree().create_timer(1).timeout
 	bf_anim._playAnim("singUp");
-	Sound.playAudio("week7_cutscene_voices/bfBeep", false);
+	Sound.playAudio("week7_cutscene_voices/bfBeep");
 	
 	await get_tree().create_timer(0.8).timeout
 	tankmanCutscene.frame = 81;
@@ -67,7 +67,7 @@ func ugh_intro():
 	tankmanCutscene.playing = true;
 	bf_anim._playAnim("idle dance");
 	camera.position = Vector2(280, 698);
-	Sound.playAudio("week7_cutscene_voices/killYou", false);
+	Sound.playAudio("week7_cutscene_voices/killYou");
 	
 	await get_tree().create_timer(6).timeout;
 	opponent_anim.show();
@@ -94,7 +94,7 @@ func guns_intro():
 	
 	await get_tree().create_timer(0.1).timeout
 	camera.position = Vector2(280, 698);
-	Sound.playAudio("week7_cutscene_voices/tankSong2", false);
+	Sound.playAudio("week7_cutscene_voices/tankSong2");
 	
 	await get_tree().create_timer(4.3).timeout;
 	gf_anim._playAnim("sad");
@@ -127,7 +127,7 @@ func stress_intro():
 	
 	await get_tree().create_timer(0.1).timeout
 	camera.position = Vector2(280, 698);
-	Sound.playAudio("week7_cutscene_voices/stressCutscene", false);
+	Sound.playAudio("week7_cutscene_voices/stressCutscene");
 	
 	await get_tree().create_timer(13).timeout
 	is_pico_part = true;

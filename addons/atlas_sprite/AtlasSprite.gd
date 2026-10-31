@@ -3,6 +3,10 @@ class_name AtlasSprite extends Node2D
 
 var spriteStuff = {};
 
+@export_group("shader")
+
+@export var atlas_shader:ShaderMaterial;
+
 @export_group("animation path", "")
 @export_dir var path = "":
 	set(value):
@@ -239,7 +243,7 @@ func create_sprite(data, keyID, index, spriteTransform, blendID = 0, color = nul
 	spr.z_as_relative = true;
 	spr.z_index = 0;
 	
-	spr.material = apply_blend(blendID);
+	spr.material = atlas_shader if atlas_shader != null else apply_blend(blendID);
 	spr.modulate = set_symbol_color(color);
 	
 	var textureFrame = AtlasTexture.new();

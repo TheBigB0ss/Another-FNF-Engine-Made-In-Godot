@@ -87,7 +87,7 @@ func _input(ev):
 				change_achievement(1);
 				
 func change_achievement(change):
-	Sound.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu");
 	
 	var row = (cur_Achievement / achievements_row);
 	var col = (cur_Achievement % achievements_row);

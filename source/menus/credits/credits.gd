@@ -68,7 +68,7 @@ func changeDev(change):
 	
 	Global.currentCredits = creditSelected;
 	
-	Sound.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu");
 	
 	socialSelected = 0;
 	
@@ -84,7 +84,7 @@ func change_social_media(change):
 		
 	socialSelected = wrapi(socialSelected + change, 0, socials.size());
 	
-	Sound.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu");
 	
 	update_midia();
 	

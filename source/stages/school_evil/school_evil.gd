@@ -66,6 +66,6 @@ func _on_senpai_fade_timer_timeout() -> void:
 		senpai.modulate.a = fade_timer * 0.2;
 		
 	if fade_timer == 6:
-		Sound.playAudio("Senpai_Dies", false);
+		Sound.playAudio("Senpai_Dies");
 		senpai.animation.play("Senpai Pre Explosion instance 1/ ");
 		

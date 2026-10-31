@@ -3,8 +3,14 @@ extends Node
 func _init() -> void:
 	load_mods();
 	
+func get_mods_path():
+	if OS.get_name() == "Android" or OS.get_name() == "iOS":
+		return OS.get_user_data_dir().path_join("mods");
+		
+	return OS.get_executable_path().get_base_dir().path_join("mods");
+	
 func load_mods() -> void:
-	var mods_path = OS.get_executable_path().get_base_dir().path_join("mods");
+	var mods_path = get_mods_path();
 	
 	if !DirAccess.dir_exists_absolute(mods_path):
 		if DirAccess.make_dir_recursive_absolute(mods_path) != OK:

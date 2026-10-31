@@ -25,6 +25,6 @@ func _process(delta: float) -> void:
 	
 	if progress_bar.progress == 1.0:
 		GlobalOptions.reset_settings();
-		Sound.playAudio("confirmMenu", false);
+		Sound.playAudio("confirmMenu");
 		progress_bar.progress = 0.0;
 		

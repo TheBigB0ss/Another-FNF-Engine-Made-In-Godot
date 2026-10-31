@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b4mo0tf4ce8kf"
-path="res://.godot/imported/bluesky.png-40ec832cb6c0ab993a9102d3e22069b5.ctex"
+uid="uid://buk1yalfqdytt"
+path="res://.godot/imported/pause.png-56e1966e33e3a8abdcb7345c6d9c3127.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/credits/social_midia/bluesky.png"
-dest_files=["res://.godot/imported/bluesky.png-40ec832cb6c0ab993a9102d3e22069b5.ctex"]
+source_file="res://assets/images/hud/mobile/pause.png"
+dest_files=["res://.godot/imported/pause.png-56e1966e33e3a8abdcb7345c6d9c3127.ctex"]
 
 [params]
 

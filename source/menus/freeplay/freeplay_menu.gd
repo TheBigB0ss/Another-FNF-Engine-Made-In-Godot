@@ -182,7 +182,7 @@ func go_to_song(song, diff_path):
 	SongData.loadJson(song, diff_path);
 	
 	if !SongData.chart_dont_exist:
-		Sound.playAudio("confirmMenu", false);
+		Sound.playAudio("confirmMenu");
 		
 		SongData.week_songs = song;
 		SongData.week_diffs = diff_path;
@@ -206,7 +206,7 @@ func change_song(change):
 	if songs.is_empty():
 		return;
 		
-	Sound.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu");
 	
 	cur_song = wrapi(cur_song + change, 0, songs.size());
 	

@@ -42,7 +42,7 @@ func _ready():
 		if song == "ugh" or song == "guns" or song == "stress":
 			Sound.add_new_sound("game over/tankman gameover voice lines/jeffGameover-%s"%[randi_range(1, 25)]);
 			
-		Sound.playAudio("game over/fnf_loss_sfx", false);
+		Sound.playAudio("game over/fnf_loss_sfx");
 		if death_anim.curCharacter == "Bf Pixel dead":
 			Sound.playAudio("game over/fnf_loss_sfx", true);
 			

@@ -45,7 +45,7 @@ func _input(ev):
 			if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !noSpam:
 				noSpam = true;
 				choiced = true;
-				Sound.playAudio("confirmMenu", false);
+				Sound.playAudio("confirmMenu");
 				
 				await get_tree().create_timer(0.95).timeout;
 				match options[curOption]:
@@ -86,7 +86,7 @@ func _process(delta):
 		magenta_time = 0.095;
 		
 func changeItem(change):
-	Sound.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu");
 	
 	curOption += change;
 	curOption = wrapi(curOption, 0, len(options));

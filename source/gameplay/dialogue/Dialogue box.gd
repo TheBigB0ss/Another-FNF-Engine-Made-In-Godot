@@ -144,7 +144,7 @@ func _process(delta):
 		
 		if dialogue[letterID-1] != " ":
 			if characters_spr_array[cur_dialogue] != "evilLeafy":
-				Sound.playAudio("pixelText", false);
+				Sound.playAudio("pixelText");
 				
 		letterID += 1;
 		
@@ -157,7 +157,7 @@ func _process(delta):
 		elif letterID - 1 == len(dialogue):
 			cur_dialogue += 1;
 			
-			Sound.playAudio("clickText", false);
+			Sound.playAudio("clickText");
 			
 			if !cur_dialogue > dialogue_array.size()-1:
 				update_text(dialogue_array[cur_dialogue], characters_array[cur_dialogue], characters_spr_array[cur_dialogue]);
