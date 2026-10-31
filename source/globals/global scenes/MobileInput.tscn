@@ -1,143 +1,12 @@
 [gd_scene format=3 uid="uid://crwqscwiv6tol"]
 
 [ext_resource type="Texture2D" uid="uid://pf5jgf5xdqc" path="res://assets/images/hud/mobile/down.png" id="1_gssl3"]
+[ext_resource type="Script" uid="uid://bnuvda2mqauhd" path="res://source/globals/global scenes/mobile_input.gd" id="1_iiauq"]
 [ext_resource type="Texture2D" uid="uid://bw0baetfhlrwe" path="res://assets/images/hud/mobile/up.png" id="2_wjhqe"]
 [ext_resource type="Texture2D" uid="uid://cwwvyotmtyldl" path="res://assets/images/hud/mobile/left.png" id="3_os15u"]
 [ext_resource type="Texture2D" uid="uid://dy0mgjeo3jey7" path="res://assets/images/hud/mobile/right.png" id="4_iiauq"]
 [ext_resource type="Texture2D" uid="uid://buk1yalfqdytt" path="res://assets/images/hud/mobile/pause.png" id="5_os15u"]
 [ext_resource type="Texture2D" uid="uid://ksu64ejyrf7s" path="res://assets/images/hud/mobile/exit.png" id="6_iiauq"]
-
-[sub_resource type="GDScript" id="GDScript_7avee"]
-resource_name = "MobileInput"
-script/source = "extends CanvasLayer
-
-@onready var controlls = $Controlls
-@onready var otherKeys = controlls.get_node(\"Others\")
-@onready var notesKeys = controlls.get_node(\"Notes\")
-
-@onready var input_map:Dictionary[Node, PackedStringArray] = {
-	%Esc: [\"escape\"],
-	%Enter: [\"enter\"],
-	
-	%Left: [\"left\"],
-	%Down: [\"down\"],
-	%Up: [\"up\"],
-	%Right: [\"right\"]
-}
-
-var simulateNote:bool = false
-var draged = false
-var touchDelay = 0.
-
-var touched = false
-var use_notes = false:set=update_note_visibility
-
-const MIN_DRAG_SPD = 2.
-
-var click_in_button = false
-
-func _ready() -> void:
-	use_notes = false
-	
-	for inp in input_map:
-		if inp is TouchScreenButton: 
-			var value = input_map[inp]
-			inp.pressed.connect(func(): 
-				click_in_button = true
-				touched = false
-				draged = false
-				simulateKeyPressed(value) 
-			)
-			inp.released.connect(func(): 
-				click_in_button = false
-				simulateKeyReleased(value) )
-	
-	scene_updated()
-	get_tree().scene_changed.connect(scene_updated)
-	process_mode = Node.PROCESS_MODE_ALWAYS;
-	
-func scene_updated():
-	var in_state = get_tree().current_scene.name in ['PlayState']
-	#%Enter.visible = in_state
-	use_notes = in_state
-
-func _input(ev: InputEvent) -> void:
-	#if ev.is_action_pressed():
-		#print(\"Input fake funcionando\")
-	if !use_notes and !click_in_button:
-		if ev is InputEventScreenTouch:
-			if ev.pressed: 
-				touchDelay = Time.get_unix_time_from_system()
-				draged = true
-				touched = true
-			else:
-				if touched: 
-					
-					simulateKeyPressed([\"enter\"])
-					
-		
-			
-			
-		if ev is InputEventScreenDrag:
-			var drag_pos = ev.screen_relative
-			
-			if ( abs(drag_pos.y) > MIN_DRAG_SPD || abs(drag_pos.x) > MIN_DRAG_SPD ) && draged:
-				touched = false
-				draged = false
-				if drag_pos.y < 0: simulateKeyPressed([\"ui_up\"]) 
-				if drag_pos.y > 0: simulateKeyPressed([\"ui_down\"])  
-				
-				if drag_pos.x < 0: simulateKeyPressed([\"ui_left\"]) 
-				if drag_pos.x > 0: simulateKeyPressed([\"ui_right\"]) 
-
-func update_note_visibility(visi:bool):
-	use_notes = visi
-	%Enter.visible = visi
-	notesKeys.visible = visi
-	
-func simulateKeyReleased(actionList:PackedStringArray = [\"\"]):
-	for key in actionList:
-		
-		var fakeKey = InputEventKey.new()
-		fakeKey.keycode = GlobalOptions.keys[key][0]
-		fakeKey.pressed = false
-		Input.parse_input_event(fakeKey)
-
-func simulateKeyPressed(actionList:PackedStringArray = [\"\"]):
-	for key in actionList:
-		
-		var fakeKey = InputEventKey.new()
-		fakeKey.keycode = GlobalOptions.keys[key][0]
-		fakeKey.pressed = true
-		Input.parse_input_event(fakeKey)
-	
-	#for action in actionList:
-		#
-		#var fakeInput = InputEventAction.new()
-		#fakeInput.action = action
-		#fakeInput.pressed = true
-		#Input.parse_input_event(fakeInput)
-
-#func simulateInput(keycodeList:Array[Key] = [], actionKey:PackedStringArray = [\"\"]):
-	#var all_lists:Array[Key] = keycodeList
-	#
-	#if len(actionKey) > 0:
-		#for action in actionKey:
-			#if action.is_empty() || !InputMap.has_action(action): continue
-			#for input in InputMap.action_get_events(action):
-				#if input is InputEventKey: all_lists.append(input.keycode)
-		#
-	#var filtered_list:Array[Key] = []
-	#for input in all_lists:
-		#if !filtered_list.has(input):
-			#print(\"pRESS\", OS.keyc)
-			#filtered_list.append(input)
-	#
-	#for input in filtered_list:
-		#var inputkeycode = InputEventKey.new()
-		#inputkeycode.keycode = input
-		#Input.parse_input_event(inputkeycode)
-"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iiauq"]
 size = Vector2(150, 150)
@@ -159,7 +28,7 @@ size = Vector2(205, 205)
 
 [node name="MobileInput" type="CanvasLayer" unique_id=782822476]
 layer = 40
-script = SubResource("GDScript_7avee")
+script = ExtResource("1_iiauq")
 
 [node name="Controlls" type="Node2D" parent="." unique_id=204139271]
 position = Vector2(11, 588)

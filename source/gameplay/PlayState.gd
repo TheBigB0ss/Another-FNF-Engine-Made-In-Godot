@@ -420,7 +420,7 @@ func pressedNote(note:Note):
 	updateScoreText();
 	
 func opponentNotePressed(note:Note):
-	if note.isSustain && (GlobalOptions.splash_type != 'disable' && GlobalOptions.splash_type != 'splashes') && !GlobalOptions.middle_scroll:
+	if note.isSustain && (GlobalOptions.splash_type != 'disable' && GlobalOptions.splash_type != 'splashes') && !Global.is_on_mobile && !GlobalOptions.middle_scroll:
 		var splash = splash_note(opponentStrum.strumNode.get_child(note.noteData), "holdCover%s"%[note.noteAnim] if !SongData.isPixelStage else "holdpixelCover");
 		note.holdSplash = splash;
 		
@@ -802,8 +802,8 @@ func setup_hud():
 	ratingText.visible = GlobalOptions.show_ratingLabel;
 	msText.visible = GlobalOptions.showMsText;
 	
-	if GlobalOptions.middle_scroll:
-		playerStrum.position.x = 478;
+	if GlobalOptions.middle_scroll or Global.is_on_mobile:
+		playerStrum.position.x = 560;
 		opponentStrum.hide();
 		
 	if GlobalOptions.down_scroll:

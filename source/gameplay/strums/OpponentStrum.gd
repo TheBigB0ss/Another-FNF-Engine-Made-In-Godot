@@ -63,6 +63,8 @@ func _ready() -> void:
 		
 	array_notes.sort_custom(func(a,b): return a[0]<b[0]);
 	
+	self.visible = !Global.is_on_mobile;
+	
 var spawnId = 0;
 var notes_to_delete = [];
 func _process(delta):

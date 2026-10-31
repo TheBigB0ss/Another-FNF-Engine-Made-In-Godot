@@ -50,6 +50,9 @@ func _ready():
 		SongData.death_count
 	];
 	
+	if Global.is_on_mobile:
+		text.position.y += 120;
+		
 	update_botplay_color();
 	
 	options_grp.position.y = float(480-coolOffset*cur_option);

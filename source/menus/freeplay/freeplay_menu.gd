@@ -36,6 +36,8 @@ func _ready() -> void:
 	
 	Discord.update_discord_info("freeplay menu", "Is in menus");
 	
+	$Control.visible = !Global.is_on_mobile;
+	
 	weeks = Global.get_folder("assets/data/weeks data/%s"%[SongData.week_folder_path]);
 	
 	for i in weeks:

@@ -10,7 +10,7 @@ shadow_color = Color(0, 0, 0, 1)
 
 [node name="DebugText" type="CanvasLayer" unique_id=294763286]
 process_mode = 3
-layer = 7
+layer = 45
 script = ExtResource("1_af4iq")
 
 [node name="text" type="Label" parent="." unique_id=1796035034]

@@ -42,7 +42,6 @@ Flash="*res://source/globals/global scenes/Flash.tscn"
 Transition="*res://source/globals/global scenes/transition.tscn"
 ScreenShot="*res://source/globals/global scenes/screenShot.tscn"
 Volume="*res://source/globals/global scenes/volume.tscn"
-Fps="*res://source/globals/global scenes/DebugText.tscn"
 MusicManager="*res://source/globals/global scripts/Music_Manager.gd"
 Discord="*res://source/globals/global scripts/Discord.gd"
 DiscordRPCLoader="*res://addons/discord-rpc-gd/nodes/discord_autoload.gd"
@@ -50,6 +49,7 @@ HighScore="*res://source/globals/global scripts/HighScore.gd"
 Achievements="*res://source/globals/global scripts/Achievements.gd"
 AchievementPopUp="*res://source/globals/global scenes/achievement_popUp.tscn"
 MobileInput="*uid://crwqscwiv6tol"
+Fps="*res://source/globals/global scenes/DebugText.tscn"
 
 [display]
 

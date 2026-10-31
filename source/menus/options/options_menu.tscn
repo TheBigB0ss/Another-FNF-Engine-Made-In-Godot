@@ -58,8 +58,9 @@ color = Color(0, 0, 0, 0.470588)
 script = ExtResource("4_0exu3")
 
 [node name="ColorRect" type="ColorRect" parent="reset" unique_id=1423191949]
+offset_left = 5.0
 offset_top = 659.0
-offset_right = 1280.0
+offset_right = 1280.01
 offset_bottom = 720.0
 color = Color(0, 0, 0, 0.415686)
 metadata/_edit_use_anchors_ = true
@@ -67,7 +68,6 @@ metadata/_edit_use_anchors_ = true
 [node name="reset_bar" type="Node2D" parent="reset" unique_id=516527768]
 position = Vector2(1231, 612)
 script = ExtResource("5_21d2q")
-progress = 0.55
 
 [node name="reset_text" type="Node2D" parent="reset" unique_id=391528260]
 position = Vector2(658, 690)

@@ -24,9 +24,35 @@ var is_on_key_mode = false;
 var is_on_reset_menu = false;
 var options = {};
 
+const mobile_forbidden_options = {
+	"graphics": [
+		"vsync",
+		"fullscreen"
+	],
+	"gameplay": [
+		"middle scroll",
+		"r to restart"
+	]
+}
+
 func reloadText():
 	options = GlobalOptions.set_options();
 	
+	if Global.is_on_mobile:
+		options.erase("controls");
+		
+		for i in mobile_forbidden_options.keys():
+			for j in mobile_forbidden_options[i]:
+				options[i].erase(j)
+				
+		options["clear data"] = {};
+		
+		if GlobalOptions.pause_options:
+			Global.currentOptions = 0;
+			get_tree().paused = false;
+			
+		return;
+		
 	if !GlobalOptions.pause_options:
 		options["offset menu"] = {};
 		options["cam editor menu"] = {};

@@ -5,6 +5,11 @@ extends Node2D
 @onready var bg = $"../Bg";
 
 func _ready() -> void:
+	if Global.is_on_mobile:
+		text.text = "Hold two fingers to return to default settings";
+		text.scale = Vector2(0.58, 0.58);
+		
+	progress_bar.progress = 0.0;
 	progress_bar.modulate.a = 0.0;
 	
 func _process(delta: float) -> void:

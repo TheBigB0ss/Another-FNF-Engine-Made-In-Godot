@@ -12,7 +12,7 @@ var is_on_video = false;
 
 var is_on_mobile:bool:
 	get:
-		return OS.get_name() == "Android" or OS.get_name() == "iOS";
+		return true;
 		
 var current_selected = {
 	"storyMode": 0,
