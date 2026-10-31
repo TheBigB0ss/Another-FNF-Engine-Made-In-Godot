@@ -19,10 +19,10 @@ script/source = "extends CanvasLayer
 	%Esc: [\"escape\"],
 	%Enter: [\"enter\"],
 	
-	%Left: [\"left\", \"ui_left\"],
-	%Down: [\"down\", \"ui_down\"],
-	%Up: [\"up\", \"ui_up\"],
-	%Right: [\"right\", \"ui_right\"]
+	%Left: [\"left\"],
+	%Down: [\"down\"],
+	%Up: [\"up\"],
+	%Right: [\"right\"]
 }
 
 var simulateNote:bool = false
@@ -34,6 +34,8 @@ var use_notes = false:set=update_note_visibility
 
 const MIN_DRAG_SPD = 2.
 
+var click_in_button = false
+
 func _ready() -> void:
 	use_notes = false
 	
@@ -41,12 +43,18 @@ func _ready() -> void:
 		if inp is TouchScreenButton: 
 			var value = input_map[inp]
 			inp.pressed.connect(func(): 
-				print('click')
-				simulateKeyPressed(value) )
-			inp.released.connect(func(): simulateKeyReleased(value) )
+				click_in_button = true
+				touched = false
+				draged = false
+				simulateKeyPressed(value) 
+			)
+			inp.released.connect(func(): 
+				click_in_button = false
+				simulateKeyReleased(value) )
 	
 	scene_updated()
 	get_tree().scene_changed.connect(scene_updated)
+	process_mode = Node.PROCESS_MODE_ALWAYS;
 	
 func scene_updated():
 	var in_state = get_tree().current_scene.name in ['PlayState']
@@ -56,7 +64,7 @@ func scene_updated():
 func _input(ev: InputEvent) -> void:
 	#if ev.is_action_pressed():
 		#print(\"Input fake funcionando\")
-	if !use_notes:
+	if !use_notes and !click_in_button:
 		if ev is InputEventScreenTouch:
 			if ev.pressed: 
 				touchDelay = Time.get_unix_time_from_system()
@@ -64,6 +72,7 @@ func _input(ev: InputEvent) -> void:
 				touched = true
 			else:
 				if touched: 
+					
 					simulateKeyPressed([\"enter\"])
 					
 		

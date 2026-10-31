@@ -48,6 +48,17 @@
 		},
 		{
 			"team": "Another FNF Engine made in Godot",
+			"name": "nathx.code",
+			"role": "mobile port coder",
+			"icon": "natata",
+			"social midia": {
+				"twitter": "https://x.com/nathx_code",
+				"youtube": "https://www.youtube.com/@natihx"
+			},
+			"bg_color": "#f400f5"
+		},
+		{
+			"team": "Another FNF Engine made in Godot",
 			"name": "pheSpriter",
 			"role": "bg artist",
 			"icon": "pheSpriter",
