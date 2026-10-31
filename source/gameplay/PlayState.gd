@@ -248,14 +248,10 @@ func _process(delta: float) -> void:
 	iconP1.position.x = lerp(iconP1.position.x, healthPosition+p1Offset, 1.0 - exp(-20.0 * delta));
 	iconP2.position.x = lerp(iconP2.position.x, healthPosition-p2Offset, 1.0 - exp(-20.0 * delta));
 	
-<<<<<<< HEAD
+
 	#if !DisplayServer.window_is_focused() && can_pause:
 		#pause();
-=======
-	if !DisplayServer.window_is_focused() && can_pause && !Global.is_on_mobile:
-		pause();
->>>>>>> ba8ec763d552393440e350e5e85183667c4827a0
-		
+
 	if !start_song:
 		return;
 		
