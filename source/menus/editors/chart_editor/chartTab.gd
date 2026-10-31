@@ -7,8 +7,6 @@ extends Control
 @onready var chartTab = $chart;
 @onready var previewTab = $preview;
 
-const FONT = preload("res://assets/fonts/Symtext.ttf");
-
 func onFilePress(id):
 	match id:
 		0:
@@ -63,7 +61,7 @@ func _ready():
 	];
 	
 	for i in menus:
-		i.add_theme_font_override("font", FONT);
+		i.add_theme_font_override("font", preload("res://assets/fonts/Symtext.ttf"));
 		i.add_theme_font_size_override("font_size", 16);
 		
 	fileTab.get_popup().add_item("open file", 0);
@@ -101,3 +99,4 @@ func _process(_delta: float) -> void:
 	
 	old_song_text = song_text;
 	old_diff_text = diff_text;
+	

@@ -1,0 +1,48 @@
+{
+	"song": {
+		"events": [
+			[
+				19200.0,
+				8.0,
+				"set lyric",
+				"",
+				""
+			],
+			[
+				27600.0,
+				8.0,
+				"set lyric",
+				"That's how you do it!",
+				""
+			],
+			[
+				28800.0,
+				8.0,
+				"set lyric",
+				"",
+				""
+			],
+			[
+				18000.0,
+				8,
+				"set lyric",
+				"That's how you do it!",
+				""
+			],
+			[
+				18000.0,
+				8,
+				"play anim",
+				"1",
+				"hey"
+			],
+			[
+				27600.0,
+				8,
+				"play anim",
+				"1",
+				"hey"
+			]
+		]
+	}
+}

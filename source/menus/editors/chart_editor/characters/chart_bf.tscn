@@ -16,13 +16,29 @@ script = ExtResource("1_h3sli")
 path = "bf-chart"
 texture = ExtResource("2_ly5gl")
 data_path = "res://assets/images/editors/chart preview/bf/chart-bf.xml"
+frame = 2
 offset = Vector2(116, -19)
-anim_looped = {
-"down": false,
-"idle": true,
-"left": false,
-"right": false,
-"up": false
+anims_data = {
+"down": {
+"fps": 16.0,
+"loop": true
+},
+"idle": {
+"fps": 16.0,
+"loop": true
+},
+"left": {
+"fps": 16.0,
+"loop": true
+},
+"right": {
+"fps": 16.0,
+"loop": true
+},
+"up": {
+"fps": 16.0,
+"loop": true
+}
 }
 animation = 1
 metadata/_custom_type_script = "uid://cithgl1w0skdv"

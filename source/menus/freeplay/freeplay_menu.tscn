@@ -20,7 +20,6 @@ script = ExtResource("1_vy5cd")
 
 [node name="bg" type="Sprite2D" parent="." unique_id=2098578728]
 position = Vector2(640, 360)
-scale = Vector2(0.995334, 0.986301)
 texture = ExtResource("2_br0bf")
 
 [node name="songs" type="Node2D" parent="." unique_id=1575774956]

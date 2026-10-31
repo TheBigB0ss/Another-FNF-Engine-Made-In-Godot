@@ -3,9 +3,6 @@ extends Node
 @onready var opts = $'creditsOpts';
 @onready var socialOpts = $'socialOpts';
 
-var coolOffset = 145;
-var offSetShit = 0;
-
 @onready var bg = $'Bg';
 
 @onready var devName = $'Texts/name';
@@ -13,120 +10,127 @@ var offSetShit = 0;
 
 var creditSelected = 0;
 var socialSelected = 0;
+
 var creditsJson = {};
 
+var devInfo:
+	get:
+		return creditsJson["dev_info"][creditSelected];
+		
 var team = Alphabet.new();
 
 func _ready():
 	Discord.update_discord_info("credits menu", "Is in menus")
 	
-	var jsonFile = FileAccess.open("res://assets/data/credits_data.json" ,FileAccess.READ);
-	var jsonData = JSON.new();
-	jsonData.parse(jsonFile.get_as_text());
-	creditsJson = jsonData.get_data();
-	jsonFile.close();
+	creditsJson = Global.load_json("assets/data/credits_data");
 	
 	for i in creditsJson["dev_info"]:
-		var icon = Sprite2D.new();
-		icon.texture = load("res://assets/images/credits/icons/%s.png"%[i["icon"]]);
-		icon.position.y = offSetShit;
-		icon.position.x -= 40;
+		var icon = Sprite2D.new()
+		icon.texture = load("res://assets/images/credits/icons/%s.png"%i["icon"])
+		icon.position = Vector2(-40, opts.get_child_count() * 145.0)
 		opts.add_child(icon);
-		offSetShit += coolOffset;
 		
 	team.scale = Vector2(0.55, 0.55);
 	team.position = Vector2(20, 65);
 	$Texts.add_child(team);
 	
-	opts.position.y = lerp(float(opts.position.y), float(480-coolOffset*creditSelected), 0.23);
-	for j in creditsJson["dev_info"].size():
-		opts.get_child(j).modulate.a = lerp(opts.get_child(j).modulate.a, (1.0 if j == creditSelected else 0.5), 0.20);
-		opts.get_child(j).position.x = lerp(float(opts.get_child(j).position.x), float(150 if j == creditSelected else opts.position.x - 120), 0.25);
-		
-	changeDev(Global.current_selected["credits"])
-	change_social_midia(0);
+	update_social_icons();
+	
+	creditSelected = Global.current_selected["credits"];
+	
+	updateDev();
+	update_midia();
 	
 func _input(event):
-	if event is InputEventKey:
-		if event.pressed && !event.echo:
-			if event.keycode in [GlobalOptions.get_key("ui_down")]:
-				changeDev(1);
-				
-			if event.keycode in [GlobalOptions.get_key("ui_up")]:
-				changeDev(-1);
-				
-			if len(creditsJson["dev_info"][creditSelected]["social midia"].keys()) > 0:
-				if event.keycode in [GlobalOptions.get_key("ui_left")]:
-					change_social_midia(-1);
-					
-				if event.keycode in [GlobalOptions.get_key("ui_right")]:
-					change_social_midia(1);
-					
-				if (event.keycode in [GlobalOptions.get_key("enter")] || event.keycode in [KEY_KP_ENTER]):
-					open_link();
-					
-			if event.keycode in [GlobalOptions.get_key("escape")]:
-				Global.changeScene("menus/main_menu/MainMenu", true, false);
-				
-func changeDev(shit):
-	creditSelected += shit;
-	creditSelected = wrapi(creditSelected, 0, len(creditsJson["dev_info"]));
+	if !event is InputEventKey or !event.pressed or event.echo:
+		return;
+		
+	if event.keycode == GlobalOptions.get_key("ui_down"):
+		changeDev(1);
+		
+	elif event.keycode == GlobalOptions.get_key("ui_up"):
+		changeDev(-1);
+		
+	elif event.keycode == GlobalOptions.get_key("ui_left"):
+		change_social_media(-1);
+		
+	elif event.keycode == GlobalOptions.get_key("ui_right"):
+		change_social_media(1);
+		
+	elif event.keycode == GlobalOptions.get_key("enter") or event.keycode == KEY_KP_ENTER:
+		open_link();
+		
+	elif event.keycode == GlobalOptions.get_key("escape"):
+		Global.changeScene("menus/main_menu/MainMenu", true, false);
+		
+func changeDev(change):
+	creditSelected = wrapi(creditSelected + change, 0, creditsJson["dev_info"].size());
+	
 	Global.currentCredits = creditSelected;
 	
 	Sound.playAudio("scrollMenu", false);
 	
-	change_social_midia(0);
-	updateDev();
+	socialSelected = 0;
 	
-func change_social_midia(shit):
-	socialSelected += shit;
-	socialSelected = wrapi(socialSelected, 0, len(creditsJson["dev_info"][creditSelected]["social midia"].keys()));
+	update_social_icons();
+	updateDev();
+	update_midia();
+	
+func change_social_media(change):
+	var socials = devInfo["social midia"];
+	
+	if socials.is_empty():
+		return;
+		
+	socialSelected = wrapi(socialSelected + change, 0, socials.size());
 	
 	Sound.playAudio("scrollMenu", false);
 	
 	update_midia();
 	
 func update_social_icons():
-	var social_offset = 165;
-	var social_offset_shit = 0;
+	var socials = devInfo["social midia"];
 	
-	for i in socialOpts.get_children():
-		socialOpts.remove_child(i);
-		i.queue_free();
+	while socialOpts.get_child_count() < socials.size():
+		var icon = Sprite2D.new();
+		icon.scale = Vector2(0.70, 0.70);
+		icon.position = Vector2(480 + (socialOpts.get_child_count() * 120.0), 480);
+		socialOpts.add_child(icon);
 		
-	for i in creditsJson["dev_info"][creditSelected]["social midia"].keys():
-		var social_icon = Sprite2D.new();
-		social_icon.texture = load("res://assets/images/credits/social_midia/%s.png"%[i]);
-		social_icon.position.x = social_offset_shit;
-		social_icon.position.y -= 40;
-		socialOpts.add_child(social_icon);
-		social_offset_shit += social_offset;
+	for i in socialOpts.get_child_count():
+		var icon = socialOpts.get_child(i);
+		
+		if i < socials.size():
+			icon.texture = load("res://assets/images/credits/social media/%s.png"%[socials.keys()[i]]);
+			
+		icon.visible = i < socials.size();
 		
 func update_midia():
-	update_social_icons();
-	
-	for i in len(creditsJson["dev_info"][creditSelected]["social midia"].keys()):
-		if i == socialSelected:
-			socialOpts.get_child(i).modulate.a = 1;
-		else:
-			socialOpts.get_child(i).modulate.a = 0.5;
-			
-func _process(delta):
-	opts.position.y = lerp(float(opts.position.y), float(480-coolOffset*creditSelected), 1.0 - exp(-12.0 * delta));
-	for j in creditsJson["dev_info"].size():
-		opts.get_child(j).modulate.a = lerp(opts.get_child(j).modulate.a, (1.0 if j == creditSelected else 0.5), 1.0 - exp(-6.0 * delta));
-		opts.get_child(j).position.x = lerp(float(opts.get_child(j).position.x), float(150 if j == creditSelected else opts.position.x - 120), 1.0 - exp(-12.0 * delta));
+	for i in socialOpts.get_child_count():
+		var icon = socialOpts.get_child(i);
+		icon.modulate.a = (1.0 if i == socialSelected else 0.5) if icon.visible else 0.0;
 		
-	bg.modulate = lerp(bg.modulate, Color(creditsJson["dev_info"][creditSelected]["bg_color"]), 1.0 - exp(-6.0 * delta));
+func _process(delta: float) -> void:
+	opts.position.y = lerpf(opts.position.y, 480.0 - 145.0 * creditSelected, 1.0 - exp(-12.0 * delta));
+	
+	for i in opts.get_child_count():
+		var icon = opts.get_child(i);
+		
+		icon.modulate.a = lerpf(icon.modulate.a, 1.0 if i == creditSelected else 0.5, 1.0 - exp(-6.0 * delta));
+		icon.position.x = lerpf(icon.position.x, 150.0 if i == creditSelected else opts.position.x - 120.0, 1.0 - exp(-12.0 * delta));
+		
+	bg.modulate = bg.modulate.lerp(Color(devInfo["bg_color"]), 1.0 - exp(-6.0 * delta))
 	
 func updateDev():
-	devName.text = "";
-	devRole.text = "";
-	team._creat_word('');
+	devName.text = devInfo["name"];
+	devRole.text = devInfo["role"];
 	
-	devName.text = creditsJson["dev_info"][creditSelected]["name"];
-	devRole.text = creditsJson["dev_info"][creditSelected]["role"];
-	team._creat_word(creditsJson["dev_info"][creditSelected]["team"]);
+	team._creat_word(devInfo["team"]);
 	
 func open_link():
-	OS.shell_open(creditsJson["dev_info"][creditSelected]["social midia"][creditsJson["dev_info"][creditSelected]["social midia"].keys()[socialSelected]]);
+	var socials = devInfo["social midia"];
+	
+	if socials.is_empty():
+		return;
+		
+	OS.shell_open(socials.values()[socialSelected]);

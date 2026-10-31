@@ -80,6 +80,9 @@ var anim_beat = 2;
 
 var is_animated_sprite = false;
 
+var forced_anim = false;
+var forced_anim_timer = 0;
+
 var characterScript:CharacterScript;
 
 func _init() -> void:
@@ -210,6 +213,18 @@ func _process(delta):
 	
 	update_character_state(delta);
 	
+	if forced_anim:
+		forced_anim_timer -= delta;
+		
+		if forced_anim_timer <= 0.0:
+			forced_anim = false;
+			forced_anim_timer = 0.0;
+			
+			idleTimer = 0;
+			dance();
+			
+		return;
+		
 	if (curAnim.begins_with("sing") or curAnim.contains("sing") or special_anim) && characterState != CHARACTER_STATES.HOLDING:
 		idleTimer += delta;
 		
@@ -250,9 +265,13 @@ func _playAnim(anim = "", special = false):
 		
 		if special_anim or special:
 			characterState = CHARACTER_STATES.SPECIAL;
+			forced_anim = true;
+			forced_anim_timer = Conductor.stepCrochet * anim_time * 0.001;
+			
 		if curAnim == "idle dance":
 			sing_timer = 0;
 			characterState = CHARACTER_STATES.IDLE;
+			
 		if animList[i].begins_with("sing") && is_instance_valid(curNote):
 			characterState = CHARACTER_STATES.SINGING;
 			
@@ -266,7 +285,9 @@ func _playAnim(anim = "", special = false):
 					reset_anim();
 					
 				CHARACTER_STATES.SINGING, CHARACTER_STATES.SPECIAL:
-					sing_timer = 0.060;
+					if !forced_anim:
+						sing_timer = 0.060;
+						
 					reset_anim();
 					
 		if animList[i].begins_with("sing") or charData["Poses"][i].has("Anim Time") or characterState == CHARACTER_STATES.SPECIAL:
@@ -280,6 +301,7 @@ func _playAnim(anim = "", special = false):
 		current_anim = posesList[i];
 		
 		if is_animated_sprite:
+			
 			character.play(current_anim);
 		else:
 			character_anim.play(current_anim);
@@ -357,7 +379,7 @@ func _get_property_list():
 	return properties;
 	
 func back_to_idle(idle_timer):
-	if (idle_timer % int(anim_beat) == 0) && !curAnim.begins_with("sing") && !special_anim:
+	if (idle_timer % int(anim_beat) == 0) && !curAnim.begins_with("sing") && !special_anim && !forced_anim:
 		dance();
 		
 func reset_anim():

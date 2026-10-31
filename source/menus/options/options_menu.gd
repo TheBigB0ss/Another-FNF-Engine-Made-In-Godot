@@ -7,10 +7,10 @@ extends Node2D
 @onready var option_suffix_stuff = $'settings/option_suffix';
 @onready var reset_menu = $reset_menu/reset_data_scene;
 
-var coolKeyText = Alphabet
+var coolKeyText = Alphabet;
 
 var offSetShit = 0;
-var coolOffset = 140;;
+var coolOffset = 140;
 
 var is_on_settings_mode = false;
 
@@ -78,9 +78,6 @@ func _input(ev):
 				if ev.keycode in [GlobalOptions.get_key("escape")] && !ev.echo:
 					go_back();
 					
-				if ev.keycode in [KEY_R] && ev.echo:
-					GlobalOptions.reset_settings();
-					
 			return;
 			
 		if ev.keycode in [GlobalOptions.get_key("escape")] && !ev.echo:
@@ -147,7 +144,7 @@ func _input(ev):
 					
 				if enterKey && !ev.echo:
 					GlobalOptions.change_bool_opt(opt_name, category);
-					curSetting.update_bool_spr(GlobalOptions.get_value(opt_name, category));
+					curSetting.update_bool_spr(curSetting.check_sprite, GlobalOptions.get_value(opt_name, category));
 					
 			TYPE_ARRAY:
 				if is_on_key_mode:

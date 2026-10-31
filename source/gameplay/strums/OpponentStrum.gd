@@ -135,7 +135,7 @@ func _process(delta):
 		
 	notesList = notesList.filter(func(note): return note != null);
 	
-	for i in 4:
+	for i in strumNode.get_child_count():
 		var note = strumArray[i];
 		if note.reset_arrow_anim > 0:
 			note.reset_arrow_anim = max(note.reset_arrow_anim - 4.0 * delta, 0.0);
@@ -153,7 +153,7 @@ func _process(delta):
 	notes_to_delete.clear();
 	
 func notesAppears():
-	for i in 4:
+	for i in strumNode.get_child_count():
 		var strumNote = strumArray[i];
 		strumNote.modulate.a = 0.0;
 		

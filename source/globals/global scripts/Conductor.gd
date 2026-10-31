@@ -138,6 +138,39 @@ func update_position(time):
 	lastBeat = curBeat;
 	lastSection = curSection;
 	
+func get_section(time):
+	bpmChangeMap.clear();
+	
+	var curBPM = bpm;
+	var totalSteps = 0;
+	var totalPos = 0.0;
+	
+	for section in SongData.songSections:
+		if section["changeBPM"]:
+			curBPM = max(float(section["bpm"]), 1.0);
+			bpmChangeMap.append([totalSteps, totalPos, curBPM]);
+			
+		var sectionLength = section["lengthInSteps"];
+		totalSteps += sectionLength;
+		totalPos += ((60.0 / curBPM) * 1000.0 / 4.0) * sectionLength;
+		
+	var last_change = [0, 0, bpm];
+	for i in bpmChangeMap:
+		if i[1] <= time:
+			last_change = i;
+		else:
+			break;
+			
+	var new_crochet = (60.0 / last_change[2]) * 1000.0;
+	var new_stepCrochet = new_crochet / 4.0;
+	var step = last_change[0] + floor((time - last_change[1]) / new_stepCrochet);
+	var new_curSection = int(floor(step / 16));
+	
+	return clamp(new_curSection, 0, SongData.songSections.size() - 1);
+	
+func beats_to_ms(beats):
+	return beats * crochet;
+	
 func set_rating(ms):
 	ms = abs(ms);
 	
@@ -151,3 +184,4 @@ func set_rating(ms):
 			return ["Sick", "Good", "Bad"][i];
 			
 	return "Shit";
+	

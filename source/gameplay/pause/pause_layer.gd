@@ -17,6 +17,8 @@ var cur_option = 0;
 var can_use = false;
 var is_paused = false;
 
+var botplay_option = null;
+
 var offSetShit = 0;
 var coolOffset = 125;
 
@@ -33,81 +35,86 @@ func _ready():
 	for i in opts:
 		var pause_opts = Alphabet.new();
 		pause_opts._creat_word(i);
-		pause_opts.position.y = offSetShit;
-		
-		if SongData.isOnChartMode:
-			pause_opts.position.y = offSetShit - 150;
-			
+		pause_opts.position.y = offSetShit - (150 if SongData.isOnChartMode else 0);
 		options_grp.add_child(pause_opts);
+		
+		if i == "BOTPLAY":
+			botplay_option = pause_opts;
+			
 		offSetShit += coolOffset;
 		
-	var songName = SongData.song.to_upper();
-	if songName.contains("-REMIX"):
-		songName = songName.replace("-REMIX", "");
-		
-	text.text = "SONG: %s\nDIFFICULTY: %s\nDEATHS: %s"%[songName, SongData.week_diffs.to_upper() if SongData.week_diffs != "" else "NORMAL", SongData.death_count];
+	var songName = SongData.song.to_upper().replace("-REMIX", "");
+	text.text = "SONG: %s\nDIFFICULTY: %s\nDEATHS: %s" % [
+		songName,
+		SongData.week_diffs.to_upper() if SongData.week_diffs != "" else "NORMAL",
+		SongData.death_count
+	];
 	
-	for j in opts.size():
-		if opts[j] == "BOTPLAY":
-			options_grp.get_child(j).modulate = Color("#ffffff" if !GlobalOptions.isUsingBot else "#ffeb00");
-			
+	update_botplay_color();
+	
 	options_grp.position.y = float(480-coolOffset*cur_option);
 	
 	change_opt(0);
 	
 	is_paused = true;
-	process_mode = 2;
+	#process_mode = 2
+	pause_panel.process_mode = Node.PROCESS_MODE_ALWAYS;
+	process_mode = Node.PROCESS_MODE_ALWAYS;
 	
 func _process(delta):
-	MusicManager.volume_db = lerp(MusicManager.volume_db, 0.0, 1.0 - exp(-0.35 * delta));
-	options_grp.position.y = lerp(float(options_grp.position.y), float(480-coolOffset*cur_option), 1.0 - exp(-9.0 * delta));
+	MusicManager.volume_db = lerpf(MusicManager.volume_db, 0.0, 1.0 - exp(-0.35 * delta));
 	
-	if Global.can_use_menus:
-		if Input.is_action_just_pressed("ui_accept") && !is_paused:
-			_choice_pause_opts();
-			is_paused = true;
+	options_grp.position.y = lerpf(options_grp.position.y, 480.0 - coolOffset * cur_option, 1.0 - exp(-9.0 * delta));
+	
+	if Global.can_use_menus and Input.is_action_just_pressed("ui_accept"):
+		if !is_paused:
+			is_paused = true
+			_choice_pause_opts()
 			
-		if Input.is_action_just_released("ui_accept"):
-			is_paused = false;
-			
-	var curMinutes = str(int(curTime / 1000) / 60).pad_zeros(1);
-	var curSeconds = str(int(curTime / 1000) % 60).pad_zeros(2);
-	var maxMinutes = str(int(main_scene.songLength) / 60).pad_zeros(1);
-	var maxSeconds = str(int(main_scene.songLength) % 60).pad_zeros(2);
-	
-	timeText.position = Vector2(options_grp.get_child(cur_option).position.x + 550, options_grp.get_child(cur_option).position.y + 80);
-	timeText.visible = opts[cur_option] == "SKIP TIME";
-	timeText.text = curMinutes + ":" + curSeconds + " / " + maxMinutes + ":" + maxSeconds;
-	
+	if Input.is_action_just_released("ui_accept"):
+		is_paused = false
+		
+	if opts[cur_option] == "SKIP TIME":
+		var selected = options_grp.get_child(cur_option);
+		
+		timeText.position = selected.position + Vector2(550, 80);
+		timeText.visible = true;
+		
+		update_time_text();
+	else:
+		timeText.visible = false;
+		
 var curTime = 0;
 func _input(ev):
-	if ev is InputEventKey:
-		if can_use && Global.can_use_menus:
-			if ev.pressed:
-				if !ev.echo:
-					if ev.keycode in [GlobalOptions.get_key("ui_down")]:
-						change_opt(1);
-						Sound.playAudio("scrollMenu", false);
-						
-					if ev.keycode in [GlobalOptions.get_key("ui_up")]:
-						change_opt(-1);
-						Sound.playAudio("scrollMenu", false);
-						
-				var rightKey = (ev.keycode == GlobalOptions.get_key("ui_right"));
-				var leftKey = (ev.keycode == GlobalOptions.get_key("ui_left"));
-				
-				if opts[cur_option] == "SKIP TIME":
-					var dir = int(rightKey) - int(leftKey);
-					if dir != 0:
-						curTime += dir*1000;
-						curTime = clamp(curTime, 0, main_scene.songLength*1000);
-						
-func change_opt(opt):
-	cur_option += opt;
-	cur_option = wrapi(cur_option, 0, len(opts));
+	if !ev is InputEventKey or !ev.pressed:
+		return;
+		
+	if !can_use or !Global.can_use_menus:
+		return;
+		
+	if ev.keycode == GlobalOptions.get_key("ui_down") && !ev.echo:
+		change_opt(1);
+		Sound.playAudio("scrollMenu", false);
+		
+	elif ev.keycode == GlobalOptions.get_key("ui_up") && !ev.echo:
+		change_opt(-1);
+		Sound.playAudio("scrollMenu", false);
+		
+	var rightKey = (ev.keycode == GlobalOptions.get_key("ui_right"));
+	var leftKey = (ev.keycode == GlobalOptions.get_key("ui_left"));
 	
-	for i in opts.size():
-		options_grp.get_child(i).modulate.a = (1 if i == cur_option else 0.5);
+	if opts[cur_option] == "SKIP TIME":
+		var dir = int(rightKey) - int(leftKey);
+		if dir != 0:
+			curTime += dir*1000;
+			curTime = clamp(curTime, 0, VocalManager.songLength*1000);
+			
+func change_opt(change):
+	cur_option = wrapi(cur_option + change, 0, opts.size());
+	
+	for i in options_grp.get_child_count():
+		var option = options_grp.get_child(i);
+		option.modulate.a = 1.0 if i == cur_option else 0.5;
 		
 func _choice_pause_opts():
 	match opts[cur_option]:
@@ -116,31 +123,27 @@ func _choice_pause_opts():
 			can_use = false;
 			
 		"RESTART":
-			paused = false;
-			can_use = false;
-			main_scene.inst.stop();
-			main_scene.voices.stop();
+			stop_song();
 			
 			SongData.restartSong = true;
 			SongData.isPlaying = false;
+			
 			Global.reloadScene(true, false);
 			
 		"OPTIONS":
-			GlobalOptions.pause_options = true;
-			paused = false;
-			can_use = false;
-			main_scene.inst.stop();
-			main_scene.voices.stop();
+			stop_song();
 			
-			Global.changeScene("/menus/options/options_menu", true, false);
+			GlobalOptions.pause_options = true;
 			SongData.isPlaying = false;
 			
+			Global.changeScene("/menus/options/options_menu", true, false);
+			
 		"SKIP TIME":
-			var currentPosition = max(Conductor.getSongTime, 0.0);
+			var current_position = max(Conductor.getSongTime, 0.0);
 			
 			can_use = false;
 			
-			if curTime < currentPosition:
+			if curTime < current_position:
 				Conductor.startTime = curTime;
 				Global.reloadScene(true, false);
 				return;
@@ -151,32 +154,20 @@ func _choice_pause_opts():
 					
 				for note in strum.noteNode.get_children():
 					if note is Note:
-						note.missed = false;
-						note.is_pressing = false;
-						note.pressed_emit = false;
-						note.holdSplash = null;
+						note.queue_free();
 						
-					note.queue_free();
-					
 			clear_notes();
-			
 			main_scene.setTimePos(curTime);
 			
 			_resume();
 			
 		"BOTPLAY":
 			GlobalOptions.isUsingBot = !GlobalOptions.isUsingBot;
-			for j in opts.size():
-				if opts[j] == "BOTPLAY":
-					options_grp.get_child(j).modulate = Color("#ffffff" if !GlobalOptions.isUsingBot else "#ffeb00");
-					
+			update_botplay_color();
 			main_scene.updateScoreText();
 			
 		"EXIT TO MENU":
-			paused = false;
-			can_use = false;
-			main_scene.inst.stop();
-			main_scene.voices.stop();
+			stop_song();
 			
 			SongData.restartSong = false;
 			SongData.isPlaying = false;
@@ -184,27 +175,25 @@ func _choice_pause_opts():
 			SongData.death_count = 0;
 			
 			get_tree().paused = false;
+			
 			MusicManager._play_song("freakyMenu", "music", true);
+
 			Global.changeScene("/menus/story_mode/storyMode" if SongData.isStoryMode else "/menus/freeplay/freeplay_menu");
 			
 		"EXIT CHART MODE":
-			paused = false;
-			can_use = false;
-			main_scene.inst.stop();
-			main_scene.voices.stop();
+			stop_song();
 			
 			SongData.restartSong = true;
 			SongData.isOnChartMode = false;
 			
 			SongData.loadJson(SongData.week_songs[0], SongData.week_diffs, null);
+			
 			Global.reloadScene(true, false);
 			
-func stop_shit():
+func stop_song():
 	paused = false;
 	can_use = false;
-	pause_panel.visible = false;
 	
-	get_tree().paused = false;
 	main_scene.inst.stop();
 	main_scene.voices.stop();
 	
@@ -212,13 +201,20 @@ func _paused():
 	if curTime != Conductor.getSongTime:
 		curTime = Conductor.getSongTime;
 		
+	lastTime = -1;
+	
 	MusicManager._play_song(GlobalOptions.updated_pause_music, "music", true, -80.0);
+	
 	paused = true;
 	pause_panel.visible = true;
 	
 func _resume():
 	MusicManager._stop_music();
+	
 	paused = false;
+	can_use = false;
+	is_paused = true;
+	
 	pause_panel.visible = false;
 	get_tree().paused = false;
 	
@@ -250,3 +246,21 @@ func clear_notes():
 	main_scene.playerStrum.playerNotes.clear();
 	main_scene.opponentStrum.opponentNotes.clear();
 	
+var lastTime = -1;
+func update_time_text():
+	var seconds = int(curTime / 1000.0);
+	
+	if seconds == lastTime:
+		return;
+		
+	lastTime = seconds;
+	
+	var current_minutes = seconds / 60;
+	var current_seconds = seconds % 60;
+	
+	timeText.text = "%02d:%02d / %02d:%02d" % [current_minutes, current_seconds, int(VocalManager.songLength) / 60, int(VocalManager.songLength) % 60];
+	
+func update_botplay_color():
+	if is_instance_valid(botplay_option):
+		botplay_option.modulate = Color("#ffeb00" if GlobalOptions.isUsingBot else "#ffffff");
+		

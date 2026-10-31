@@ -37,6 +37,9 @@ func init_json(char_json_path):
 	jsonFile.close();
 	
 func _ready():
+	reload();
+	notify_property_list_changed();
+	
 	is_animated_sprite = character is AnimatedSprite2D;
 	
 	curCharacter = json_path.get_file();

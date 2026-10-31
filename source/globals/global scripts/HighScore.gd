@@ -37,11 +37,15 @@ func loadJson(path):
 		return {};
 		
 func get_song_score(song = "", diff = "", score = 0):
-	score_data[set_song(song, diff)] = score; save_score();
+	score_data[set_song(song, diff)] = score;
+	save_score();
 func get_song_percent(song = "", diff = "", percent = 0.0):
-	percent_data[set_song(song, diff)] = percent; save_percent();
+	percent_data[set_song(song, diff)] = percent;
+	save_percent();
 func get_song_rank(song = "", diff = "", rank = ""):
-	rank_data[set_song(song, diff)] = str(rank); save_rank();
+	rank_data[set_song(song, diff)] = str(rank);
+	save_rank();
+	
 func get_score(song = "", diff = ""):
 	return int(score_data.get(set_song(song, diff), 0));
 func get_percent(song = "", diff = ""):

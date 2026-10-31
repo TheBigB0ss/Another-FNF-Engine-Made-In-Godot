@@ -3,6 +3,9 @@ extends Node
 var chartData = {};
 var stageData = {};
 var eventsData = {};
+var weeks_data = {};
+var characters = {};
+var camera_data = {};
 
 var week = "";
 var song = "":
@@ -61,8 +64,6 @@ var isOnChartMode = false;
 var isPlaying = false;
 var isOnDeathScreen = false;
 
-var stage_shader:ShaderMaterial = null;
-
 var songNotes = [];
 
 var playerNotes = [];
@@ -74,50 +75,46 @@ var songEvents = [];
 var week_songs = []:
 	set(val):
 		week_songs = [val] if val is String else val;
-	get:
-		return week_songs;
 		
 var week_diffs = []:
 	set(val):
-		week_diffs = "" if val == "normal" else val;
-	get:
-		return week_diffs;
+		if val == "normal":
+			val = "";
+			
+		week_diffs = val;
 		
-var weeks_data = {};
-
 var week_folder_path = "default";
 var weekName = "";
 
-var characters = {};
-var camera_data = {};
+var stage_shader:ShaderMaterial = null;
 
 func loadStageJson(new_stage):
-	var jsonFile = FileAccess.open("res://source/stages/%s/%s.json"%[new_stage, new_stage], FileAccess.READ);
-	var jsonData = JSON.new();
-	jsonData.parse(jsonFile.get_as_text());
-	stageData = jsonData.get_data();
-	jsonFile.close();
+	var path = "res://source/stages/%s/%s.json"%[new_stage, new_stage];
 	
-	set_stage_null_var("gf Z_Index", 0);
-	set_stage_null_var("opponent Z_Index", 0);
-	set_stage_null_var("bf Z_Index", 0);
-	set_stage_null_var("stage zoom", 0.8);
-	set_stage_null_var("stage beat zoom", 0.83);
-	set_stage_null_var("new opponent", [0, 0]);
-	set_stage_null_var("new opponent Z_Index", 0);
-	set_stage_null_var("two opponents", false);
+	if !FileAccess.file_exists(path):
+		return;
+		
+	var file = FileAccess.open(path, FileAccess.READ);
+	var data = JSON.parse_string(file.get_as_text());
+	file.close();
 	
-	stageZoomBeat = Vector2(stageData["stage beat zoom"], stageData["stage beat zoom"]);
-	stageZoom = Vector2(stageData["stage zoom"], stageData["stage zoom"]);
+	stageData = data;
 	
-	player1StagePosition = Vector2(stageData["bf"][0], stageData["bf"][1]);
-	player1Zindex = stageData["bf Z_Index"];
+	stageZoom = Vector2.ONE * float(stageData.get("stage zoom", 0.8));
+	stageZoomBeat = Vector2.ONE * float(stageData.get("stage beat zoom", 0.83));
 	
-	player2StagePosition = Vector2(stageData["opponent"][0], stageData["opponent"][1]);
-	player2Zindex = stageData["opponent Z_Index"];
+	var bf_pos = stageData.get("bf", [0, 0]);
+	var opponent_pos = stageData.get("opponent", [0, 0]);
+	var gf_pos = stageData.get("gf", [0, 0]);
 	
-	gfStagePosition = Vector2(stageData["gf"][0], stageData["gf"][1]);
-	gfZindex = stageData["gf Z_Index"];
+	player1StagePosition = Vector2(bf_pos[0], bf_pos[1]);
+	player1Zindex = stageData.get("bf Z_Index", 0);
+	
+	player2StagePosition = Vector2(opponent_pos[0], opponent_pos[1]);
+	player2Zindex = stageData.get("opponent Z_Index", 0);
+	
+	gfStagePosition = Vector2(gf_pos[0], gf_pos[1]);
+	gfZindex = stageData.get("gf Z_Index", 0);
 	
 func loadJson(new_song, difficulty = "", new_chart = null):
 	playerNotes.clear();
@@ -127,239 +124,37 @@ func loadJson(new_song, difficulty = "", new_chart = null):
 	characters.clear();
 	camera_data.clear();
 	
-	var difficultyPath = "";
-	var eventsPath = "";
+	var difficultyPath = ("res://assets/songs/%s/chart/%s.json"%[new_song, new_song]) if difficulty == "" or difficulty == "normal" else ("res://assets/songs/%s/chart/%s-%s.json"%[new_song, new_song, difficulty]);
+	var eventsPath = "res://assets/songs/%s/chart/events.json"%[new_song];
 	
-	difficultyPath = ("res://assets/songs/%s/chart/%s.json"%[new_song, new_song]) if difficulty == "" or difficulty == "normal" else ("res://assets/songs/%s/chart/%s-%s.json"%[new_song, new_song, difficulty]);
-	eventsPath = "res://assets/songs/%s/chart/events.json"%[new_song];
+	var chart_data = null;
 	
-	var jsonFile = FileAccess.open(difficultyPath, FileAccess.READ);
-	var jsonData = JSON.new();
-	
-	if FileAccess.file_exists(difficultyPath):
-		chart_dont_exist = false;
-		
-		jsonData.parse(jsonFile.get_as_text());
-		chartData = new_chart if new_chart != null else jsonData.get_data();
-		jsonFile.close();
-		
-		if chartData.has("song"):
-			convert_pyschChart(chartData, eventsPath);
-		elif chartData.has("codenameChart"):
-			convert_codenameChart(chartData, eventsPath);
-		else:
-			set_chart(chartData, eventsPath);
-			
-		reload_section();
+	if new_chart != null:
+		chart_data = new_chart;
 	else:
-		chart_dont_exist = true;
-		
-func set_stage_null_var(cool_var, new_value):
-	if !stageData.has(cool_var):
-		stageData[cool_var] = new_value;
-		
-func set_chart(songChart, eventsPath = ""):
-	playerNotes.clear();
-	opponentNotes.clear();
-	songSections.clear();
-	
-	stage = songChart["meta"]["stage"];
-	song = songChart["meta"]["song"];
-	if song.contains("-remix"):
-		song = song.replace("-remix", "");
-		
-	isPixelStage = songChart["meta"]["isPixelStage"];
-	needVoice = songChart["meta"]["needsVoices"];
-	
-	songBpm = songChart["meta"]["bpm"];
-	songSpeed = songChart["meta"]["speed"];
-	
-	player1 = songChart["meta"]["player1"];
-	player2 = songChart["meta"]["player2"];
-	gfPlayer = songChart["meta"]["gfVersion"];
-	
-	for strum in songChart["strums"]:
-		for i in strum["player"]:
-			var note = [i[0], i[1], i[2], i[3], i[4] if i[4] != null else null, i[5] if i[5] != null else null];
-			playerNotes.append(note);
+		if !FileAccess.file_exists(difficultyPath):
+			chart_dont_exist = true;
+			return;
 			
-		for i in strum["opponent"]:
-			var note = [i[0], i[1], i[2], i[3], i[4] if i[4] != null else null, i[5] if i[5] != null else null];
-			opponentNotes.append(note);
+		var file = FileAccess.open(difficultyPath, FileAccess.READ);
+		var json = JSON.new();
+		var error = json.parse(file.get_as_text());
+		file.close();
+		
+		if error != OK:
+			chart_dont_exist = true;
+			return;
 			
-	for i in songChart["sections"]:
-		songSections.append(i);
+		chart_data = json.data;
 		
-	if !songChart["events"].is_empty():
-		songEvents = songChart["events"];
-		
-	elif songChart["events"].is_empty() && FileAccess.file_exists(eventsPath):
-		var eventsJsonFile = FileAccess.open(eventsPath, FileAccess.READ);
-		var eventsJsonData = JSON.new();
-		eventsJsonData.parse(eventsJsonFile.get_as_text());
-		eventsData = eventsJsonData.get_data();
-		eventsJsonFile.close();
-		
-		songEvents = eventsData["song"]["events"];
-		
-	elif songChart["events"].is_empty() && !FileAccess.file_exists(eventsPath):
-		songEvents = [];
-		
-func convert_pyschChart(songChart, eventsPath = ""):
-	playerNotes.clear();
-	opponentNotes.clear();
-	songSections.clear();
+	chart_dont_exist = false;
+	chartData = chart_data;
 	
-	var templateChart = {
-		"strums": [
-			{
-				"player": [],
-				"opponent": [],
-				"extra": []
-			}
-		],
-		"sections": []
-	};
+	var loader = ChartLoader.new();
+	loader.load_chart(chartData, new_song, eventsPath);
 	
-	stage = songChart["song"].get("stage", "stage");
-	song = songChart["song"]["song"];
-	if song.contains("-remix"):
-		song = song.replace("-remix", "");
-		
-	isPixelStage = songChart["song"].get("isPixelStage", false);
-	needVoice = songChart["song"].get("needsVoices", false);
+	reload_section();
 	
-	songBpm = songChart["song"]["bpm"];
-	songSpeed = songChart["song"]["speed"];
-	
-	player1 = songChart["song"]["player1"];
-	player2 = songChart["song"]["player2"];
-	gfPlayer = songChart["song"]["gfVersion"];
-	
-	for i in songChart["song"]["notes"].size():
-		var section = songChart["song"]["notes"][i];
-		
-		templateChart["sections"].append({
-			"lengthInSteps": section.get("lengthInSteps", 16),
-			"altAnim": section.get("altAnim", false),
-			"bpm": section.get("bpm", songChart["song"]["bpm"]),
-			"changeBPM": section.get("changeBPM", false),
-			"mustHitSection": section.get("mustHitSection", true),
-			"gfSection": section.get("gfSection", false)
-		});
-		
-		for j in section["sectionNotes"]:
-			var note = {
-				"noteTime": j[0],
-				"noteData": int(j[1])%4,
-				"noteLength": j[2],
-				"noteType": j[3] if j.size() > 3 else "",
-				"noteValue1": j[4] if j.size() > 4 else null,
-				"noteValue2": j[5] if j.size() > 4 else null
-			};
-			
-			if int(j[1]) < 4:
-				if section["mustHitSection"]:
-					templateChart["strums"][0]["player"].append(note);
-				else:
-					templateChart["strums"][0]["opponent"].append(note);
-					
-			elif int(j[1]) < 8:
-				if section["mustHitSection"]:
-					templateChart["strums"][0]["opponent"].append(note);
-				else:
-					templateChart["strums"][0]["player"].append(note);
-					
-	for i in templateChart["sections"]:
-		songSections.append(i);
-		
-	for strum in templateChart["strums"]:
-		for note in strum["player"]:
-			playerNotes.append([note["noteTime"], note["noteData"], note["noteLength"], note["noteType"], note["noteValue1"], note["noteValue2"]]);
-			
-		for note in strum["opponent"]:
-			opponentNotes.append([note["noteTime"], note["noteData"], note["noteLength"], note["noteType"], note["noteValue1"], note["noteValue2"]]);
-			
-	if !songChart["song"].get("events", []).is_empty():
-		songEvents = songChart["song"]["events"];
-		
-	elif songChart["song"].get("events", []).is_empty() && FileAccess.file_exists(eventsPath):
-		var eventsJsonFile = FileAccess.open(eventsPath, FileAccess.READ);
-		var eventsJsonData = JSON.new();
-		eventsJsonData.parse(eventsJsonFile.get_as_text());
-		eventsData = eventsJsonData.get_data();
-		eventsJsonFile.close();
-		
-		songEvents = eventsData["song"]["events"];
-		
-	elif songChart["song"].get("events", []).is_empty() && !FileAccess.file_exists(eventsPath):
-		songEvents = [];
-		
-func convert_codenameChart(songChart, songName, eventsPath = ""):
-	playerNotes.clear();
-	opponentNotes.clear();
-	songSections.clear();
-	
-	var metaData = {};
-	var metaPath = "res://assets/songs/%s/chart/meta.json"%[songName];
-	
-	if FileAccess.file_exists(metaPath):
-		var metaJsonFile = FileAccess.open(eventsPath, FileAccess.READ);
-		var metaJsonData = JSON.new();
-		metaJsonData.parse(metaJsonFile.get_as_text());
-		metaData = metaJsonData.get_data();
-		metaJsonFile.close();
-		
-	elif songChart.has("meta"):
-		metaData = songChart["meta"];
-		
-	stage = metaData.get("stage", "stage");
-	song = metaData.get("name", metaData.get("displayName", songName));
-	if song.contains("-remix"):
-		song = song.replace("-remix", "");
-		
-	songBpm = metaData["bpm"];
-	songSpeed = songChart.get("scrollSpeed", metaData.get("scrollSpeed", 1.0));
-	
-	var lastMustHit = false;
-	var lastSection = 0;
-	for strum in songChart["strumLines"]:
-		for note in strum["notes"]:
-			lastSection = max(lastSection, get_section(note["time"]));
-			
-	for i in lastSection + 1:
-		songSections.append({
-			"lengthInSteps": 16,
-			"changeBPM": false,
-			"bpm": songBpm,
-			"mustHitSection": lastMustHit,
-			"gfSection": false,
-			"altAnim": false,
-			"sectionNotes": []
-		});
-		
-		lastMustHit = !lastMustHit;
-		
-	for strum in songChart["strumLines"]:
-		match strum["position"]:
-			"boyfriend":
-				player1 = strum["characters"][0];
-				for note in strum["notes"]:
-					var newNote = [note["time"], note["id"], note["sLen"], songChart["noteTypes"][note["type"]-1] if note["type"] > 0 else "", null, null];
-					playerNotes.append(newNote);
-					
-			"dad":
-				player2 = strum["characters"][0];
-				for note in strum["notes"]:
-					var newNote = [note["time"], note["id"], note["sLen"], songChart["noteTypes"][note["type"]-1] if note["type"] > 0 else "", null, null];
-					opponentNotes.append(newNote);
-					
-			"girlfriend":
-				gfPlayer = strum["characters"][0];
-				for note in strum["notes"]:
-					var newNote = [note["time"], note["id"], note["sLen"], songChart["noteTypes"][note["type"]-1] if note["type"] > 0 else "", null, null];
-					opponentNotes.append(newNote);
-					
 func get_stage_shader(_stage):
 	for i in _stage.get_children():
 		for j in i.get_children():
@@ -385,7 +180,7 @@ func reload_section():
 		section_events[i] = [];
 		
 	for note in playerNotes:
-		var sec = get_section(note[0]);
+		var sec = Conductor.get_section(note[0]);
 		
 		if !player_section_notes.has(sec):
 			player_section_notes[sec] = [];
@@ -393,7 +188,7 @@ func reload_section():
 		player_section_notes[sec].append(note);
 		
 	for note in opponentNotes:
-		var sec = get_section(note[0]);
+		var sec = Conductor.get_section(note[0]);
 		
 		if !opponent_section_notes.has(sec):
 			opponent_section_notes[sec] = [];
@@ -401,7 +196,7 @@ func reload_section():
 		opponent_section_notes[sec].append(note);
 		
 	for event in songEvents:
-		var sec = get_section(event[0]);
+		var sec = Conductor.get_section(event[0]);
 		
 		if !section_events.has(sec):
 			section_events[sec] = [];
@@ -411,11 +206,11 @@ func reload_section():
 func get_section_notes(section):
 	var notes = [];
 	for note in playerNotes:
-		if get_section(note[0]) == section:
+		if Conductor.get_section(note[0]) == section:
 			notes.append(note);
 			
 	for note in opponentNotes:
-		if get_section(note[0]) == section:
+		if Conductor.get_section(note[0]) == section:
 			notes.append(note);
 			
 	return notes;
@@ -424,36 +219,6 @@ func get_note_array(noteData):
 	return playerNotes if noteData >= 4 else opponentNotes;
 	
 func clear_section(section):
-	playerNotes = playerNotes.filter(func(n): return get_section(n[0]) != section);
-	opponentNotes = opponentNotes.filter(func(n): return get_section(n[0]) != section);
-	
-func get_section(time):
-	var bpmChangeMap = [];
-	
-	var curBPM = songBpm;
-	var totalSteps = 0;
-	var totalPos = 0.0;
-	
-	for section in songSections:
-		if section["changeBPM"]:
-			curBPM = max(float(section["bpm"]), 1.0);
-			bpmChangeMap.append([totalSteps, totalPos, curBPM]);
-			
-		var sectionLength = section["lengthInSteps"];
-		totalSteps += sectionLength;
-		totalPos += ((60.0 / curBPM) * 1000.0 / 4.0) * sectionLength;
-		
-	var last_change = [0, 0, songBpm];
-	for i in bpmChangeMap:
-		if i[1] <= time:
-			last_change = i;
-		else:
-			break;
-			
-	var crochet = (60.0 / last_change[2]) * 1000.0;
-	var stepCrochet = crochet / 4.0;
-	var step = last_change[0] + floor((time - last_change[1]) / stepCrochet);
-	var curSection = int(floor(step / 16));
-	
-	return clamp(curSection, 0, songSections.size() - 1);
+	playerNotes = playerNotes.filter(func(n): return Conductor.get_section(n[0]) != section);
+	opponentNotes = opponentNotes.filter(func(n): return Conductor.get_section(n[0]) != section);
 	

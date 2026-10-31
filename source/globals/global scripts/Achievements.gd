@@ -157,3 +157,4 @@ func save_achievements():
 	new_jsonFile.close();
 	
 	update_achievement_status();
+	

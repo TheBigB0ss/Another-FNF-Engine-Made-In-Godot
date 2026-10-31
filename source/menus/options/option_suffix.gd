@@ -10,6 +10,8 @@ var checkBoxGrp = Node2D.new();
 var alphabetGrp = Node2D.new();
 var new_alphabetGrp = Node2D.new();
 
+var check_sprite:AnimatedSprite2D;
+
 func _ready() -> void:
 	add_child(alphabetGrp);
 	add_child(new_alphabetGrp);
@@ -49,11 +51,14 @@ func _ready() -> void:
 				update_text(str(new_options[i].opt_type));
 				
 			TYPE_BOOL:
-				var check_sprite = AnimatedSprite2D.new();
-				check_sprite.sprite_frames = preload("res://assets/images/checkboxThingie.res");
-				check_sprite.position = Vector2(suffix_x, suffix_y);
-				checkBoxGrp.add_child(check_sprite);
-				update_bool_spr(new_options[i].opt_type);
+				var box = AnimatedSprite2D.new();
+				box.sprite_frames = preload("res://assets/images/checkboxThingie.res");
+				box.position = Vector2(suffix_x, suffix_y);
+				checkBoxGrp.add_child(box);
+				
+				self.check_sprite = box;
+				
+				update_bool_spr(box, new_options[i].opt_type);
 				
 func update_text(new_text, new_x = 0, is_bold = true):
 	for i in new_alphabetGrp.get_children():
@@ -65,16 +70,29 @@ func update_text(new_text, new_x = 0, is_bold = true):
 	alphabet._clear_word();
 	alphabet._creat_word(new_text);
 	new_alphabetGrp.add_child(alphabet);
-	new_alphabetGrp.position = Vector2(suffix_x+new_x, suffix_y);
+	new_alphabetGrp.position = Vector2(suffix_x + new_x, suffix_y);
 	
-func update_bool_spr(new_value):
-	var check_box_sprite = checkBoxGrp.get_child(cur_suffix);
+func update_bool_spr(sprite, new_value: bool) -> void:
+	sprite.offset.y = -50;
 	
-	check_box_sprite.offset.y = -50;
-	check_box_sprite.play("Check Box unselecting" if !new_value else "Check Box selecting animation");
-	check_box_sprite.connect("animation_finished", Callable(self, "unselected_box").bind(check_box_sprite));
+	if new_value:
+		sprite.play("Check Box selecting animation");
+	else:
+		sprite.play_backwards("Check Box selecting animation");
+		
+	var callback = unselected_box.bind(sprite);
 	
-func unselected_box(sprite):
-	if sprite.animation == "Check Box unselecting":
+	if !sprite.animation_finished.is_connected(callback):
+		sprite.animation_finished.connect(callback);
+		
+func unselected_box(sprite) -> void:
+	if !is_instance_valid(sprite):
+		return;
+		
+	if sprite.animation != "Check Box selecting animation":
+		return;
+		
+	if sprite.frame == 0 && !sprite.is_playing():
 		sprite.play("Check Box unselected");
 		sprite.offset.y = 0;
+		

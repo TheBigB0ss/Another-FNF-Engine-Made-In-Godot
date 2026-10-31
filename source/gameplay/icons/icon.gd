@@ -21,7 +21,6 @@ var icon_animated:SparrowSprite;
 
 func init_icon(parent, path, is_opponent, animated, icon_position):
 	var new_icon = Icon.new();
-	
 	new_icon.is_animated = animated;
 	new_icon.position = icon_position;
 	new_icon.flip_h = !is_opponent;

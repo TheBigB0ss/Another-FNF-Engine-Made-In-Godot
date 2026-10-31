@@ -35,6 +35,8 @@ func init_json(char_json_path):
 	jsonFile.close();
 	
 func _ready():
+	reload();
+	
 	curCharacter = json_path.get_file();
 	curCharacter = curCharacter.replace(".json", "");
 	

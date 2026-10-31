@@ -1,27 +1,54 @@
-[gd_scene format=3 uid="uid://clmqwo5a7tqgl"]
+[gd_scene format=3 uid="uid://bkyo1sv2daoyn"]
 
-[ext_resource type="Script" uid="uid://ctudout6jcg6p" path="res://source/characters/characters_scripts/Character.gd" id="1_c3l03"]
-[ext_resource type="SpriteFrames" uid="uid://brios6f54dg6f" path="res://assets/images/characters/spirit.res" id="2_bkcf6"]
+[ext_resource type="Shader" uid="uid://bcj1i4t5ur56h" path="res://source/shaders/glitch.gdshader" id="1_7qngk"]
+[ext_resource type="Script" uid="uid://djpjx6srvhkd5" path="res://source/characters/characters_scripts/SparrowCharacter.gd" id="1_g2sdm"]
+[ext_resource type="Texture2D" uid="uid://bppqqcv0g38b0" path="res://assets/images/characters/spirit.png" id="2_kvad4"]
 
-[node name="spirit" type="Node2D" unique_id=1527958019]
-script = ExtResource("1_c3l03")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kvad4"]
+shader = ExtResource("1_7qngk")
+shader_parameter/shake_power = 0.045
+shader_parameter/shake_rate = 1.0
+shader_parameter/shake_speed = -0.39
+shader_parameter/shake_block_size = 30.5
+shader_parameter/shake_color_rate = 0.01
+shader_parameter/use_screen_texture = false
+
+[node name="Spirit" type="Node2D" unique_id=1315244245]
+texture_filter = 1
+material = SubResource("ShaderMaterial_kvad4")
+script = ExtResource("1_g2sdm")
 json_path = "res://assets/data/characters/spirit.json"
-healthBar_Color = Color(1, 0, 0.2784314, 1)
-anims_timer = {
-"idle dance": [2, 5, false],
-"singDown": [2, 5, false],
-"singLeft": [2, 5, false],
-"singRight": [2, 5, false],
-"singUp": [2, 5, false]
-}
+animation = 4
 anim_type = 2
 have_death_animation = false
-idle_type = 1
+idle_type = 2
 frame_count = 2.4
-
-[node name="character" type="AnimatedSprite2D" parent="." unique_id=1859462146]
-texture_filter = 1
-scale = Vector2(5, 5)
-sprite_frames = ExtResource("2_bkcf6")
-animation = &"idle spirit"
-offset = Vector2(5, -30)
+atlas_shader = SubResource("ShaderMaterial_kvad4")
+texture = ExtResource("2_kvad4")
+data_path = "res://assets/images/characters/spirit.txt"
+frame = 19
+loop = false
+anims_data = {
+"idle spirit": {
+"fps": 16.0,
+"loop": false
+},
+"left": {
+"fps": 16.0,
+"loop": false
+},
+"right": {
+"fps": 16.0,
+"loop": false
+},
+"spirit down": {
+"fps": 16.0,
+"loop": false
+},
+"up": {
+"fps": 16.0,
+"loop": false
+}
+}
+animation = 4
+metadata/_custom_type_script = "uid://djpjx6srvhkd5"

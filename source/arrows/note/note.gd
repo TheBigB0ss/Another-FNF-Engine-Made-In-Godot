@@ -12,6 +12,8 @@ var custom_note_dir = KEY_LEFT;
 var strum_positions = Vector2.ZERO;
 var strum_offsets = Vector2.ZERO;
 
+var curNoteAnim = "";
+
 var fileType = "res";
 var type = "note";
 var noteAnim = "purple";
@@ -59,8 +61,10 @@ var ignoreNote = false;
 var manyHits = 0;
 var amount = 0;
 
-var healthPerHit = 2.10;
-var healthPerHolding = 6.50;
+var healthPerHit = 2.50;
+var healthPerHolding = 7.50;
+
+const MISS_LIMIT = 0.13;
 
 var holdSplash = null;
 
@@ -75,20 +79,6 @@ signal noteCreated(note);
 signal characterNotePressed(note, character);
 signal playStrumAnim(note, is_opponent, anim_time, isCPU);
 
-func reload_note_type():
-	match type:
-		"Hurt Note":
-			note.sprite_frames = load("res://assets/images/arrows/hurt note/HurtNote.res" if !SongData.isPixelStage else "res://assets/images/arrows/pixel/hurt note/HurtNote_assets_pixel.res");
-			is_a_bad_note = true;
-			sustainLength = max(0,0);
-			
-		"Echo Note":
-			note.sprite_frames = load("res://assets/images/arrows/echo note/notes.res" if !SongData.isPixelStage else "res://assets/images/arrows/pixel/echo note/echo_pixel.res");
-			sustainLength = max(0,0);
-		_:
-			manyHits = 0;
-			amount = 0;
-			
 const NOTES_SETTINGS = {
 	0:{
 		"dir": "left",
@@ -115,58 +105,88 @@ const NOTES_ANIM = [
 	"singRight"
 ];
 
-var curNoteAnim = "";
+const NOTES_TYPES = {
+	"Hurt Note": {
+		"normal": "res://assets/images/arrows/hurt note/HurtNote.res",
+		"pixel": "res://assets/images/arrows/pixel/hurt note/HurtNote_assets_pixel.res",
+		"is bad note": true,
+		"sustain max": 0.0
+	},
+	"Echo Note":{
+		"normal": "res://assets/images/arrows/echo note/notes.res",
+		"pixel": "res://assets/images/arrows/pixel/echo note/echo_pixel.res",
+		"is bad note": false,
+		"sustain max": 0.0
+	}
+};
 
 func reload_note_data():
 	note_dir = NOTES_SETTINGS[int(noteData)%4]["dir"];
 	noteAnim = NOTES_SETTINGS[int(noteData)%4]["anim"];
 	custom_note_dir = GlobalOptions.keys[NOTES_SETTINGS[int(noteData)%4]["dir"]][1];
 	
-func reload_note():
-	if SongData.isPixelStage:
-		note.texture_filter = AnimatedSprite2D.TEXTURE_FILTER_NEAREST;
-		strumNote.texture_filter = AnimatedSprite2D.TEXTURE_FILTER_NEAREST;
-		noteLine.texture_filter = Line2D.TEXTURE_FILTER_NEAREST;
+var notes_cache = {};
+func get_note_texture(path):
+	if notes_cache.has(path):
+		return notes_cache[path];
 		
+	var frames = load(path);
+	
+	if frames != null:
+		notes_cache[path] = frames;
+		
+	return frames;
+	
+func reload_note():
+	note_type = "default";
+	note_skin = "notes";
+	note_strum = "StrumlineNotes";
+	note_lines = "NOTE_hold_assets";
+	fileType = "res";
+	
+	if SongData.isPixelStage:
 		note_type = "pixel/default";
-		note_skin = "notes";
 		note_strum = "NOTE_assets";
 		note_lines = "arrowEnds";
 		fileType = "tres";
-	else:
-		note_type = 'default';
-		note_skin = "notes";
-		note_strum = "StrumlineNotes";
-		note_lines = "NOTE_hold_assets"
-		fileType = "res";
 		
-		if type == "note" or type == "":
-			match noteAnim:
-				"green":
-					noteLine.position.x += 2.5;
-				"blue":
-					noteLine.position.x -= 1.5;
-					
-	note.sprite_frames = load("res://assets/images/arrows/%s/%s.%s"%[note_type, note_skin, fileType]);
-	strumNote.sprite_frames = load("res://assets/images/arrows/%s/%s.%s"%[note_type, note_strum, fileType]);
-	line.sprite_frames = load("res://assets/images/arrows/%s/%s.%s"%[note_type, note_lines, fileType]);
+		note.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST;
+		strumNote.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST;
+		noteLine.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST;
+		
+	noteLine.position.x = 0.0;
+	
+	if !SongData.isPixelStage && (type == "note" or type == ""):
+		match noteAnim:
+			"green":
+				noteLine.position.x = 2.5
+			"blue":
+				noteLine.position.x = -1.5
+				
+	var base_path = "res://assets/images/arrows/%s/%s.%s";
+	note.sprite_frames = get_note_texture(base_path%[note_type, note_skin, fileType]);
+	strumNote.sprite_frames = get_note_texture(base_path%[note_type, note_strum, fileType]);
+	line.sprite_frames = get_note_texture(base_path%[note_type, note_lines, fileType]);
 	
 	noteLine.lineTex = line.sprite_frames.get_frame_texture("%s hold piece"%[noteAnim], 0);
 	noteLine.noteEndTex = line.sprite_frames.get_frame_texture("%s hold end"%[noteAnim], 0);
 	
-func set_note_scale(parent_scale, pixelNote):
-	var new_noteScale = parent_scale;
-	new_noteScale = Vector2(1/parent_scale.x, 1/parent_scale.y);
+func reload_note_type():
+	var data = NOTES_TYPES.get(type, {});
 	
-	if pixelNote:
-		new_noteScale *= 7;
-	if GlobalOptions.down_scroll:
-		new_noteScale.y *= -1;
+	if data.is_empty():
+		manyHits = 0;
+		amount = 0;
+		return;
 		
-	return new_noteScale;
+	note.sprite_frames = load(data["pixel" if SongData.isPixelStage else "normal"]);
+	
+	is_a_bad_note = data.get("bad", false);
+	sustainLength = data.get("sustain", sustainLength);
 	
 func _ready():
 	ogSustain = sustainLength;
+	
 	scale = Vector2.ONE * (0.25 if isChartNote else 0.65);
 	 
 	add_child(strumNote);
@@ -186,8 +206,6 @@ func _ready():
 	reload_note();
 	reload_note_type();
 	
-	note.play(noteAnim);
-	
 	if SongData.isPixelStage:
 		note.scale = Vector2.ONE * 9;
 		strumNote.scale = Vector2.ONE * 9;
@@ -198,6 +216,8 @@ func _ready():
 		noteAlpha = 0.5;
 		
 	noteLine.modulate.a = noteAlpha;
+	
+	note.play(noteAnim);
 	
 func _process(delta: float) -> void:
 	if isChartNote:
@@ -223,7 +243,7 @@ func _process(delta: float) -> void:
 			noteLine.length = sustainLength;
 			
 			if isPlayer:
-				if sustainLength <= 0 && GlobalOptions.show_splashes:
+				if sustainLength <= 0 && (GlobalOptions.splash_type != 'disable' && GlobalOptions.splash_type != 'splashes'):
 					if is_instance_valid(holdSplash):
 						if GlobalOptions.isUsingBot:
 							holdSplash.queue_free();
@@ -245,7 +265,7 @@ func _process(delta: float) -> void:
 		missTimer += delta;
 		
 	if missed or missedLongNote && sustainLength > 0.0:
-		if missTimer > 0.13:
+		if missTimer > MISS_LIMIT:
 			can_press = false;
 			is_pressing = false;
 			
@@ -357,3 +377,4 @@ func swap_sing_anims(pos1, pos2):
 		pos1: pos2,
 		pos2: pos1
 	}.get(curNoteAnim, curNoteAnim);
+	

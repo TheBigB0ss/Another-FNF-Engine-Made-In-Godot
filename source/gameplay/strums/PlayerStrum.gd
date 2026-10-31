@@ -24,8 +24,6 @@ var skipIntro = false;
 signal noteCreated(note, isOpponent);
 signal noteHit(note, isOpponent);
 
-signal healthChange(health);
-
 func _ready() -> void:
 	strumNode = Node2D.new();
 	add_child(strumNode);
@@ -124,7 +122,6 @@ func _process(delta):
 		if note.sustainLength > 0:
 			if note.is_pressing && note.missTimer <= 0:
 				self.emit_signal("noteHit", note, false);
-				self.emit_signal("healthChange", note.healthPerHolding * delta);
 				
 	playerNotes = playerNotes.filter(func(note): return note != null);
 	notesList = notesList.filter(func(note): return note != null);
@@ -134,7 +131,7 @@ func _process(delta):
 	else:
 		playerInput();
 		
-	for i in 4:
+	for i in strumNode.get_child_count():
 		var note = strumArray[i];
 		if GlobalOptions.isUsingBot:
 			if note.reset_arrow_anim > 0:
@@ -156,7 +153,7 @@ func _process(delta):
 	notes_to_delete.clear();
 	
 func notesAppears():
-	for i in 4:
+	for i in strumNode.get_child_count():
 		var strumNote = strumArray[i];
 		strumNote.modulate.a = 0.0;
 		
@@ -176,7 +173,7 @@ func playerInput():
 			continue;
 			
 		if Input.is_action_pressed(key):
-			if note.missTimer <= 0.13 && note.missedLongNote:
+			if note.missTimer <= note.MISS_LIMIT && note.missedLongNote:
 				note.release_time = 0.0;
 				note.missTimer = 0.0;
 				

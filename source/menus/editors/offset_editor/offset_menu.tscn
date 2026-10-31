@@ -420,10 +420,10 @@ metadata/_custom_type_script = "uid://l08oojy4jhie"
 
 [node name="animations" type="Label" parent="offset_layer" unique_id=148634994]
 texture_filter = 1
-offset_left = 6.0
-offset_top = 89.0
-offset_right = 175.0
-offset_bottom = 138.0
+offset_left = 2.0000005
+offset_top = 98.0
+offset_right = 171.0
+offset_bottom = 147.0
 scale = Vector2(1.155, 1.155)
 label_settings = SubResource("LabelSettings_g4v7s")
 
@@ -587,9 +587,9 @@ offset_right = 887.0
 offset_bottom = 709.0
 color = Color(0, 0, 0, 0.551)
 
-[node name="AlphabetObject" type="AnimatedSprite2D" parent="text_layer" unique_id=1903040282]
-position = Vector2(621, 688)
-scale = Vector2(0.54, 0.53)
+[node name="AlphabetObject" type="Node2D" parent="text_layer" unique_id=1814532063]
+position = Vector2(625, 689)
+scale = Vector2(0.565, 0.565)
 script = ExtResource("6_v3n4i")
 text = "press TAB to switch"
 centred = true

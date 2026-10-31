@@ -30,14 +30,6 @@ var dont_have_chart = false;
 
 var weekJson = {};
 
-func loadJson(week):
-	var jsonFile = FileAccess.open("res://assets/data/weeks data/%s/%s"%[SongData.week_folder_path, week],FileAccess.READ);
-	var jsonData = JSON.new();
-	jsonData.parse(jsonFile.get_as_text());
-	weekJson = jsonData.get_data();
-	jsonFile.close();
-	return weekJson;
-	
 func _ready() -> void:
 	Conductor.reset();
 	Conductor.getSongTime = 0.0;
@@ -45,37 +37,49 @@ func _ready() -> void:
 	Discord.update_discord_info("freeplay menu", "Is in menus");
 	
 	weeks = Global.get_folder("assets/data/weeks data/%s"%[SongData.week_folder_path]);
+	
 	for i in weeks:
-		loadJson(i);
+		weekJson = Global.load_json("assets/data/weeks data/%s/%s"%[SongData.week_folder_path, i.replace(".json", "")])
 		
-		for j in weekJson["songs"]:
-			if weekJson["hideFromFreeplay"]:
+		if weekJson == null:
+			continue;
+			
+		if !weekJson.has("songs"):
+			continue;
+			
+		if weekJson.get("hideFromFreeplay", false):
+			continue;
+			
+		var week_name = weekJson.get("weekName", "");
+		var week_diffs = weekJson.get("weekDifficulties", []);
+		
+		for song_data in weekJson["songs"]:
+			if song_data.size() < 3:
 				continue;
 				
-			var new_song = j[0];
-			var new_icon = j[1];
-			var new_color = j[2];
-			var new_weekName = weekJson["weekName"];
-			var new_weekDifficult = weekJson["weekDifficulties"];
-			
-			add_song(new_song, new_icon, new_color, new_weekName, new_weekDifficult);
+			add_song(song_data[0], song_data[1], song_data[2], week_name, week_diffs);
 			
 	var unlocked_songs = HighScore.unlockSongs.keys();
 	unlocked_songs.sort();
 	
-	for i in unlocked_songs:
-		var new_song = i;
-		var new_icon = HighScore.unlockSongs[i]["icon"];
-		var new_color = HighScore.unlockSongs[i]["color"];
-		var new_weekName = HighScore.unlockSongs[i]["week name"];
-		var new_weekDifficult = HighScore.unlockSongs[i]["diffs"];
+	for song in unlocked_songs:
+		var data = HighScore.unlockSongs[song];
 		
-		add_song(new_song, new_icon, new_color, new_weekName, new_weekDifficult);
+		add_song(song, data.get("icon", ""), data.get("color", [1.0, 1.0, 1.0]), data.get("week name", ""), data.get("diffs", []));
 		
-	song_stuff.position.y = float(350-coolOffset*cur_song);
-	icons_stuff.position.y = float(350-coolOffset*cur_song);
-	$bg.modulate = Color(bg_colors[cur_song][0], bg_colors[cur_song][1], bg_colors[cur_song][2]);
+	if songs.is_empty():
+		return;
+		
+	song_stuff.position.y = 350.0 - coolOffset * cur_song;
+	icons_stuff.position.y = 350.0 - coolOffset * cur_song;
 	
+	$bg.modulate = get_current_bg_color();
+	
+	var chance = randi_range(0, 1000) <= 2;
+	for i in songs.size():
+		song_stuff.get_child(i).wave = chance;
+		song_stuff.get_child(i).rainbow = chance;
+		
 	change_song(Global.current_selected["freeplay"]);
 	changeDiff(1);
 	
@@ -90,7 +94,15 @@ func add_song(new_song, new_icon, new_color, new_week, diff):
 		new_song = new_song.replace("-", " ");
 		
 	var alphabet = Alphabet.new();
+	alphabet.waveIntensity = 10.0;
+	alphabet.waveSpeed = 5.0;
 	alphabet._creat_word(new_song);
+	
+	if new_song == "thorns":
+		alphabet.shaking = true;
+		alphabet.shakingX = 5.0;
+		alphabet.shakingY = 8.0;
+		
 	alphabet.position.y += offSetShit;
 	song_stuff.add_child(alphabet);
 	
@@ -103,11 +115,13 @@ func add_song(new_song, new_icon, new_color, new_week, diff):
 	offSetShit += coolOffset;
 	
 func _process(delta):
-	Conductor.getSongTime += delta*1000;
-	
+	if songs.is_empty():
+		return;
+		
 	song_stuff.position.y = lerp(float(song_stuff.position.y), float(350-coolOffset*cur_song), 1.0 - exp(-12.0 * delta));
 	icons_stuff.position.y = lerp(float(icons_stuff.position.y), float(350-coolOffset*cur_song), 1.0 - exp(-12.0 * delta));
-	$bg.modulate = lerp($bg.modulate, Color(bg_colors[cur_song][0], bg_colors[cur_song][1], bg_colors[cur_song][2]), 1.0 - exp(-6.0 * delta));
+	
+	$bg.modulate = $bg.modulate.lerp(get_current_bg_color(), 1.0 - exp(-6.0 * delta));
 	
 	var diff_id = cur_diff if cur_diff <= diffs.size() - 1 else 0;
 	var diff_name = diffs[diff_id].to_lower();
@@ -119,58 +133,61 @@ func _process(delta):
 	rank = HighScore.get_rank(song, diff);
 	percent = HighScore.get_percent(song, diff);
 	
-	cur_score = lerp(float(cur_score), float(score), delta * 20.0);
+	cur_score = lerp(float(cur_score), float(score), 1.0 - exp(-12.0 * delta));
 	
-	$scoreText.text = "SCORE: %s\nRANK: %s\nACCURACY: %s"%[snapped(round(cur_score), 1), rank, str(float(percent), "%")];
+	$scoreText.text = "SCORE: %s\nRANK: %s\nACCURACY: %s" % [str(roundi(cur_score)), rank, str(float(percent), "%")];
 	
-	if GlobalOptions.low_quality:
+func _input(ev):
+	if !ev is InputEventKey:
 		return;
 		
-	for i in songs.size():
-		for letters in song_stuff.get_child(i).get_children():
-			if songs[i] == "thorns":
-				letters.offset = Vector2(randf_range(5, 7), randf_range(10, 30));
-			else:
-				letters.offset = Vector2.ZERO;
-				
-func _input(ev):
-	if ev is InputEventKey:
-		if ev.pressed && Global.can_use_menus:
-			if ev.keycode in [GlobalOptions.get_key("escape")] && !ev.echo:
-				Global.changeScene("menus/main_menu/MainMenu", true, false);
-				
-			if ev.keycode in [GlobalOptions.get_key("ui_down")] && !ev.echo && !noSpam:
-				change_song(1);
-				
-			if ev.keycode in [GlobalOptions.get_key("ui_up")] && !ev.echo && !noSpam:
-				change_song(-1);
-				
-			if ev.keycode in [GlobalOptions.get_key("ui_left")] && !noSpam && !ev.echo:
-				changeDiff(-1);
-				
-			if ev.keycode in [GlobalOptions.get_key("ui_right")] && !noSpam && !ev.echo:
-				changeDiff(1);
-				
-			if SongData.chart_dont_exist && $warning.visible:
-				if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo:
-					$warning.visible = false;
-					noSpam = false;
-			else:
-				if (ev.keycode in [GlobalOptions.get_key("enter")] || ev.keycode in [KEY_KP_ENTER]) && !ev.echo && !noSpam:
-					noSpam = true;
-					go_to_song(songs[cur_song], diffs[cur_diff if !cur_diff > diffs.size()-1 else 0]);
-					
-			if ev.keycode in [KEY_SPACE] && !ev.echo:
-				MusicManager._play_song("/Inst%s"%["" if diffs[cur_diff if !cur_diff > diffs.size()-1 else 0] != "remix" else "-remix"], "songs/%s/song"%[songs[cur_song].to_lower()], true);
-				
+	if !ev.pressed or ev.echo or !Global.can_use_menus:
+		return;
+		
+	if ev.keycode == GlobalOptions.get_key("escape"):
+		Global.changeScene("menus/main_menu/MainMenu", true, false)
+		
+	elif ev.keycode == GlobalOptions.get_key("ui_down"):
+		if !noSpam:
+			change_song(1);
+			
+	elif ev.keycode == GlobalOptions.get_key("ui_up"):
+		if !noSpam:
+			change_song(-1);
+			
+	elif ev.keycode == GlobalOptions.get_key("ui_left"):
+		if !noSpam:
+			changeDiff(-1);
+			
+	elif ev.keycode == GlobalOptions.get_key("ui_right"):
+		if !noSpam:
+			changeDiff(1);
+			
+	elif ev.keycode == GlobalOptions.get_key("enter") or ev.keycode == KEY_KP_ENTER:
+		if SongData.chart_dont_exist && $warning.visible:
+			$warning.visible = false;
+			noSpam = false;
+			
+		elif !noSpam:
+			noSpam = true;
+			go_to_song(songs[cur_song], get_current_diff());
+			
+	elif ev.keycode == KEY_SPACE:
+		var diff = get_current_diff();
+		var suffix = "-remix" if diff == "remix" else "";
+		
+		MusicManager._play_song("/Inst%s"%[suffix], "songs/%s/song"%[songs[cur_song].to_lower()], true);
+		
 func go_to_song(song, diff_path):
 	SongData.loadJson(song, diff_path);
 	
 	if !SongData.chart_dont_exist:
 		Sound.playAudio("confirmMenu", false);
+		
 		SongData.week_songs = song;
 		SongData.week_diffs = diff_path;
 		SongData.isStoryMode = false;
+		
 		MusicManager._stop_music();
 		
 		SongData.weekName = cool_weeks[cur_song] if !cur_song > cool_weeks.size()-1 else "";
@@ -186,28 +203,80 @@ func go_to_song(song, diff_path):
 		Sound.playAudio("cancelMenu", false);
 		
 func change_song(change):
+	if songs.is_empty():
+		return;
+		
 	Sound.playAudio("scrollMenu", false);
 	
-	cur_song += change;
-	cur_song = wrapi(cur_song, 0, len(songs));
+	cur_song = wrapi(cur_song + change, 0, songs.size());
 	
 	Global.currentFreeplay = cur_song;
 	
 	update_song();
 	
-func changeDiff(shit):
-	cur_diff += shit;
-	cur_diff = wrapi(cur_diff if diffs.size() > 1 else 0, 0, len(diffs));
-	$difficultyText.text = str("< ",diffs[cur_diff].to_upper()," >");
-	
-func update_song():
-	diffs = ["easy", "normal", "hard"] if week_difficulties[cur_song] == [] else week_difficulties[cur_song];
-	if diffs == null or diffs == []:
+func changeDiff(change):
+	if diffs.is_empty():
 		diffs = ["easy", "normal", "hard"];
 		
-	$difficultyText.text = str("< ",diffs[cur_diff if !cur_diff > diffs.size()-1 else 0].to_upper()," >");
+	cur_diff = wrapi(cur_diff + change, 0, diffs.size());
 	
-	for j in songs.size():
-		icons_stuff.get_child(j).modulate.a = 1 if j == cur_song else 0.5;
-		song_stuff.get_child(j).modulate.a = 1 if j == cur_song else 0.5;
+	$difficultyText.text = "< %s >"%[get_current_diff().to_upper()];
+	
+	update_score();
+	
+func update_song():
+	if songs.is_empty():
+		return
 		
+	diffs = week_difficulties[cur_song];
+	
+	if diffs.is_empty():
+		diffs = ["easy", "normal", "hard"];
+		
+	cur_diff = wrapi(cur_diff, 0, diffs.size());
+	
+	$difficultyText.text = "< %s >"%[get_current_diff().to_upper()];
+	
+	for i in songs.size():
+		var alpha = 1.0 if i == cur_song else 0.5;
+		
+		icons_stuff.get_child(i).modulate.a = alpha;
+		song_stuff.get_child(i).modulate.a = alpha;
+		
+	update_score();
+	
+func update_score() -> void:
+	if songs.is_empty():
+		return;
+		
+	var song = songs[cur_song].to_lower();
+	var diff = get_current_diff();
+	var diff_path = "" if diff == "normal" else "-" + diff;
+	
+	score = HighScore.get_score(song, diff_path);
+	rank = HighScore.get_rank(song, diff_path);
+	percent = HighScore.get_percent(song, diff_path);
+	
+func get_current_bg_color():
+	if bg_colors.is_empty():
+		return Color.WHITE;
+		
+	var color_data = bg_colors[cur_song];
+	
+	if color_data is Color:
+		return color_data;
+		
+	if color_data.size() >= 3:
+		return Color(
+			color_data[0],
+			color_data[1],
+			color_data[2]
+		);
+		
+	return Color.WHITE;
+	
+func get_current_diff():
+	if diffs.is_empty():
+		return "normal";
+		
+	return diffs[wrapi(cur_diff, 0, diffs.size())];

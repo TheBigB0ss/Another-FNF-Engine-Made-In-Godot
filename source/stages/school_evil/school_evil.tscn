@@ -1,9 +1,12 @@
 [gd_scene format=3 uid="uid://c5t77j5i6gn54"]
 
 [ext_resource type="Script" uid="uid://bd35ldrbgo2wo" path="res://source/stages/school_evil/school_evil.gd" id="1_klcyl"]
-[ext_resource type="SpriteFrames" uid="uid://0orptr02askr" path="res://assets/stages/week6/evil/evilSchoolBg.res" id="2_3mfn1"]
 [ext_resource type="Shader" uid="uid://dho05u5a40fe" path="res://source/shaders/vhs.gdshader" id="2_n2kuo"]
 [ext_resource type="PackedScene" uid="uid://db0xykw58qt6y" path="res://assets/stages/week6/senpaiCrazy.tscn" id="3_tfrse"]
+[ext_resource type="Shader" uid="uid://v8cdn1pqygg3" path="res://source/shaders/wiggle.gdshader" id="4_dpvuv"]
+[ext_resource type="Texture2D" uid="uid://6dmauyhf4rcs" path="res://assets/stages/week6/evil/evil-school.png" id="4_v3gq7"]
+[ext_resource type="Texture2D" uid="uid://h4nmiof27g8s" path="res://assets/stages/week6/evil/evil-school-street.png" id="5_dpvuv"]
+[ext_resource type="Texture2D" uid="uid://5hi2367md4am" path="res://assets/stages/week6/evil/evil-school-trees.png" id="6_xc26s"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rmpmr"]
 shader = ExtResource("2_n2kuo")
@@ -11,6 +14,170 @@ shader_parameter/wiggle = 0.05
 shader_parameter/wiggle_speed = 22.0
 shader_parameter/smear = 1.285
 shader_parameter/blur_samples = 15
+
+[sub_resource type="Shader" id="Shader_dpvuv"]
+code = "shader_type canvas_item;
+
+uniform int effect_type : hint_enum(\"DREAMY:0\", \"WAVY:1\", \"HEAT WAVE HORIZONTAL:2\", \"HEAT WAVE VERTICAL:3\", \"FLAG:4\") = 0;
+uniform float u_speed = 1.0;
+uniform float u_frequency = 10.0;
+uniform float u_amplitude = 0.01;
+uniform float u_time = 0.0;
+
+uniform bool pixel_snap = true;
+
+uniform vec2 u_texel_size = vec2(0.001, 0.001);
+
+uniform float pixel_step = 1.0;
+
+vec2 snap_uv(vec2 uv) {
+	if (!pixel_snap) {
+		return uv;
+	}
+	
+	vec2 step_size = max(u_texel_size * pixel_step, vec2(0.000001));
+	return floor(uv / step_size + 0.5) * step_size;
+}
+
+vec2 sine_wave(vec2 uv) {
+	float t = TIME * u_speed;
+	
+	float x = 0.0;
+	float y = 0.0;
+	
+	if (effect_type == 0) {
+		x = sin(uv.y * u_frequency + t) * u_amplitude;
+	}
+	else if (effect_type == 1) {
+		y = sin(uv.x * u_frequency + t) * u_amplitude;
+	}
+	else if (effect_type == 2) {
+		x = sin(uv.x * u_frequency + t) * u_amplitude;
+	}
+	else if (effect_type == 3) {
+		y = sin(uv.y * u_frequency + t) * u_amplitude;
+	}
+	else if (effect_type == 4) {
+		x = sin(uv.y * u_frequency + t) * u_amplitude;
+		y = sin(uv.x * u_frequency + t) * u_amplitude;
+	}
+	
+	return vec2(x, y);
+}
+
+void fragment() {
+	vec2 uv = UV;
+	vec2 displacement = sine_wave(uv);
+	
+	if (pixel_snap) {
+		vec2 step_size = max(
+			u_texel_size * pixel_step,
+			vec2(0.000001)
+		);
+		displacement = round(displacement / step_size) * step_size;
+	}
+	
+	uv += displacement;
+	
+	COLOR = texture(TEXTURE, uv);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7jmal"]
+shader = SubResource("Shader_dpvuv")
+shader_parameter/effect_type = 4
+shader_parameter/u_speed = 1.845
+shader_parameter/u_frequency = 14.015
+shader_parameter/u_amplitude = 0.03
+shader_parameter/u_time = 0.0
+shader_parameter/pixel_snap = true
+shader_parameter/u_texel_size = Vector2(0.001, 0.001)
+shader_parameter/pixel_step = 6.65
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dpvuv"]
+shader = ExtResource("4_dpvuv")
+shader_parameter/effect_type = 2
+shader_parameter/u_speed = 1.0
+shader_parameter/u_frequency = 10.0
+shader_parameter/u_amplitude = 0.07
+shader_parameter/pixel_snap = true
+shader_parameter/u_texel_size = Vector2(0.001, 0.001)
+shader_parameter/pixel_step = 8.49
+
+[sub_resource type="Shader" id="Shader_xc26s"]
+code = "shader_type canvas_item;
+
+uniform int effect_type : hint_enum(\"DREAMY:0\", \"WAVY:1\", \"HEAT WAVE HORIZONTAL:2\", \"HEAT WAVE VERTICAL:3\", \"FLAG:4\") = 0;
+uniform float u_speed = 1.0;
+uniform float u_frequency = 10.0;
+uniform float u_amplitude = 0.01;
+
+uniform bool pixel_snap = true;
+
+uniform vec2 u_texel_size = vec2(0.001, 0.001);
+
+uniform float pixel_step = 1.0;
+
+vec2 snap_uv(vec2 uv) {
+	if (!pixel_snap) {
+		return uv;
+	}
+	
+	vec2 step_size = max(u_texel_size * pixel_step, vec2(0.000001));
+	return floor(uv / step_size + 0.5) * step_size;
+}
+
+vec2 sine_wave(vec2 uv) {
+	float t = TIME * u_speed;
+	
+	float x = 0.0;
+	float y = 0.0;
+	
+	if (effect_type == 0) {
+		x = sin(uv.y * u_frequency + t) * u_amplitude;
+	}
+	else if (effect_type == 1) {
+		y = sin(uv.x * u_frequency + t) * u_amplitude;
+	}
+	else if (effect_type == 2) {
+		x = sin(uv.x * u_frequency + t) * u_amplitude;
+	}
+	else if (effect_type == 3) {
+		y = sin(uv.y * u_frequency + t) * u_amplitude;
+	}
+	else if (effect_type == 4) {
+		x = sin(uv.y * u_frequency + t) * u_amplitude;
+		y = sin(uv.x * u_frequency + t) * u_amplitude;
+	}
+	
+	return vec2(x, y);
+}
+
+void fragment() {
+	vec2 uv = UV;
+	vec2 displacement = sine_wave(uv);
+	
+	if (pixel_snap) {
+		vec2 step_size = max(
+			u_texel_size * pixel_step,
+			vec2(0.000001)
+		);
+		displacement = round(displacement / step_size) * step_size;
+	}
+	
+	uv += displacement;
+	
+	COLOR = texture(TEXTURE, uv);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xc26s"]
+shader = SubResource("Shader_xc26s")
+shader_parameter/effect_type = 0
+shader_parameter/u_speed = 0.575
+shader_parameter/u_frequency = 16.735
+shader_parameter/u_amplitude = 0.01
+shader_parameter/pixel_snap = true
+shader_parameter/u_texel_size = Vector2(0.001, 0.001)
+shader_parameter/pixel_step = 17.99
 
 [node name="SchoolEvil" type="Node2D" unique_id=2016262123]
 script = ExtResource("1_klcyl")
@@ -49,14 +216,31 @@ offset_bottom = 1080.0
 [node name="senpai fade timer" type="Timer" parent="senpai cutscene" unique_id=945953463]
 wait_time = 0.6
 
-[node name="schoolBg" type="AnimatedSprite2D" parent="." unique_id=246281114]
+[node name="school" type="Node2D" parent="." unique_id=1567831735]
+position = Vector2(652, 453)
+scale = Vector2(6.995, 6.995)
+
+[node name="ColorRect" type="ColorRect" parent="school" unique_id=446208027]
+offset_left = -553.73914
+offset_top = -409.56522
+offset_right = 726.26086
+offset_bottom = 310.43478
+color = Color(0, 0, 0, 1)
+
+[node name="schoolBg" type="Sprite2D" parent="school" unique_id=1269949452]
 texture_filter = 1
-position = Vector2(600, 454)
-scale = Vector2(7.9, 7.9)
-sprite_frames = ExtResource("2_3mfn1")
-animation = &"background 2 instance 1"
-autoplay = "background 2 instance 1"
-frame = 15
-frame_progress = 0.13429
+material = SubResource("ShaderMaterial_7jmal")
+texture = ExtResource("4_v3gq7")
+
+[node name="sidewalk" type="Sprite2D" parent="school" unique_id=1161117677]
+texture_filter = 1
+material = SubResource("ShaderMaterial_dpvuv")
+texture = ExtResource("5_dpvuv")
+
+[node name="fuckasstree" type="Sprite2D" parent="school" unique_id=619193816]
+texture_filter = 1
+material = SubResource("ShaderMaterial_xc26s")
+position = Vector2(-3.2880628, 9.72123)
+texture = ExtResource("6_xc26s")
 
 [connection signal="timeout" from="senpai cutscene/senpai fade timer" to="." method="_on_senpai_fade_timer_timeout"]

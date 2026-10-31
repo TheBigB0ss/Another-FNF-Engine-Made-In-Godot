@@ -59,6 +59,9 @@ func _ready():
 	base_position = (self.position if character_anim == null else character.position);
 	
 func _process(delta):
+	if Engine.is_editor_hint():
+		return;
+		
 	if curAnim.begins_with("dead") && SongData.isOnDeathScreen:
 		idleTimer += delta;
 		

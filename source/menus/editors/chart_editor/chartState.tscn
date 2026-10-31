@@ -655,12 +655,24 @@ offset_bottom = 52.0
 disabled = true
 text = "add event"
 
+[node name="remove_event" type="Button" parent="chart_UI/chart_objs/chartTab/eventsWindow" unique_id=272154800]
+unique_name_in_owner = true
+offset_left = 266.0
+offset_top = 57.0
+offset_right = 381.0
+offset_bottom = 88.0
+disabled = true
+text = "remove event"
+
 [node name="note_events" type="OptionButton" parent="chart_UI/chart_objs/chartTab/eventsWindow" unique_id=1797640138]
 offset_left = 267.0
-offset_top = 58.0
+offset_top = 94.0
 offset_right = 381.0
-offset_bottom = 89.0
+offset_bottom = 125.0
 disabled = true
+alignment = 2
+autowrap_mode = 3
+clip_text = true
 
 [node name="opponentPreviewWindow" type="Window" parent="chart_UI/chart_objs/chartTab" unique_id=1316713624]
 oversampling_override = 1.0
@@ -674,7 +686,33 @@ metadata/_custom_type_script = "uid://cvh168tg37tji"
 [node name="EnemyChart" parent="chart_UI/chart_objs/chartTab/opponentPreviewWindow" unique_id=246031562 instance=ExtResource("7_w8f1m")]
 position = Vector2(90, 131)
 scale = Vector2(0.63, 0.63)
+export_name = null
+export_fps = null
+export_loop = null
 frame = 7
+fps = 16.0
+anims_data = {
+"down": {
+"fps": 20.0,
+"loop": true
+},
+"idle": {
+"fps": 16.0,
+"loop": true
+},
+"left": {
+"fps": 16.0,
+"loop": true
+},
+"right": {
+"fps": 16.0,
+"loop": true
+},
+"up": {
+"fps": 16.0,
+"loop": true
+}
+}
 
 [node name="playerPreviewWindow" type="Window" parent="chart_UI/chart_objs/chartTab" unique_id=1397538122]
 oversampling_override = 1.0
@@ -688,7 +726,10 @@ metadata/_custom_type_script = "uid://cvh168tg37tji"
 [node name="ChartBf" parent="chart_UI/chart_objs/chartTab/playerPreviewWindow" unique_id=145860512 instance=ExtResource("6_orogo")]
 position = Vector2(34, 131)
 scale = Vector2(0.805, 0.805)
-frame = 2
+export_name = null
+export_fps = null
+export_loop = null
+frame = 7
 
 [node name="chart_inst" type="AudioStreamPlayer" parent="." unique_id=164621937]
 
@@ -716,3 +757,4 @@ position = Vector2(640, 360)
 [connection signal="text_changed" from="chart_UI/chart_objs/chartTab/eventsWindow/value 1" to="." method="_on_value_1_text_changed"]
 [connection signal="text_changed" from="chart_UI/chart_objs/chartTab/eventsWindow/value 2" to="." method="_on_value_2_text_changed"]
 [connection signal="pressed" from="chart_UI/chart_objs/chartTab/eventsWindow/add_event" to="." method="_on_add_event_pressed"]
+[connection signal="pressed" from="chart_UI/chart_objs/chartTab/eventsWindow/remove_event" to="." method="_on_remove_event_pressed"]

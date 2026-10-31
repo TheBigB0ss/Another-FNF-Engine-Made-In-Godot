@@ -6,8 +6,21 @@
 [node name="senpai" type="Node2D" unique_id=665015851]
 script = ExtResource("1_wlguy")
 json_path = "res://assets/data/characters/senpai.json"
+healthBar_Color = Color(1, 0.67058825, 0.3372549, 1)
+anims_timer = {
+"idle dance": [2, 5, false],
+"singDown": [2, 5, false],
+"singLeft": [2, 5, false],
+"singRight": [2, 5, false],
+"singUp": [2, 5, false]
+}
+anim_type = 1
+have_death_animation = false
+idle_type = 1
 
 [node name="character" type="AnimatedSprite2D" parent="." unique_id=596804410]
 texture_filter = 1
+scale = Vector2(5, 5)
 sprite_frames = ExtResource("2_hxrdp")
 animation = &"Senpai Idle instance 1"
+frame = 27

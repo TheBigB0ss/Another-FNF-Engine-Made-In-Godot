@@ -16,11 +16,9 @@ extends Node2D
 @onready var leftArrow = $'arrows/LeftArrow';
 @onready var rightArrow = $'arrows/RightArrow';
 
-var yellowBf = null;
-var yellowGf = null;
-var yellowOpponent = null;
-
 var noSpam = false;
+
+var diffTexs = {};
 var diffs = ["easy", "normal", "hard"];
 var curDiff = 0;
 
@@ -34,34 +32,15 @@ var coolOffset = 115;
 var score = 0;
 var week_score = 0;
 
-func get_week_files():
-	var file = [];
-	var coolFolder = DirAccess.open("res://assets/data/weeks data/%s"%[SongData.week_folder_path]);
-	if coolFolder:
-		coolFolder.list_dir_begin();
-		var nameShit = coolFolder.get_next();
-		while nameShit != "":
-			file.append(nameShit.replace(".json", ""));
-			nameShit = coolFolder.get_next();
-			
-	return file;
-	
-func loadJson(_week):
-	var jsonFile = FileAccess.open("res://assets/data/weeks data/%s/%s.json"%[SongData.week_folder_path, _week],FileAccess.READ);
-	var jsonData = JSON.new();
-	jsonData.parse(jsonFile.get_as_text());
-	jsonFile.close();
-	return jsonData.get_data();
-	
-var diffTexs = {};
-
 func _ready():
 	Discord.update_discord_info("story menu", "Is in menus");
 	
 	Conductor.reset();
 	
-	for i in get_week_files():
-		var data = loadJson(i);
+	for i in Global.get_folder("assets/data/weeks data/%s"%[SongData.week_folder_path]):
+		i = i.replace(".json", "");
+		
+		var data = Global.load_json("assets/data/weeks data/%s/%s"%[SongData.week_folder_path, i]);
 		if data["hideFromStoryMode"]:
 			continue;
 			
@@ -136,8 +115,6 @@ func _process(delta):
 	
 	leftArrow.position.x = lerp(leftArrow.position.x, diffSpr.position.x - diffSpr.texture.get_width() / 2.0 - leftArrow.texture.get_width() + 110, 1.0 - exp(-8.0 * delta));
 	rightArrow.position.x = lerp(rightArrow.position.x, diffSpr.position.x + diffSpr.texture.get_width() / 2.0 - 95, 1.0 - exp(-8.0 * delta));
-	
-	scoreText.text = "Week Score: %s"%[week_score];
 	
 	if !choiced:
 		return;
@@ -219,6 +196,8 @@ func update_weekScore():
 			
 		week_score += HighScore.get_score(i[0], suffix);
 		
+	scoreText.text = "Week Score: %s"%[week_score];
+	
 func changeWeek(shit):
 	Sound.playAudio("scrollMenu", false);
 	
@@ -230,6 +209,7 @@ func changeWeek(shit):
 		weeksSpr.get_child(j).modulate.a = 1 if j == curWeek else 0.5;
 		
 	updateWeek();
+	update_weekScore();
 	
 func updateWeek():
 	SongData.weeks_data = weeks;
@@ -268,37 +248,49 @@ func updateWeek():
 			i.get_child(0).modulate = Color("#000000") if !is_unlocked else Color("#ffffff");
 			
 func changeMenuCharacter():
-	var yellow_fellas = {
-		"bf": [menu_bf, 1],
-		"gf": [menu_gf, 2],
-		"opponent": [menu_opponent, 0]
-	};
+	var yellow_fellas = [
+		[menu_opponent, weeks[curWeek]["weekCharacters"][0]],
+		[menu_bf, weeks[curWeek]["weekCharacters"][1]],
+		[menu_gf, weeks[curWeek]["weekCharacters"][2]]
+	];
 	
-	for i in yellow_fellas.keys():
-		var char_grp = yellow_fellas[i][0];
-		var charName = weeks[curWeek]["weekCharacters"][yellow_fellas[i][1]];
+	for i in yellow_fellas:
+		var char_group = i[0];
+		var char_name = i[1];
+		var current_character = char_group.get_child(0) if char_group.get_child_count() > 0 else null;
 		
-		if charName == "":
-			if char_grp.get_child_count() > 0:
-				if char_grp.get_child(0) != null:
-					char_grp.get_child(0).queue_free();
-					
+		if char_name == "":
+			if current_character != null:
+				current_character.queue_free();
+				
 			continue;
 			
-		if char_grp.get_child_count() > 0:
-			if char_grp.get_child(0) == null:
-				continue;
-				
-			var curChar = char_grp.get_child(0);
+		if current_character != null && current_character.name == char_name:
+			continue;
 			
-			if charName == curChar.name:
-				continue;
-				
-			curChar.queue_free();
+		if current_character != null:
+			char_group.remove_child(current_character);
+			current_character.queue_free();
 			
-		var path = "res://source/menus/story_mode/characters/Menu_%s.tscn"%[charName];
-		var new_char = load(path).instantiate();
-		new_char.name = charName;
-		char_grp.add_child(new_char);
-		char_grp.show();
+		var character = getMenuCharacter(char_name);
+		if character == null:
+			continue;
+			
+		var new_char = character.instantiate();
+		new_char.name = char_name;
+		char_group.add_child(new_char);
+		char_group.show();
 		
+var character_cache = {};
+func getMenuCharacter(char_name):
+	if character_cache.has(char_name):
+		return character_cache[char_name];
+		
+	var path = "res://source/menus/story_mode/characters/Menu_%s.tscn"%[char_name];
+	var character = load(path);
+	
+	if character != null:
+		character_cache[char_name] = character;
+		
+	return character;
+	

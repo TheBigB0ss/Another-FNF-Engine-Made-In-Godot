@@ -15,6 +15,8 @@ var goToIdle = true;
 @export var path = "";
 
 func _ready():
+	reload();
+	
 	var jsonFile = FileAccess.open("res://assets/images/editors/chart preview/%s.json"%[path], FileAccess.READ);
 	var jsonData = JSON.new();
 	jsonData.parse(jsonFile.get_as_text());

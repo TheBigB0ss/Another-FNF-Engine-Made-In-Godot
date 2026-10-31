@@ -73,7 +73,7 @@
 		},
 		{
 			"Anim": "good anim",
-			"Anim Time": 5,
+			"Anim Time": 40.0,
 			"Name": "PRETTY GOOD tankman 1",
 			"Offset": [
 				57.0,

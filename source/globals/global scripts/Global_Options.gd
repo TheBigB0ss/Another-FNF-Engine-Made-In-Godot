@@ -28,9 +28,9 @@ var updated_icon = "default";
 var rating_mode = "hud element";
 var timeBar_mode = "default";
 var idleMode = "beat";
+var splash_type = "both";
 
 var use_shader = true;
-var show_splashes = true;
 var show_songCard = true;
 var screen_zoom = true;
 var show_ratingLabel = false;
@@ -328,9 +328,10 @@ func set_options():
 				"value": optionList["visual"]["health bar alpha"],
 				"description": "health bar opacity"
 			},
-			"show splashes":{
-				"value": optionList["visual"]["show splashes"],
-				"description": "show note splashes"
+			"splash type":{
+				"value": optionList["options"]["splash type"]["list"],
+				"description": "select which splash type do you prefer",
+				"ID": optionList["options"]["splash type"]["index"]
 			},
 			"show song card":{
 				"value": optionList["visual"]["show song card"],
@@ -439,7 +440,7 @@ func apply_changes():
 	hide_hud = optionList["visual"]["hide hud"];
 	timeBar_mode = optionList["visual"]["time bar type"];
 	health_bar_alpha = optionList["visual"]["health bar alpha"];
-	show_splashes = optionList["visual"]["show splashes"];
+	splash_type = optionList["visual"]["splash type"];
 	show_songCard = optionList["visual"]["show song card"];
 	screen_zoom = optionList["visual"]["screen zoom"];
 	show_ratingLabel = optionList["visual"]["show rating label"];
@@ -502,7 +503,7 @@ func get_option_list():
 			"time bar type": "default",
 			"hide hud": false,
 			"screen zoom": true,
-			"show splashes": true,
+			"splash type": "both",
 			"show song card": true,
 			"show rating label": false,
 			"health bar alpha": 1.0
@@ -556,6 +557,10 @@ func get_option_list():
 			},
 			'idle mode':{
 				"list": ["beat", "step"],
+				"index": 0
+			},
+			"splash type":{
+				"list": ["both", "splashes", "hold splashes", "disable"],
 				"index": 0
 			}
 		}

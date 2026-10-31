@@ -9,8 +9,6 @@ var dad = Character.new();
 @onready var voices = $'chart_voices';
 @onready var inst = $'chart_inst';
 
-var songLength = 0.0;
-
 var timeline_width = 0.0;
 var isPlaying = false;
 
@@ -184,24 +182,7 @@ func reload_scene(songName):
 	load_events();
 	
 func load_song(songName):
-	var music_inst = load("res://assets/songs/%s/song/Inst.ogg"%[songName]);
-	
-	var music_voices = "res://assets/songs/%s/song/Voices.ogg"%[songName];
-	var music_voices_player = "res://assets/songs/%s/song/Voices-player.ogg"%[songName];
-	var music_voices_opponent = "res://assets/songs/%s/song/Voices-opponent.ogg"%[songName];
-	
-	var vocalsSynchronized = AudioStreamSynchronized.new();
-	
-	if ResourceLoader.exists(music_voices_player) && ResourceLoader.exists(music_voices_player):
-		vocalsSynchronized.stream_count = 2;
-		vocalsSynchronized.set_sync_stream(0, load(music_voices_player));
-		vocalsSynchronized.set_sync_stream(1, load(music_voices_opponent));
-	else:
-		vocalsSynchronized.stream_count = 1;
-		vocalsSynchronized.set_sync_stream(0, load(music_voices));
-		
-	inst.stream = music_inst;
-	voices.stream = vocalsSynchronized;
+	VocalManager.load_audio(songName, '', inst, voices);
 	
 	inst.play(0.0);
 	voices.play(0.0);
@@ -209,15 +190,10 @@ func load_song(songName):
 	inst.stream_paused = true;
 	voices.stream_paused = true;
 	
-	var instLength = music_inst.get_length();
-	var vocalsLength = vocalsSynchronized.get_sync_stream(0).get_length();
-	
-	songLength = max(instLength, vocalsLength);
-	
-	timeLine.timeline_width = songLength * 100;
+	timeLine.timeline_width = VocalManager.songLength * 100;
 	timeLine.queue_redraw();
 	
-	timeBar.max_value = songLength;
+	timeBar.max_value = VocalManager.songLength;
 	
 func update_events_position(grp, arr):
 	var id = 0;
@@ -278,8 +254,8 @@ func _process(delta: float) -> void:
 		
 		var curMinutes = str(int(currentPosition) / 60).pad_zeros(1);
 		var curSeconds = str(int(currentPosition) % 60).pad_zeros(2);
-		var maxMinutes = str(int(songLength) / 60).pad_zeros(1);
-		var maxSeconds = str(int(songLength) % 60).pad_zeros(2);
+		var maxMinutes = str(int(VocalManager.songLength) / 60).pad_zeros(1);
+		var maxSeconds = str(int(VocalManager.songLength) % 60).pad_zeros(2);
 		chart_info.text = str(curMinutes, ":", curSeconds, " / ", maxMinutes, ":", maxSeconds);
 		
 	match timeLine.get_track():

@@ -3,8 +3,6 @@ extends Node2D
 @onready var voices = $chart_voices;
 @onready var inst = $chart_inst;
 
-var songLength = 0.0;
-
 @onready var iconP1 = $'grid_objs/icons/icon_player';
 @onready var iconP2 = $'grid_objs/icons/icon_opponent';
 
@@ -14,7 +12,6 @@ var songLength = 0.0;
 @onready var event_text = $chart_UI/chart_objs/chartTab/eventsWindow/events_description;
 
 @onready var grid = $'grid_objs/grid';
-
 @onready var song_line = $'grid_objs/song_line';
 @onready var selection = $'grid_objs/selection_box';
 @onready var notes = $'grid_objs/notes';
@@ -38,19 +35,10 @@ var songLength = 0.0;
 
 var curselected_note = [];
 var curselected_event = []:
-	set(val):
-		if curselected_event != val:
-			curselected_event = val;
-			
-			notesEvents.clear();
-			for i in SongData.songEvents.size():
-				if SongData.songEvents[i].size() <= 2 or curselected_event.is_empty():
-					continue;
-					
-				if SongData.songEvents[i][0] == curselected_event[0] && int(SongData.songEvents[i][1]) == int(curselected_event[1]):
-					notesEvents.add_item(SongData.songEvents[i][2]);
-					notesEvents.set_item_metadata(notesEvents.item_count - 1, i);
-					
+	set(value):
+		curselected_event = value;
+		refresh_events_list();
+		
 var event_text_array = [];
 var note_types = [
 	"", 
@@ -216,24 +204,31 @@ func change_note_edit(_item):
 			%noteVal1.value = 0;
 			%noteVal2.value = 0;
 			
+var icons_cache = {};
 func get_icons(_char):
-	var icon = {}
-	var replaced = _char;
-	
 	if _char.contains(".json"):
-		replaced = _char.replace(".json", "");
+		_char = _char.replace(".json", "");
 		
-	var jsonFile = FileAccess.open("res://assets/data/characters/%s.json"%[replaced],FileAccess.READ);
-	var jsonData = JSON.new();
-	
-	if jsonFile == null or replaced == "none":
+	if _char == "none":
 		return "no_icon";
 		
-	jsonData.parse(jsonFile.get_as_text());
-	icon = jsonData.get_data();
-	jsonFile.close();
+	if icons_cache.has(_char):
+		return icons_cache[_char];
+		
+	var path = "res://assets/data/characters/%s.json"%[_char];
 	
-	return icon["HealthIcon"];
+	if !FileAccess.file_exists(path):
+		return "no_icon";
+		
+	var file = FileAccess.open(path, FileAccess.READ);
+	var data = JSON.parse_string(file.get_as_text());
+	file.close();
+	
+	if !data.has("HealthIcon"):
+		return "no_icon";
+		
+	icons_cache[_char] = data["HealthIcon"];
+	return icons_cache[_char];
 	
 func change_icons(_char):
 	iconP1.reload_icon(get_icons(characterList[player1Options.selected]), "idle");
@@ -381,17 +376,27 @@ func mouse_inside_obj(spr, offset = 2):
 	);
 	
 func obj_inside_block(obj, offset):
-	if obj == null && (obj.sprite_frames if obj is AnimatedSprite2D else obj.texture) == null:
+	if !is_instance_valid(obj):
 		return false;
 		
-	var size = (obj.sprite_frames.get_frame_texture(obj.animation, obj.frame).get_size() if obj is AnimatedSprite2D else obj.texture.get_size()) * obj.scale
-	return (
-		selectionRect.position.x + selectionRect.size.x > obj.global_position.x - size.x / offset 
-		&& selectionRect.position.x < obj.global_position.x + size.x / offset 
-		&& selectionRect.position.y + selectionRect.size.y > obj.global_position.y - size.y / offset  
-		&& selectionRect.position.y < obj.global_position.y + size.y / offset
-	);
+	var texture = null;
 	
+	if obj is AnimatedSprite2D:
+		if obj.sprite_frames == null:
+			return false;
+			
+		texture = obj.sprite_frames.get_frame_texture(obj.animation, obj.frame);
+	else:
+		texture = obj.texture;
+		
+	if texture == null:
+		return false;
+		
+	return selectionRect.intersects(
+		Rect2(obj.global_position - (texture.get_size() * obj.scale) / offset,
+			(texture.get_size() * obj.scale) * 2.0 / offset)
+		);
+		
 func try_redraw(tileShit, songLineSize):
 	grid._redraw_grid(tileShit);
 	grid.queue_redraw();
@@ -409,9 +414,9 @@ func update_song(scroll, update_time = false):
 	else:
 		Conductor.getSongTime += scroll;
 		
-	Conductor.getSongTime = clamp(Conductor.getSongTime, 0.0, songLength*1000.0);
+	Conductor.getSongTime = clamp(Conductor.getSongTime, 0.0, VocalManager.songLength*1000.0);
 	
-	var new_section = SongData.get_section(Conductor.getSongTime);
+	var new_section = Conductor.get_section(Conductor.getSongTime);
 	
 	if new_section != curSection:
 		var direction = 1 if new_section > curSection else -1;
@@ -432,7 +437,7 @@ func update_song(scroll, update_time = false):
 	update_hud_position();
 	
 func check_song_progress():
-	if floor(Conductor.getSongTime/1000) >= songLength:
+	if floor(Conductor.getSongTime/1000) >= VocalManager.songLength:
 		changeSection(0);
 		
 		Conductor.reset();
@@ -459,17 +464,31 @@ func update_selected_notes():
 			selected_notes.erase(i);
 			
 func update_selected_events():
+	var found_event = false;
+	
 	for i in arrayEventNotes:
 		if i == null:
 			continue;
 			
 		if obj_inside_block(i.event_note, 8):
 			i.modulate = Color(0.151, 0.574, 1.0, 1.0);
-			curselected_event = [i.strumTime, i.noteData];
 			
+			for j in range(SongData.songEvents.size()):
+				var event = SongData.songEvents[j];
+				
+				if is_equal_approx(event[0] - section_start_time(), i.strumTime) && int(event[1]) == int(i.noteData):
+					event_index = j;
+					curselected_event = event;
+					found_event = true;
+					break;
+					
 		elif !obj_inside_block(i.event_note, 8) && selectionRect != Rect2():
 			i.modulate = Color(1.0, 1.0, 1.0, 1.0);
 			
+	if !found_event:
+		event_index = -1;
+		curselected_event = [];
+		
 var last_timebar_value = 0.0;
 var last_song_seek = 0.0;
 var selected_notes = [];
@@ -488,39 +507,39 @@ func _process(delta):
 	selection.visible = grid.mouse_inside_grid();
 	
 	if !is_mouse_inside_ui() && !dialogs_open:
-		update_selected_notes();
-		update_selected_events();
-		
+		if selectionRect != Rect2():
+			update_selected_notes();
+			update_selected_events();
+			
 		var strumTime = number_to_time(selection.position.y-20) + section_start_time();
 		var note_pos = floor(grid.get_local_mouse_position().x / grid_size);
 		
-		if note_pos < 0 or note_pos > 8:
-			return;
-			
-		if Input.is_action_just_pressed("mouse_click") && grid.mouse_inside_grid() && !grab_notes:
-			if note_pos < 8:
-				var lane = int(note_pos) % 4;
-				var found = false;
-				for i in SongData.get_note_array(int(note_pos)):
-					if is_equal_approx(i[0], strumTime) && int(i[1]) == int(lane):
-						delete_note(note_pos, i);
-						found = true;
-						break;
+		if note_pos >= 0 && note_pos <= 8:
+			if Input.is_action_just_pressed("mouse_click") && grid.mouse_inside_grid() && !grab_notes:
+				if note_pos < 8:
+					var lane = int(note_pos) % 4;
+					var found = false;
+					for i in SongData.get_note_array(int(note_pos)):
+						if is_equal_approx(i[0], strumTime) && int(i[1]) == int(lane):
+							delete_note(note_pos, i);
+							found = true;
+							break;
+							
+					if !found:
+						add_note(selection.position.y - 20, note_pos, 0, note_types[note_type_button.selected]);
+				else:
+					var found = false;
+					for i in SongData.songEvents:
+						if is_equal_approx(i[0], strumTime) && int(i[1]) == int(note_pos):
+							delete_event_note(i);
+							found = true;
+							break;
+							
+					if !found:
+						add_event_note(selection.position.y - 20, note_pos);
 						
-				if !found:
-					add_note(selection.position.y - 20, note_pos, 0, note_types[note_type_button.selected]);
-			else:
-				var found = false;
-				for i in SongData.songEvents:
-					if is_equal_approx(i[0], strumTime) && int(i[1]) == int(note_pos):
-						delete_event_note(i);
-						found = true;
-						break;
-						
-				if !found:
-					add_event_note(selection.position.y - 20, note_pos);
-					
 	%add_event.disabled = curselected_event.is_empty();
+	%remove_event.disabled = curselected_event.is_empty();
 	notesEvents.disabled = curselected_event.is_empty();
 	
 	if Input.is_action_just_pressed("copy") && !selected_notes.is_empty():
@@ -566,8 +585,8 @@ func _process(delta):
 	
 	var curMinutes = str(int(currentPosition) / 60).pad_zeros(1);
 	var curSeconds = str(int(currentPosition) % 60).pad_zeros(2);
-	var maxMinutes = str(int(songLength) / 60).pad_zeros(1);
-	var maxSeconds = str(int(songLength) % 60).pad_zeros(2);
+	var maxMinutes = str(int(VocalManager.songLength) / 60).pad_zeros(1);
+	var maxSeconds = str(int(VocalManager.songLength) % 60).pad_zeros(2);
 	
 	var chartCurStep = (curSection*16) + floor(number_to_time(time_to_number(Conductor.getSongTime - section_start_time())) / chartStepCrochet);
 	var chartCurBeat = floor(chartCurStep / 4);
@@ -584,7 +603,7 @@ func _process(delta):
 		
 	if !is_playing:
 		if !is_equal_approx(timeBar.value, last_timebar_value):
-			curSection = min(SongData.get_section(Conductor.getSongTime), SongData.songSections.size() - 1);
+			curSection = min(Conductor.get_section(Conductor.getSongTime), SongData.songSections.size() - 1);
 			curSection = clamp(curSection, 0, SongData.songSections.size() - 1);
 			
 			update_song(timeBar.value, true);
@@ -628,7 +647,7 @@ func changeSection(sec):
 		
 	curSection = 0 if sec == 0 else curSection + sec;
 	
-	if (curSection + 1 >= SongData.songSections.size() && floor(Conductor.getSongTime/1000.0) < songLength):
+	if (curSection + 1 >= SongData.songSections.size() && floor(Conductor.getSongTime/1000.0) < VocalManager.songLength):
 		add_null_section();
 		
 	curSection = wrapi(curSection, 0, SongData.songSections.size());
@@ -648,8 +667,9 @@ func is_mouse_inside_ui():
 	var option_buttons = [player1Options, player2Options, gfOptions, stageOptions, notesEvents, note_type_button, events_button];
 	
 	for i in option_buttons:
-		return i.get_popup().visible;
-		
+		if i.get_popup().visible:
+			return true;
+			
 	var windows = [
 		$chart_UI/chart_objs/chartTab/helpWindow,
 		$chart_UI/chart_objs/chartTab/soundWindow,
@@ -675,6 +695,11 @@ func play_song():
 	queue_redraw();
 	
 func load_section():
+	if SongData.songSections.is_empty():
+		return;
+		
+	curSection = clampi(curSection, 0, SongData.songSections.size() - 1);
+	
 	chartBpm = get_section_bpm(curSection);
 	chartCrochet = (60.0 / chartBpm) * 1000.0;
 	chartStepCrochet = chartCrochet / 4.0;
@@ -698,6 +723,12 @@ func load_section():
 		
 var loadSec = {};
 func load_new_section(sec):
+	if SongData.songSections.is_empty():
+		return;
+		
+	if sec < 0 or sec >= SongData.songSections.size():
+		return
+		
 	if loadSec.has(sec):
 		return;
 		
@@ -718,7 +749,6 @@ func load_new_section(sec):
 			lane += 4;
 			
 		var new_note = spawn_note(strumTime, lane, note_data[2], floor(time_to_number(strumTime)), note_data[3]);
-		
 		section_data["notes"].append(new_note);
 		
 	for note_data in SongData.opponent_section_notes[sec]:
@@ -729,7 +759,6 @@ func load_new_section(sec):
 			lane -= 4;
 			
 		var new_note = spawn_note(strumTime, lane, note_data[2], floor(time_to_number(strumTime)), note_data[3]);
-		
 		section_data["notes"].append(new_note);
 		
 	for event_data in SongData.section_events[sec]:
@@ -774,6 +803,7 @@ func creat_note(event_note = false, strumtime = 0.0, noteData = 0, sustain = 0, 
 		floor(noteData * grid_size) + 380, 
 		grid_size + cool_y - 20 if cool_y != null else selection.position.y
 	);
+	
 	notes.add_child(newNote);
 	if !event_note:
 		arrayNotes.append(newNote);
@@ -787,7 +817,21 @@ func spawn_sustain(note:Note):
 	if !is_instance_valid(note.noteLine):
 		return;
 		
-	note.noteLine.length = maxf(note.sustainLength, 0.0)
+	var line = note.noteLine.sustainLine;
+	
+	if !is_instance_valid(line):
+		return;
+		
+	line.texture = note.noteLine.get_texture(note.noteLine.lineTex);
+	line.texture_mode = Line2D.LINE_TEXTURE_TILE;
+	
+	if line.get_point_count() < 2:
+		line.clear_points();
+		line.add_point(Vector2.ZERO);
+		line.add_point(Vector2.ZERO);
+		
+	line.set_point_position(0, Vector2.ZERO);
+	line.set_point_position(1, Vector2(0.0, maxf(0.0, note.sustainLength - note.noteLine.note_end_height)));
 	
 func add_event_note(strumtime, noteData):
 	var note_strumtime = number_to_time(strumtime) + section_start_time();
@@ -806,19 +850,16 @@ func add_note(strumtime, noteData, _sustain, type):
 	var note_sustain = 0;
 	var note_type = type;
 	
-	var new_note = [note_strumtime, int(note_data)%4, note_sustain, note_type]; 
+	var new_note = [note_strumtime, int(note_data)%4, note_sustain, note_type, null, null]; 
 	if note_types[currentNoteSelected.selected] == "Echo Note":
-		new_note.append(%noteVal1.value);
-		new_note.append(%noteVal2.value);
-	else:
-		new_note.append(null);
-		new_note.append(null);
+		new_note[4] = %noteVal1.value;
+		new_note[5] = %noteVal2.value;
 		
 	SongData.get_note_array(noteData).append(new_note);
 	if duet_notes:
 		var duet = new_note.duplicate(true);
 		duet[1] = int(duet[1] + 4)%8;
-		SongData.get_note_array(duet[1]).append(new_note);
+		SongData.get_note_array(duet[1]).append(duet);
 		
 	curselected_note = new_note;
 	%note_sustain_lenght.value = curselected_note[2];
@@ -836,8 +877,8 @@ func delete_note(noteData, note):
 	load_section();
 	
 func delete_event_note(note):
-	if note == curselected_note:
-		curselected_note = [];
+	if note == curselected_event:
+		curselected_event = [];
 		
 	SongData.songEvents.erase(note);
 	
@@ -846,23 +887,29 @@ func delete_event_note(note):
 	
 func loadJson(song, difficulty = "", new_chart = null):
 	var difficultyPath = ("res://assets/songs/%s/chart/%s.json"%[song, song]) if difficulty == "" or difficulty == "normal" else ("res://assets/songs/%s/chart/%s-%s.json"%[song, song, difficulty]);
-	var jsonFile = FileAccess.open(difficultyPath, FileAccess.READ);
-	var jsonData = JSON.new();
-	
 	if !FileAccess.file_exists(difficultyPath):
-		return;
+		return
 		
-	jsonData.parse(jsonFile.get_as_text());
-	var data = jsonData.get_data() if new_chart == null else new_chart;
-	jsonFile.close();
+	var data = null;
 	
-	if data.has("song"):
-		SongData.convert_pyschChart(data, difficultyPath.replace(".json", "-events.json"));
-	elif data.has("codenameChart"):
-		SongData.convert_codenameChart(data, song, difficultyPath.replace(".json", "-events.json"));
+	if new_chart != null:
+		data = new_chart;
 	else:
-		SongData.set_chart(data, difficultyPath.replace(".json", "-events.json"));
+		var jsonFile = FileAccess.open(difficultyPath, FileAccess.READ);
+		var jsonData = JSON.new();
+		var error = jsonData.parse(jsonFile.get_as_text());
+		jsonFile.close();
 		
+		if error != OK:
+			return;
+			
+		data = jsonData.data;
+		
+	var eventsPath = difficultyPath.replace(".json", "-events.json");
+	
+	var loader = ChartLoader.new();
+	loader.load_chart(data, song, eventsPath);
+	
 	SongData.reload_section();
 	
 	if SongData.stage.contains(" "):
@@ -1013,25 +1060,7 @@ func paste_section():
 	load_section();
 	
 func set_audio():
-	var diffPrexif = str("-remix" if %song_difficulty.text.to_lower() == "-remix" or %song_difficulty.text.to_lower() == "remix" else "");
-	var music_inst = load("res://assets/songs/%s/song/Inst%s.ogg"%[%song_name.text.to_lower(), diffPrexif]);
-	
-	var music_voices = "res://assets/songs/%s/song/Voices%s.ogg"%[%song_name.text.to_lower(), diffPrexif];
-	var music_voices_player = "res://assets/songs/%s/song/Voices-player%s.ogg"%[%song_name.text.to_lower(), diffPrexif];
-	var music_voices_opponent = "res://assets/songs/%s/song/Voices-opponent%s.ogg"%[%song_name.text.to_lower(), diffPrexif];
-	
-	var vocalsSynchronized = AudioStreamSynchronized.new();
-	
-	if ResourceLoader.exists(music_voices_player) && ResourceLoader.exists(music_voices_player):
-		vocalsSynchronized.stream_count = 2;
-		vocalsSynchronized.set_sync_stream(0, load(music_voices_player));
-		vocalsSynchronized.set_sync_stream(1, load(music_voices_opponent));
-	else:
-		vocalsSynchronized.stream_count = 1;
-		vocalsSynchronized.set_sync_stream(0, load(music_voices));
-		
-	inst.stream = music_inst;
-	voices.stream = vocalsSynchronized;
+	VocalManager.load_audio(%song_name.text.to_lower(), %song_difficulty.text.to_lower(), inst, voices);
 	
 	inst.play(0.0);
 	voices.play(0.0);
@@ -1039,13 +1068,8 @@ func set_audio():
 	inst.stream_paused = true;
 	voices.stream_paused = true;
 	
-	var instLength = music_inst.get_length();
-	var vocalsLength = vocalsSynchronized.get_sync_stream(0).get_length();
-	
-	songLength = max(instLength, vocalsLength);
-	
 	timeBar.newMinVal = 0;
-	timeBar.newMaxVal = songLength * 1000;
+	timeBar.newMaxVal = VocalManager.songLength * 1000;
 	
 func _on_must_hit_pressed():
 	SongData.songSections[curSection]["mustHitSection"] = %must_hit.button_pressed;
@@ -1114,59 +1138,141 @@ func _on_note_sustain_lenght_value_changed(value: float) -> void:
 		
 	load_section();
 	
-func _on_add_event_pressed() -> void:
-	if curselected_event.is_empty():
+func _on_remove_event_pressed() -> void:
+	var selected_id = notesEvents.get_selected();
+	
+	if selected_id < 0:
 		return;
 		
-	notesEvents.clear();
-	var found = false;
-	for j in SongData.songEvents:
-		if j[0] == curselected_event[0] && int(j[1]) == int(curselected_event[1]):
-			if j.size() < 5:
-				j.append_array([event_text_array[events_button.selected], %"value 1".text, %"value 2".text]);
-				found = true;
-				break;
-				
-	if !found:
-		SongData.songEvents.append([curselected_event[0], curselected_event[1], event_text_array[events_button.selected], %"value 1".text, %"value 2".text]);
-		
-	for i in SongData.songEvents.size():
-		if SongData.songEvents[i][0] == curselected_event[0] && int(SongData.songEvents[i][1]) == int(curselected_event[1]):
-			notesEvents.add_item(SongData.songEvents[i][2]);
-			notesEvents.set_item_metadata(notesEvents.item_count - 1, i);
-			
-	if notesEvents.item_count > 0:
-		var id = notesEvents.item_count - 1;
-		notesEvents.select(id);
-		eventsChange(id);
-		
-	notesEvents.fit_to_longest_item = false;
+	var metadata = notesEvents.get_item_metadata(selected_id);
 	
+	if metadata == null:
+		return;
+		
+	var index = int(metadata);
+	
+	if index < 0 or index >= SongData.songEvents.size():
+		return;
+		
+	SongData.songEvents.remove_at(index);
+	
+	event_index = -1;
+	
+	refresh_events_list();
+	
+	if notesEvents.item_count > 0:
+		notesEvents.select(0);
+		eventsChange(0);
+	else:
+		%"value 1".text = "";
+		%"value 2".text = "";
+		
+func _on_add_event_pressed() -> void:
+	if curselected_event.size() < 2:
+		return;
+		
+	if events_button.selected < 0:
+		return;
+		
+	var new_event = [float(curselected_event[0]), int(curselected_event[1]), event_text_array[events_button.selected], %"value 1".text, %"value 2".text];
+	
+	SongData.songEvents.append(new_event);
+	
+	refresh_events_list(SongData.songEvents.size() - 1);
+	
+	if notesEvents.get_selected() >= 0:
+		eventsChange(notesEvents.get_selected());
+		
 var event_index = -1;
-func eventsChange(index):
+
+func eventsChange(index) -> void:
 	if index < 0 or index >= notesEvents.item_count:
 		event_index = -1;
 		return;
 		
 	var metadata = notesEvents.get_item_metadata(index);
-	event_index = metadata if metadata != null else -1;
 	
-	if event_index < 0 or event_index >= SongData.songEvents.size():
+	if metadata == null:
 		event_index = -1;
 		return;
 		
-	events_button.select(event_text_array.find(SongData.songEvents[event_index][2]));
-	%"value 1".text = SongData.songEvents[event_index][3];
-	%"value 2".text = SongData.songEvents[event_index][4];
+	var id = int(metadata);
 	
+	if id < 0 or id >= SongData.songEvents.size():
+		event_index = -1;
+		return;
+		
+	event_index = id;
+	var event = SongData.songEvents[event_index];
+	
+	if event.size() < 3:
+		return;
+		
+	var type_index = event_text_array.find(event[2]);
+	if type_index >= 0:
+		events_button.select(type_index);
+		
+	%"value 1".text = str(event[3]) if event.size() > 3 else "";
+	%"value 2".text = str(event[4]) if event.size() > 4 else "";
+	
+func select_event(index):
+	if index < 0 or index >= SongData.songEvents.size():
+		event_index = -1;
+		return;
+		
+	event_index = index;
+	
+func refresh_events_list(select_index = -1):
+	notesEvents.clear();
+	event_index = -1;
+	
+	if curselected_event.size() < 2:
+		%"value 1".text = "";
+		%"value 2".text = "";
+		return;
+		
+	var selected_item = -1;
+	
+	for i in range(SongData.songEvents.size()):
+		var event = SongData.songEvents[i];
+		
+		if event.size() < 3:
+			continue;
+			
+		if is_equal_approx(float(event[0]), float(curselected_event[0])) && int(event[1]) == int(curselected_event[1]):
+			notesEvents.add_item(str(event[2]));
+			
+			var item_index = notesEvents.item_count - 1;
+			notesEvents.set_item_metadata(item_index, i);
+			
+			if i == select_index:
+				selected_item = item_index;
+				
+	if selected_item >= 0:
+		notesEvents.select(selected_item);
+		
+	notesEvents.fit_to_longest_item = false;
+	
+	if selected_item >= 0:
+		notesEvents.select(selected_item);
+		eventsChange(selected_item);
+		
+	elif notesEvents.item_count > 0:
+		notesEvents.select(0);
+		eventsChange(0);
+		
+	else:
+		%"value 1".text = "";
+		%"value 2".text = "";
+		
 func _on_value_1_text_changed(new_text):
-	if event_index == -1:
+	if event_index < 0 or event_index >= SongData.songEvents.size():
 		return;
 		
 	SongData.songEvents[event_index][3] = new_text;
 	
 func _on_value_2_text_changed(new_text):
-	if event_index == -1:
+	if event_index < 0 or event_index >= SongData.songEvents.size():
 		return;
 		
 	SongData.songEvents[event_index][4] = new_text;

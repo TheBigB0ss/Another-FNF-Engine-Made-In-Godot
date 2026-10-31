@@ -15,3 +15,4 @@ func load_icon(path):
 	icon = icon.init_icon(self, path, true, false, Vector2(last_letter.position.x + frame_widht, alphabet.position.y + new_y));
 	icon.play_icon_anim("idle");
 	icon.enable = false;
+	

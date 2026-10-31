@@ -14,8 +14,6 @@ extends Node2D
 @onready var voices = $voices;
 @onready var inst = $inst;
 
-var songLength = 0.0;
-
 var iconP1 = Icon.new();
 var iconP2 = Icon.new();
 @onready var iconGrp = $'hud/Hud_Layer/icons';
@@ -37,6 +35,8 @@ var iconP2 = Icon.new();
 var can_pause = false;
 
 var health = 50.0;
+var healthHolding = 0.0;
+var curHealth = 0.0;
 
 var totalHits = 0;
 var notesPlayed = 0;
@@ -123,7 +123,6 @@ func _ready():
 	Global.connect("end_dialogue", startCountdown);
 	Global.connect("end_cutscene", startCountdown);
 	
-	playerStrum.connect("healthChange", set_health);
 	playerStrum.connect("noteCreated", set_note);
 	playerStrum.connect("noteHit", set_noteHit);
 	playerStrum.skipIntro = skipIntro;
@@ -131,8 +130,6 @@ func _ready():
 	opponentStrum.connect("noteCreated", set_note);
 	opponentStrum.connect("noteHit", set_noteHit);
 	opponentStrum.skipIntro = skipIntro;
-	
-	eventLoader.connect("event_emit", eventEmit);
 	
 	stage = load("res://source/stages/%s/%s.tscn"%[SongData.stage, SongData.stage]).instantiate();
 	if stage is Stage:
@@ -167,6 +164,8 @@ func _ready():
 	iconP1 = iconP1.init_icon(iconGrp, bf.curIcon, false, bf.animatedIcon, Vector2(710, 645));
 	iconP2 = iconP2.init_icon(iconGrp, dad.curIcon, true, dad.animatedIcon, Vector2(610, 645));
 	
+	sectionCamera.init_cam();
+	
 	SongData.updated_chart = SongData.chartData;
 	
 	Conductor.mapBPMChanges();
@@ -175,7 +174,10 @@ func _ready():
 	Conductor.getSongTime = -Conductor.crochet*5;
 	Conductor.songSpeed = SongData.songSpeed;
 	
-	startSong();
+	VocalManager.load_audio(SongData.song, songDiff, inst, voices);
+	
+	timeBar.max_value = VocalManager.songLength;
+	
 	setup_hud();
 	updateScoreText();
 	
@@ -201,22 +203,40 @@ func _ready():
 		hud.add_child(newSongCard);
 		hud.move_child(newSongCard, 8);
 		
+	
 func start_dialogue():
 	SongData.is_in_cutscene = true;
 	dialogue_box.start();
 	dialogue_box.show();
 	dialogue_box.pause_song();
 	
+func pause():
+	if get_tree().paused:
+		return;
+		
+	pause_menu.can_use = true;
+	pause_menu.is_paused = true;
+	pause_menu.visible = true;
+	
+	pause_menu._paused();
+	
+	get_tree().paused = true;
+	
+	Discord.update_discord_info("pause", "Paused");
+	
 var start_song = false;
 var discord_songName = "";
 var last_song_seek = 0.0;
 
-var curHealth = 0.0;
 func _process(delta: float) -> void:
 	ScriptLoader.call_func("on_process", [delta]);
 	
 	msText.modulate.a = max(msText.modulate.a - 2.0 * delta, 0.0);
 	
+	if healthHolding > 0.0:
+		health = minf(health + healthHolding * delta, 100.0);
+		healthHolding = 0.0;
+		
 	curHealth = lerp(curHealth, float(health), 1.0 - exp(-15.0 * delta));
 	healthBar.value = curHealth;
 	
@@ -228,6 +248,9 @@ func _process(delta: float) -> void:
 	iconP1.position.x = lerp(iconP1.position.x, healthPosition+p1Offset, 1.0 - exp(-20.0 * delta));
 	iconP2.position.x = lerp(iconP2.position.x, healthPosition-p2Offset, 1.0 - exp(-20.0 * delta));
 	
+	if !DisplayServer.window_is_focused() && can_pause:
+		pause();
+		
 	if !start_song:
 		return;
 		
@@ -265,8 +288,8 @@ func _process(delta: float) -> void:
 		
 		var curMinutes = str(int(currentPosition) / 60).pad_zeros(1);
 		var curSeconds = str(int(currentPosition) % 60).pad_zeros(2);
-		var maxMinutes = str(int(songLength) / 60).pad_zeros(1);
-		var maxSeconds = str(int(songLength) % 60).pad_zeros(2);
+		var maxMinutes = str(int(VocalManager.songLength) / 60).pad_zeros(1);
+		var maxSeconds = str(int(VocalManager.songLength) % 60).pad_zeros(2);
 		
 		var current_time = (curMinutes + ":" + curSeconds if Conductor.getSongTime >= 0 else "0:00");
 		
@@ -276,10 +299,10 @@ func _process(delta: float) -> void:
 			"time elapsed":
 				timeText.text = current_time;
 			"time left":
-				var timeLeft = max(0, songLength - currentPosition);
+				var timeLeft = max(0, VocalManager.songLength - currentPosition);
 				timeText.text = str(int(timeLeft) / 60).pad_zeros(1) + ":" + str(int(timeLeft) % 60).pad_zeros(2);
 				
-		if currentPosition >= songLength:
+		if currentPosition >= VocalManager.songLength:
 			inst.stop();
 			voices.stop();
 			
@@ -329,7 +352,7 @@ var ratingColors = {
 	"Shit": Color.DARK_RED
 };
 func pressedNote(note:Note):
-	if note.isSustain && GlobalOptions.show_splashes:
+	if note.isSustain && (GlobalOptions.splash_type != 'disable' && GlobalOptions.splash_type != 'splashes'):
 		var splash = splash_note(playerStrum.strumNode.get_child(note.noteData), "holdCover%s"%[note.noteAnim] if !SongData.isPixelStage else "holdpixelCover");
 		note.holdSplash = splash;
 		
@@ -355,7 +378,7 @@ func pressedNote(note:Note):
 	msText.text = str(snapped(ms, 0.01), "Ms");
 	msText.position = Vector2(
 		rating_spr.position.x - msText.size.x * 0.5,
-		rating_spr.position.y + (msText.size.x * 0.5) + 25
+		rating_spr.position.y + (msText.size.x * 0.5) + 10
 	);
 	msText.modulate.a = 1.0;
 	
@@ -375,7 +398,7 @@ func pressedNote(note:Note):
 			
 	rating_spr.pop_up_rating(rating_data[rating]["RatingID"]);
 	
-	if rating == "Sick" && GlobalOptions.show_splashes:
+	if rating == "Sick" && (GlobalOptions.splash_type != 'disable' && GlobalOptions.splash_type != 'hold splashes'):
 		splash_note(strum, ("note impact %s %s"%[randi_range(1, 2), note.noteAnim]) if !SongData.isPixelStage else "pixelsplashes%s %s"%[randi_range(1, 2), note.noteAnim]);
 		
 	totalHits += 1;
@@ -396,7 +419,7 @@ func pressedNote(note:Note):
 	updateScoreText();
 	
 func opponentNotePressed(note:Note):
-	if note.isSustain && GlobalOptions.show_splashes && !GlobalOptions.middle_scroll:
+	if note.isSustain && (GlobalOptions.splash_type != 'disable' && GlobalOptions.splash_type != 'splashes') && !GlobalOptions.middle_scroll:
 		var splash = splash_note(opponentStrum.strumNode.get_child(note.noteData), "holdCover%s"%[note.noteAnim] if !SongData.isPixelStage else "holdpixelCover");
 		note.holdSplash = splash;
 		
@@ -435,9 +458,6 @@ func miss_note(note:Note):
 	
 func noteCreated(note):
 	ScriptLoader.call_func("on_note_created", [note]);
-	
-func eventEmit(eventName, args):
-	ScriptLoader.call_func("on_event", [eventName, args]);
 	
 func playBfMissAnim(curNote:Note):
 	if curNote.is_a_bad_note:
@@ -589,13 +609,7 @@ func _input(ev):
 		return;
 		
 	if can_pause && (ev.keycode == GlobalOptions.get_key("enter") or ev.keycode == KEY_KP_ENTER):
-		pause_menu.can_use = true;
-		pause_menu.visible = true;
-		
-		pause_menu._paused();
-		get_tree().paused = true;
-		
-		Discord.update_discord_info("pause", "Paused");
+		pause();
 		
 	if OS.is_debug_build():
 		if ev.keycode == KEY_F1:
@@ -680,35 +694,6 @@ func set_contdownSpr(path, spr):
 	var tween = create_tween();
 	tween.tween_property(countdownSprite, "modulate:a", 1.0, 0.15);
 	tween.tween_property(countdownSprite, "modulate:a", 0.0, 0.15);
-	
-func startSong():
-	if SongData.song == "":
-		return;
-		
-	var music_inst = load("res://assets/songs/%s/song/Inst%s.ogg"%[SongData.song, "-remix" if songDiff == "remix" else ""]);
-	var music_voices = "res://assets/songs/%s/song/Voices%s.ogg"%[SongData.song, "-remix" if songDiff == "remix" else ""];
-	
-	var music_voices_player = "res://assets/songs/%s/song/Voices-player%s.ogg"%[SongData.song, "-remix" if songDiff == "remix" else ""];
-	var music_voices_opponent = "res://assets/songs/%s/song/Voices-opponent%s.ogg"%[SongData.song, "-remix" if songDiff == "remix" else ""];
-	
-	var vocalsSynchronized = AudioStreamSynchronized.new();
-	if ResourceLoader.exists(music_voices_player) && ResourceLoader.exists(music_voices_opponent):
-		vocalsSynchronized.stream_count = 2;
-		vocalsSynchronized.set_sync_stream(0, load(music_voices_player));
-		vocalsSynchronized.set_sync_stream(1, load(music_voices_opponent));
-	else:
-		vocalsSynchronized.stream_count = 1;
-		vocalsSynchronized.set_sync_stream(0, load(music_voices));
-		
-	inst.stream = music_inst;
-	voices.stream = vocalsSynchronized;
-	
-	var instLength = music_inst.get_length();
-	var vocalsLength = vocalsSynchronized.get_sync_stream(0).get_length();
-	
-	songLength = max(instLength, vocalsLength);
-	
-	timeBar.max_value = songLength;
 	
 func finishSong():
 	can_pause = false;
@@ -862,9 +847,10 @@ func set_note(note:Note, isOpponent):
 func set_noteHit(note:Note, isOpponent):
 	if !isOpponent:
 		note.pressed(bf);
+		
+		if note.isSustain && note.sustainLength > 0.0:
+			healthHolding += note.healthPerHolding;
+			
 	else:
 		note.opponent_pressed(dad);
 		
-func set_health(amount):
-	health = clampf(health + amount, 0.0, 100.0);
-	

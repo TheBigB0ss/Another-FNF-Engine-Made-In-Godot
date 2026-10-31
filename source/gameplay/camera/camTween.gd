@@ -175,3 +175,20 @@ func ease_value(t, cam_ease):
 				return (1.0 - ease_value(1.0 - 2.0 * t, "bounceOut")) / 2.0;
 			return (1.0 + ease_value(2.0 * t - 1.0, "bounceOut")) / 2.0;
 			
+func get_ease_name(easing, ease_dir):
+	easing = easing.to_lower();
+	ease_dir = ease_dir.to_lower();
+	
+	if easing == "linear":
+		return "linear";
+		
+	match ease_dir:
+		"in":
+			return easing + "In";
+		"out":
+			return easing + "Out";
+		"inout":
+			return easing + "InOut";
+			
+	return "linear";
+	

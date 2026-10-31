@@ -3,8 +3,10 @@
 [ext_resource type="Script" uid="uid://1ti2qhdtf1mm" path="res://source/menus/options/options_menu.gd" id="1_g3fsc"]
 [ext_resource type="Texture2D" uid="uid://depqgg301j5px" path="res://assets/images/menuBgs/menuBGMagenta.png" id="2_gnd2s"]
 [ext_resource type="FontFile" uid="uid://d1v51eqb2c10v" path="res://assets/fonts/vcr.ttf" id="3_12ubm"]
+[ext_resource type="Script" uid="uid://bul6abs1hl5h" path="res://source/menus/options/reset.gd" id="4_0exu3"]
 [ext_resource type="Script" uid="uid://essfoa0h4nwy" path="res://source/alphabet/alphabetObject.gd" id="4_5hxum"]
 [ext_resource type="PackedScene" uid="uid://csjtlx65o4ol2" path="res://source/menus/options/reset_data_scene.tscn" id="4_ynts2"]
+[ext_resource type="Script" uid="uid://b6ouv7aowixf6" path="res://source/menus/options/reset_bar.gd" id="5_21d2q"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_g4v7s"]
 font = ExtResource("3_12ubm")
@@ -13,8 +15,7 @@ font = ExtResource("3_12ubm")
 script = ExtResource("1_g3fsc")
 
 [node name="Bg" type="Sprite2D" parent="." unique_id=357058538]
-position = Vector2(640, 360)
-scale = Vector2(0.995334, 0.986301)
+position = Vector2(648, 365)
 texture = ExtResource("2_gnd2s")
 
 [node name="options" type="Node2D" parent="." unique_id=189224050]
@@ -54,6 +55,7 @@ offset_bottom = 734.0
 color = Color(0, 0, 0, 0.470588)
 
 [node name="reset" type="Node2D" parent="." unique_id=155725832]
+script = ExtResource("4_0exu3")
 
 [node name="ColorRect" type="ColorRect" parent="reset" unique_id=1423191949]
 offset_top = 659.0
@@ -62,12 +64,23 @@ offset_bottom = 720.0
 color = Color(0, 0, 0, 0.415686)
 metadata/_edit_use_anchors_ = true
 
-[node name="AlphabetObject" type="AnimatedSprite2D" parent="reset" unique_id=552523075]
+[node name="reset_bar" type="Node2D" parent="reset" unique_id=516527768]
+position = Vector2(1231, 612)
+script = ExtResource("5_21d2q")
+progress = 0.55
+
+[node name="reset_text" type="Node2D" parent="reset" unique_id=391528260]
 position = Vector2(658, 690)
 scale = Vector2(0.72, 0.72)
 script = ExtResource("4_5hxum")
 text = "Hold R to return to default settings"
 centred = true
+visible_letters = 36
+makeShake = true
+shaking_intensity_x = 0.0
+shaking_intensity_y = 0.0
+wave_intensity = 0.0
+wave_speed = 0.0
 metadata/_custom_type_script = "uid://essfoa0h4nwy"
 
 [node name="reset_menu" type="Control" parent="." unique_id=1216545783]

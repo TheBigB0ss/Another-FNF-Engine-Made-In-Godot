@@ -78,6 +78,9 @@ var character = self;
 var base_position = Vector2.ZERO;
 var offset = Vector2.ZERO;
 
+var forced_anim = false;
+var forced_anim_timer = 0;
+
 var characterScript:CharacterScript;
 
 func _init() -> void:
@@ -121,6 +124,7 @@ func init_character(parent, char_position, char_zIndex, char_path, child_id):
 func _ready():
 	reload();
 	notify_property_list_changed();
+	
 	curCharacter = json_path.get_file();
 	curCharacter = curCharacter.replace(".json", "");
 	
@@ -209,6 +213,18 @@ func character_process(delta):
 	
 	update_character_state(delta);
 	
+	if forced_anim:
+		forced_anim_timer -= delta;
+		
+		if forced_anim_timer <= 0.0:
+			forced_anim = false;
+			forced_anim_timer = 0.0;
+			
+			idleTimer = 0;
+			dance();
+			
+		return;
+		
 	if (curAnim.begins_with("sing") or curAnim.contains("sing") or special_anim) && characterState != CHARACTER_STATES.HOLDING:
 		idleTimer += delta;
 		
@@ -257,10 +273,14 @@ func _playAnim(anim = "", special = false):
 		
 		if special_anim or special:
 			characterState = CHARACTER_STATES.SPECIAL;
+			forced_anim = true;
+			forced_anim_timer = Conductor.stepCrochet * anim_time * 0.001;
+			
 		if curAnim == "idle dance":
 			sing_timer = 0;
 			characterState = CHARACTER_STATES.IDLE;
 			frame = newFrame;
+			
 		if animList[i].begins_with("sing") && is_instance_valid(curNote):
 			characterState = CHARACTER_STATES.SINGING;
 			
@@ -360,7 +380,7 @@ func _get_property_list() -> Array[Dictionary]:
 	return properties;
 	
 func back_to_idle(idle_timer):
-	if (idle_timer % int(anim_beat) == 0) && !curAnim.begins_with("sing") && !special_anim:
+	if (idle_timer % int(anim_beat) == 0) && !curAnim.begins_with("sing") && !special_anim && !forced_anim:
 		dance();
 		
 func update_character_side(isPlayer) -> void:

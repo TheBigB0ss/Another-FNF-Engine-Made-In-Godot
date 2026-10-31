@@ -170,7 +170,7 @@ func _process(delta):
 		
 	notesList = notesList.filter(func(note): return note != null);
 	
-	for i in 4:
+	for i in strumNode.get_child_count():
 		var note = strumArray[i];
 		if note.reset_arrow_anim > 0:
 			note.reset_arrow_anim = max(note.reset_arrow_anim - 4 * delta, 0);
@@ -229,7 +229,7 @@ func spawnNote(strumTime, noteData, lenght, type, value1 = null, value2 = null):
 	noteNode.add_child(note);
 	
 func opponentNotePressed(note:Note):
-	if note.isSustain && GlobalOptions.show_splashes:
+	if note.isSustain && (GlobalOptions.splash_type != 'disable' && GlobalOptions.splash_type != 'splashes'):
 		if !is_instance_valid(note.holdSplash) && is_instance_valid(note.noteLine):
 			var strum = strumArray[note.noteData];
 			var splash = splash_note(strum, "holdCover%s"%[note.noteAnim] if !SongData.isPixelStage else "holdpixelCover");

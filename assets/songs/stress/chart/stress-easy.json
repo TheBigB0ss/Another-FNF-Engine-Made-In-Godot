@@ -1,15 +1,6 @@
 {
 	"song": {
 		"bpm": 178.0,
-		"events": [
-			[
-				62022.4719101124,
-				9.0,
-				"play anim",
-				"1",
-				"good anim"
-			]
-		],
 		"isPixelStage": false,
 		"needsVoices": true,
 		"notes": [

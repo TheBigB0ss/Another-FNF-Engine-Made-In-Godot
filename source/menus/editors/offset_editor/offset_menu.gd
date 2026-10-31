@@ -212,12 +212,18 @@ func set_rating_pos():
 		$cross.show();
 		
 func mouse_inside(spr):
+	if spr.texture == null or !spr.visible:
+		return false;
+		
 	var size = spr.texture.get_size() * spr.scale
 	var mouse = spr.get_global_mouse_position();
-	if mouse.x > spr.global_position.x - size.x / 2 && mouse.x < spr.global_position.x + size.x / 2 && mouse.y > spr.global_position.y - size.y / 2 && mouse.y < spr.global_position.y + size.y / 2:
-		return true;
-		
-	return false;
+	
+	return (
+		mouse.x > spr.global_position.x - size.x / 2 && 
+		mouse.x < spr.global_position.x + size.x / 2 && 
+		mouse.y > spr.global_position.y - size.y / 2 && 
+		mouse.y < spr.global_position.y + size.y / 2
+	);
 	
 var char_scale = Vector2.ZERO;
 func mouse_inside_character(spr):
@@ -355,12 +361,12 @@ func change_character_frame(frame):
 		character.timer = character.start_frame + value;
 		character.frame = int(character.timer);
 		
-var rating_status = null;
 enum RatingState {
 	RATING = 0,
 	COMBO = 1,
 	NUMS = 2
 };
+var rating_status = -1;
 
 var dragging_character = false;
 
@@ -371,6 +377,51 @@ var specialAnims = [];
 var last_icon = "";
 var new_icon = "";
 func _process(_delta: float) -> void:
+	if adjusting_rating:
+		var mouse = get_viewport().get_mouse_position();
+		
+		if Input.is_action_just_pressed("mouse_click"):
+			rating_status = -1;
+			
+			if mouse_inside(comboSpr):
+				rating_status = RatingState.COMBO;
+			elif numsSpr.get_num_at_mouse() != -1:
+				rating_status = RatingState.NUMS;
+			elif mouse_inside(ratingSpr):
+				rating_status = RatingState.RATING;
+				
+		if Input.is_action_pressed("mouse_click"):
+			if rating_status == -1:
+				return;
+				
+			match rating_status:
+				RatingState.COMBO:
+					%combo_x.value = mouse.x;
+					%combo_y.value = mouse.y;
+					
+				RatingState.NUMS:
+					%nums_x.value = mouse.x;
+					%nums_y.value = mouse.y;
+					
+				RatingState.RATING:
+					%rating_x.value = mouse.x;
+					%rating_y.value = mouse.y;
+					
+		else:
+			rating_status = -1;
+			
+		ratingSpr.position = Vector2(%rating_x.value, %rating_y.value);
+		comboSpr.position = Vector2(%combo_x.value, %combo_y.value);
+		numsSpr.position = Vector2(%nums_x.value, %nums_y.value);
+		
+		ratingSpr.visible = %visible_rating.button_pressed;
+		comboSpr.visible = %visible_combo.button_pressed;
+		numsSpr.visible = %visible_nums.button_pressed;
+		
+		GlobalOptions.set_setting("rating_pos", "meta", [%rating_x.value, %rating_y.value, %visible_rating.button_pressed]);
+		GlobalOptions.set_setting("combo_pos", "meta", [%combo_x.value, %combo_y.value, %visible_combo.button_pressed]);
+		GlobalOptions.set_setting("nums_pos", "meta", [%nums_x.value, %nums_y.value, %visible_nums.button_pressed]);
+		
 	last_icon = new_icon;
 	
 	if last_icon != %icon_text.text:
@@ -407,46 +458,6 @@ func _process(_delta: float) -> void:
 		%y_offset.value = mouse.y / char_scale.y;
 		
 		return;
-		
-	if adjusting_rating:
-		var mouse = get_viewport().get_mouse_position();
-		
-		if Input.is_action_just_pressed("mouse_click"):
-			if mouse_inside(comboSpr):
-				rating_status = RatingState.COMBO;
-			elif mouse_inside(numsSpr):
-				rating_status = RatingState.NUMS;
-			elif mouse_inside(ratingSpr):
-				rating_status = RatingState.RATING;
-				
-		elif Input.is_action_pressed("mouse_click") && rating_status != null:
-			match rating_status:
-				RatingState.COMBO:
-					%combo_x.value = mouse.x;
-					%combo_y.value = mouse.y;
-					
-				RatingState.NUMS:
-					%nums_x.value = mouse.x;
-					%nums_y.value = mouse.y;
-					
-				RatingState.RATING:
-					%rating_x.value = mouse.x;
-					%rating_y.value = mouse.y;
-					
-		elif Input.is_action_just_released("mouse_click"):
-			rating_status = null;
-			
-		ratingSpr.position = Vector2(%rating_x.value, %rating_y.value);
-		comboSpr.position = Vector2(%combo_x.value, %combo_y.value);
-		numsSpr.position = Vector2(%nums_x.value, %nums_y.value);
-		
-		ratingSpr.visible = %visible_rating.button_pressed;
-		comboSpr.visible = %visible_combo.button_pressed;
-		numsSpr.visible = %visible_nums.button_pressed;
-		
-		GlobalOptions.set_setting("rating_pos", "meta", [%rating_x.value, %rating_y.value, %visible_rating.button_pressed]);
-		GlobalOptions.set_setting("combo_pos", "meta", [%combo_x.value, %combo_y.value, %visible_combo.button_pressed]);
-		GlobalOptions.set_setting("nums_pos", "meta", [%nums_x.value, %nums_y.value, %visible_nums.button_pressed]);
 		
 	if !$FileDialog.visible:
 		if Input.is_action_just_released("mouse_wheel_down"):
@@ -601,3 +612,4 @@ func _on_beat_time_value_changed(value: float) -> void:
 func _on_color_button_pressed() -> void:
 	%color_text.color = charIcon.get_icon_color();
 	charBarColor.tint_under = %color_text.color;
+	

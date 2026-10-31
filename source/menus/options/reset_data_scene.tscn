@@ -33,21 +33,25 @@ position = Vector2(632.5, 361.5)
 scale = Vector2(15.85, 9.77)
 texture = ExtResource("4_u6fpd")
 
-[node name="AlphabetObject" type="AnimatedSprite2D" parent="panel" unique_id=771665715]
-position = Vector2(659, 166)
-scale = Vector2(0.59, 0.59)
-script = ExtResource("4_7husa")
-text = "Are you sure you want to reset your data?"
-centred = true
-metadata/_custom_type_script = "uid://essfoa0h4nwy"
-
-[node name="AlphabetObject2" type="AnimatedSprite2D" parent="panel" unique_id=1824665914]
-position = Vector2(651, 212)
-scale = Vector2(0.48, 0.48)
+[node name="Warning2" type="Node2D" parent="panel" unique_id=689400467]
+position = Vector2(652, 212)
+scale = Vector2(0.47999996, 0.48)
 script = ExtResource("4_7husa")
 text = "(This will also reset your achievement progress)"
 is_bold = false
 centred = true
+visible_letters = 48
+makeWave = true
+metadata/_custom_type_script = "uid://essfoa0h4nwy"
+
+[node name="Warning1" type="Node2D" parent="panel" unique_id=561882379]
+position = Vector2(661, 166)
+scale = Vector2(0.59, 0.59)
+script = ExtResource("4_7husa")
+text = "Are you sure you want to reset your data?"
+centred = true
+visible_letters = 41
+makeShake = true
 metadata/_custom_type_script = "uid://essfoa0h4nwy"
 
 [node name="alphabetGrp" type="Node2D" parent="panel" unique_id=1001934917]
