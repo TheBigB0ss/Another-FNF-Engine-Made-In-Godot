@@ -60,7 +60,7 @@ func _input(ev):
 		if ev is InputEventKey && ev.pressed && (ev.keycode in [KEY_ENTER] || ev.keycode in [KEY_KP_ENTER]):
 			no_spam = true;
 			enterText.play("ENTER PRESSED");
-			Sound.playAudio('confirmMenu', false);
+			Sound.playAudio('confirmMenu');
 			Global.finished_intro = true;
 			
 			await get_tree().create_timer(1.5).timeout

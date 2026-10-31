@@ -128,7 +128,7 @@ func go_to_week():
 	var is_unlocked = HighScore.unlockweek(weeks[curWeek]["lastWeek"], weeks[curWeek]["lastWeek"], weeks[curWeek]["weekName"], weeks[curWeek]["isLocked"]);
 	
 	if !is_unlocked:
-		Sound.playAudio("cancelMenu", false);
+		Sound.playAudio("cancelMenu");
 		return;
 		
 	noSpam = true;
@@ -158,12 +158,12 @@ func go_to_week():
 		
 		var difficultyPath = ("res://assets/songs/%s/chart/%s.json"%[songPath, songPath]) if diffsList == "" or diffsList == "normal" else ("res://assets/songs/%s/chart/%s-%s.json"%[songPath, songPath, diffsList]);
 		$warning/Label.text = "Missing Chart:\n%s"%[difficultyPath];
-		Sound.playAudio("cancelMenu", false);
+		Sound.playAudio("cancelMenu");
 		
 		return;
 		
 	choiced = true;
-	Sound.playAudio("confirmMenu", false);
+	Sound.playAudio("confirmMenu");
 	
 	if weeks[curWeek]["weekCharacters"][1] == "BF":
 		menu_bf.get_child(0).loop = false;
@@ -199,7 +199,7 @@ func update_weekScore():
 	scoreText.text = "Week Score: %s"%[week_score];
 	
 func changeWeek(shit):
-	Sound.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu");
 	
 	curWeek += shit;
 	curWeek = wrapi(curWeek, 0, len(weeks));

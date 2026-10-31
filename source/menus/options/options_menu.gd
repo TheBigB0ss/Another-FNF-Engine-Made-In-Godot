@@ -178,7 +178,7 @@ func _input(ev):
 					var coolID = GlobalOptions.keys_list[new_cur_option];
 					var new_code = OS.get_keycode_string(ev.keycode).to_lower();
 					if GlobalOptions.check_key_bind(ev.keycode, GlobalOptions.keys[coolID][2]):
-						Sound.playAudio("cancelMenu", false);
+						Sound.playAudio("cancelMenu");
 						return;
 						
 					if InputMap.has_action("ui_%s"%[new_code]):
@@ -263,7 +263,7 @@ func _process(delta):
 	settings.position.y = lerp(float(settings.position.y), float(480-coolOffset*new_cur_option), 1.0 - exp(-12.0 * delta));
 	
 func change_option(change):
-	Sound.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu");
 	
 	cur_option += change;
 	cur_option = wrapi(cur_option, 0, len(options));
@@ -276,7 +276,7 @@ func change_option(change):
 			
 var description_tween = null;
 func change_new_option(change):
-	Sound.playAudio("scrollMenu", false);
+	Sound.playAudio("scrollMenu");
 	
 	description_text.modulate.a = 0.0;
 	description_text.position.y = 700;

@@ -23,7 +23,7 @@ func _ready():
 			
 func trigger_car():
 	if SongData.isPlaying:
-		Sound.playAudio("carPass", false);
+		Sound.playAudio("carPass");
 		car_can_pass = true;
 		
 func _process(delta):

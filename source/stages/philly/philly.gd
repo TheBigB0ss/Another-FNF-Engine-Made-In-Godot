@@ -58,7 +58,7 @@ func _process(delta: float) -> void:
 		if train_time >= TRAIN_WAIT_TIME:
 			train_time = 0.0;
 			train_canMove = false;
-			Sound.playAudio("train_passes", false);
+			Sound.playAudio("train_passes");
 			train_moving = true;
 			
 	if train_moving:
@@ -69,7 +69,7 @@ func _process(delta: float) -> void:
 				reset_train();
 				
 func trigger_train():
-	Sound.playAudio("train_passes", false);
+	Sound.playAudio("train_passes");
 	train_canMove = true;
 	
 var train_tween = null;

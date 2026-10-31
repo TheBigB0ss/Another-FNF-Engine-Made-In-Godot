@@ -248,7 +248,7 @@ func _process(delta: float) -> void:
 	iconP1.position.x = lerp(iconP1.position.x, healthPosition+p1Offset, 1.0 - exp(-20.0 * delta));
 	iconP2.position.x = lerp(iconP2.position.x, healthPosition-p2Offset, 1.0 - exp(-20.0 * delta));
 	
-	if !DisplayServer.window_is_focused() && can_pause:
+	if !DisplayServer.window_is_focused() && can_pause && !Global.is_on_mobile:
 		pause();
 		
 	if !start_song:
@@ -431,7 +431,7 @@ func miss_note(note:Note):
 	bf.characterScript.call_func("on_miss", [note]);
 	
 	if GlobalOptions.playMissSound:
-		Sound.playAudio("miss_sounds/missnote%s"%[randi_range(1, 3)], false);
+		Sound.playAudio("miss_sounds/missnote%s"%[randi_range(1, 3)]);
 		Sound.audio.volume_db = -8;
 		
 	playBfMissAnim(note);

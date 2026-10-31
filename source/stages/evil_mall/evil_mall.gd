@@ -13,7 +13,7 @@ func winterHorrorland_cutscene():
 	Flash.just_appear(0.5, Color(0.0, 0.0, 0.0));
 	
 	await get_tree().create_timer(0.5).timeout
-	Sound.playAudio("Lights_Turn_On", false);
+	Sound.playAudio("Lights_Turn_On");
 	
 	await get_tree().create_timer(1.8).timeout
 	camera.zoom = lerp(camera.zoom, Vector2(0.8, 0.8), 0.9);

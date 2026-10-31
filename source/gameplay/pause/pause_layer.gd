@@ -94,11 +94,11 @@ func _input(ev):
 		
 	if ev.keycode == GlobalOptions.get_key("ui_down") && !ev.echo:
 		change_opt(1);
-		Sound.playAudio("scrollMenu", false);
+		Sound.playAudio("scrollMenu");
 		
 	elif ev.keycode == GlobalOptions.get_key("ui_up") && !ev.echo:
 		change_opt(-1);
-		Sound.playAudio("scrollMenu", false);
+		Sound.playAudio("scrollMenu");
 		
 	var rightKey = (ev.keycode == GlobalOptions.get_key("ui_right"));
 	var leftKey = (ev.keycode == GlobalOptions.get_key("ui_left"));
@@ -177,7 +177,7 @@ func _choice_pause_opts():
 			get_tree().paused = false;
 			
 			MusicManager._play_song("freakyMenu", "music", true);
-
+			
 			Global.changeScene("/menus/story_mode/storyMode" if SongData.isStoryMode else "/menus/freeplay/freeplay_menu");
 			
 		"EXIT CHART MODE":
