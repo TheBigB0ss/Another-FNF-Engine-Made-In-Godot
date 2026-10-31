@@ -1,0 +1,205 @@
+[gd_scene format=3 uid="uid://crwqscwiv6tol"]
+
+[ext_resource type="Texture2D" uid="uid://pf5jgf5xdqc" path="res://assets/images/hud/mobile/down.png" id="1_gssl3"]
+[ext_resource type="Texture2D" uid="uid://bw0baetfhlrwe" path="res://assets/images/hud/mobile/up.png" id="2_wjhqe"]
+[ext_resource type="Texture2D" uid="uid://cwwvyotmtyldl" path="res://assets/images/hud/mobile/left.png" id="3_os15u"]
+[ext_resource type="Texture2D" uid="uid://dy0mgjeo3jey7" path="res://assets/images/hud/mobile/right.png" id="4_iiauq"]
+[ext_resource type="Texture2D" uid="uid://5fwkty4ar3r6" path="res://assets/images/hud/mobile/enter.png" id="5_os15u"]
+[ext_resource type="Texture2D" uid="uid://c2xa75a3ghsrq" path="res://assets/images/hud/mobile/esc.png" id="6_iiauq"]
+
+[sub_resource type="GDScript" id="GDScript_7avee"]
+resource_name = "MobileInput"
+script/source = "extends CanvasLayer
+
+@onready var controlls = $Controlls
+@onready var otherKeys = controlls.get_node(\"Others\")
+@onready var notesKeys = controlls.get_node(\"Notes\")
+
+@onready var input_map:Dictionary[Node, PackedStringArray] = {
+	%Esc: [\"escape\"],
+	%Enter: [\"enter\"],
+	
+	%Left: [\"left\", \"ui_left\"],
+	%Down: [\"down\", \"ui_down\"],
+	%Up: [\"up\", \"ui_up\"],
+	%Right: [\"right\", \"ui_right\"]
+}
+
+var simulateNote:bool = false
+var draged = false
+var touchDelay = 0.
+
+var touched = false
+var use_notes = false:set=update_note_visibility
+
+const MIN_DRAG_SPD = 2.
+
+func _ready() -> void:
+	use_notes = false
+	
+	for inp in input_map:
+		if inp is TouchScreenButton: 
+			var value = input_map[inp]
+			inp.pressed.connect(func(): 
+				print('click')
+				simulateKeyPressed(value) )
+			inp.released.connect(func(): simulateKeyReleased(value) )
+	
+	scene_updated()
+	get_tree().scene_changed.connect(scene_updated)
+	
+func scene_updated():
+	var in_state = get_tree().current_scene.name in ['PlayState']
+	#%Enter.visible = in_state
+	use_notes = in_state
+
+func _input(ev: InputEvent) -> void:
+	#if ev.is_action_pressed():
+		#print(\"Input fake funcionando\")
+	if !use_notes:
+		if ev is InputEventScreenTouch:
+			if ev.pressed: 
+				touchDelay = Time.get_unix_time_from_system()
+				draged = true
+				touched = true
+			else:
+				if touched: 
+					simulateKeyPressed([\"enter\"])
+					
+		
+			
+			
+		if ev is InputEventScreenDrag:
+			var drag_pos = ev.screen_relative
+			
+			if ( abs(drag_pos.y) > MIN_DRAG_SPD || abs(drag_pos.x) > MIN_DRAG_SPD ) && draged:
+				touched = false
+				draged = false
+				if drag_pos.y < 0: simulateKeyPressed([\"ui_up\"]) 
+				if drag_pos.y > 0: simulateKeyPressed([\"ui_down\"])  
+				
+				if drag_pos.x < 0: simulateKeyPressed([\"ui_left\"]) 
+				if drag_pos.x > 0: simulateKeyPressed([\"ui_right\"]) 
+
+func update_note_visibility(visi:bool):
+	use_notes = visi
+	%Enter.visible = visi
+	notesKeys.visible = visi
+	
+func simulateKeyReleased(actionList:PackedStringArray = [\"\"]):
+	for key in actionList:
+		
+		var fakeKey = InputEventKey.new()
+		fakeKey.keycode = GlobalOptions.keys[key][0]
+		fakeKey.pressed = false
+		Input.parse_input_event(fakeKey)
+
+func simulateKeyPressed(actionList:PackedStringArray = [\"\"]):
+	for key in actionList:
+		
+		var fakeKey = InputEventKey.new()
+		fakeKey.keycode = GlobalOptions.keys[key][0]
+		fakeKey.pressed = true
+		Input.parse_input_event(fakeKey)
+	
+	#for action in actionList:
+		#
+		#var fakeInput = InputEventAction.new()
+		#fakeInput.action = action
+		#fakeInput.pressed = true
+		#Input.parse_input_event(fakeInput)
+
+#func simulateInput(keycodeList:Array[Key] = [], actionKey:PackedStringArray = [\"\"]):
+	#var all_lists:Array[Key] = keycodeList
+	#
+	#if len(actionKey) > 0:
+		#for action in actionKey:
+			#if action.is_empty() || !InputMap.has_action(action): continue
+			#for input in InputMap.action_get_events(action):
+				#if input is InputEventKey: all_lists.append(input.keycode)
+		#
+	#var filtered_list:Array[Key] = []
+	#for input in all_lists:
+		#if !filtered_list.has(input):
+			#print(\"pRESS\", OS.keyc)
+			#filtered_list.append(input)
+	#
+	#for input in filtered_list:
+		#var inputkeycode = InputEventKey.new()
+		#inputkeycode.keycode = input
+		#Input.parse_input_event(inputkeycode)
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iiauq"]
+size = Vector2(150, 150)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q1mmg"]
+size = Vector2(150, 150)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5cgik"]
+size = Vector2(150, 150)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f04qt"]
+size = Vector2(150, 150)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4kf73"]
+size = Vector2(150, 150)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_os15u"]
+size = Vector2(150, 150)
+
+[node name="MobileInput" type="CanvasLayer" unique_id=782822476]
+layer = 40
+script = SubResource("GDScript_7avee")
+
+[node name="Controlls" type="Node2D" parent="." unique_id=204139271]
+position = Vector2(11, 588)
+scale = Vector2(0.8, 0.8)
+
+[node name="Notes" type="Node2D" parent="Controlls" unique_id=592035553]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="Left" type="TouchScreenButton" parent="Controlls/Notes" unique_id=2089841309]
+unique_name_in_owner = true
+position = Vector2(-5, 0)
+scale = Vector2(0.9999998, 0.9999998)
+texture_normal = ExtResource("3_os15u")
+shape = SubResource("RectangleShape2D_iiauq")
+
+[node name="Down" type="TouchScreenButton" parent="Controlls/Notes" unique_id=1360260805]
+unique_name_in_owner = true
+position = Vector2(149.99998, 0)
+scale = Vector2(0.99999994, 0.99999994)
+texture_normal = ExtResource("1_gssl3")
+shape = SubResource("RectangleShape2D_q1mmg")
+
+[node name="Up" type="TouchScreenButton" parent="Controlls/Notes" unique_id=1783890296]
+unique_name_in_owner = true
+position = Vector2(1261.2499, -0.25)
+scale = Vector2(0.99999994, 0.99999994)
+texture_normal = ExtResource("2_wjhqe")
+shape = SubResource("RectangleShape2D_5cgik")
+
+[node name="Right" type="TouchScreenButton" parent="Controlls/Notes" unique_id=38829846]
+unique_name_in_owner = true
+position = Vector2(1421.0319, -1.25)
+scale = Vector2(0.99999994, 0.99999994)
+texture_normal = ExtResource("4_iiauq")
+shape = SubResource("RectangleShape2D_f04qt")
+
+[node name="Others" type="Node2D" parent="Controlls" unique_id=684987800]
+scale = Vector2(0.9999998, 0.9999998)
+
+[node name="Enter" type="TouchScreenButton" parent="Controlls/Others" unique_id=1782149330]
+unique_name_in_owner = true
+position = Vector2(1462.5002, -727.50006)
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("5_os15u")
+shape = SubResource("RectangleShape2D_4kf73")
+
+[node name="Esc" type="TouchScreenButton" parent="Controlls/Others" unique_id=1911713040]
+unique_name_in_owner = true
+position = Vector2(-6.250001, -730.0001)
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("6_iiauq")
+shape = SubResource("RectangleShape2D_os15u")
