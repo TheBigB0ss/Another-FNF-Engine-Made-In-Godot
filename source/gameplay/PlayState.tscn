@@ -120,10 +120,10 @@ anchors_preset = 0
 layer = 2
 
 [node name="healthBar" type="TextureProgressBar" parent="hud/Hud_Layer" unique_id=1262312385]
-offset_left = 358.0
-offset_top = 640.0
-offset_right = 959.0
-offset_bottom = 659.0
+offset_left = 345.0
+offset_top = 637.0
+offset_right = 946.0
+offset_bottom = 656.0
 step = 0.01
 value = 50.0
 fill_mode = 1
@@ -155,10 +155,10 @@ horizontal_alignment = 1
 
 [node name="scoreLabel" type="Label" parent="hud/Hud_Layer" unique_id=1862258188]
 texture_filter = 1
-offset_left = 276.0
-offset_top = 670.0
-offset_right = 16847.0
-offset_bottom = 1114.0
+offset_left = 263.0
+offset_top = 667.0
+offset_right = 16834.0
+offset_bottom = 1111.0
 scale = Vector2(0.045, 0.045)
 text = "Score: ??? / Misses: ??? / Rating: ??? (0.0) / Rank: ???"
 label_settings = SubResource("LabelSettings_ghwrx")

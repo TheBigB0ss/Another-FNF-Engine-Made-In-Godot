@@ -421,7 +421,7 @@ func set_options():
 	
 func apply_changes():
 	down_scroll = optionList["gameplay"]["down scroll"];
-	middle_scroll = optionList["gameplay"]["middle scroll"];
+	middle_scroll = optionList["gameplay"]["middle scroll"] or Global.is_on_mobile;
 	ghost_tapping = optionList["gameplay"]["ghost tapping"];
 	restart_action = optionList["gameplay"]["r to restart"];
 	playMissSound = optionList["gameplay"]["play miss sound"];

@@ -803,7 +803,7 @@ func setup_hud():
 	msText.visible = GlobalOptions.showMsText;
 	
 	if GlobalOptions.middle_scroll or Global.is_on_mobile:
-		playerStrum.position.x = 560;
+		playerStrum.position.x = 475;
 		opponentStrum.hide();
 		
 	if GlobalOptions.down_scroll:
