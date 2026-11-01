@@ -39,7 +39,6 @@ func update_text():
 			
 	if GlobalOptions.debugTextMode == "complex":
 		text += "\nPROCESS: %.2f ms"%[Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0];
-		text += "\nRAM: %s / %s" % [String.humanize_size(objectMem), String.humanize_size(memPeak)];
 		text += "\nVRAM: %s / %s" % [String.humanize_size(videoMem), String.humanize_size(vramPeak)];
 		text += "\nTEX: %s / %s" % [String.humanize_size(textureMem), String.humanize_size(texturePeak)];
 		
